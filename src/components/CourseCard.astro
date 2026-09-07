@@ -1,0 +1,8 @@
+---
+const { item } = Astro.props;
+const imageStyle = item.data.image ? `background-image:url('${item.data.image}')` : '';
+---
+<article class="card">
+  <div class:list={['card-media', { 'has-image': item.data.image }]} style={imageStyle}><span>{item.data.category}</span></div>
+  <div class="card-body"><p class="eyebrow">{item.data.category}</p><h3>{item.data.title}</h3><p>{item.data.summary}</p><div class="meta"><span>{item.data.duration}</span><span>{item.data.level}</span></div><a class="detail-link" href={`/courses/${item.id}/`}>Xem chi tiết <span>→</span></a></div>
+</article>

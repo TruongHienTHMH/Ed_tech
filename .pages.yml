@@ -1,0 +1,75 @@
+media:
+  input: public/uploads
+  output: /uploads
+
+content:
+  - name: courses
+    label: Khóa học
+    type: collection
+    path: src/content/courses
+    filename: "{primary}.md"
+    view:
+      fields: [title, category, published, order]
+      primary: title
+      sort: [order, title]
+    fields:
+      - { name: title, label: Tên khóa học, type: string, required: true }
+      - { name: summary, label: Mô tả ngắn, type: text, required: true }
+      - { name: category, label: Danh mục, type: string, required: true }
+      - { name: duration, label: Thời lượng, type: string, required: true }
+      - { name: level, label: Trình độ, type: string, required: true }
+      - { name: mentor, label: Mentor, type: string, required: true }
+      - { name: image, label: Ảnh đại diện, type: image }
+      - { name: featured, label: Nổi bật, type: boolean, default: false }
+      - { name: published, label: Hiển thị, type: boolean, default: true }
+      - { name: order, label: Thứ tự, type: number, default: 99 }
+      - name: outcomes
+        label: Kết quả đạt được
+        type: string
+        list: true
+      - { name: body, label: Nội dung chi tiết, type: rich-text }
+
+  - name: roadmaps
+    label: Lộ trình
+    type: collection
+    path: src/content/roadmaps
+    filename: "{primary}.md"
+    view:
+      fields: [title, category, published, order]
+      primary: title
+      sort: [order, title]
+    fields:
+      - { name: title, label: Tên lộ trình, type: string, required: true }
+      - { name: summary, label: Mô tả ngắn, type: text, required: true }
+      - { name: category, label: Danh mục, type: string, required: true }
+      - { name: duration, label: Thời lượng, type: string, required: true }
+      - { name: image, label: Ảnh đại diện, type: image }
+      - { name: featured, label: Nổi bật, type: boolean, default: false }
+      - { name: published, label: Hiển thị, type: boolean, default: true }
+      - { name: order, label: Thứ tự, type: number, default: 99 }
+      - name: steps
+        label: Các bước
+        type: string
+        list: true
+      - { name: body, label: Nội dung chi tiết, type: rich-text }
+
+  - name: mentors
+    label: Mentor
+    type: collection
+    path: src/content/mentors
+    filename: "{primary}.md"
+    view:
+      fields: [name, role, published, order]
+      primary: name
+      sort: [order, name]
+    fields:
+      - { name: name, label: Họ tên, type: string, required: true }
+      - { name: role, label: Chuyên môn, type: string, required: true }
+      - { name: bio, label: Giới thiệu, type: text, required: true }
+      - { name: image, label: Ảnh chân dung, type: image }
+      - { name: published, label: Hiển thị, type: boolean, default: true }
+      - { name: order, label: Thứ tự, type: number, default: 99 }
+
+settings:
+  content:
+    merge: true

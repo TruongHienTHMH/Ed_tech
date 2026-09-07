@@ -1,0 +1,13 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+export async function getStaticPaths() {
+  const items = await getCollection('courses', ({ data }) => data.published);
+  return items.map((item) => ({ params: { id: item.id }, props: { item } }));
+}
+const { item } = Astro.props;
+const { Content } = await render(item);
+---
+<BaseLayout title={`${item.data.title} | EduPath`} description={item.data.summary}>
+  <article class="detail-page"><a class="back-link" href="/#courses">← Tất cả khóa học</a><div class="detail-hero"><div><p class="eyebrow">{item.data.category}</p><h1>{item.data.title}</h1><p class="lead">{item.data.summary}</p><div class="meta"><span>{item.data.duration}</span><span>{item.data.level}</span><span>Mentor: {item.data.mentor}</span></div><button class="button js-consult" type="button">Nhận tư vấn khóa học</button></div><aside><p class="eyebrow">SAU KHÓA HỌC</p><ul>{item.data.outcomes.map((outcome) => <li>✓ {outcome}</li>)}</ul></aside></div><div class="prose"><Content /></div></article>
+</BaseLayout>

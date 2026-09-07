@@ -1,0 +1,36 @@
+---
+import '../styles/global.css';
+const { title = 'EduPath', description = 'Khóa học thực tế, lộ trình rõ ràng và mentor đồng hành.' } = Astro.props;
+---
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Về trang chủ"><span class="brand-mark">E</span><span>EduPath</span></a>
+      <nav aria-label="Điều hướng chính">
+        <a href="/#courses">Khóa học</a><a href="/#roadmaps">Lộ trình</a><a href="/#mentors">Mentor</a>
+      </nav>
+      <button class="button button-small js-consult" type="button">Nhận tư vấn</button>
+    </header>
+    <main><slot /></main>
+    <footer><strong>EduPath</strong><span>Học đúng hướng, tiến bộ rõ ràng.</span><button class="text-button js-consult" type="button">Liên hệ qua Zalo →</button></footer>
+    <dialog id="consult-dialog" aria-labelledby="consult-title">
+      <form method="dialog"><button class="dialog-close" aria-label="Đóng">×</button></form>
+      <p class="eyebrow">TƯ VẤN TUYỂN SINH</p><h2 id="consult-title">Quét mã để trò chuyện qua Zalo</h2>
+      <div class="qr-placeholder" aria-label="Vị trí mã QR Zalo"><span>QR ZALO</span><small>Client thay ảnh tại<br /><code>public/uploads/zalo-qr.png</code></small></div>
+      <p>Đội ngũ tư vấn sẽ giúp bạn chọn khóa học và lộ trình phù hợp.</p>
+      <a class="button" href="https://zalo.me/" target="_blank" rel="noopener">Mở Zalo</a>
+    </dialog>
+    <script>
+      const dialog = document.querySelector('#consult-dialog');
+      document.querySelectorAll('.js-consult').forEach((button) => button.addEventListener('click', () => dialog?.showModal()));
+      dialog?.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
+    </script>
+  </body>
+</html>

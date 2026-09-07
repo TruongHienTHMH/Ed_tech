@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CourseCard from '../components/CourseCard.astro';
+import RoadmapCard from '../components/RoadmapCard.astro';
+
+const byOrder = (a, b) => a.data.order - b.data.order;
+const courses = (await getCollection('courses', ({ data }) => data.published)).sort(byOrder).slice(0, 6);
+const roadmaps = (await getCollection('roadmaps', ({ data }) => data.published)).sort(byOrder).slice(0, 6);
+const mentors = (await getCollection('mentors', ({ data }) => data.published)).sort(byOrder).slice(0, 6);
+---
+<BaseLayout>
+  <section class="hero">
+    <div><p class="eyebrow">LỘ TRÌNH RÕ RÀNG · HỌC CÓ ĐỊNH HƯỚNG</p><h1>Biến mục tiêu nghề nghiệp thành <em>những bước đi cụ thể.</em></h1><p class="lead">Khóa học thực hành, lộ trình có cấu trúc và mentor giàu kinh nghiệm giúp bạn tiến bộ mà không bị lạc giữa quá nhiều tài liệu.</p><div class="hero-actions"><a class="button" href="#courses">Khám phá khóa học</a><a class="button button-ghost" href="#roadmaps">Xem lộ trình</a></div></div>
+    <aside class="hero-board"><p class="eyebrow">LỘ TRÌNH NỔI BẬT</p><h2>Full-stack Web Developer</h2><p>Từ nền tảng web đến xây dựng và triển khai sản phẩm hoàn chỉnh.</p><ol><li><b>01</b><span>HTML, CSS & JavaScript</span></li><li><b>02</b><span>React & kiến trúc giao diện</span></li><li class="active"><b>03</b><span>Backend, API & Database</span></li></ol><a href="/roadmaps/fullstack-web/">Xem lộ trình →</a></aside>
+  </section>
+
+  <section class="section" id="courses"><header class="section-head"><div><p class="eyebrow">HỌC THEO MỤC TIÊU</p><h2>Khóa học nổi bật</h2></div><p>Tối đa 6 khóa học được chọn hiển thị từ hệ thống quản trị nội dung.</p></header>{courses.length ? <div class:list={['content-grid', `items-${courses.length}`]}>{courses.map((item) => <CourseCard item={item} />)}</div> : <div class="empty">Chưa có khóa học được xuất bản.</div>}</section>
+
+  <section class="section section-blue" id="roadmaps"><header class="section-head"><div><p class="eyebrow">ĐI TỪNG CHẶNG</p><h2>Lộ trình học tập</h2></div><p>Mỗi lộ trình dẫn đến một trang chi tiết riêng với các bước học cụ thể.</p></header>{roadmaps.length ? <div class:list={['content-grid', `items-${roadmaps.length}`]}>{roadmaps.map((item) => <RoadmapCard item={item} />)}</div> : <div class="empty">Chưa có lộ trình được xuất bản.</div>}</section>
+
+  <section class="section" id="mentors"><header class="section-head"><div><p class="eyebrow">NGƯỜI ĐỒNG HÀNH</p><h2>Mentor của bạn</h2></div><p>Kinh nghiệm thực tế được chuyển thành hướng dẫn dễ áp dụng.</p></header>{mentors.length ? <div class:list={['content-grid', 'mentor-grid', `items-${mentors.length}`]}>{mentors.map((item) => <article class="mentor-card"><div class="avatar">{item.data.name.split(' ').slice(-2).map((x) => x[0]).join('')}</div><div><h3>{item.data.name}</h3><p class="mentor-role">{item.data.role}</p><p>{item.data.bio}</p></div></article>)}</div> : <div class="empty">Chưa có mentor được xuất bản.</div>}</section>
+
+  <section class="closing"><div><p class="eyebrow">CHƯA BIẾT BẮT ĐẦU TỪ ĐÂU?</p><h2>Trao đổi trực tiếp với đội ngũ tư vấn</h2><p>Chúng tôi sẽ giúp bạn chọn khóa học phù hợp với mục tiêu và thời gian hiện có.</p></div><button class="button button-light js-consult" type="button">Quét QR Zalo để được tư vấn</button></section>
+</BaseLayout>
