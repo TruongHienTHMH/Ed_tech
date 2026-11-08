@@ -2,25 +2,13 @@
 
 import React from "react";
 import Image from "next/image";
-import { openLeadModal } from "@/components/forms/LeadModalManager";
 
 export default function FloatingCta() {
   return (
     <aside
-      aria-label="Kênh hỗ trợ và đăng ký tư vấn trực tuyến"
+      aria-label="Kênh liên hệ hỗ trợ trực tuyến"
       className="fixed bottom-6 right-5 sm:right-6 z-40 flex flex-col items-end gap-3"
     >
-      {/* Quick Consultation Bubble Pill */}
-      <button
-        type="button"
-        onClick={() => openLeadModal({ ctaLocation: "floating_pill_cta" })}
-        className="flex items-center gap-2 bg-gradient-to-r from-[#8B1D2C] to-[#AF445A] hover:from-[#731422] hover:to-[#96374C] text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-full shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer border border-white/20"
-        title="Đăng ký tư vấn 1-on-1"
-      >
-        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-        <span>Đăng Ký Tư Vấn</span>
-      </button>
-
       <div className="flex flex-col items-center gap-2.5">
         {/* Hotline Support */}
         <a
