@@ -1,0 +1,741 @@
+{
+  "courses": [
+    {
+      "id": "end-to-end-analytics",
+      "title": "End-to-End Analytics with SQL & Dashboard",
+      "slug": "end-to-end-analytics",
+      "tag": "End-to-End",
+      "tagline": "Xây dựng nền tảng Data Analytics toàn diện từ truy vấn đến trực quan hóa",
+      "description": "Xây dựng nền tảng Data Analytics toàn diện, từ truy vấn và xử lý dữ liệu với SQL đến tư duy phân tích, trực quan hóa và thiết kế Dashboard hoàn chỉnh cho doanh nghiệp.",
+      "tuitionVnd": 5699000,
+      "originalTuitionVnd": 6780000,
+      "duration": "27 buổi (6 tuần)",
+      "level": "Beginner",
+      "coverImageUrl": "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+      "isActive": true,
+      "isFeatured": true,
+      "sortOrder": 1
+    },
+    {
+      "id": "sql-for-data-analytics",
+      "title": "Khóa SQL for Data Analytics",
+      "slug": "sql-for-data-analytics",
+      "tag": "SQL",
+      "tagline": "Làm quen với Database và SQL, xây dựng khả năng truy vấn và tổng hợp dữ liệu",
+      "description": "Làm quen với Database và SQL, xây dựng khả năng truy vấn, lọc, biến đổi và tối ưu dữ liệu từ các hệ thống cơ sở dữ liệu lớn trong thực tế doanh nghiệp.",
+      "tuitionVnd": 2990000,
+      "originalTuitionVnd": 3500000,
+      "duration": "12 buổi (6 tuần)",
+      "level": "Beginner",
+      "coverImageUrl": "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+      "isActive": true,
+      "isFeatured": true,
+      "sortOrder": 2
+    },
+    {
+      "id": "data-analytical-thinking",
+      "title": "Khóa Data Analytical Thinking",
+      "slug": "data-analytical-thinking",
+      "tag": "Dashboard",
+      "tagline": "Học cách xác định vấn đề, lựa chọn metrics, phân tích dữ liệu và thiết kế báo cáo",
+      "description": "Học cách xác định vấn đề kinh doanh, phân rã chỉ số (Metrics Tree), phân tích dữ liệu chuyên sâu và trực quan hóa Dashboard phục vụ quyết định quản trị.",
+      "tuitionVnd": 3790000,
+      "originalTuitionVnd": 4500000,
+      "duration": "15 buổi (5 tuần)",
+      "level": "Intermediate",
+      "coverImageUrl": "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+      "isActive": true,
+      "isFeatured": true,
+      "sortOrder": 3
+    }
+  ],
+  "curriculum": [
+    {
+      "id": "mod-sql-01",
+      "courseId": "sql-for-data-analytics",
+      "courseName": "SQL for Data Analytics",
+      "moduleNumber": 1,
+      "title": "Buổi 1: Làm quen Database & Cú pháp truy vấn cơ bản",
+      "summary": "Hiểu kiến trúc Relational Database, cài đặt DBeaver, thực hành SELECT, WHERE, ORDER BY, GROUP BY.",
+      "bulletPoints": [
+        "Tổng quan về cơ sở dữ liệu quan hệ (RDBMS) trong doanh nghiệp",
+        "Cài đặt DBeaver và kết nối hệ quản trị PostgreSQL / MySQL",
+        "Cú pháp SELECT, ALIAS, DISTINCT, toán tử lọc WHERE, AND/OR/IN/BETWEEN",
+        "Thực hành truy vấn cơ bản trên bộ dữ liệu E-commerce thực tế"
+      ],
+      "durationHours": 3,
+      "lessonsCount": 4,
+      "sortOrder": 1,
+      "weekNumber": 1,
+      "weekLabel": "Week 1",
+      "sessionDateBadge": "TH10 03",
+      "isMilestone": false
+    },
+    {
+      "id": "mod-sql-02",
+      "courseId": "sql-for-data-analytics",
+      "courseName": "SQL for Data Analytics",
+      "moduleNumber": 2,
+      "title": "Buổi 2: Các hàm biến đổi dữ liệu (Scalar & Aggregate Functions)",
+      "summary": "Xử lý chuỗi văn bản, ngày tháng, ép kiểu CAST và tính toán tổng hợp SUM/AVG/COUNT.",
+      "bulletPoints": [
+        "Xử lý chuỗi với LIKE, CONCAT, SUBSTRING, TRIM, UPPER/LOWER",
+        "Xử lý ngày tháng chuyên sâu: DATE_TRUNC, EXTRACT, INTERVAL",
+        "Phân nhóm và tính toán tổng hợp với GROUP BY và điều kiện lọc HAVING",
+        "Bài tập tính doanh thu theo tháng và tần suất mua sắm"
+      ],
+      "durationHours": 3,
+      "lessonsCount": 4,
+      "sortOrder": 2,
+      "weekNumber": 1,
+      "weekLabel": "Week 1",
+      "sessionDateBadge": "TH10 05",
+      "isMilestone": false
+    },
+    {
+      "id": "mod-sql-03",
+      "courseId": "sql-for-data-analytics",
+      "courseName": "SQL for Data Analytics",
+      "moduleNumber": 3,
+      "title": "Buổi 3: Kết hợp bảng nâng cao với JOINs (INNER, LEFT, RIGHT, FULL)",
+      "summary": "Tư duy quan hệ dữ liệu nhiều bảng, liên kết dữ liệu khách hàng, đơn hàng và sản phẩm.",
+      "bulletPoints": [
+        "Mô hình Entity-Relationship (ERD) và khóa chính (PK) / khóa ngoại (FK)",
+        "Bản chất đại số của INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN",
+        "Xử lý bẫy NULL values và phép nhân Cartesian (Cartesian Explosion)",
+        "Thực hành trích xuất dữ liệu tổng hợp đa chiều từ 5 bảng liên kết"
+      ],
+      "durationHours": 3,
+      "lessonsCount": 4,
+      "sortOrder": 3,
+      "weekNumber": 2,
+      "weekLabel": "Week 2",
+      "sessionDateBadge": "TH10 26",
+      "isMilestone": false
+    },
+    {
+      "id": "mod-sql-04",
+      "courseId": "sql-for-data-analytics",
+      "courseName": "SQL for Data Analytics",
+      "moduleNumber": 4,
+      "title": "Buổi 4: Bài thực hành 1 (Hands-on Lab 1) - Báo cáo Doanh thu & Giỏ hàng",
+      "summary": "Tự tay viết script phân tích toàn bộ quy trình giỏ hàng, doanh số và tỉ lệ drop-off.",
+      "bulletPoints": [
+        "Đọc yêu cầu bài toán kinh doanh từ Stakeholder",
+        "Xác định bảng nguồn, viết truy vấn kết nối đơn hàng, coupon, hoàn trả",
+        "Tính toán AOV (Average Order Value) và tỉ lệ áp mã giảm giá",
+        "Mentor review code trực tiếp và chỉ ra các lỗi logic thường gặp"
+      ],
+      "durationHours": 3,
+      "lessonsCount": 3,
+      "sortOrder": 4,
+      "weekNumber": 2,
+      "weekLabel": "Week 2",
+      "sessionDateBadge": "TH10 28",
+      "isMilestone": true,
+      "milestoneBadge": "Thực hành 1"
+    },
+    {
+      "id": "mod-sql-05",
+      "courseId": "sql-for-data-analytics",
+      "courseName": "SQL for Data Analytics",
+      "moduleNumber": 5,
+      "title": "Buổi 5: Truy vấn con (Subquery) & Bảng tạm CTE (WITH Clause)",
+      "summary": "Kỹ thuật phân rã truy vấn phức tạp, tái sử dụng logic và làm sạch cấu trúc code.",
+      "bulletPoints": [
+        "Subquery trong SELECT, FROM, WHERE và tương quan Correlated Subqueries",
+        "Tư duy sử dụng Common Table Expressions (CTE) với từ khóa WITH",
+        "Chuyển đổi các bài toán logic nhiều tầng sang chuỗi CTE rõ ràng, dễ bảo trì",
+        "Phân tích hành vi mua hàng lần đầu (First Purchase Date)"
+      ],
+      "durationHours": 3,
+      "lessonsCount": 4,
+      "sortOrder": 5,
+      "weekNumber": 3,
+      "weekLabel": "Week 3",
+      "sessionDateBadge": "TH11 01",
+      "isMilestone": false
+    },
+    {
+      "id": "mod-sql-06",
+      "courseId": "sql-for-data-analytics",
+      "courseName": "SQL for Data Analytics",
+      "moduleNumber": 6,
+      "title": "Buổi 6: Window Functions phân tích (ROW_NUMBER, RANK, DENSE_RANK)",
+      "summary": "Phân đoạn dữ liệu theo nhóm, xếp hạng top sản phẩm và tính toán lũy kế.",
+      "bulletPoints": [
+        "Cú pháp OVER (PARTITION BY ... ORDER BY ...)",
+        "Sự khác biệt giữa ROW_NUMBER, RANK và DENSE_RANK",
+        "Kỹ thuật lọc Top N bản ghi theo từng nhóm phân loại (Category)",
+        "Thực hành tìm Top 3 nhân viên bán hàng xuất sắc nhất mỗi chi nhánh"
+      ],
+      "durationHours": 3,
+      "lessonsCount": 4,
+      "sortOrder": 6,
+      "weekNumber": 3,
+      "weekLabel": "Week 3",
+      "sessionDateBadge": "TH11 03",
+      "isMilestone": false
+    },
+    {
+      "id": "mod-sql-07",
+      "courseId": "sql-for-data-analytics",
+      "courseName": "SQL for Data Analytics",
+      "moduleNumber": 7,
+      "title": "Buổi 7: Window Functions nâng cao (LEAD, LAG) & Phân tích chuỗi thời gian",
+      "summary": "So sánh kỳ này với kỳ trước (MoM, YoY), tính chu kỳ mua lặp lại của khách hàng.",
+      "bulletPoints": [
+        "Cú pháp LEAD(), LAG() lấy bản ghi liền trước và liền sau",
+        "Tính toán tỷ lệ tăng trưởng doanh thu Month-over-Month (MoM)",
+        "Tính khoảng cách thời gian giữa 2 lần đặt hàng liên tiếp (Days Between Orders)",
+        "Xác định nhóm khách hàng có nguy cơ rời bỏ (At-Risk Churn)"
+      ],
+      "durationHours": 3,
+      "lessonsCount": 4,
+      "sortOrder": 7,
+      "weekNumber": 4,
+      "weekLabel": "Week 4",
+      "sessionDateBadge": "TH11 05",
+      "isMilestone": false
+    },
+    {
+      "id": "mod-sql-08",
+      "courseId": "sql-for-data-analytics",
+      "courseName": "SQL for Data Analytics",
+      "moduleNumber": 8,
+      "title": "Buổi 8: Tối ưu hóa hiệu năng truy vấn (Query Optimization & Execution Plan)",
+      "summary": "Hiểu EXPLAIN ANALYZE, chỉ mục Index và kỹ thuật viết câu lệnh tối ưu trên dữ liệu lớn.",
+      "bulletPoints": [
+        "Cách Database Engine thực thi câu lệnh truy vấn (Execution Plan)",
+        "Nguyên lý hoạt động của B-Tree Index và khi nào KHÔNG nên đánh Index",
+        "Tránh các lỗi gây Full Table Scan: sargable queries, hàm trong WHERE",
+        "Thực hành refactor câu lệnh chạy từ 45 giây xuống 0.8 giây"
+      ],
+      "durationHours": 3,
+      "lessonsCount": 4,
+      "sortOrder": 8,
+      "weekNumber": 4,
+      "weekLabel": "Week 4",
+      "sessionDateBadge": "TH11 07",
+      "isMilestone": false
+    },
+    {
+      "id": "mod-sql-09",
+      "courseId": "sql-for-data-analytics",
+      "courseName": "SQL for Data Analytics",
+      "moduleNumber": 9,
+      "title": "Buổi 9: Bài thực hành 2 (Hands-on Lab 2) - Phân tích Retention & Churn Cohort",
+      "summary": "Xây dựng bảng Cohort Analysis từ dữ liệu giao dịch thực tế phục vụ phân tích tăng trưởng.",
+      "bulletPoints": [
+        "Định nghĩa Cohort tháng gia nhập và Activity Matrix",
+        "Viết script SQL tính toán tỷ lệ giữ chân (Retention Rate M1, M2, M3...)",
+        "Xuất dữ liệu chuẩn heatmap để đưa vào trực quan hóa",
+        "Mentor feedback từng đoạn code và chiến lược kiểm tra tính đúng đắn"
+      ],
+      "durationHours": 3,
+      "lessonsCount": 3,
+      "sortOrder": 9,
+      "weekNumber": 5,
+      "weekLabel": "Week 5",
+      "sessionDateBadge": "TH11 10",
+      "isMilestone": true,
+      "milestoneBadge": "Thực hành 2"
+    },
+    {
+      "id": "mod-sql-10",
+      "courseId": "sql-for-data-analytics",
+      "courseName": "SQL for Data Analytics",
+      "moduleNumber": 10,
+      "title": "Buổi 10: Thiết kế mô hình dữ liệu Star Schema & Data Mart cho BI",
+      "summary": "Chuẩn bị bảng Fact và Dimension tối ưu cho kết nối Power BI / Looker Studio.",
+      "bulletPoints": [
+        "Sự khác biệt giữa OLTP (hệ thống vận hành) và OLAP (hệ thống phân tích)",
+        "Mô hình dữ liệu hình sao (Star Schema): Fact Table vs Dimension Table",
+        "Tạo View và Data Mart tổng hợp tự động làm mới hàng ngày",
+        "Kết nối trực tiếp PostgreSQL với công cụ BI để kiểm tra hiệu năng"
+      ],
+      "durationHours": 3,
+      "lessonsCount": 4,
+      "sortOrder": 10,
+      "weekNumber": 5,
+      "weekLabel": "Week 5",
+      "sessionDateBadge": "TH11 12",
+      "isMilestone": false
+    },
+    {
+      "id": "mod-sql-11",
+      "courseId": "sql-for-data-analytics",
+      "courseName": "SQL for Data Analytics",
+      "moduleNumber": 11,
+      "title": "Buổi 11: Dự án tốt nghiệp Capstone - Giải quyết bài toán Kinh doanh thực chiến",
+      "summary": "Làm việc độc lập trên bộ dữ liệu doanh nghiệp thật: Fintech / E-commerce / Retail.",
+      "bulletPoints": [
+        "Nhận đề bài thực tế với dữ liệu thô chưa làm sạch",
+        "Lên kế hoạch phân tích, làm sạch dữ liệu và xây dựng câu lệnh SQL cốt lõi",
+        "Tìm kiếm insight sâu về doanh thu, khách hàng và đề xuất hành động thực tiễn",
+        "Chuẩn bị slide thuyết trình và tài liệu kỹ thuật chuẩn mực"
+      ],
+      "durationHours": 3,
+      "lessonsCount": 3,
+      "sortOrder": 11,
+      "weekNumber": 6,
+      "weekLabel": "Week 6",
+      "sessionDateBadge": "TH11 15",
+      "isMilestone": true,
+      "milestoneBadge": "Dự án cuối khóa"
+    },
+    {
+      "id": "mod-sql-12",
+      "courseId": "sql-for-data-analytics",
+      "courseName": "SQL for Data Analytics",
+      "moduleNumber": 12,
+      "title": "Buổi 12: Thuyết trình đồ án, Feedback 1-on-1 & Định hướng nghề nghiệp DA",
+      "summary": "Báo cáo trước Mentor, nhận góp ý chuyên môn chi tiết và chỉnh sửa CV/Portfolio xin việc.",
+      "bulletPoints": [
+        "Thuyết trình đồ án tốt nghiệp Capstone trước Mentor và hội đồng",
+        "Mentor đánh giá chi tiết chất lượng code, insight và kỹ năng trình bày",
+        "Chiến lược xây dựng Portfolio trên GitHub / Notion thu hút nhà tuyển dụng",
+        "Hỏi đáp 1-on-1 về lộ trình thăng tiến và phỏng vấn vị trí Data Analyst"
+      ],
+      "durationHours": 3,
+      "lessonsCount": 3,
+      "sortOrder": 12,
+      "weekNumber": 6,
+      "weekLabel": "Week 6",
+      "sessionDateBadge": "TH11 17",
+      "isMilestone": true,
+      "milestoneBadge": "Feedback 1-on-1"
+    },
+    {
+      "id": "mod-e2e-01",
+      "courseId": "end-to-end-analytics",
+      "courseName": "End-to-End Analytics",
+      "moduleNumber": 1,
+      "title": "Module 1: Nền tảng SQL & Truy vấn dữ liệu thực chiến",
+      "summary": "Làm chủ truy vấn từ cơ bản đến nâng cao (JOINs, Window Functions, CTE).",
+      "bulletPoints": [
+        "Toàn bộ 12 buổi học chuyên sâu của lộ trình SQL for Data Analytics",
+        "Thực hành với bộ dữ liệu giao dịch đa ngành triệu dòng",
+        "Tối ưu hóa truy vấn hiệu năng cao phục vụ BI Dashboard"
+      ],
+      "durationHours": 36,
+      "lessonsCount": 12,
+      "sortOrder": 1,
+      "weekNumber": 1,
+      "weekLabel": "Giai đoạn 1",
+      "sessionDateBadge": "TH10 03"
+    },
+    {
+      "id": "mod-e2e-02",
+      "courseId": "end-to-end-analytics",
+      "courseName": "End-to-End Analytics",
+      "moduleNumber": 2,
+      "title": "Module 2: Tư duy phân tích kinh doanh (Data Analytical Thinking)",
+      "summary": "Xác định bài toán, xây dựng cây chỉ số (Metrics Tree) và khung phân tích MECE.",
+      "bulletPoints": [
+        "Chuyển đổi câu hỏi mơ hồ của sếp thành bài toán phân tích định lượng",
+        "Xây dựng cây chỉ số doanh thu, chi phí, lợi nhuận và chuyển đổi",
+        "Phân tích nguyên nhân gốc rễ (Root Cause Analysis)"
+      ],
+      "durationHours": 24,
+      "lessonsCount": 8,
+      "sortOrder": 2,
+      "weekNumber": 4,
+      "weekLabel": "Giai đoạn 2",
+      "sessionDateBadge": "TH11 01"
+    },
+    {
+      "id": "mod-e2e-03",
+      "courseId": "end-to-end-analytics",
+      "courseName": "End-to-End Analytics",
+      "moduleNumber": 3,
+      "title": "Module 3: Thiết kế Dashboard quản trị & Kể chuyện dữ liệu (Data Storytelling)",
+      "summary": "Trực quan hóa trên Power BI / Looker Studio và thuyết phục lãnh đạo ra quyết định.",
+      "bulletPoints": [
+        "Nguyên lý UI/UX thiết kế Dashboard dành cho C-levels & Quản lý",
+        "Lựa chọn biểu đồ chuẩn mực và bố cục F-pattern / Z-pattern",
+        "Kể chuyện dữ liệu để thúc đẩy hành động (Data Storytelling)",
+        "Dự án tốt nghiệp Capstone đa chiều hoàn chỉnh"
+      ],
+      "durationHours": 21,
+      "lessonsCount": 7,
+      "sortOrder": 3,
+      "weekNumber": 6,
+      "weekLabel": "Giai đoạn 3",
+      "sessionDateBadge": "TH11 20",
+      "isMilestone": true,
+      "milestoneBadge": "Dự án Capstone"
+    },
+    {
+      "id": "mod-think-01",
+      "courseId": "data-analytical-thinking",
+      "courseName": "Data Analytical Thinking",
+      "moduleNumber": 1,
+      "title": "Buổi 1-5: Khung tư duy phân rã vấn đề kinh doanh (MECE & Metrics Tree)",
+      "summary": "Phân rã chỉ số cốt lõi và xác định đúng vấn đề trước khi bắt tay phân tích.",
+      "bulletPoints": [
+        "Tư duy MECE (Mutually Exclusive, Collectively Exhaustive)",
+        "Thiết lập cây chỉ số phân tích doanh nghiệp B2B & B2C",
+        "Xác định North Star Metric và bộ chỉ số input/output"
+      ],
+      "durationHours": 15,
+      "lessonsCount": 5,
+      "sortOrder": 1,
+      "weekNumber": 1,
+      "weekLabel": "Week 1-2",
+      "sessionDateBadge": "TH10 10"
+    },
+    {
+      "id": "mod-think-02",
+      "courseId": "data-analytical-thinking",
+      "courseName": "Data Analytical Thinking",
+      "moduleNumber": 2,
+      "title": "Buổi 6-10: Các kỹ thuật phân tích dữ liệu chuyên sâu (Cohort, Funnel, RFM)",
+      "summary": "Làm chủ các mô hình phân tích kinh điển trong E-commerce, Fintech, SaaS.",
+      "bulletPoints": [
+        "Phân tích phễu chuyển đổi (Funnel Conversion) và điểm rơi rớt",
+        "Mô hình phân khúc khách hàng RFM (Recency, Frequency, Monetary)",
+        "Phân tích giữ chân và tính giá trị vòng đời khách hàng (Customer Lifetime Value - LTV)"
+      ],
+      "durationHours": 15,
+      "lessonsCount": 5,
+      "sortOrder": 2,
+      "weekNumber": 3,
+      "weekLabel": "Week 3-4",
+      "sessionDateBadge": "TH10 25"
+    },
+    {
+      "id": "mod-think-03",
+      "courseId": "data-analytical-thinking",
+      "courseName": "Data Analytical Thinking",
+      "moduleNumber": 3,
+      "title": "Buổi 11-15: Thiết kế Dashboard quản trị & Data Storytelling",
+      "summary": "Biến con số khô khan thành hành động và quyết định quản trị chiến lược.",
+      "bulletPoints": [
+        "Bố cục Dashboard phục vụ điều hành doanh nghiệp",
+        "Viết Executive Summary và cấu trúc bài thuyết trình dữ liệu",
+        "Dự án báo cáo tư vấn thực tế cho Ban giám đốc"
+      ],
+      "durationHours": 15,
+      "lessonsCount": 5,
+      "sortOrder": 3,
+      "weekNumber": 5,
+      "weekLabel": "Week 5",
+      "sessionDateBadge": "TH11 10",
+      "isMilestone": true,
+      "milestoneBadge": "Dự án cuối khóa"
+    }
+  ],
+  "packages": [
+    {
+      "id": "pkg-combo-full",
+      "packageId": "combo-end-to-end",
+      "name": "Combo End-to-End Analytics (SQL + Thinking + BI)",
+      "originalPrice": 6780000,
+      "salePrice": 5690000,
+      "badge": "Tiết Kiệm 1.090.000đ",
+      "featuresList": [
+        "Trọn bộ 2 khóa học: SQL Thực Chiến + Data Thinking",
+        "Tổng cộng 27 buổi học trực tiếp qua Zoom",
+        "Thực hành trên 2 dự án doanh nghiệp lớn (E-commerce & Fintech)",
+        "1 Dự án tốt nghiệp Capstone hoàn chỉnh cho Portfolio",
+        "Mentor review code & bài tập 1-on-1 hàng tuần",
+        "Tham gia cộng đồng Alumni Data & hỗ trợ CV trọn đời"
+      ],
+      "isPopular": true,
+      "isActive": true,
+      "sortOrder": 1
+    },
+    {
+      "id": "pkg-sql-only",
+      "packageId": "single-sql",
+      "name": "Khóa Lẻ: SQL for Data Analytics",
+      "originalPrice": 3500000,
+      "salePrice": 2990000,
+      "badge": "Ưu Đãi Sớm",
+      "featuresList": [
+        "12 buổi học chuyên sâu về cơ sở dữ liệu và truy vấn SQL",
+        "Thực hành với hệ quản trị PostgreSQL / MySQL",
+        "2 bài thực hành lớn (Hands-on Labs) có Mentor chấm điểm",
+        "Định hướng nghề nghiệp và tối ưu hồ sơ ứng tuyển"
+      ],
+      "isPopular": false,
+      "isActive": true,
+      "sortOrder": 2
+    },
+    {
+      "id": "pkg-thinking-only",
+      "packageId": "single-thinking",
+      "name": "Khóa Lẻ: Data Analytical Thinking",
+      "originalPrice": 4500000,
+      "salePrice": 3790000,
+      "badge": "Chuyên Sâu",
+      "featuresList": [
+        "15 buổi học tư duy giải quyết vấn đề kinh doanh bằng số liệu",
+        "Xây dựng cây chỉ số Metrics Tree, mô hình Cohort, RFM",
+        "Thiết kế Dashboard báo cáo điều hành chuyên nghiệp",
+        "Thực hành tư vấn chiến lược cho doanh nghiệp giả lập"
+      ],
+      "isPopular": false,
+      "isActive": true,
+      "sortOrder": 3
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-ecommerce-basket",
+      "projectId": "proj-ecommerce-basket",
+      "title": "Phân Tích Giỏ Hàng & Tối Ưu Cross-Selling E-Commerce",
+      "category": "E-Commerce",
+      "authorName": "Nguyễn Minh Anh (K7)",
+      "tools": [
+        "SQL",
+        "PostgreSQL",
+        "Power BI"
+      ],
+      "toolsRaw": "SQL, PostgreSQL, Power BI",
+      "metrics": "Tăng 18% giá trị đơn hàng trung bình (AOV) nhờ đề xuất combo sản phẩm",
+      "imageUrl": "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+      "sortOrder": 1,
+      "isActive": true
+    },
+    {
+      "id": "proj-fintech-retention",
+      "projectId": "proj-fintech-retention",
+      "title": "Dự Đoán Rủi Ro Rời Bỏ (Churn) Ứng Dụng Thanh Toán Fintech",
+      "category": "Fintech",
+      "authorName": "Trần Quốc Bảo (K8)",
+      "tools": [
+        "SQL",
+        "Cohort Analysis",
+        "Looker Studio"
+      ],
+      "toolsRaw": "SQL, Cohort Analysis, Looker Studio",
+      "metrics": "Giảm 12% tỷ lệ mất người dùng sau 30 ngày qua mô hình cảnh báo sớm",
+      "imageUrl": "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+      "sortOrder": 2,
+      "isActive": true
+    },
+    {
+      "id": "proj-retail-inventory",
+      "projectId": "proj-retail-inventory",
+      "title": "Tối Ưu Hóa Tồn Kho & Dự Báo Nhu Cầu Bán Lẻ Chuỗi Thời Trang",
+      "category": "Retail",
+      "authorName": "Lê Hoàng Yến (K9)",
+      "tools": [
+        "SQL",
+        "Excel Advanced",
+        "Tableau"
+      ],
+      "toolsRaw": "SQL, Excel Advanced, Tableau",
+      "metrics": "Tiết kiệm 22% chi phí lưu kho và hạn chế tình trạng đứt hàng bán chạy",
+      "imageUrl": "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+      "sortOrder": 3,
+      "isActive": true
+    }
+  ],
+  "mentors": [
+    {
+      "id": "hua-thao-ly",
+      "name": "Hứa Thảo Ly",
+      "role": "Founder Lydata & Senior Data Analyst",
+      "title": "Founder Lydata • Ex-Senior DA MoMo, Tiki, ACB",
+      "bio": "Xin chào, mình là Lý - Founder của Lydata. Với hơn 6+ năm kinh nghiệm làm việc trong lĩnh vực Data Analytics tại các tập đoàn và kỳ lân công nghệ hàng đầu như MoMo, Tiki, ACB Bank, mình đã đồng hành cùng hơn 1,000+ học viên chuyển ngành và nâng cao năng lực phân tích dữ liệu ứng dụng thực chiến.",
+      "avatarUrl": "/assets/figma/da527ba5696d5b94f6f71aebe984b901fc46d929.png",
+      "companies": [
+        "MoMo",
+        "Tiki",
+        "ACB Bank"
+      ],
+      "companiesWorked": "MoMo, Tiki, ACB Bank",
+      "linkedinUrl": "https://linkedin.com",
+      "experienceYears": 6,
+      "isActive": true
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "test-01",
+      "studentName": "Nguyễn Hải Đăng",
+      "studentRole": "Ex-Marketing Exec → Junior Data Analyst",
+      "role": "Ex-Marketing Exec → Junior Data Analyst",
+      "company": "Shopee Vietnam",
+      "courseId": "sql-for-data-analytics",
+      "rating": 5,
+      "comment": "Trước đây mình rất sợ các câu lệnh và công thức phức tạp. Nhờ cách dạy trực quan theo từng tình huống kinh doanh của chị Lý, mình đã hiểu sâu bản chất JOIN, CTE và Window Function. Hiện tại mình đã pass vòng phỏng vấn DA tại Shopee!",
+      "reviewText": "Trước đây mình rất sợ các câu lệnh và công thức phức tạp. Nhờ cách dạy trực quan theo từng tình huống kinh doanh của chị Lý, mình đã hiểu sâu bản chất JOIN, CTE và Window Function. Hiện tại mình đã pass vòng phỏng vấn DA tại Shopee!",
+      "avatarUrl": "/assets/figma/da527ba5696d5b94f6f71aebe984b901fc46d929.png",
+      "isActive": true
+    },
+    {
+      "id": "test-02",
+      "studentName": "Trần Mai Phương",
+      "studentRole": "Business Analyst",
+      "role": "Business Analyst",
+      "company": "MB Bank",
+      "courseId": "end-to-end-analytics",
+      "rating": 5,
+      "comment": "Khóa Combo End-to-End thực sự là bước ngoặt. Không chỉ dạy kỹ thuật viết code, chị Lý còn truyền cho mình tư duy bóc tách vấn đề MECE và cách nói chuyện với Stakeholder. Các buổi review bài tập 1-on-1 siêu chi tiết và tâm huyết.",
+      "reviewText": "Khóa Combo End-to-End thực sự là bước ngoặt. Không chỉ dạy kỹ thuật viết code, chị Lý còn truyền cho mình tư duy bóc tách vấn đề MECE và cách nói chuyện với Stakeholder. Các buổi review bài tập 1-on-1 siêu chi tiết và tâm huyết.",
+      "avatarUrl": "/assets/figma/da527ba5696d5b94f6f71aebe984b901fc46d929.png",
+      "isActive": true
+    },
+    {
+      "id": "test-03",
+      "studentName": "Phạm Quốc Tuấn",
+      "studentRole": "Operations Specialist",
+      "role": "Operations Specialist",
+      "company": "Giao Hàng Nhanh (GHN)",
+      "courseId": "data-analytical-thinking",
+      "rating": 5,
+      "comment": "Khóa học giúp mình xóa bỏ tư duy làm báo cáo chay. Mình tự tay xây dựng được hệ thống Dashboard tự động cảnh báo đơn trễ và đo lường SLA giao hàng. Sếp khen ngợi và tăng lương ngay sau khi áp dụng vào thực tế.",
+      "reviewText": "Khóa học giúp mình xóa bỏ tư duy làm báo cáo chay. Mình tự tay xây dựng được hệ thống Dashboard tự động cảnh báo đơn trễ và đo lường SLA giao hàng. Sếp khen ngợi và tăng lương ngay sau khi áp dụng vào thực tế.",
+      "avatarUrl": "/assets/figma/da527ba5696d5b94f6f71aebe984b901fc46d929.png",
+      "isActive": true
+    }
+  ],
+  "faqs": [
+    {
+      "id": "faq-01",
+      "question": "Mình chưa từng học lập trình hoặc học khối ngành kinh tế có theo được không?",
+      "answer": "Hoàn toàn được! Lộ trình được thiết kế đặc biệt dành cho người mới bắt đầu từ con số 0. Giảng viên sẽ hướng dẫn từ tư duy dữ liệu cơ bản, cài đặt công cụ từng bước và thực hành trực tiếp qua các tình huống kinh doanh thực tế.",
+      "category": "General",
+      "sortOrder": 1,
+      "isActive": true
+    },
+    {
+      "id": "faq-02",
+      "question": "Hình thức học và thời gian học như thế nào?",
+      "answer": "Khóa học diễn ra trực tiếp qua Zoom Meeting vào các buổi tối trong tuần (19h30 - 21h30). Mỗi buổi học đều có video record chất lượng cao và tài liệu bài giảng được gửi lại sau buổi học để học viên xem lại bất kỳ lúc nào.",
+      "category": "Learning Format",
+      "sortOrder": 2,
+      "isActive": true
+    },
+    {
+      "id": "faq-03",
+      "question": "Học viên có được hỗ trợ sau khi kết thúc khóa học không?",
+      "answer": "Có! Học viên được tham gia cộng đồng Alumni Data trọn đời, được hỗ trợ giải đáp thắc mắc công việc thực tế, review CV/Portfolio xin việc và kết nối cơ hội tuyển dụng từ mạng lưới đối tác của Lydata.",
+      "category": "Support",
+      "sortOrder": 3,
+      "isActive": true
+    },
+    {
+      "id": "faq-04",
+      "question": "Chính sách bảo lưu và hoàn học phí như thế nào?",
+      "answer": "Học viên được hỗ trợ bảo lưu khóa học tối đa 06 tháng khi có việc bận đột xuất. Nếu sau 02 buổi học đầu tiên cảm thấy chưa phù hợp, bạn được quyền yêu cầu hoàn lại 100% học phí mà không cần bất kỳ thủ tục phức tạp nào.",
+      "category": "Policy",
+      "sortOrder": 4,
+      "isActive": true
+    }
+  ],
+  "blogs": [
+    {
+      "id": "blog-sql-meo-can-biet",
+      "title": "Các mẹo SQL cần biết trong doanh nghiệp",
+      "slug": "cac-meo-sql-can-biet",
+      "category": "SQL",
+      "excerpt": "Khám phá các mẹo, thủ thuật và câu lệnh SQL hữu ích giúp viết truy vấn ngắn gọn, tối ưu và hiệu quả hơn trong môi trường doanh nghiệp thực tế.",
+      "coverImageUrl": "/assets/figma/71218f0038c8a9ce02ba0e6f6b102fbf63b6953b.png",
+      "authorName": "Hứa Thảo Ly",
+      "publishedAt": "2026-03-01",
+      "readTimeMinutes": 6,
+      "isActive": true,
+      "contentMarkdown": "## 1. Tại sao kỹ năng viết SQL chuẩn doanh nghiệp lại quan trọng?\n\nKhi làm việc với các hệ thống cơ sở dữ liệu lớn hàng chục triệu dòng tại các công ty như ví điện tử hay sàn thương mại điện tử, việc viết câu lệnh SQL chạy được là **chưa đủ**. Một truy vấn không tối ưu có thể làm sập database server hoặc khiến báo cáo chạy mất hàng giờ đồng hồ.\n\n> **Lời khuyên từ Mentor Ly:** Trong phỏng vấn và công việc thực tế, nhà tuyển dụng đánh giá cao một Data Analyst biết sử dụng CTE, Window Function và kiểm soát tốt chi phí quét dữ liệu (scan cost).\n\n---\n\n## 2. Tận dụng CTE (Common Table Expressions) thay vì Subquery lồng nhau\n\nSubquery lồng nhiều tầng khiến người đọc hoa mắt và gây khó khăn cho việc bảo trì code. Sử dụng mệnh đề `WITH` giúp tách logic thành từng bước tuần tự rõ ràng:\n\n```sql\n-- Tính doanh thu và xếp hạng chi tiêu của khách hàng theo tháng\nWITH monthly_customer_revenue AS (\n  SELECT\n    DATE_TRUNC('month', order_date) AS order_month,\n    customer_id,\n    SUM(total_amount) AS total_spent,\n    COUNT(order_id) AS order_count\n  FROM orders\n  WHERE order_status = 'COMPLETED'\n  GROUP BY 1, 2\n),\nranked_customers AS (\n  SELECT\n    order_month,\n    customer_id,\n    total_spent,\n    DENSE_RANK() OVER (\n      PARTITION BY order_month \n      ORDER BY total_spent DESC\n    ) AS spending_rank\n  FROM monthly_customer_revenue\n)\nSELECT *\nFROM ranked_customers\nWHERE spending_rank <= 10\nORDER BY order_month DESC, spending_rank ASC;\n```\n\n---\n\n## 3. Phân biệt ROW_NUMBER, RANK và DENSE_RANK\n\nĐây là câu hỏi thường xuyên xuất hiện trong các bài test SQL kỹ thuật:\n\n- **ROW_NUMBER():** Luôn trả về số thứ tự duy nhất (1, 2, 3, 4...), hữu ích khi cần lấy chính xác 1 dòng mới nhất (deduplication).\n- **RANK():** Nếu có giá trị bằng nhau sẽ đồng hạng và **nhảy cóc** thứ tự (1, 2, 2, 4...).\n- **DENSE_RANK():** Nếu bằng nhau sẽ đồng hạng nhưng **không nhảy cóc** (1, 2, 2, 3...).\n\n### Ví dụ xử lý bản ghi trùng lặp (Deduplication):\n\n```sql\n-- Lấy trạng thái mới nhất của mỗi đơn hàng dựa trên thời gian cập nhật\nWITH ranked_events AS (\n  SELECT\n    order_id,\n    status,\n    updated_at,\n    ROW_NUMBER() OVER (\n      PARTITION BY order_id \n      ORDER BY updated_at DESC\n    ) AS rn\n  FROM order_logs\n)\nSELECT order_id, status, updated_at\nFROM ranked_events\nWHERE rn = 1;\n```\n\n---\n\n## 4. Xử lý giá trị NULL an toàn với COALESCE\n\nTránh để giá trị `NULL` làm hỏng phép tính tổng hoặc hiển thị bảng điều khiển bằng hàm `COALESCE`:\n\n```sql\nSELECT\n  p.product_name,\n  COALESCE(s.discount_rate, 0) AS safe_discount,\n  p.base_price * (1 - COALESCE(s.discount_rate, 0)) AS final_price\nFROM products p\nLEFT JOIN promotions s ON p.promo_id = s.id;\n```\n\n---\n\n## 5. Tổng kết\n\nNắm vững các kỹ thuật trên không chỉ giúp bạn hoàn thành tốt các bài tập phân tích dữ liệu mà còn tự tin giải quyết bài toán nghiệp vụ quy mô lớn tại các doanh nghiệp hàng đầu."
+    },
+    {
+      "id": "blog-dashboard-5-giay",
+      "title": "Cách thiết kế Dashboard trực quan chỉ trong 5 giây",
+      "slug": "thiet-ke-dashboard-truc-quan",
+      "category": "Dashboard",
+      "excerpt": "Những nguyên lý thị giác quan trọng giúp báo cáo của bạn vừa chuẩn logic kinh doanh vừa đẹp mắt, thuyết phục ban lãnh đạo ngay từ cái nhìn đầu tiên.",
+      "coverImageUrl": "/assets/figma/71218f0038c8a9ce02ba0e6f6b102fbf63b6953b.png",
+      "authorName": "Hứa Thảo Ly",
+      "publishedAt": "2026-03-05",
+      "readTimeMinutes": 7,
+      "isActive": true,
+      "contentMarkdown": "## 1. Quy tắc 5 giây (The 5-Second Rule) trong thiết kế báo cáo\n\nMột dashboard hiệu quả là khi người dùng (đặc biệt là Ban Giám Đốc hoặc Trưởng phòng) có thể nắm bắt được bức tranh toàn cảnh về sức khỏe kinh doanh chỉ sau **5 giây đầu tiên** nhìn vào màn hình.\n\n> Nếu sếp của bạn mất quá 1 phút để tìm xem doanh thu hôm nay tăng hay giảm, dashboard đó đã thất bại về mặt trải nghiệm người dùng (UX/UI).\n\n---\n\n## 2. Bố cục theo mẫu chữ F và chữ Z (Eye-Tracking Patterns)\n\nMắt người đọc phương Tây và Việt Nam luôn quét từ **trái sang phải**, từ **trên xuống dưới**. Do đó hãy sắp xếp dashboard theo cấu trúc phân cấp thông tin:\n\n- **Góc trên cùng bên trái:** Các chỉ số sinh mệnh (North Star KPIs) như Doanh thu, Lợi nhuận, Số lượng đơn hàng mới.\n- **Khu vực trung tâm:** Biểu đồ xu hướng (Trend Line) hoặc so sánh chỉ số qua các mốc thời gian (MoM, YoY).\n- **Góc dưới hoặc thanh bên phải:** Bảng chi tiết phân rã theo ngành hàng, khu vực địa lý hoặc kênh phân phối.\n\n---\n\n## 3. Màu sắc có chủ đích: Đừng biến báo cáo thành hộp bút chì màu\n\nSai lầm phổ biến nhất của các bạn mới làm Data Analyst là sử dụng quá nhiều màu sắc rực rỡ khiến người xem bị quá tải thị giác:\n\n- **Màu trung tính (#252525, #676767, #F8F9FA):** Dành cho nền, chữ và các yếu tố phụ.\n- **Màu thương hiệu hoặc điểm nhấn (Crimson / Navy):** Dành cho số liệu trọng tâm cần thu hút sự chú ý.\n- **Màu trạng thái (Xanh lá / Đỏ):** Chỉ dùng khi biểu thị tích cực (tăng trưởng, đạt KPI) hoặc tiêu cực (sụt giảm, rủi ro).\n\n---\n\n## 4. Tính toán chỉ số tăng trưởng (Growth Rate) chuẩn xác\n\nDưới đây là công thức SQL mẫu để tính tỷ lệ tăng trưởng doanh thu so với tháng trước (MoM Growth) trước khi đưa lên biểu đồ:\n\n```sql\nWITH monthly_sales AS (\n  SELECT\n    DATE_TRUNC('month', order_date) AS sales_month,\n    SUM(net_revenue) AS current_revenue\n  FROM fact_sales\n  GROUP BY 1\n),\nsales_with_lag AS (\n  SELECT\n    sales_month,\n    current_revenue,\n    LAG(current_revenue, 1) OVER (ORDER BY sales_month) AS previous_month_revenue\n  FROM monthly_sales\n)\nSELECT\n  sales_month,\n  current_revenue,\n  previous_month_revenue,\n  ROUND(\n    ((current_revenue - previous_month_revenue) / NULLIF(previous_month_revenue, 0)) * 100, \n    2\n  ) AS mom_growth_percent\nFROM sales_with_lag\nORDER BY sales_month DESC;\n```\n\n---\n\n## 5. Tạm kết\n\nMột dashboard xuất sắc không chỉ nằm ở vẻ ngoài thẩm mỹ mà là khả năng kích hoạt hành động nghiệp vụ (Actionable Insights) cho đội ngũ lãnh đạo."
+    },
+    {
+      "id": "blog-chuyen-nganh-data-0",
+      "title": "Lộ trình chuyển ngành Data Analytics từ con số 0",
+      "slug": "lo-trinh-chuyen-nganh-data-analyst",
+      "category": "Career",
+      "excerpt": "Kinh nghiệm thực chiến từ việc học công cụ, làm portfolio dự án đến cách trả lời câu hỏi phỏng vấn hóc búa dành cho người trái ngành.",
+      "coverImageUrl": "/assets/figma/71218f0038c8a9ce02ba0e6f6b102fbf63b6953b.png",
+      "authorName": "Hứa Thảo Ly",
+      "publishedAt": "2026-03-10",
+      "readTimeMinutes": 8,
+      "isActive": true,
+      "contentMarkdown": "## 1. Chuyển ngành sang Data Analytics có quá muộn?\n\nRất nhiều bạn từ khối ngành kinh tế, marketing, logistics hay tài chính ngân hàng thường lo lắng: *\"Mình không biết lập trình, học toán bình thường thì có làm được Data Analyst không?\"*\n\nCâu trả lời ngắn gọn là: **Hoàn toàn được!** Data Analyst không đòi hỏi bạn phải có bằng Khoa học Máy tính. Điều quan trọng nhất của một DA là **tư duy kinh doanh (Business Sense)** kết hợp với khả năng sử dụng dữ liệu để chứng minh luận điểm.\n\n---\n\n## 2. 4 Giai đoạn trong lộ trình chinh phục nghề DA\n\n### Giai đoạn 1: Tư duy phân tích và Nền tảng số liệu\n- Hiểu các mô hình kinh doanh phổ biến (E-commerce, SaaS, Retail, Banking).\n- Nắm rõ các chỉ số vận hành cốt lõi: CAC, LTV, AOV, Churn Rate, Retention Rate.\n\n### Giai đoạn 2: Vũ khí tối thượng — SQL thực chiến\nSQL là kỹ năng bắt buộc số 1 mà 99% các vị trí tuyển dụng Data Analyst đều yêu cầu. Bạn cần thành thạo:\n- Lọc, kết hợp dữ liệu: `WHERE`, `JOIN` (INNER, LEFT, FULL).\n- Gom nhóm và tính toán: `GROUP BY`, `HAVING`, Aggregations.\n- Các hàm nâng cao: CTEs, Window Functions (`ROW_NUMBER`, `LEAD`, `LAG`).\n\n### Giai đoạn 3: Trực quan hóa dữ liệu (BI Dashboard)\n- Lựa chọn công cụ phù hợp: Looker Studio, Power BI hoặc Tableau.\n- Thiết kế luồng dữ liệu tự động và xây dựng báo cáo phân tích tương tác.\n\n### Giai đoạn 4: Python cho Phân tích thăm dò (EDA)\nSử dụng thư viện `pandas` và `matplotlib` để làm sạch dữ liệu lớn và trực quan hóa phân phối:\n\n```python\nimport pandas as pd\nimport numpy as np\n\n# Đọc dữ liệu khách hàng và kiểm tra tỷ lệ rời bỏ (Churn)\ndf = pd.read_csv(\"customer_churn_data.csv\")\n\n# Tính toán các chỉ số cơ bản\nsummary = df.groupby(\"subscription_plan\").agg(\n    total_users=(\"user_id\", \"count\"),\n    avg_monthly_spend=(\"monthly_charge\", \"mean\"),\n    churn_rate=(\"is_churned\", lambda x: np.mean(x) * 100)\n).reset_index()\n\nprint(\"Báo cáo tỷ lệ Churn theo gói dịch vụ:\")\nprint(summary.round(2))\n```\n\n---\n\n## 3. Bí quyết xây dựng Portfolio dự án gây ấn tượng với nhà tuyển dụng\n\nThay vì chỉ nộp CV với các dự án Titanic hay Iris dataset có sẵn trên Kaggle, hãy tạo ít nhất **2 dự án Capstone giải quyết bài toán kinh doanh cụ thể**:\n1. **Dự án E-commerce Basket Analysis:** Phân tích quy luật mua sắm chéo để gợi ý sản phẩm bán kèm.\n2. **Dự án Customer Segmentation (RFM):** Phân khúc khách hàng theo Tần suất, Giá trị và Thời gian mua sắm gần nhất.\n\n---\n\n## 4. Lời kết từ Mentor Hứa Thảo Ly\n\nCon đường chuyển ngành sẽ có những thời điểm bạn cảm thấy quá tải trước lượng kiến thức đồ sộ. Nhưng nếu có một lộ trình học có định hướng, người hướng dẫn sát sao và kiên trì rèn luyện dự án thực tế, bạn hoàn toàn có thể tự tin ứng tuyển vị trí Data Analyst trong vòng 4 đến 6 tháng."
+    }
+  ],
+  "promotions": [
+    {
+      "id": "promo-early-bird",
+      "code": "EARLYBIRD",
+      "title": "Ưu Đãi Đăng Ký Sớm K10",
+      "discountType": "FIXED_VND",
+      "discountValue": 500000,
+      "startDate": "2026-10-01",
+      "endDate": "2026-12-31",
+      "applicableCourses": "ALL",
+      "badge": "Giảm 500.000đ",
+      "isActive": true,
+      "sortOrder": 1
+    },
+    {
+      "id": "promo-combo-special",
+      "code": "COMBODATA",
+      "title": "Ưu Đãi Trọn Bộ Combo Data Analyst",
+      "discountType": "FIXED_VND",
+      "discountValue": 1090000,
+      "startDate": "2026-10-01",
+      "endDate": "2026-12-31",
+      "applicableCourses": "end-to-end-analytics",
+      "badge": "Tiết Kiệm 1.090K",
+      "isActive": true,
+      "sortOrder": 2
+    }
+  ],
+  "settings": {
+    "hotline": "(+84) 934 938 431",
+    "zaloUrl": "https://zalo.me/0934938431",
+    "contactEmail": "vietds@gmail.com",
+    "announcementBar": "🎉 Khai giảng khóa mới ngày 26 tháng 10, 2026 - Giảm ngay 500.000đ khi đăng ký sớm!",
+    "revalidationUrl": "/api/revalidate"
+  },
+  "trustMetrics": [
+    {
+      "metricKey": "students_enrolled",
+      "numberDisplay": "1,000+",
+      "label": "Học viên tốt nghiệp",
+      "iconName": "Users",
+      "isActive": true,
+      "sortOrder": 1
+    },
+    {
+      "metricKey": "employment_rate",
+      "numberDisplay": "92%",
+      "label": "Có việc làm trong 3 tháng",
+      "iconName": "Briefcase",
+      "isActive": true,
+      "sortOrder": 2
+    },
+    {
+      "metricKey": "average_rating",
+      "numberDisplay": "4.8/5",
+      "label": "Đánh giá hài lòng từ học viên",
+      "iconName": "Star",
+      "isActive": true,
+      "sortOrder": 3
+    },
+    {
+      "metricKey": "partner_companies",
+      "numberDisplay": "30+",
+      "label": "Doanh nghiệp đối tác tuyển dụng",
+      "iconName": "Building",
+      "isActive": true,
+      "sortOrder": 4
+    }
+  ]
+}
