@@ -9,72 +9,25 @@
 <body>
   <div class="modal-header">
     <div>
-      <h2 class="modal-title">✍️ Thêm Bài Viết Blog</h2>
-      <p class="modal-subtitle">Xuất bản bài viết kiến thức, tự động sinh slug chuẩn SEO và chống trùng lặp</p>
+      <h2 class="modal-title">✍️ Thêm Bài Viết Blog Hàng Loạt</h2>
+      <p class="modal-subtitle">Xuất bản bài viết kiến thức, tự động sinh slug chuẩn SEO và chống trùng lặp theo thời gian thực</p>
     </div>
   </div>
 
   <form id="blogForm">
-    <div class="form-group">
-      <label for="title">Tiêu Đề Bài Viết <span class="required">*</span></label>
-      <input type="text" id="title" name="title" required
-        placeholder="Lộ trình chuyển ngành Data Analytics từ con số 0 năm 2026" autocomplete="off">
-    </div>
+    <div id="blogCardsContainer" class="repeater-container"></div>
 
-    <div class="preview-box">
-      <div class="preview-header">
-        <span>Xem trước URL Bài Viết Blog</span>
-        <span id="versionBadge" class="badge-v badge-emerald">Chuẩn SEO</span>
-      </div>
-      <div class="preview-content">
-        https://datawithly.edu.vn/blog/<strong id="slugPreview"
-          style="color: var(--primary);">lo-trinh-chuyen-nganh-data-analytics</strong>
-      </div>
-      <input type="hidden" id="slug" name="slug">
-      <input type="hidden" id="blog_id" name="id">
-    </div>
-
-    <div class="form-row">
-      <div class="form-group col-1">
-        <label for="category">Chuyên Mục Bài Viết <span class="required">*</span></label>
-        <select id="category" name="category">
-          <option value="Sự nghiệp">Sự nghiệp (Career Path)</option>
-          <option value="Kỹ thuật">Kỹ thuật (SQL / BI / Python)</option>
-          <option value="Case Study">Case Study Thực Chiến</option>
-          <option value="Góc nhìn">Góc nhìn & Tư duy Dữ liệu</option>
-        </select>
-      </div>
-      <div class="form-group col-1">
-        <label for="author_name">Tác Giả <span class="required">*</span></label>
-        <input type="text" id="author_name" name="author_name" required value="Hứa Thảo Ly" placeholder="Hứa Thảo Ly">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="excerpt">Đoạn Tóm Tắt Ngắn (Meta Description & Excerpt) <span class="required">*</span></label>
-      <textarea id="excerpt" name="excerpt" rows="3" required
-        placeholder="Chi tiết từng giai đoạn học tập, kỹ năng cần chuẩn bị và cách xây dựng Portfolio để chinh phục nhà tuyển dụng trong 6 tháng..."></textarea>
-    </div>
-
-    <div class="form-row" style="margin-top: 6px;">
-      <div class="form-group col-1">
-        <label for="published_at">Ngày Xuất Bản</label>
-        <input type="date" id="published_at" name="published_at">
-      </div>
-      <div class="form-group col-1" style="display: flex; align-items: flex-end;">
-        <label class="checkbox-group" style="width: 100%;">
-          <input type="checkbox" id="is_active" name="is_active" checked>
-          <span class="checkbox-label">Xuất bản công khai (is_active)</span>
-        </label>
-      </div>
-    </div>
+    <button type="button" id="addBlogBtn" class="btn-add-repeater">
+      <span>➕ Thêm bài viết</span>
+    </button>
 
     <div id="errorBox" class="alert-banner alert-danger error-msg"></div>
+    <div id="successBox" class="alert-banner alert-success fade-in" style="display: none;"></div>
 
     <div class="btn-group">
       <button type="button" class="btn-cancel" onclick="google.script.host.close()">Hủy Bỏ</button>
       <button type="submit" id="submitBtn" class="btn-submit">
-        <span>Xuất Bản Bài Viết</span>
+        <span id="submitBtnText">Lưu tất cả (1 bài viết)</span>
       </button>
     </div>
   </form>
@@ -129,85 +82,224 @@
       }
     }
 
-    var titleInput = document.getElementById("title");
-    var slugPreview = document.getElementById("slugPreview");
-    var slugHidden = document.getElementById("slug");
-    var idHidden = document.getElementById("blog_id");
-    var versionBadge = document.getElementById("versionBadge");
+    var form = document.getElementById("blogForm");
+    var container = document.getElementById("blogCardsContainer");
+    var addBlogBtn = document.getElementById("addBlogBtn");
+    var submitBtn = document.getElementById("submitBtn");
+    var submitBtnText = document.getElementById("submitBtnText");
+    var errorBox = document.getElementById("errorBox");
+    var successBox = document.getElementById("successBox");
 
-    titleInput.addEventListener("input", function () {
-      var rawSlug = slugify(this.value);
-      if (!rawSlug) {
-        slugPreview.innerText = "lo-trinh-chuyen-nganh-data-analytics";
-        slugHidden.value = "";
-        idHidden.value = "";
-        versionBadge.className = "badge-v badge-slate";
-        versionBadge.innerText = "Chờ nhập liệu";
-        return;
+    function showError(msg) {
+      if (successBox) successBox.style.display = "none";
+      errorBox.innerText = msg;
+      errorBox.style.display = "block";
+    }
+
+    function showSuccess(msg) {
+      errorBox.style.display = "none";
+      errorBox.innerText = "";
+      successBox.innerText = msg;
+      successBox.style.display = "flex";
+    }
+
+    function updateAllSlugs() {
+      var cards = container.querySelectorAll(".form-card");
+      var batchSlugs = [].concat(existingSlugs);
+
+      for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        var titleInput = card.querySelector('[name="title"]');
+        var slugPreview = card.querySelector(".slug-preview-text");
+        var slugHidden = card.querySelector('[name="slug"]');
+        var versionBadge = card.querySelector(".slug-version-badge");
+        var val = (titleInput.value || "").trim();
+        var rawSlug = slugify(val);
+
+        if (!rawSlug) {
+          slugPreview.innerText = "lo-trinh-chuyen-nganh-data-analytics";
+          slugHidden.value = "";
+          versionBadge.className = "badge-v badge-slate slug-version-badge";
+          versionBadge.innerText = "Chờ nhập liệu";
+          continue;
+        }
+
+        var res = resolveUniqueSlugClient(rawSlug, batchSlugs);
+        slugPreview.innerText = res.slug;
+        slugHidden.value = res.slug;
+        batchSlugs.push(res.slug);
+
+        if (res.isVersioned) {
+          versionBadge.className = "badge-v badge-crimson slug-version-badge";
+          versionBadge.innerText = "⚡ Trùng tiêu đề -> Đã gắn: " + res.slug.split("-").pop();
+        } else {
+          versionBadge.className = "badge-v badge-emerald slug-version-badge";
+          versionBadge.innerText = "✅ Duy nhất chuẩn SEO";
+        }
+      }
+    }
+
+    function updateCardHeaders() {
+      var cards = container.querySelectorAll(".form-card");
+      for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        var titleElem = card.querySelector(".form-card-title span");
+        if (titleElem) {
+          titleElem.innerText = "✍️ Bài viết #" + (i + 1);
+        }
+        var removeBtn = card.querySelector(".btn-remove-card");
+        if (removeBtn) {
+          removeBtn.style.display = cards.length > 1 ? "inline-block" : "none";
+        }
+      }
+      submitBtnText.innerText = "Lưu tất cả (" + cards.length + " bài viết)";
+    }
+
+    function createBlogCard() {
+      var card = document.createElement("div");
+      card.className = "form-card fade-in";
+      card.innerHTML =
+        '<div class="form-card-header">' +
+          '<div class="form-card-title"><span>✍️ Bài viết</span></div>' +
+          '<button type="button" class="btn-remove-card" title="Xóa bài viết này">✕ Xóa</button>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Tiêu Đề Bài Viết <span class="required">*</span></label>' +
+          '<input type="text" name="title" required placeholder="Lộ trình chuyển ngành Data Analytics từ con số 0 năm 2026" autocomplete="off">' +
+        '</div>' +
+        '<div class="preview-box">' +
+          '<div class="preview-header">' +
+            '<span>Xem trước URL Bài Viết Blog</span>' +
+            '<span class="badge-v badge-slate slug-version-badge">Chờ nhập liệu</span>' +
+          '</div>' +
+          '<div class="preview-content">' +
+            'https://datawithly.edu.vn/blog/<strong class="slug-preview-text" style="color: var(--primary);">lo-trinh-chuyen-nganh-data-analytics</strong>' +
+          '</div>' +
+          '<input type="hidden" name="slug">' +
+          '<input type="hidden" name="id">' +
+        '</div>' +
+        '<div class="form-row">' +
+          '<div class="form-group col-1">' +
+            '<label>Chuyên Mục Bài Viết <span class="required">*</span></label>' +
+            '<select name="category">' +
+              '<option value="Sự nghiệp">Sự nghiệp (Career Path)</option>' +
+              '<option value="Kỹ thuật">Kỹ thuật (SQL / BI / Python)</option>' +
+              '<option value="Case Study">Case Study Thực Chiến</option>' +
+              '<option value="Góc nhìn">Góc nhìn & Tư duy Dữ liệu</option>' +
+            '</select>' +
+          '</div>' +
+          '<div class="form-group col-1">' +
+            '<label>Tác Giả <span class="required">*</span></label>' +
+            '<input type="text" name="author_name" required value="Hứa Thảo Ly" placeholder="Hứa Thảo Ly">' +
+          '</div>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Đoạn Tóm Tắt Ngắn (Meta Description & Excerpt) <span class="required">*</span></label>' +
+          '<textarea name="excerpt" rows="2" required placeholder="Chi tiết từng giai đoạn học tập, kỹ năng cần chuẩn bị và cách xây dựng Portfolio..."></textarea>' +
+        '</div>' +
+        '<div class="form-row" style="margin-top: 6px;">' +
+          '<div class="form-group col-1">' +
+            '<label>Ngày Xuất Bản</label>' +
+            '<input type="date" name="published_at">' +
+          '</div>' +
+          '<div class="form-group col-1" style="display: flex; align-items: flex-end;">' +
+            '<label class="checkbox-group" style="width: 100%;">' +
+              '<input type="checkbox" name="is_active" checked>' +
+              '<span class="checkbox-label">Xuất bản công khai (is_active)</span>' +
+            '</label>' +
+          '</div>' +
+        '</div>';
+
+      var dateInput = card.querySelector('[name="published_at"]');
+      if (dateInput) {
+        dateInput.value = new Date().toISOString().split("T")[0];
       }
 
-      var res = resolveUniqueSlugClient(rawSlug, existingSlugs);
-      slugPreview.innerText = res.slug;
-      slugHidden.value = res.slug;
-      idHidden.value = "blg-" + res.slug;
+      var titleInput = card.querySelector('[name="title"]');
+      titleInput.addEventListener("input", updateAllSlugs);
 
-      if (res.isVersioned) {
-        versionBadge.className = "badge-v badge-crimson";
-        versionBadge.innerText = "⚡ Trùng tiêu đề -> Đã gắn: " + res.slug.split("-").pop();
-      } else {
-        versionBadge.className = "badge-v badge-emerald";
-        versionBadge.innerText = "✅ Duy nhất chuẩn SEO";
-      }
+      var removeBtn = card.querySelector(".btn-remove-card");
+      removeBtn.addEventListener("click", function () {
+        card.remove();
+        updateCardHeaders();
+        updateAllSlugs();
+      });
+
+      container.appendChild(card);
+      updateCardHeaders();
+      updateAllSlugs();
+      return card;
+    }
+
+    addBlogBtn.addEventListener("click", function () {
+      var newCard = createBlogCard();
+      var input = newCard.querySelector('[name="title"]');
+      if (input) input.focus();
     });
 
-    document.getElementById("published_at").value = new Date().toISOString().split("T")[0];
-
-    var form = document.getElementById("blogForm");
-    var submitBtn = document.getElementById("submitBtn");
-    var errorBox = document.getElementById("errorBox");
+    createBlogCard();
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       errorBox.style.display = "none";
       errorBox.innerText = "";
 
-      var title = titleInput.value.trim();
-      var excerpt = document.getElementById("excerpt").value.trim();
-      if (!title || !excerpt) {
-        showError("Vui lòng nhập tiêu đề bài viết và đoạn tóm tắt.");
+      var cards = container.querySelectorAll(".form-card");
+      if (cards.length === 0) {
+        showError("Vui lòng thêm ít nhất một bài viết.");
         return;
       }
 
-      var data = {
-        id: idHidden.value || ("blg-" + slugify(title)),
-        title: title,
-        slug: slugHidden.value || slugify(title),
-        category: document.getElementById("category").value,
-        excerpt: excerpt,
-        author_name: document.getElementById("author_name").value.trim() || "Hứa Thảo Ly",
-        published_at: document.getElementById("published_at").value,
-        is_active: document.getElementById("is_active").checked
-      };
+      var blogList = [];
+      for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        var title = (card.querySelector('[name="title"]').value || "").trim();
+        if (!title) {
+          showError("Vui lòng nhập tiêu đề cho bài viết #" + (i + 1) + ".");
+          card.querySelector('[name="title"]').focus();
+          return;
+        }
+
+        var excerpt = (card.querySelector('[name="excerpt"]').value || "").trim();
+        if (!excerpt) {
+          showError("Vui lòng nhập đoạn tóm tắt cho bài viết #" + (i + 1) + ".");
+          card.querySelector('[name="excerpt"]').focus();
+          return;
+        }
+
+        var author = (card.querySelector('[name="author_name"]').value || "").trim() || "Hứa Thảo Ly";
+        var publishedAt = card.querySelector('[name="published_at"]').value || new Date().toISOString().split("T")[0];
+
+        blogList.push({
+          title: title,
+          slug: card.querySelector('[name="slug"]').value || slugify(title),
+          category: card.querySelector('[name="category"]').value,
+          excerpt: excerpt,
+          author_name: author,
+          published_at: publishedAt,
+          is_active: card.querySelector('[name="is_active"]').checked
+        });
+      }
 
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="spinner"></span> Đang lưu...';
+      addBlogBtn.disabled = true;
+      submitBtnText.innerHTML = '<span class="spinner"></span> Đang xuất bản ' + blogList.length + ' bài viết...';
 
       google.script.run
-        .withSuccessHandler(function () {
-          google.script.host.close();
+        .withSuccessHandler(function (res) {
+          showSuccess("✅ Đã xuất bản thành công " + (res.count || blogList.length) + " bài viết!");
+          setTimeout(function () {
+            google.script.host.close();
+          }, 1200);
         })
         .withFailureHandler(function (err) {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = '<span>Xuất Bản Bài Viết</span>';
+          addBlogBtn.disabled = false;
+          updateCardHeaders();
           showError("Lỗi: " + (err.message || err.toString()));
         })
-        .saveBlogFromModal(data);
+        .addBlogsBatchFromModal(blogList);
     });
-
-    function showError(msg) {
-      errorBox.innerText = msg;
-      errorBox.style.display = "block";
-    }
   </script>
 </body>
 

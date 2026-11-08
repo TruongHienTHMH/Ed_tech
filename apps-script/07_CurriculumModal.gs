@@ -31,27 +31,81 @@ function showAddCurriculumModal() {
 
   var template = createModalTemplate("CurriculumModal");
   template.coursesList = coursesList;
-  var html = template.evaluate().setWidth(600).setHeight(620).setTitle("📚 Thêm Chương Lộ Trình Học - DataWithLy CMS");
-  SpreadsheetApp.getUi().showModalDialog(html, "📚 Thêm Chương Lộ Trình Học");
+  var html = template.evaluate().setWidth(660).setHeight(720).setTitle("📚 Thêm Chương Lộ Trình Hàng Loạt - DataWithLy CMS");
+  SpreadsheetApp.getUi().showModalDialog(html, "📚 Thêm Chương Lộ Trình Hàng Loạt");
 }
 
-function addNewCurriculumModuleFromModal(data) {
+function addCurriculumBatchFromModal(curriculumList) {
+  if (!curriculumList || !curriculumList.length) {
+    throw new Error("Danh sách chương học không được để trống.");
+  }
+
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName("curriculum") || (setupCurriculumTab(ss), ss.getSheetByName("curriculum"));
 
-  var courseId = (data.course_id || "").toString().trim();
-  var moduleTitle = (data.module_title || "").toString().trim();
-  if (!courseId || !moduleTitle) throw new Error("Khóa học và Tiêu đề chương không được để trống.");
+  var rowsToAdd = [];
+  var addedItems = [];
 
-  var modNum = Number(data.module_number) || 1;
-  var pkId = (data.id || (courseId + "-mod-" + modNum)).toString().trim();
+  for (var i = 0; i < curriculumList.length; i++) {
+    var item = curriculumList[i];
+    var courseId = (item.course_id || "").toString().trim();
+    var moduleTitle = (item.module_title || "").toString().trim();
+    if (!courseId) {
+      throw new Error("Chương #" + (i + 1) + ": Khóa học áp dụng không được để trống.");
+    }
+    if (!moduleTitle) {
+      throw new Error("Chương #" + (i + 1) + ": Tiêu đề chương không được để trống.");
+    }
 
-  sheet.appendRow([
-    sanitizeFormula(pkId), sanitizeFormula(courseId), sanitizeFormula(data.course_name), modNum, sanitizeFormula(moduleTitle),
-    sanitizeFormula(data.duration || "2 tuần"), Number(data.lessons_count) || 6,
-    sanitizeFormula(data.topics_bullets), Number(data.sort_order) || modNum
-  ]);
+    var modNum = Number(item.module_number) || (i + 1);
 
-  ss.toast("🎉 Đã thêm chương lộ trình: " + moduleTitle, "DataWithLy CMS", 5);
-  return { success: true, id: pkId, title: moduleTitle };
+    // Tự động sinh module_id / UUID v4 chuẩn RFC 4122
+    var pkId = item.id && isValidUUID(item.id, "cur-")
+      ? item.id.toString().trim()
+      : generateUUID("cur-");
+
+    // Chuẩn hóa và bóc tách nội dung bullet points Alt+Enter đúng format
+    var rawTopics = (item.topics_bullets || "").toString();
+    var cleanTopics = rawTopics
+      .replace(/\r\n/g, "\n")
+      .replace(/\r/g, "\n")
+      .split("\n")
+      .map(function (line) { return line.trim(); })
+      .filter(function (line) { return line.length > 0; })
+      .join("\n");
+
+    var lessonsCount = Number(item.lessons_count) || 6;
+    var sortOrder = Number(item.sort_order) || modNum;
+
+    rowsToAdd.push([
+      sanitizeFormula(pkId),
+      sanitizeFormula(courseId),
+      sanitizeFormula(item.course_name || ""),
+      modNum,
+      sanitizeFormula(moduleTitle),
+      sanitizeFormula(item.duration || "2 tuần"),
+      lessonsCount,
+      sanitizeFormula(cleanTopics),
+      sortOrder
+    ]);
+
+    addedItems.push({ id: pkId, title: moduleTitle, module_number: modNum });
+  }
+
+  var startRow = sheet.getLastRow() + 1;
+  sheet.getRange(startRow, 1, rowsToAdd.length, 9).setValues(rowsToAdd);
+
+  var msg = "🎉 Đã lưu thành công " + rowsToAdd.length + " chương lộ trình học vào bảng curriculum!";
+  ss.toast(msg, "DataWithLy CMS", 5);
+
+  return { success: true, count: rowsToAdd.length, modules: addedItems };
+}
+
+function addNewCurriculumModuleFromModal(data) {
+  var res = addCurriculumBatchFromModal([data]);
+  return {
+    success: true,
+    id: res.modules[0].id,
+    title: res.modules[0].title
+  };
 }
