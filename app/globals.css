@@ -1,26 +1,201 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-sans: "Inter", var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: "Be Vietnam Pro", var(--font-be-vietnam-pro), "Inter", system-ui, sans-serif;
+
+  /* Figma Brand Tokens */
+  --color-brand-wine: #AF445A;
+  --color-brand-purple: #784080;
+  --color-brand-yellow: #FFC934;
+  --color-brand-dark: #2E2E2E;
+  --color-brand-slate: #1F242F;
+  --color-brand-heading: #252525;
+  --color-brand-muted: #676767;
+
+  /* Primary Scale */
+  --color-primary-dark: #110926;
+  --color-primary-900: #1C0F45;
+  --color-primary-800: #2E146E;
+  --color-primary-700: #431B9E;
+  --color-primary-600: #531DCD;
+  --color-primary-500: #6227F4;
+  --color-primary-400: #8257F6;
+  --color-primary-300: #A486F8;
+  --color-primary-200: #C8B6FA;
+  --color-primary-100: #ECE5FD;
+  --color-primary-50: #F8F6FE;
+
+  /* Neutral Scale */
+  --color-neutral-dark: #0B0C0E;
+  --color-neutral-900: #1E2024;
+  --color-neutral-800: #34383F;
+  --color-neutral-700: #4B515B;
+  --color-neutral-600: #646C79;
+  --color-neutral-500: #7E8794;
+  --color-neutral-400: #9DA4AE;
+  --color-neutral-300: #BDC2C9;
+  --color-neutral-200: #DDE0E3;
+  --color-neutral-100: #EEF0F2;
+  --color-neutral-50: #F8F9FA;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    color: #252525;
+    background-color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Reusable Figma Design Tokens */
+.bg-brand-gradient {
+  background-image: linear-gradient(91.45deg, #AF445A 0%, #784080 100%);
 }
+
+.bg-brand-gradient-reverse {
+  background-image: linear-gradient(91.45deg, #784080 0%, #AF445A 100%);
+}
+
+.bg-card-gradient {
+  background-image: linear-gradient(126.45deg, #AF445A 0.22%, #974C86 33.49%, #8054B3 66.75%);
+}
+
+.bg-announcement-gradient {
+  background-image: linear-gradient(100.08deg, #AF445A 0%, #784080 100%);
+}
+
+.text-brand-gradient {
+  background-image: linear-gradient(91.45deg, #AF445A 0%, #784080 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom typography classes matching design spec */
+.text-h1 {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+}
+@media (min-width: 1024px) {
+  .text-h1 {
+    font-size: 56px;
+    line-height: 64px;
+  }
+}
+
+.text-h2 {
+  font-size: 26px;
+  line-height: 34px;
+  font-weight: 600;
+}
+@media (min-width: 1024px) {
+  .text-h2 {
+    font-size: 40px;
+    line-height: 48px;
+  }
+}
+
+.text-h3 {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+}
+@media (min-width: 1024px) {
+  .text-h3 {
+    font-size: 28px;
+    line-height: 36px;
+  }
+}
+
+.text-h4 {
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 600;
+}
+@media (min-width: 1024px) {
+  .text-h4 {
+    font-size: 22px;
+    line-height: 30px;
+  }
+}
+
+.text-body-l {
+  font-size: 16px;
+  line-height: 24px;
+}
+@media (min-width: 1024px) {
+  .text-body-l {
+    font-size: 18px;
+    line-height: 28px;
+  }
+}
+
+.text-body-m {
+  font-size: 14px;
+  line-height: 20px;
+}
+@media (min-width: 1024px) {
+  .text-body-m {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+.text-label-l {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+@media (min-width: 1024px) {
+  .text-label-l {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+.text-label-m {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 600;
+}
+@media (min-width: 1024px) {
+  .text-label-m {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+
+.text-btn {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+@media (min-width: 1024px) {
+  .text-btn {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+/* 2-tier Shadow & Purple Border Hover Utility matching screenshot 23.17.38 */
+.card-hover-dual-shadow {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1.5px solid #EEF0F2;
+}
+
+.card-hover-dual-shadow:hover,
+.card-hover-dual-shadow.is-active {
+  border-color: var(--color-primary-500);
+  box-shadow: 
+    0 24px 48px -12px rgba(11, 12, 14, 0.12),
+    0 12px 32px -4px rgba(98, 39, 244, 0.28);
+  transform: translateY(-3px);
+}
+
+

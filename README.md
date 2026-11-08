@@ -1,3 +1,12 @@
+# DataWithLy
+
+## Tài liệu và công cụ dự án
+
+- [Bộ docs và quy trình phát triển với Agent](docs/README.md).
+- [Q&A, yêu cầu bổ sung và báo cáo tham khảo](docs/references/README.md).
+- [Script tạo Excel mẫu](scripts/README.md).
+- [Hướng dẫn tích hợp Google Sheets](google-apps-script/README.md).
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

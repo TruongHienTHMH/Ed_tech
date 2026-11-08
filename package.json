@@ -4,9 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "bundle:gas": "node scripts/bundle-apps-script.js",
+    "test:gas": "node scripts/test-duplicate-qa.js",
+    "test:lead": "node scripts/test-lead-submission.js",
+    "test:rate": "node scripts/test-rate-limiter.js",
+    "test": "npm run test:gas && npm run test:lead && npm run test:rate",
+    "db:seed": "node scripts/seed-sheets.js",
+    "ci": "npm run lint && npm run typecheck && npm run test && npm run db:seed && npm run build"
   },
   "dependencies": {
     "next": "16.3.4",
