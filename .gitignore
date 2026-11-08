@@ -39,3 +39,22 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#python generate and xlsx file
+*.xlsx
+*.py
+
+#app_script code
+# (root level temp .gs files ignored, but apps-script/ directory is tracked)
+/*.gs
+
+#docs to work with agent (tracked in git for PR reports & architectural trace)
+!.docs/
+!.docs/**
+
+
+# uploads
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+.clasp.json

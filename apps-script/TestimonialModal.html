@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <?!= include('SharedStyles'); ?>
+</head>
+
+<body>
+  <div class="modal-header">
+    <div>
+      <h2 class="modal-title">💬 Thêm Đánh Giá Học Viên</h2>
+      <p class="modal-subtitle">Thêm feedback thực tế từ cựu học viên đang làm việc tại các tập đoàn lớn</p>
+    </div>
+  </div>
+
+  <form id="testimonialForm">
+    <div class="preview-box">
+      <div class="preview-header">
+        <span>Xem trước Testimonial Card</span>
+        <span id="previewRatingStars" style="color: #F59E0B; font-size: 14px;">★★★★★</span>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: flex-start;">
+        <img id="avatarPreview" src="/uploads/avatars/default.jpg"
+          onerror="this.src='https://ui-avatars.com/api/?name=Hoc+Vien&background=1F242F&color=fff'"
+          style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-border);">
+        <div style="flex: 1;">
+          <div style="display: flex; justify-content: space-between;">
+            <strong id="namePreview" style="font-size: 13px; color: var(--primary);">Trần Minh Quân</strong>
+            <span id="companyPreview" class="badge-v badge-slate" style="font-size: 10px;">Shopee Express</span>
+          </div>
+          <div id="rolePreview" style="font-size: 11px; color: var(--slate-muted);">Junior Data Analyst</div>
+          <p id="reviewPreview"
+            style="font-size: 12px; color: var(--dark-slate); font-style: italic; margin: 6px 0 0; line-height: 1.4;">
+            "Khóa học SQL của chị Ly thực sự thực chiến và dễ hiểu..."
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="student_name">Họ và Tên Học Viên <span class="required">*</span></label>
+        <input type="text" id="student_name" name="student_name" required placeholder="Trần Minh Quân"
+          autocomplete="off">
+      </div>
+      <div class="form-group col-1">
+        <label for="role">Vị Trí Công Việc</label>
+        <input type="text" id="role" name="role" placeholder="Junior Data Analyst">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="company">Công Ty Làm Việc</label>
+        <input type="text" id="company" name="company" placeholder="Shopee Express, Techcombank...">
+      </div>
+      <div class="form-group col-1">
+        <label for="course_id">Khóa Học Liên Quan <span class="required">*</span></label>
+        <select id="course_id" name="course_id" required>
+          <option value="ALL">Khóa Học Chung / Tất cả</option>
+          <? for (var i = 0; i < coursesList.length; i++) { ?>
+          <option value="<?= coursesList[i].id ?>">
+            <?= coursesList[i].title ?>
+          </option>
+          <? } ?>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="rating">Số Sao Đánh Giá <span class="required">*</span></label>
+        <select id="rating" name="rating">
+          <option value="5" selected>⭐⭐⭐⭐⭐ 5 Sao (Xuất sắc)</option>
+          <option value="4">⭐⭐⭐⭐ 4 Sao (Rất tốt)</option>
+          <option value="3">⭐⭐⭐ 3 Sao (Khá)</option>
+          <option value="2">⭐⭐ 2 Sao (Trung bình)</option>
+          <option value="1">⭐ 1 Sao (Cần cải thiện)</option>
+        </select>
+      </div>
+      <div class="form-group col-1">
+        <label for="avatar_url">Ảnh Đại Diện (Avatar URL)</label>
+        <input type="text" id="avatar_url" name="avatar_url" placeholder="/uploads/avatars/quan-tran.jpg">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="review_text">Nội Dung Đánh Giá / Cảm Nhận <span class="required">*</span></label>
+      <textarea id="review_text" name="review_text" rows="4" required
+        placeholder="Khóa học SQL của chị Ly thực sự thực chiến. Chị chỉ cho mình cách viết Window Functions mà lúc trước mình đọc docs hoài không hiểu..."></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label class="checkbox-group">
+          <input type="checkbox" id="is_featured" name="is_featured" checked>
+          <span class="checkbox-label">Đánh giá nổi bật (Trang chủ)</span>
+        </label>
+      </div>
+      <div class="form-group col-1">
+        <label class="checkbox-group">
+          <input type="checkbox" id="is_active" name="is_active" checked>
+          <span class="checkbox-label">Kích hoạt hiển thị (is_active)</span>
+        </label>
+      </div>
+    </div>
+
+    <div id="errorBox" class="alert-banner alert-danger error-msg"></div>
+
+    <div class="btn-group">
+      <button type="button" class="btn-cancel" onclick="google.script.host.close()">Hủy Bỏ</button>
+      <button type="submit" id="submitBtn" class="btn-submit">
+        <span>Lưu Đánh Giá</span>
+      </button>
+    </div>
+  </form>
+
+  <script>
+    var nameInput = document.getElementById("student_name");
+    var roleInput = document.getElementById("role");
+    var companyInput = document.getElementById("company");
+    var ratingSelect = document.getElementById("rating");
+    var avatarInput = document.getElementById("avatar_url");
+    var reviewInput = document.getElementById("review_text");
+
+    var namePreview = document.getElementById("namePreview");
+    var rolePreview = document.getElementById("rolePreview");
+    var companyPreview = document.getElementById("companyPreview");
+    var ratingPreview = document.getElementById("previewRatingStars");
+    var avatarPreview = document.getElementById("avatarPreview");
+    var reviewPreview = document.getElementById("reviewPreview");
+
+    function slugify(text) {
+      if (!text) return "";
+      var str = text.toString().toLowerCase().trim();
+      str = str.replace(/[áàảãạăắằẳẵặâấầẩẫậ]/g, "a");
+      str = str.replace(/[éèẻẽẹêếềểễệ]/g, "e");
+      str = str.replace(/[íìỉĩị]/g, "i");
+      str = str.replace(/[óòỏõọôốồổỗộơớờởỡợ]/g, "o");
+      str = str.replace(/[úùủũụưứừửữự]/g, "u");
+      str = str.replace(/[ýỳỷỹỵ]/g, "y");
+      str = str.replace(/đ/g, "d");
+      str = str.replace(/[\s_]+/g, "-");
+      str = str.replace(/[^a-z0-9-]/g, "");
+      str = str.replace(/-+/g, "-");
+      str = str.replace(/^-+|-+$/g, "");
+      return str;
+    }
+
+    function updatePreview() {
+      namePreview.innerText = nameInput.value || "Tên học viên";
+      rolePreview.innerText = roleInput.value || "Vị trí công việc";
+      companyPreview.innerText = companyInput.value || "Tập đoàn công nghệ";
+      var stars = parseInt(ratingSelect.value, 10) || 5;
+      ratingPreview.innerText = "★".repeat(stars) + "☆".repeat(5 - stars);
+      reviewPreview.innerText = reviewInput.value ? '"' + reviewInput.value + '"' : '"Cảm nhận thực tế của học viên..."';
+      if (avatarInput.value) avatarPreview.src = avatarInput.value;
+    }
+
+    nameInput.addEventListener("input", updatePreview);
+    roleInput.addEventListener("input", updatePreview);
+    companyInput.addEventListener("input", updatePreview);
+    ratingSelect.addEventListener("change", updatePreview);
+    avatarInput.addEventListener("input", updatePreview);
+    reviewInput.addEventListener("input", updatePreview);
+
+    var form = document.getElementById("testimonialForm");
+    var submitBtn = document.getElementById("submitBtn");
+    var errorBox = document.getElementById("errorBox");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      errorBox.style.display = "none";
+      errorBox.innerText = "";
+
+      var sName = nameInput.value.trim();
+      var rText = reviewInput.value.trim();
+      if (!sName || !rText) {
+        showError("Vui lòng nhập tên học viên và nội dung đánh giá.");
+        return;
+      }
+
+      var slugName = slugify(sName);
+      var data = {
+        id: "t-" + (Date.now().toString(36).substr(-4)) + "-" + slugName,
+        student_name: sName,
+        role: roleInput.value.trim(),
+        company: companyInput.value.trim(),
+        course_id: document.getElementById("course_id").value,
+        rating: ratingSelect.value,
+        review_text: rText,
+        avatar_url: avatarInput.value.trim() || "/uploads/avatars/default.jpg",
+        is_featured: document.getElementById("is_featured").checked,
+        is_active: document.getElementById("is_active").checked
+      };
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> Đang lưu...';
+
+      google.script.run
+        .withSuccessHandler(function () {
+          google.script.host.close();
+        })
+        .withFailureHandler(function (err) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>Lưu Đánh Giá</span>';
+          showError("Lỗi: " + (err.message || err.toString()));
+        })
+        .saveTestimonialFromModal(data);
+    });
+
+    function showError(msg) {
+      errorBox.innerText = msg;
+      errorBox.style.display = "block";
+    }
+  </script>
+</body>
+
+</html>

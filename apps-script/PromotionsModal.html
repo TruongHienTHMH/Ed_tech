@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <?!= include('SharedStyles'); ?>
+</head>
+
+<body>
+  <div class="modal-header">
+    <div>
+      <h2 class="modal-title">🏷️ Quản Trị Khuyến Mãi & Flash Sale</h2>
+      <p class="modal-subtitle">Tạo mã Voucher giảm giá học phí theo % hoặc VNĐ hiển thị tức thì</p>
+    </div>
+  </div>
+
+  <form id="promoForm">
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="code">Mã Voucher (Code) <span class="required">*</span></label>
+        <input type="text" id="code" name="code" required placeholder="EARLYBIRD15"
+          style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">
+      </div>
+      <div class="form-group col-1">
+        <label for="badge">Huy Hiệu (Badge Hiển Thị)</label>
+        <input type="text" id="badge" name="badge" placeholder="Giảm 15%">
+      </div>
+    </div>
+
+    <div class="preview-box">
+      <div class="preview-header">
+        <span>Xem trước Huy Hiệu Ưu Đãi</span>
+        <span id="previewBadge" class="badge-v badge-crimson">Mã: EARLYBIRD15 • Giảm 15%</span>
+      </div>
+      <div id="previewTitle" style="font-weight: 600; color: var(--dark-slate); margin-top: 4px;">
+        Chương trình ưu đãi học phí
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="title">Tiêu Đề Chương Trình <span class="required">*</span></label>
+      <input type="text" id="title" name="title" required placeholder="Ưu Đãi Đăng Ký Sớm Khóa Mới">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="discount_type">Hình Thức Giảm Giá <span class="required">*</span></label>
+        <select id="discount_type" name="discount_type">
+          <option value="PERCENT">Phần trăm (%)</option>
+          <option value="FIXED_VND">Số tiền cố định (VNĐ)</option>
+        </select>
+      </div>
+      <div class="form-group col-1">
+        <label for="discount_value">Mức Giảm <span class="required">*</span></label>
+        <input type="number" id="discount_value" name="discount_value" required placeholder="15" min="1" step="1">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="start_date">Ngày Bắt Đầu</label>
+        <input type="date" id="start_date" name="start_date">
+      </div>
+      <div class="form-group col-1">
+        <label for="end_date">Ngày Kết Thúc</label>
+        <input type="date" id="end_date" name="end_date">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="applicable_courses">Khóa Học Áp Dụng</label>
+      <select id="applicable_courses" name="applicable_courses">
+        <option value="ALL">Tất cả các khóa học (ALL)</option>
+        <? for (var i = 0; i < coursesList.length; i++) { ?>
+        <option value="<?= coursesList[i].id ?>">
+          <?= coursesList[i].title ?>
+        </option>
+        <? } ?>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="sort_order">Thứ Tự Sắp Xếp</label>
+        <input type="number" id="sort_order" name="sort_order" value="1" min="1">
+      </div>
+      <div class="form-group col-1" style="display: flex; align-items: flex-end;">
+        <label class="checkbox-group" style="width: 100%;">
+          <input type="checkbox" id="is_active" name="is_active" checked>
+          <span class="checkbox-label">Kích hoạt Voucher (is_active)</span>
+        </label>
+      </div>
+    </div>
+
+    <div id="errorBox" class="alert-banner alert-danger error-msg"></div>
+    <div id="successBox" class="alert-banner alert-success fade-in" style="display: none;"></div>
+
+    <div class="btn-group">
+      <button type="button" class="btn-cancel" onclick="google.script.host.close()">Hủy Bỏ</button>
+      <button type="button" id="saveAndContinueBtn" class="btn-secondary">
+        <span>Lưu & Tạo Tiếp</span>
+      </button>
+      <button type="submit" id="submitBtn" class="btn-submit">
+        <span>Tạo Mã Khuyến Mãi</span>
+      </button>
+    </div>
+  </form>
+
+  <script>
+    var existingCodes = <?!= JSON.stringify(existingCodes || []) ?>;
+    var codeInput = document.getElementById("code");
+    var titleInput = document.getElementById("title");
+    var badgeInput = document.getElementById("badge");
+    var typeSelect = document.getElementById("discount_type");
+    var valueInput = document.getElementById("discount_value");
+    var previewBadge = document.getElementById("previewBadge");
+    var previewTitle = document.getElementById("previewTitle");
+
+    function updatePromoPreview() {
+      var code = (codeInput.value || "EARLYBIRD").toUpperCase();
+      var type = typeSelect.value;
+      var val = parseFloat(valueInput.value) || 0;
+      var badge = badgeInput.value.trim();
+
+      if (!badge && val > 0) {
+        badge = type === "PERCENT" ? "Giảm " + val + "%" : "Giảm " + (val / 1000).toLocaleString() + "K";
+      }
+
+      var isExisting = codeInput.value && existingCodes.indexOf(code) !== -1;
+      previewBadge.className = isExisting ? "badge-v badge-gold" : "badge-v badge-crimson";
+      previewBadge.innerText = (isExisting ? "⚡ Cập nhật mã: " : "Mã: ") + code + (badge ? " • " + badge : "");
+      previewTitle.innerText = titleInput.value || "Chương trình ưu đãi học phí";
+    }
+
+    codeInput.addEventListener("input", function () {
+      this.value = this.value.toUpperCase().replace(/[^A-Z0-9_-]/g, "");
+      updatePromoPreview();
+    });
+    titleInput.addEventListener("input", updatePromoPreview);
+    badgeInput.addEventListener("input", updatePromoPreview);
+    typeSelect.addEventListener("change", function () {
+      if (this.value === "PERCENT") {
+        valueInput.placeholder = "15";
+        valueInput.max = "100";
+      } else {
+        valueInput.placeholder = "500000";
+        valueInput.removeAttribute("max");
+      }
+      updatePromoPreview();
+    });
+    valueInput.addEventListener("input", updatePromoPreview);
+
+    // Mặc định ngày
+    var today = new Date().toISOString().split("T")[0];
+    document.getElementById("start_date").value = today;
+
+    var form = document.getElementById("promoForm");
+    var submitBtn = document.getElementById("submitBtn");
+    var saveAndContinueBtn = document.getElementById("saveAndContinueBtn");
+    var errorBox = document.getElementById("errorBox");
+    var successBox = document.getElementById("successBox");
+
+    function showError(msg) {
+      if (successBox) successBox.style.display = "none";
+      errorBox.innerText = msg;
+      errorBox.style.display = "block";
+    }
+
+    function showSuccess(msg) {
+      errorBox.style.display = "none";
+      errorBox.innerText = "";
+      successBox.innerText = msg;
+      successBox.style.display = "flex";
+    }
+
+    function setButtonsLoading(isLoading, activeBtn) {
+      if (isLoading) {
+        submitBtn.disabled = true;
+        saveAndContinueBtn.disabled = true;
+        if (activeBtn) {
+          activeBtn.innerHTML = '<span class="spinner"></span> Đang lưu...';
+        }
+      } else {
+        submitBtn.disabled = false;
+        saveAndContinueBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Tạo Mã Khuyến Mãi</span>';
+        saveAndContinueBtn.innerHTML = '<span>Lưu & Tạo Tiếp</span>';
+      }
+    }
+
+    function submitPromotion(isContinue) {
+      errorBox.style.display = "none";
+      errorBox.innerText = "";
+
+      var code = codeInput.value.trim();
+      var title = titleInput.value.trim();
+      var type = typeSelect.value;
+      var val = parseFloat(valueInput.value) || 0;
+
+      if (!code || !title) {
+        showError("Vui lòng nhập Mã voucher và Tiêu đề khuyến mãi.");
+        return;
+      }
+
+      if (type === "PERCENT" && (val <= 0 || val > 100)) {
+        showError("Tỷ lệ % giảm giá phải từ 1 đến 100.");
+        return;
+      }
+      if (type === "FIXED_VND" && val <= 0) {
+        showError("Số tiền giảm VNĐ phải lớn hơn 0.");
+        return;
+      }
+
+      var start = document.getElementById("start_date").value;
+      var end = document.getElementById("end_date").value;
+      if (start && end && end < start) {
+        showError("Ngày kết thúc không được nhỏ hơn ngày bắt đầu.");
+        return;
+      }
+
+      var badge = badgeInput.value.trim();
+      if (!badge) {
+        badge = type === "PERCENT" ? "Giảm " + val + "%" : "Giảm " + (val / 1000).toLocaleString() + "K";
+      }
+
+      var data = {
+        id: "promo-" + code.toLowerCase(),
+        code: code,
+        title: title,
+        discount_type: type,
+        discount_value: val,
+        start_date: start,
+        end_date: end ? end + " 23:59:59" : "",
+        applicable_courses: document.getElementById("applicable_courses").value,
+        badge: badge,
+        is_active: document.getElementById("is_active").checked,
+        sort_order: parseInt(document.getElementById("sort_order").value, 10) || 1
+      };
+
+      var activeBtn = isContinue ? saveAndContinueBtn : submitBtn;
+      setButtonsLoading(true, activeBtn);
+
+      google.script.run
+        .withSuccessHandler(function (res) {
+          if (!isContinue) {
+            google.script.host.close();
+            return;
+          }
+
+          setButtonsLoading(false);
+
+          var savedCode = code;
+          if (existingCodes.indexOf(savedCode) === -1) {
+            existingCodes.push(savedCode);
+          }
+          showSuccess("✅ Đã lưu thành công mã khuyến mãi " + savedCode + "! Tiếp tục tạo mã mới...");
+
+          // Reset ô Code và cập nhật Preview
+          codeInput.value = "";
+          badgeInput.value = "";
+          var sortOrderEl = document.getElementById("sort_order");
+          if (sortOrderEl) {
+            sortOrderEl.value = (parseInt(sortOrderEl.value, 10) || 1) + 1;
+          }
+          updatePromoPreview();
+
+          // Focus vào ô Code mới
+          codeInput.focus();
+        })
+        .withFailureHandler(function (err) {
+          setButtonsLoading(false);
+          showError("Lỗi: " + (err.message || err.toString()));
+        })
+        .addNewPromotionFromModal(data);
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      submitPromotion(false);
+    });
+
+    saveAndContinueBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      submitPromotion(true);
+    });
+  </script>
+</body>
+
+</html>

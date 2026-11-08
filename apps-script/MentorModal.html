@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <?!= include('SharedStyles'); ?>
+</head>
+
+<body>
+  <div class="modal-header">
+    <div>
+      <h2 class="modal-title">👤 Quản Trị Hồ Sơ Mentor & AboutUs</h2>
+      <p class="modal-subtitle">Cập nhật thông tin giảng viên Hứa Thảo Ly hiển thị trên Website DataWithLy</p>
+    </div>
+  </div>
+
+  <form id="mentorForm">
+    <input type="hidden" id="mentor_id" name="id" value="<?= currentMentor.id || 'mentor-ly-hua' ?>">
+
+    <div class="preview-box">
+      <div class="preview-header">
+        <span>Xem trước Card Giảng Viên (Live Card Preview)</span>
+        <span class="badge-v badge-emerald">Hiển thị Trang Chủ</span>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: center;">
+        <img id="avatarPreview" src="<?= currentMentor.avatar_url || '/uploads/mentors/ly-hua.jpg' ?>"
+          onerror="this.src='https://ui-avatars.com/api/?name=Hua+Thao+Ly&background=8B1D2C&color=fff'"
+          style="width: 58px; height: 58px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);">
+        <div>
+          <div id="namePreview" style="font-size: 15px; font-weight: 700; color: var(--primary);">
+            <?= currentMentor.name || 'Hứa Thảo Ly' ?>
+          </div>
+          <div id="titlePreview" style="font-size: 12px; color: var(--slate-muted);">
+            <?= currentMentor.title || 'Lead Mentor & Founder DataWithLy' ?>
+          </div>
+          <div id="companiesPreview" style="font-size: 11px; margin-top: 3px; font-weight: 500; color: #059669;">🏢
+            <?= currentMentor.companies_worked || 'MoMo, Tiki, ACB Bank' ?>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="name">Họ và Tên Mentor <span class="required">*</span></label>
+        <input type="text" id="name" name="name" required value="<?= currentMentor.name ?>" placeholder="Hứa Thảo Ly">
+      </div>
+      <div class="form-group col-1">
+        <label for="title">Chức Danh & Học Vị <span class="required">*</span></label>
+        <input type="text" id="title" name="title" required value="<?= currentMentor.title ?>"
+          placeholder="Lead Mentor & Founder DataWithLy">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="companies_worked">Các Công Ty Từng Làm Việc (Phân tách bởi dấu phẩy)</label>
+      <input type="text" id="companies_worked" name="companies_worked" value="<?= currentMentor.companies_worked ?>"
+        placeholder="MoMo, Tiki, Shopee, ACB Bank">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="avatar_url">Đường Dẫn Ảnh Đại Diện (Avatar URL)</label>
+        <input type="text" id="avatar_url" name="avatar_url" value="<?= currentMentor.avatar_url ?>"
+          placeholder="/uploads/mentors/ly-hua.jpg">
+      </div>
+      <div class="form-group col-1">
+        <label for="linkedin_url">LinkedIn URL</label>
+        <input type="text" id="linkedin_url" name="linkedin_url" value="<?= currentMentor.linkedin_url ?>"
+          placeholder="https://linkedin.com/in/lyhuadata">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="bio">Tiểu Sử & Kinh Nghiệm Thực Chiến</label>
+      <textarea id="bio" name="bio" rows="4"
+        placeholder="Hơn 7 năm kinh nghiệm thực chiến trong ngành Dữ liệu tại các tập đoàn công nghệ và tài chính hàng đầu Việt Nam..."><?= currentMentor.bio ?></textarea>
+    </div>
+
+    <div class="form-group" style="margin-top: 6px;">
+      <label class="checkbox-group">
+        <input type="checkbox" id="is_active" name="is_active" <?= currentMentor.is_active ? 'checked' : '' ?>>
+        <span class="checkbox-label">Kích hoạt hiển thị hồ sơ Mentor trên website (is_active)</span>
+      </label>
+    </div>
+
+    <div id="errorBox" class="alert-banner alert-danger error-msg"></div>
+
+    <div class="btn-group">
+      <button type="button" class="btn-cancel" onclick="google.script.host.close()">Hủy Bỏ</button>
+      <button type="submit" id="submitBtn" class="btn-submit">
+        <span>Lưu Hồ Sơ Mentor</span>
+      </button>
+    </div>
+  </form>
+
+  <script>
+    var nameInput = document.getElementById("name");
+    var titleInput = document.getElementById("title");
+    var companiesInput = document.getElementById("companies_worked");
+    var avatarInput = document.getElementById("avatar_url");
+
+    var namePreview = document.getElementById("namePreview");
+    var titlePreview = document.getElementById("titlePreview");
+    var companiesPreview = document.getElementById("companiesPreview");
+    var avatarPreview = document.getElementById("avatarPreview");
+
+    nameInput.addEventListener("input", function () { namePreview.innerText = this.value || "Hứa Thảo Ly"; });
+    titleInput.addEventListener("input", function () { titlePreview.innerText = this.value || "Lead Mentor & Founder DataWithLy"; });
+    companiesInput.addEventListener("input", function () { companiesPreview.innerText = "🏢 " + (this.value || "Chưa có công ty"); });
+    avatarInput.addEventListener("input", function () { if (this.value) avatarPreview.src = this.value; });
+
+    var form = document.getElementById("mentorForm");
+    var submitBtn = document.getElementById("submitBtn");
+    var errorBox = document.getElementById("errorBox");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      errorBox.style.display = "none";
+      errorBox.innerText = "";
+
+      var name = nameInput.value.trim();
+      if (!name) {
+        showError("Vui lòng nhập họ tên Mentor.");
+        return;
+      }
+
+      var data = {
+        id: document.getElementById("mentor_id").value || "mentor-ly-hua",
+        name: name,
+        title: titleInput.value.trim(),
+        bio: document.getElementById("bio").value.trim(),
+        companies_worked: companiesInput.value.trim(),
+        avatar_url: avatarInput.value.trim(),
+        linkedin_url: document.getElementById("linkedin_url").value.trim(),
+        is_active: document.getElementById("is_active").checked
+      };
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> Đang lưu...';
+
+      google.script.run
+        .withSuccessHandler(function () {
+          google.script.host.close();
+        })
+        .withFailureHandler(function (err) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>Lưu Hồ Sơ Mentor</span>';
+          showError("Lỗi: " + (err.message || err.toString()));
+        })
+        .saveMentorProfileFromModal(data);
+    });
+
+    function showError(msg) {
+      errorBox.innerText = msg;
+      errorBox.style.display = "block";
+    }
+  </script>
+</body>
+
+</html>

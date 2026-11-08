@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <?!= include('SharedStyles'); ?>
+</head>
+
+<body>
+  <div class="modal-header">
+    <div>
+      <h2 class="modal-title">📚 Thêm Chương Lộ Trình Học</h2>
+      <p class="modal-subtitle">Gắn chương mới vào khóa học, tự động tính số thứ tự chương</p>
+    </div>
+  </div>
+
+  <form id="curriculumForm">
+    <div class="form-group">
+      <label for="course_select">Khóa Học Áp Dụng <span class="required">*</span></label>
+      <select id="course_select" name="course_select" required>
+        <? for (var i = 0; i < coursesList.length; i++) { ?>
+        <option value="<?= coursesList[i].id ?>" data-title="<?= coursesList[i].title ?>"
+          data-max="<?= coursesList[i].maxModule ?>">
+          <?= coursesList[i].title ?> (Hiện có:
+          <?= coursesList[i].maxModule ?> chương)
+        </option>
+        <? } ?>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="module_number">Số Thứ Tự Chương <span class="required">*</span></label>
+        <input type="number" id="module_number" name="module_number" required min="1" value="1">
+      </div>
+      <div class="form-group col-1">
+        <label for="duration">Thời Lượng Chương</label>
+        <input type="text" id="duration" name="duration" value="2 tuần (6 buổi)">
+      </div>
+      <div class="form-group col-1">
+        <label for="lessons_count">Số Buổi Học</label>
+        <input type="number" id="lessons_count" name="lessons_count" min="1" value="6">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="module_title">Tiêu Đề Chương <span class="required">*</span></label>
+      <input type="text" id="module_title" name="module_title" required
+        placeholder="Ví dụ: Chương 1: Nền tảng Cơ sở Dữ liệu & Cú pháp SELECT">
+    </div>
+
+    <div class="form-group">
+      <label for="topics_bullets">Nội Dung Bài Học (Mỗi dòng là một gạch đầu dòng) <span
+          class="required">*</span></label>
+      <textarea id="topics_bullets" name="topics_bullets" rows="5" required
+        placeholder="Tổng quan về RDBMS, Table, Schema&#10;Cú pháp SELECT, WHERE, ORDER BY&#10;Toán tử logic AND, OR, NOT, IN, LIKE&#10;Thực hành Capstone Mini: Phân tích giỏ hàng E-commerce"></textarea>
+      <div class="help-text">Mẹo: Xuống dòng (Enter) để tạo các bullet points riêng biệt trên website.</div>
+    </div>
+
+    <div class="form-group">
+      <label for="sort_order">Thứ Tự Hiển Thị</label>
+      <input type="number" id="sort_order" name="sort_order" value="1" min="1">
+    </div>
+
+    <div id="errorBox" class="alert-banner alert-danger error-msg"></div>
+    <div id="successBox" class="alert-banner alert-success fade-in" style="display: none;"></div>
+
+    <div class="btn-group">
+      <button type="button" class="btn-cancel" onclick="google.script.host.close()">Hủy Bỏ</button>
+      <button type="button" id="saveAndContinueBtn" class="btn-secondary">
+        <span>Lưu & Tạo Tiếp</span>
+      </button>
+      <button type="submit" id="submitBtn" class="btn-submit">
+        <span>Lưu Chương Học</span>
+      </button>
+    </div>
+  </form>
+
+  <script>
+    var courseSelect = document.getElementById("course_select");
+    var moduleNumberInput = document.getElementById("module_number");
+    var sortOrderInput = document.getElementById("sort_order");
+    var moduleTitleInput = document.getElementById("module_title");
+    var topicsBulletsInput = document.getElementById("topics_bullets");
+
+    function updateSuggestedModule() {
+      var selected = courseSelect.options[courseSelect.selectedIndex];
+      if (selected) {
+        var maxMod = parseInt(selected.getAttribute("data-max") || "0", 10);
+        var nextMod = maxMod + 1;
+        moduleNumberInput.value = nextMod;
+        sortOrderInput.value = nextMod;
+      }
+    }
+
+    courseSelect.addEventListener("change", updateSuggestedModule);
+    updateSuggestedModule();
+
+    var form = document.getElementById("curriculumForm");
+    var submitBtn = document.getElementById("submitBtn");
+    var saveAndContinueBtn = document.getElementById("saveAndContinueBtn");
+    var errorBox = document.getElementById("errorBox");
+    var successBox = document.getElementById("successBox");
+
+    function showError(msg) {
+      if (successBox) successBox.style.display = "none";
+      errorBox.innerText = msg;
+      errorBox.style.display = "block";
+    }
+
+    function showSuccess(msg) {
+      errorBox.style.display = "none";
+      errorBox.innerText = "";
+      successBox.innerText = msg;
+      successBox.style.display = "flex";
+    }
+
+    function setButtonsLoading(isLoading, activeBtn) {
+      if (isLoading) {
+        submitBtn.disabled = true;
+        saveAndContinueBtn.disabled = true;
+        if (activeBtn) {
+          activeBtn.innerHTML = '<span class="spinner"></span> Đang lưu...';
+        }
+      } else {
+        submitBtn.disabled = false;
+        saveAndContinueBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Lưu Chương Học</span>';
+        saveAndContinueBtn.innerHTML = '<span>Lưu & Tạo Tiếp</span>';
+      }
+    }
+
+    function submitCurriculum(isContinue) {
+      errorBox.style.display = "none";
+      errorBox.innerText = "";
+
+      var selected = courseSelect.options[courseSelect.selectedIndex];
+      var courseId = selected ? selected.value : "";
+      var courseName = selected ? selected.getAttribute("data-title") : "";
+      var moduleTitle = moduleTitleInput.value.trim();
+      var topicsBullets = topicsBulletsInput.value.trim();
+
+      if (!courseId || !moduleTitle) {
+        showError("Vui lòng chọn khóa học và nhập tiêu đề chương.");
+        return;
+      }
+      if (!topicsBullets) {
+        showError("Vui lòng nhập nội dung bài học.");
+        return;
+      }
+
+      var modNum = parseInt(moduleNumberInput.value, 10) || 1;
+      var data = {
+        id: courseId + "-mod-" + modNum,
+        course_id: courseId,
+        course_name: courseName,
+        module_number: modNum,
+        module_title: moduleTitle,
+        duration: document.getElementById("duration").value.trim(),
+        lessons_count: parseInt(document.getElementById("lessons_count").value, 10) || 6,
+        topics_bullets: topicsBullets,
+        sort_order: parseInt(sortOrderInput.value, 10) || modNum
+      };
+
+      var activeBtn = isContinue ? saveAndContinueBtn : submitBtn;
+      setButtonsLoading(true, activeBtn);
+
+      google.script.run
+        .withSuccessHandler(function (res) {
+          if (!isContinue) {
+            google.script.host.close();
+            return;
+          }
+
+          setButtonsLoading(false);
+
+          // Hiển thị Banner thông báo màu xanh
+          var savedNum = modNum;
+          showSuccess("✅ Đã lưu thành công chương " + savedNum + "! Tiếp tục nhập chương tiếp theo...");
+
+          // Reset các ô: Tiêu đề chương, Nội dung bài học
+          moduleTitleInput.value = "";
+          topicsBulletsInput.value = "";
+
+          // Tự động tăng số thứ tự chương: module_number.value = parseInt(module_number.value) + 1, sort_order.value = module_number.value
+          var nextModNum = savedNum + 1;
+          moduleNumberInput.value = nextModNum;
+          sortOrderInput.value = nextModNum;
+
+          // Cập nhật data-max của select option hiện tại
+          if (selected) {
+            selected.setAttribute("data-max", savedNum);
+          }
+
+          // Giữ nguyên Khóa học đang chọn và Thời lượng
+          // Tự động focus con trỏ vào ô Tiêu đề chương
+          moduleTitleInput.focus();
+        })
+        .withFailureHandler(function (err) {
+          setButtonsLoading(false);
+          showError("Lỗi: " + (err.message || err.toString()));
+        })
+        .addNewCurriculumModuleFromModal(data);
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      submitCurriculum(false);
+    });
+
+    saveAndContinueBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      submitCurriculum(true);
+    });
+  </script>
+</body>
+
+</html>
