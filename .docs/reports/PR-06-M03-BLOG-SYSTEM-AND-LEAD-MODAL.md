@@ -81,3 +81,4 @@
 - [x] Modal popup mở được từ tất cả các nút CTA trên trang.
 - [x] Nút sao chép mã code hoạt động trơn tru trên mọi trình duyệt.
 - [x] Sẵn sàng để hợp nhất vào nhánh chính.
+

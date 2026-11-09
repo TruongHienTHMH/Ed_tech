@@ -6,6 +6,8 @@ import { GoogleSheetsRequestPayload, GoogleSheetsResponse } from "./types";
 
 export interface SendToSheetsOptions {
   timeoutMs?: number;
+  url?: string;
+  secret?: string;
 }
 
 export class GoogleSheetsClient {
@@ -19,8 +21,16 @@ export class GoogleSheetsClient {
     payload: GoogleSheetsRequestPayload,
     options?: SendToSheetsOptions
   ): Promise<GoogleSheetsResponse> {
-    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
-    const secret = process.env.GOOGLE_APPS_SCRIPT_SECRET || "";
+    const appsScriptUrl =
+      options?.url ||
+      process.env.GOOGLE_APPS_SCRIPT_LEADS_URL ||
+      process.env.GOOGLE_APPS_SCRIPT_URL;
+
+    const secret =
+      options?.secret ||
+      process.env.GOOGLE_APPS_SCRIPT_LEADS_SECRET ||
+      process.env.GOOGLE_APPS_SCRIPT_SECRET ||
+      "";
 
     const requestPayload: GoogleSheetsRequestPayload = {
       ...payload,
@@ -30,7 +40,9 @@ export class GoogleSheetsClient {
 
     // If no URL configured in local development, return mock success
     if (!appsScriptUrl) {
-      console.warn(`[GoogleSheetsClient] GOOGLE_APPS_SCRIPT_URL not configured. Mocking success for sheet '${sheetName}'.`);
+      console.warn(
+        `[GoogleSheetsClient] GOOGLE_APPS_SCRIPT_LEADS_URL (hoặc GOOGLE_APPS_SCRIPT_URL) not configured. Mocking success for sheet '${sheetName}'.`
+      );
       return {
         ok: true,
         submissionId: payload.submission_id,

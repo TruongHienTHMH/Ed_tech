@@ -16,7 +16,7 @@ export class CourseSeeder implements Seeder<Course> {
         originalTuitionVnd: 6780000,
         duration: "27 buổi (6 tuần)",
         level: "Beginner",
-        coverImageUrl: "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+        coverImageUrl: "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png",
         isActive: true,
         isFeatured: true,
         sortOrder: 1,
@@ -33,7 +33,7 @@ export class CourseSeeder implements Seeder<Course> {
         originalTuitionVnd: 3500000,
         duration: "12 buổi (6 tuần)",
         level: "Beginner",
-        coverImageUrl: "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+        coverImageUrl: "/assets/figma/05ab7dcc030820120da8f65c6b464967f554e0d8.png",
         isActive: true,
         isFeatured: true,
         sortOrder: 2,
@@ -50,7 +50,7 @@ export class CourseSeeder implements Seeder<Course> {
         originalTuitionVnd: 4500000,
         duration: "15 buổi (5 tuần)",
         level: "Intermediate",
-        coverImageUrl: "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+        coverImageUrl: "/assets/figma/b1c9fe6fd2d3dafb5b4b32d30320f68d7cde1f5c.png",
         isActive: true,
         isFeatured: true,
         sortOrder: 3,
@@ -58,4 +58,3 @@ export class CourseSeeder implements Seeder<Course> {
     ];
   }
 }
-

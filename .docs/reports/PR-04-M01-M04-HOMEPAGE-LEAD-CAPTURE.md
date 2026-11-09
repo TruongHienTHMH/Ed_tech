@@ -76,3 +76,4 @@
 - [x] Đã kiểm thử chức năng gửi form lead thành công.
 - [x] Đảm bảo không lộ thông tin PII qua API GET công khai.
 - [x] Sẵn sàng để hợp nhất vào nhánh chính.
+

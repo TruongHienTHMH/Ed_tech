@@ -72,3 +72,4 @@
 - [x] Đã thử nghiệm lệnh `npm run ci` chạy mượt mà từ đầu đến cuối.
 - [x] Template PR tiếng Việt hiển thị chuẩn mực trên giao diện GitHub.
 - [x] Sẵn sàng để hợp nhất vào nhánh chính.
+

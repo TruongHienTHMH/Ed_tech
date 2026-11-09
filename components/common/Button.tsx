@@ -29,7 +29,7 @@ export type ButtonProps = ButtonAsButton | ButtonAsLink;
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-gradient-to-r from-[#8B1D2C] to-[#AF445A] hover:from-[#731422] hover:to-[#96374C] text-white shadow-md hover:shadow-lg border border-transparent",
+    "bg-gradient-to-r from-[#AF445A] to-[#784080] hover:from-[#731422] hover:to-[#96374C] text-white shadow-md hover:shadow-lg border border-transparent",
   secondary:
     "bg-[#2E2E2E] hover:bg-[#3D3D3D] text-white border border-white/10 shadow-sm",
   gold:
