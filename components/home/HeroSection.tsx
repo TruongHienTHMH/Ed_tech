@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { ArrowRight } from "@/components/common/Icons";
+import { Button } from "@/components/common/Button";
 import { openLeadModal } from "@/components/forms/LeadModalManager";
 
 export default function HeroSection() {
@@ -17,11 +18,65 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative w-full bg-white pt-12 pb-16 lg:pt-20 lg:pb-24 overflow-hidden">
+    <section className="relative w-full bg-white pt-10 pb-14 sm:pt-16 sm:pb-20 lg:pt-20 lg:pb-24 overflow-hidden">
       {/* Background Subtle Gradient Blobs */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-tr from-[#AF445A]/5 via-[#784080]/5 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
 
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
+      {/* Floating Visual Graphic 1: Analytics Dashboard Card (Figma Node 12:702) */}
+      <div className="hidden xl:block absolute left-2 2xl:left-8 top-24 w-[260px] 2xl:w-[290px] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-2xl border border-neutral-200/80 -rotate-3 hover:rotate-0 transition-all duration-300 pointer-events-none z-10">
+        <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-neutral-100">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#AF445A]" />
+            <span className="text-xs font-bold text-[#252525]">Phân tích Số liệu</span>
+          </div>
+          <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+            +42.8%
+          </span>
+        </div>
+        <div className="relative w-full h-[140px] 2xl:h-[155px] rounded-xl overflow-hidden shadow-inner bg-neutral-100">
+          <Image
+            src="/assets/figma/cf9dcd253d74531ef55b272e2e080b01e9bbd6bb.png"
+            alt="Biểu đồ trực quan hóa số liệu phân tích"
+            fill
+            sizes="(max-width: 1536px) 260px, 290px"
+            className="object-cover"
+            priority
+          />
+        </div>
+        <div className="mt-2.5 flex items-center justify-between text-[11px] text-neutral-500 font-medium">
+          <span>Interactive BI Report</span>
+          <span className="text-[#AF445A] font-semibold">SQL & Data</span>
+        </div>
+      </div>
+
+      {/* Floating Visual Graphic 2: KPI & Growth Stats Card (Figma Node 12:708) */}
+      <div className="hidden xl:block absolute right-2 2xl:right-8 top-28 w-[260px] 2xl:w-[290px] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-2xl border border-neutral-200/80 rotate-3 hover:rotate-0 transition-all duration-300 pointer-events-none z-10">
+        <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-neutral-100">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#FFC934]" />
+            <span className="text-xs font-bold text-[#252525]">Tăng trưởng KPI</span>
+          </div>
+          <span className="text-[10px] font-bold text-[#AF445A] bg-[#AF445A]/10 px-2 py-0.5 rounded-full border border-[#AF445A]/20">
+            Real-time
+          </span>
+        </div>
+        <div className="relative w-full h-[140px] 2xl:h-[155px] rounded-xl overflow-hidden shadow-inner bg-neutral-100">
+          <Image
+            src="/assets/figma/c0aae3c5c5404ee626ce858087d79649de2e3dc1.png"
+            alt="Thống kê tăng trưởng KPI doanh nghiệp"
+            fill
+            sizes="(max-width: 1536px) 260px, 290px"
+            className="object-cover"
+            priority
+          />
+        </div>
+        <div className="mt-2.5 flex items-center justify-between text-[11px] text-neutral-500 font-medium">
+          <span>Performance Cockpit</span>
+          <span className="text-emerald-600 font-semibold">Tự động hóa</span>
+        </div>
+      </div>
+
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 flex flex-col items-center text-center relative z-20">
         {/* Eyebrow Pill */}
         <p className="font-medium text-xs sm:text-sm lg:text-base tracking-[1.08px] text-[#676767] uppercase mb-3">
           ONLINE DATA ANALYTICS COURSE
@@ -39,7 +94,7 @@ export default function HeroSection() {
         </p>
 
         {/* Email Capture Box */}
-        <div className="w-full max-w-[400px] mb-10">
+        <div className="w-full max-w-[420px] mb-10">
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             <div className="relative">
               <input
@@ -51,13 +106,16 @@ export default function HeroSection() {
               />
             </div>
 
-            <button
+            <Button
               type="submit"
-              className="w-full h-12 bg-brand-gradient hover:opacity-95 text-white font-semibold text-base rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+              variant="primary"
+              size="lg"
+              fullWidth
+              iconRight={<ArrowRight className="w-4 h-4" />}
+              className="h-12 text-sm sm:text-base font-semibold shadow-md hover:shadow-lg"
             >
-              <span>Khám phá các khóa học & Tư vấn 1:1</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+              Khám phá các khóa học & Tư vấn 1:1
+            </Button>
 
             <p className="text-xs text-[#969696] leading-relaxed">
               Bằng việc tiếp tục, bạn đồng ý với Điều khoản và Chính sách bảo mật của chúng tôi.
@@ -66,7 +124,7 @@ export default function HeroSection() {
         </div>
 
         {/* Social Proof & Rating Stack */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-14">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-12 sm:mb-14">
           {/* Overlapping Avatars */}
           <div className="flex -space-x-3 items-center">
             <div className="relative w-11 h-11 rounded-full border-2 border-white overflow-hidden shadow-sm">

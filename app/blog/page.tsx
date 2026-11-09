@@ -30,7 +30,7 @@ export default async function BlogPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white selection:bg-[#AF445A]/20 selection:text-[#AF445A]">
       <AnnouncementBar />
-      <Navbar />
+      <Navbar variant="light" />
 
       <main className="flex-1">
         {/* Blog Hero Header */}

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { User } from "@/components/common/Icons";
+import { Badge } from "@/components/common/Badge";
 import { Testimonial } from "@/lib/cms/types";
 import { seedTestimonials } from "@/data/seed-data";
 
@@ -20,19 +21,19 @@ export default function TestimonialsSection({ testimonials = seedTestimonials }:
   }));
 
   return (
-    <section id="testimonials" className="relative w-full bg-white py-16 lg:py-24 overflow-hidden">
+    <section id="testimonials" className="relative w-full bg-white py-16 lg:py-24 overflow-hidden border-t border-neutral-100">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
-        {/* Header */}
+        {/* Header (Figma Node 12:892) */}
         <div className="flex flex-col items-center sm:items-start text-center sm:text-left mb-12">
           <div className="mb-3">
-            <span className="inline-block px-4 py-1.5 rounded-full border border-[#AF445A] bg-white font-bold text-xs tracking-wider uppercase text-brand-gradient">
+            <Badge variant="tag" size="md">
               ĐÁNH GIÁ THỰC TẾ
-            </span>
+            </Badge>
           </div>
           <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-[42px] leading-tight text-[#252525] mb-2">
             Đánh giá của học viên
           </h2>
-          <p className="text-[#676767] text-base font-normal">
+          <p className="text-[#676767] text-base font-normal max-w-[650px]">
             Cùng lắng nghe cảm nhận thực tế từ những học viên đã tham gia các khóa học tại Lydata.
           </p>
         </div>
@@ -42,7 +43,7 @@ export default function TestimonialsSection({ testimonials = seedTestimonials }:
           {displayList.map((item) => (
             <div
               key={item.id}
-              className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+              className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
             >
               <div>
                 {/* 5 Stars */}
@@ -54,7 +55,7 @@ export default function TestimonialsSection({ testimonials = seedTestimonials }:
 
                 {/* Quote */}
                 <p className="text-neutral-700 text-sm sm:text-[15px] leading-relaxed italic mb-6">
-                  {item.quote}
+                  &ldquo;{item.quote}&rdquo;
                 </p>
               </div>
 

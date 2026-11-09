@@ -92,7 +92,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
       <AnnouncementBar />
 
       {/* Sticky Main Navigation */}
-      <Navbar />
+      <Navbar variant="light" />
 
       {/* Main Course Content — Figma Node 12:1277 Architecture */}
       <main className="flex-1">

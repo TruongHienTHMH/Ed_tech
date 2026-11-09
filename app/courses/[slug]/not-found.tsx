@@ -6,7 +6,7 @@ import Footer from "@/components/layout/Footer";
 export default function CourseNotFound() {
   return (
     <div className="min-h-screen flex flex-col bg-[#F8F9FA] text-[#252525]">
-      <Navbar />
+      <Navbar variant="light" />
 
       <main className="flex-1 flex items-center justify-center py-20 px-4 sm:px-6">
         <div className="max-w-md w-full bg-white rounded-3xl p-8 sm:p-10 border border-neutral-200 shadow-xl text-center space-y-6">
