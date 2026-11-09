@@ -44,12 +44,12 @@ export class HealthService {
     let latencyMs = 0;
     let sheetsMessage = "Kết nối Google Apps Script thành công.";
 
-    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
+    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_CMS_URL || process.env.GOOGLE_APPS_SCRIPT_URL;
 
     if (!appsScriptUrl) {
       sheetsStatus = "mock";
       latencyMs = 0;
-      sheetsMessage = "Môi trường phát triển: GOOGLE_APPS_SCRIPT_URL chưa được cấu hình, đang dùng Mock Mode.";
+      sheetsMessage = "Môi trường phát triển: GOOGLE_APPS_SCRIPT_CMS_URL / GOOGLE_APPS_SCRIPT_URL chưa được cấu hình, đang dùng Mock Mode.";
     } else {
       try {
         const controller = new AbortController();

@@ -10,7 +10,7 @@ export class MentorSeeder implements Seeder<Mentor> {
         role: "Founder Lydata & Senior Data Analyst",
         title: "Founder Lydata • Ex-Senior DA MoMo, Tiki, ACB",
         bio: "Xin chào, mình là Lý - Founder của Lydata. Với hơn 6+ năm kinh nghiệm làm việc trong lĩnh vực Data Analytics tại các tập đoàn và kỳ lân công nghệ hàng đầu như MoMo, Tiki, ACB Bank, mình đã đồng hành cùng hơn 1,000+ học viên chuyển ngành và nâng cao năng lực phân tích dữ liệu ứng dụng thực chiến.",
-        avatarUrl: "/assets/figma/da527ba5696d5b94f6f71aebe984b901fc46d929.png",
+        avatarUrl: "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
         companies: ["MoMo", "Tiki", "ACB Bank"],
         companiesWorked: "MoMo, Tiki, ACB Bank",
         linkedinUrl: "https://linkedin.com",
@@ -20,4 +20,3 @@ export class MentorSeeder implements Seeder<Mentor> {
     ];
   }
 }
-

@@ -68,17 +68,24 @@ async function runSeed() {
     fs.writeFileSync(snapshotPath, JSON.stringify(snapshot, null, 2), "utf8");
     console.log(`💾 [DatabaseSeeder] Đã xuất bản sao lưu: database/seeders/snapshot.json`);
 
-    // Kiểm tra cấu hình Google Sheets URL
+    // Kiểm tra cấu hình Google Sheets CMS URL
     const envPath = path.join(rootDir, ".env.local");
-    let scriptUrl = process.env.GOOGLE_SHEETS_SCRIPT_URL;
-    let secret = process.env.GOOGLE_SHEETS_SECRET;
+    let scriptUrl = process.env.GOOGLE_APPS_SCRIPT_CMS_URL || process.env.GOOGLE_APPS_SCRIPT_URL;
+    let secret = process.env.GOOGLE_APPS_SCRIPT_CMS_SECRET || process.env.GOOGLE_APPS_SCRIPT_SECRET;
 
     if (fs.existsSync(envPath)) {
       const envContent = fs.readFileSync(envPath, "utf8");
-      const urlMatch = envContent.match(/GOOGLE_SHEETS_SCRIPT_URL=(.*)/);
-      const secretMatch = envContent.match(/GOOGLE_SHEETS_SECRET=(.*)/);
-      if (urlMatch && !scriptUrl) scriptUrl = urlMatch[1].trim();
-      if (secretMatch && !secret) secret = secretMatch[1].trim();
+      const urlMatch =
+        envContent.match(/GOOGLE_APPS_SCRIPT_CMS_URL=(.*)/) ||
+        envContent.match(/GOOGLE_APPS_SCRIPT_URL=(.*)/) ||
+        envContent.match(/GOOGLE_SHEETS_SCRIPT_URL=(.*)/);
+      const secretMatch =
+        envContent.match(/GOOGLE_APPS_SCRIPT_CMS_SECRET=(.*)/) ||
+        envContent.match(/GOOGLE_APPS_SCRIPT_SECRET=(.*)/) ||
+        envContent.match(/GOOGLE_SHEETS_SECRET=(.*)/);
+
+      if (urlMatch && !scriptUrl) scriptUrl = urlMatch[1].trim().replace(/^["']|["']$/g, "");
+      if (secretMatch && !secret) secret = secretMatch[1].trim().replace(/^["']|["']$/g, "");
     }
 
     if (scriptUrl && scriptUrl.startsWith("http")) {

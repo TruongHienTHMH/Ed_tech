@@ -94,13 +94,13 @@ export class SheetsClient {
       if (cached) return cached;
     }
 
-    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
-    const secret = process.env.GOOGLE_APPS_SCRIPT_SECRET || "";
+    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_CMS_URL || process.env.GOOGLE_APPS_SCRIPT_URL;
+    const secret = process.env.GOOGLE_APPS_SCRIPT_CMS_SECRET || process.env.GOOGLE_APPS_SCRIPT_SECRET || "";
     const startTime = Date.now();
 
     // 1. If no URL configured, return typed mock report from seed
     if (!appsScriptUrl) {
-      return this.buildFallbackReport(0, "Chưa cấu hình GOOGLE_APPS_SCRIPT_URL, đang hiển thị dữ liệu mẫu cục bộ.", "mock");
+      return this.buildFallbackReport(0, "Chưa cấu hình GOOGLE_APPS_SCRIPT_CMS_URL (hoặc GOOGLE_APPS_SCRIPT_URL), đang hiển thị dữ liệu mẫu cục bộ.", "mock");
     }
 
     // 2. Fetch live data from Apps Script Web App

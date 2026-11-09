@@ -38,7 +38,7 @@ export default function CourseFigmaInstructor({ onOpenConsult }: CourseFigmaInst
           <div className="flex flex-col items-center sm:items-start shrink-0 w-full md:w-52">
             <div className="relative w-44 h-44 rounded-2xl overflow-hidden shadow-md border-4 border-[#FAF7F8] mb-4 bg-gray-100">
               <Image
-                src="/assets/figma/da527ba5696d5b94f6f71aebe984b901fc46d929.png"
+                src="/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png"
                 alt="Mentor Hứa Thảo Ly"
                 fill
                 className="object-cover"

@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
 
     const payload = {
       action: "add_course",
-      secret: process.env.GOOGLE_APPS_SCRIPT_SECRET || "",
+      secret: process.env.GOOGLE_APPS_SCRIPT_CMS_SECRET || process.env.GOOGLE_APPS_SCRIPT_SECRET || "",
       id: sanitizeSpreadsheetValue(id),
       slug: sanitizeSpreadsheetValue(slug),
       title: sanitizeSpreadsheetValue(title),
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
       cover_image_url: sanitizeSpreadsheetValue(body.cover_image_url || "/uploads/courses/default-course.jpg"),
     };
 
-    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
+    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_CMS_URL || process.env.GOOGLE_APPS_SCRIPT_URL;
     let finalSlug = slug;
     let finalId = id;
 

@@ -11,7 +11,7 @@
       "originalTuitionVnd": 6780000,
       "duration": "27 buổi (6 tuần)",
       "level": "Beginner",
-      "coverImageUrl": "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+      "coverImageUrl": "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png",
       "isActive": true,
       "isFeatured": true,
       "sortOrder": 1
@@ -27,7 +27,7 @@
       "originalTuitionVnd": 3500000,
       "duration": "12 buổi (6 tuần)",
       "level": "Beginner",
-      "coverImageUrl": "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+      "coverImageUrl": "/assets/figma/05ab7dcc030820120da8f65c6b464967f554e0d8.png",
       "isActive": true,
       "isFeatured": true,
       "sortOrder": 2
@@ -43,7 +43,7 @@
       "originalTuitionVnd": 4500000,
       "duration": "15 buổi (5 tuần)",
       "level": "Intermediate",
-      "coverImageUrl": "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+      "coverImageUrl": "/assets/figma/b1c9fe6fd2d3dafb5b4b32d30320f68d7cde1f5c.png",
       "isActive": true,
       "isFeatured": true,
       "sortOrder": 3
@@ -495,7 +495,7 @@
       ],
       "toolsRaw": "SQL, PostgreSQL, Power BI",
       "metrics": "Tăng 18% giá trị đơn hàng trung bình (AOV) nhờ đề xuất combo sản phẩm",
-      "imageUrl": "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+      "imageUrl": "/assets/figma/2643f19ffd20e9e83bc82fe8862b51f3796c7604.png",
       "sortOrder": 1,
       "isActive": true
     },
@@ -512,7 +512,7 @@
       ],
       "toolsRaw": "SQL, Cohort Analysis, Looker Studio",
       "metrics": "Giảm 12% tỷ lệ mất người dùng sau 30 ngày qua mô hình cảnh báo sớm",
-      "imageUrl": "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+      "imageUrl": "/assets/figma/74b9c4a05863014e829874effcdb4e101a4bfaea.png",
       "sortOrder": 2,
       "isActive": true
     },
@@ -529,8 +529,110 @@
       ],
       "toolsRaw": "SQL, Excel Advanced, Tableau",
       "metrics": "Tiết kiệm 22% chi phí lưu kho và hạn chế tình trạng đứt hàng bán chạy",
-      "imageUrl": "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+      "imageUrl": "/assets/figma/71218f0038c8a9ce02ba0e6f6b102fbf63b6953b.png",
       "sortOrder": 3,
+      "isActive": true
+    },
+    {
+      "id": "proj-fmcg-sales-performance",
+      "projectId": "proj-fmcg-sales-performance",
+      "title": "Dashboard Giám Sát Hiệu Suất Bán Hàng Kênh Phân Phối FMCG",
+      "category": "FMCG",
+      "authorName": "Phạm Hải Đăng (K6)",
+      "tools": [
+        "SQL",
+        "BigQuery",
+        "Power BI"
+      ],
+      "toolsRaw": "SQL, BigQuery, Power BI",
+      "metrics": "Tự động hóa 100% báo cáo doanh số hàng ngày, tiết kiệm 15 giờ làm việc/tuần",
+      "imageUrl": "/assets/figma/973e833b234c55daebe419eefe02eb6e80f7d86d.png",
+      "sortOrder": 4,
+      "isActive": true
+    },
+    {
+      "id": "proj-logistics-delivery-sla",
+      "projectId": "proj-logistics-delivery-sla",
+      "title": "Phân Tích & Tối Ưu SLA Giao Hàng Chặng Cuối Logistics",
+      "category": "Logistics",
+      "authorName": "Đỗ Mai Linh (K8)",
+      "tools": [
+        "SQL",
+        "Window Functions",
+        "Looker"
+      ],
+      "toolsRaw": "SQL, Window Functions, Looker",
+      "metrics": "Cải thiện tỷ lệ giao đúng hẹn từ 81% lên 94.5% trên toàn quốc",
+      "imageUrl": "/assets/figma/2fc0a1c70056162f5d32de1029e4b71d620e97c4.png",
+      "sortOrder": 5,
+      "isActive": true
+    },
+    {
+      "id": "proj-banking-credit-risk",
+      "projectId": "proj-banking-credit-risk",
+      "title": "Phân Khúc Khách Hàng & Giám Sát Rủi Ro Tín Dụng Ngân Hàng",
+      "category": "Banking",
+      "authorName": "Vũ Tuấn Kiệt (K9)",
+      "tools": [
+        "SQL",
+        "RFM Segmentation",
+        "Tableau"
+      ],
+      "toolsRaw": "SQL, RFM Segmentation, Tableau",
+      "metrics": "Phát hiện sớm 15% nợ nhóm 2 và đề xuất giải pháp cơ cấu kịp thời",
+      "imageUrl": "/assets/figma/c0aae3c5c5404ee626ce858087d79649de2e3dc1.png",
+      "sortOrder": 6,
+      "isActive": true
+    },
+    {
+      "id": "proj-healthcare-appointment-analytics",
+      "projectId": "proj-healthcare-appointment-analytics",
+      "title": "Phân Tích Tỷ Lệ Hủy Lịch Khám & Tối Ưu Năng Suất Phòng Khám",
+      "category": "Healthcare",
+      "authorName": "Ngô Thu Hương (K7)",
+      "tools": [
+        "SQL",
+        "Google Data Studio",
+        "Google Sheets"
+      ],
+      "toolsRaw": "SQL, Google Data Studio, Google Sheets",
+      "metrics": "Giảm 25% tỷ lệ no-show qua hệ thống tự động nhắc hẹn thông minh",
+      "imageUrl": "/assets/figma/cf9dcd253d74531ef55b272e2e080b01e9bbd6bb.png",
+      "sortOrder": 7,
+      "isActive": true
+    },
+    {
+      "id": "proj-edtech-student-engagement",
+      "projectId": "proj-edtech-student-engagement",
+      "title": "Đo Lường Mức Độ Gắn Kết & Tỷ Lệ Hoàn Thành Khóa Học Trực Tuyến",
+      "category": "EdTech",
+      "authorName": "Trương Gia Huy (K10)",
+      "tools": [
+        "SQL",
+        "Funnel Analysis",
+        "Metabase"
+      ],
+      "toolsRaw": "SQL, Funnel Analysis, Metabase",
+      "metrics": "Tăng tỷ lệ hoàn thành khóa học từ 42% lên 68% qua tối ưu điểm rơi nội dung",
+      "imageUrl": "/assets/figma/1af45d712faebc37b4905756835680a337298304.png",
+      "sortOrder": 8,
+      "isActive": true
+    },
+    {
+      "id": "proj-realestate-market-trend",
+      "projectId": "proj-realestate-market-trend",
+      "title": "Nghiên Cứu Biến Động Giá & Xu Hướng Thị Trường Bất Động Sản",
+      "category": "Real Estate",
+      "authorName": "Hoàng Bích Ngọc (K8)",
+      "tools": [
+        "SQL",
+        "CTE Advanced",
+        "Power BI"
+      ],
+      "toolsRaw": "SQL, CTE Advanced, Power BI",
+      "metrics": "Xây dựng chỉ số định giá bất động sản theo bán kính hạ tầng chuẩn xác 91%",
+      "imageUrl": "/assets/figma/f0920e49e6a571ac94250b3258b77d8c976423b6.png",
+      "sortOrder": 9,
       "isActive": true
     }
   ],
@@ -541,7 +643,7 @@
       "role": "Founder Lydata & Senior Data Analyst",
       "title": "Founder Lydata • Ex-Senior DA MoMo, Tiki, ACB",
       "bio": "Xin chào, mình là Lý - Founder của Lydata. Với hơn 6+ năm kinh nghiệm làm việc trong lĩnh vực Data Analytics tại các tập đoàn và kỳ lân công nghệ hàng đầu như MoMo, Tiki, ACB Bank, mình đã đồng hành cùng hơn 1,000+ học viên chuyển ngành và nâng cao năng lực phân tích dữ liệu ứng dụng thực chiến.",
-      "avatarUrl": "/assets/figma/da527ba5696d5b94f6f71aebe984b901fc46d929.png",
+      "avatarUrl": "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
       "companies": [
         "MoMo",
         "Tiki",
@@ -564,7 +666,7 @@
       "rating": 5,
       "comment": "Trước đây mình rất sợ các câu lệnh và công thức phức tạp. Nhờ cách dạy trực quan theo từng tình huống kinh doanh của chị Lý, mình đã hiểu sâu bản chất JOIN, CTE và Window Function. Hiện tại mình đã pass vòng phỏng vấn DA tại Shopee!",
       "reviewText": "Trước đây mình rất sợ các câu lệnh và công thức phức tạp. Nhờ cách dạy trực quan theo từng tình huống kinh doanh của chị Lý, mình đã hiểu sâu bản chất JOIN, CTE và Window Function. Hiện tại mình đã pass vòng phỏng vấn DA tại Shopee!",
-      "avatarUrl": "/assets/figma/da527ba5696d5b94f6f71aebe984b901fc46d929.png",
+      "avatarUrl": "/assets/figma/e40866062bc7c3587c903859bd52be66623217cc.png",
       "isActive": true
     },
     {
@@ -577,7 +679,7 @@
       "rating": 5,
       "comment": "Khóa Combo End-to-End thực sự là bước ngoặt. Không chỉ dạy kỹ thuật viết code, chị Lý còn truyền cho mình tư duy bóc tách vấn đề MECE và cách nói chuyện với Stakeholder. Các buổi review bài tập 1-on-1 siêu chi tiết và tâm huyết.",
       "reviewText": "Khóa Combo End-to-End thực sự là bước ngoặt. Không chỉ dạy kỹ thuật viết code, chị Lý còn truyền cho mình tư duy bóc tách vấn đề MECE và cách nói chuyện với Stakeholder. Các buổi review bài tập 1-on-1 siêu chi tiết và tâm huyết.",
-      "avatarUrl": "/assets/figma/da527ba5696d5b94f6f71aebe984b901fc46d929.png",
+      "avatarUrl": "/assets/figma/2fc0a1c70056162f5d32de1029e4b71d620e97c4.png",
       "isActive": true
     },
     {
@@ -590,7 +692,46 @@
       "rating": 5,
       "comment": "Khóa học giúp mình xóa bỏ tư duy làm báo cáo chay. Mình tự tay xây dựng được hệ thống Dashboard tự động cảnh báo đơn trễ và đo lường SLA giao hàng. Sếp khen ngợi và tăng lương ngay sau khi áp dụng vào thực tế.",
       "reviewText": "Khóa học giúp mình xóa bỏ tư duy làm báo cáo chay. Mình tự tay xây dựng được hệ thống Dashboard tự động cảnh báo đơn trễ và đo lường SLA giao hàng. Sếp khen ngợi và tăng lương ngay sau khi áp dụng vào thực tế.",
-      "avatarUrl": "/assets/figma/da527ba5696d5b94f6f71aebe984b901fc46d929.png",
+      "avatarUrl": "/assets/figma/2a57d0c1a2a65bb9e121f9545459faf7c1b50587.png",
+      "isActive": true
+    },
+    {
+      "id": "test-04",
+      "studentName": "Lê Hoàng Yến",
+      "studentRole": "Product Growth Executive",
+      "role": "Product Growth Executive",
+      "company": "MoMo",
+      "courseId": "end-to-end-analytics",
+      "rating": 5,
+      "comment": "Bộ tài liệu thực tế và dataset từ các công ty kỳ lân giúp mình tự tin xử lý bài test ứng tuyển. Chị Lý định hướng xây dựng portfolio cực kỳ bài bản và thuyết phục các hiring manager.",
+      "reviewText": "Bộ tài liệu thực tế và dataset từ các công ty kỳ lân giúp mình tự tin xử lý bài test ứng tuyển. Chị Lý định hướng xây dựng portfolio cực kỳ bài bản và thuyết phục các hiring manager.",
+      "avatarUrl": "/assets/figma/b2b53a3cd8b4e6f2cfcc039b89d51637f8421060.png",
+      "isActive": true
+    },
+    {
+      "id": "test-05",
+      "studentName": "Vũ Minh Quân",
+      "studentRole": "Financial Analyst",
+      "role": "Financial Analyst",
+      "company": "VNDIRECT",
+      "courseId": "sql-for-data-analytics",
+      "rating": 5,
+      "comment": "Từ người chỉ quen dùng Excel, mình đã tự tin viết các truy vấn SQL phân tích hàng triệu dòng giao dịch chứng khoán trong tích tắc. Thời gian trích xuất dữ liệu giảm từ 2 ngày xuống còn 15 phút.",
+      "reviewText": "Từ người chỉ quen dùng Excel, mình đã tự tin viết các truy vấn SQL phân tích hàng triệu dòng giao dịch chứng khoán trong tích tắc. Thời gian trích xuất dữ liệu giảm từ 2 ngày xuống còn 15 phút.",
+      "avatarUrl": "/assets/figma/fb2492c1b7d7c65a104edaa8e809cc8a5a19315f.png",
+      "isActive": true
+    },
+    {
+      "id": "test-06",
+      "studentName": "Đỗ Khánh Linh",
+      "studentRole": "Commercial Analytics Specialist",
+      "role": "Commercial Analytics Specialist",
+      "company": "Unilever Vietnam",
+      "courseId": "data-analytical-thinking",
+      "rating": 5,
+      "comment": "Tư duy phân rã cây chỉ số (Metric Tree) và thiết kế Dashboard chuẩn Executive đã giúp các bài thuyết trình số liệu của mình với BGĐ trở nên cô đọng, sắc bén và ra được quyết định ngay lập tức.",
+      "reviewText": "Tư duy phân rã cây chỉ số (Metric Tree) và thiết kế Dashboard chuẩn Executive đã giúp các bài thuyết trình số liệu của mình với BGĐ trở nên cô đọng, sắc bén và ra được quyết định ngay lập tức.",
+      "avatarUrl": "/assets/figma/74b9c4a05863014e829874effcdb4e101a4bfaea.png",
       "isActive": true
     }
   ],

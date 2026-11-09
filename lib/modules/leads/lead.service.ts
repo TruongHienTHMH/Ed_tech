@@ -80,8 +80,14 @@ export class LeadService {
       `[LeadService] Ingesting lead id=${clean.submission_id}, phone=${maskSensitivePhone(clean.phone)}, course=${clean.course_id}`
     );
 
-    // 4. Save to Google Sheets via Generic Client
-    const sheetsResult = await GoogleSheetsClient.appendRow(this.targetSheetName, rowPayload);
+    // 4. Save to Google Sheets via Generic Client (Prioritizing Leads-specific ENV)
+    const leadsUrl = process.env.GOOGLE_APPS_SCRIPT_LEADS_URL || process.env.GOOGLE_APPS_SCRIPT_URL;
+    const leadsSecret = process.env.GOOGLE_APPS_SCRIPT_LEADS_SECRET || process.env.GOOGLE_APPS_SCRIPT_SECRET;
+
+    const sheetsResult = await GoogleSheetsClient.appendRow(this.targetSheetName, rowPayload, {
+      url: leadsUrl,
+      secret: leadsSecret,
+    });
 
     if (sheetsResult.ok) {
       return {

@@ -34,3 +34,4 @@ Các hướng dẫn trải nghiệm thực tế và những lưu ý vận hành 
 - [ ] Tài liệu thuyết minh đầy đủ, trung thực, rõ ràng bằng tiếng Việt
 - [ ] Không commit trực tiếp vào nhánh `main`
 - [ ] Sẵn sàng để đối tác và đội ngũ kỹ thuật nghiệm thu
+

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { User } from "@/components/common/Icons";
 import { Badge } from "@/components/common/Badge";
 import { Testimonial } from "@/lib/cms/types";
@@ -18,6 +19,7 @@ export default function TestimonialsSection({ testimonials = seedTestimonials }:
     role: t.studentRole || "Học viên DataWithLy",
     quote: t.comment || t.reviewText || "Khóa học rất thực chiến.",
     rating: t.rating || 5,
+    avatarUrl: t.avatarUrl,
   }));
 
   return (
@@ -61,9 +63,21 @@ export default function TestimonialsSection({ testimonials = seedTestimonials }:
 
               {/* Student Info */}
               <div className="flex items-center gap-3 pt-4 border-t border-neutral-100">
-                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#AF445A]/15 to-[#784080]/15 flex items-center justify-center shrink-0 border border-[#AF445A]/20">
-                  <User className="w-5 h-5 text-[#AF445A]" />
-                </div>
+                {item.avatarUrl ? (
+                  <div className="relative w-11 h-11 rounded-full overflow-hidden shrink-0 border border-[#AF445A]/20">
+                    <Image
+                      src={item.avatarUrl}
+                      alt={item.name}
+                      fill
+                      className="object-cover"
+                      sizes="44px"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#AF445A]/15 to-[#784080]/15 flex items-center justify-center shrink-0 border border-[#AF445A]/20">
+                    <User className="w-5 h-5 text-[#AF445A]" />
+                  </div>
+                )}
                 <div>
                   <h3 className="font-bold text-sm text-[#252525]">{item.name}</h3>
                   <p className="text-xs text-[#784080] font-medium">{item.role}</p>

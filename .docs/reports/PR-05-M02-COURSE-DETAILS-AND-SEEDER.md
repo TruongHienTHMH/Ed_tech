@@ -78,3 +78,4 @@
 - [x] Đã xóa bỏ triệt để hardcoded seed data rác trong mã nguồn frontend.
 - [x] Bố cục 2 cột khớp 100% bản vẽ Figma Node `12:1277`.
 - [x] Sẵn sàng để hợp nhất vào nhánh chính.
+
