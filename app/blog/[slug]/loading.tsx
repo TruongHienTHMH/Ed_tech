@@ -7,7 +7,7 @@ export default function BlogPostLoading() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <AnnouncementBar />
-      <Navbar />
+      <Navbar variant="light" />
 
       <main className="flex-1 animate-pulse">
         {/* Breadcrumb Skeleton */}

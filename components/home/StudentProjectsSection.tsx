@@ -2,7 +2,9 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { ExternalLink } from "@/components/common/Icons";
+import { ExternalLink, X } from "@/components/common/Icons";
+import { Button } from "@/components/common/Button";
+import { Badge } from "@/components/common/Badge";
 import { StudentProject } from "@/lib/cms/types";
 import { seedStudentProjects } from "@/data/seed-data";
 
@@ -23,20 +25,20 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
   }));
 
   return (
-    <section id="projects" className="relative w-full bg-[#1F242F] py-16 lg:py-24 text-white overflow-hidden">
+    <section id="projects" className="relative w-full bg-[#1F242F] py-16 lg:py-24 text-white overflow-hidden border-t border-white/5">
       {/* Background ambient lighting */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-[#AF445A]/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 flex flex-col items-center">
-        {/* Eyebrow Pill */}
+        {/* Eyebrow Pill (Figma Node 12:873) */}
         <div className="mb-4">
-          <span className="inline-block px-5 py-2 rounded-full border border-[#AF445A] bg-white font-bold text-xs sm:text-sm tracking-wider uppercase text-brand-gradient shadow-md">
+          <Badge variant="tag" size="md">
             PROJECT HỌC VIÊN
-          </span>
+          </Badge>
         </div>
 
         {/* Title */}
-        <h2 className="font-heading font-bold text-2xl sm:text-3xl lg:text-[42px] leading-tight text-center text-white mb-12 max-w-[650px]">
+        <h2 className="font-heading font-bold text-2xl sm:text-3xl lg:text-[40px] leading-tight text-center text-white mb-12 max-w-[700px]">
           Dự án của học viên qua các khóa học tại Lydata
         </h2>
 
@@ -48,8 +50,8 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
               <div
                 key={project.id}
                 onClick={() => setSelectedImage(project.image)}
-                className={`group relative rounded-2xl overflow-hidden border-4 border-white shadow-lg bg-neutral-900 cursor-pointer transform hover:-translate-y-1.5 transition-all duration-300 ${
-                  isTall ? "h-[300px] sm:h-[328px]" : "h-[200px] sm:h-[208px]"
+                className={`group relative rounded-2xl overflow-hidden border-2 border-white/20 shadow-lg bg-neutral-900 cursor-pointer transform hover:-translate-y-1.5 transition-all duration-300 ${
+                  isTall ? "h-[290px] sm:h-[320px]" : "h-[200px] sm:h-[216px]"
                 }`}
               >
                 <Image
@@ -77,14 +79,16 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
 
         {/* "Xem thêm" Button */}
         <div>
-          <a
+          <Button
             href="https://facebook.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-10 py-3.5 rounded-lg border-2 border-[#AF445A] bg-transparent hover:bg-white/5 font-bold text-base text-brand-gradient hover:scale-105 transition-all shadow-md"
+            variant="outline"
+            size="lg"
+            className="border-2 border-[#AF445A] text-white hover:bg-white/10 font-bold px-10 shadow-md transition-all hover:scale-105"
           >
             Xem thêm dự án trên Cộng đồng
-          </a>
+          </Button>
         </div>
       </div>
 
@@ -94,6 +98,13 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
           onClick={() => setSelectedImage(null)}
           className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 cursor-zoom-out animate-in fade-in"
         >
+          <button
+            onClick={() => setSelectedImage(null)}
+            className="absolute top-6 right-6 text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 cursor-pointer"
+            aria-label="Đóng xem trước"
+          >
+            <X className="w-6 h-6" />
+          </button>
           <div className="relative max-w-5xl max-h-[90vh] w-full h-[80vh]">
             <Image
               src={selectedImage}

@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Check, X, ArrowRight } from "@/components/common/Icons";
+import { Button } from "@/components/common/Button";
+import { Badge } from "@/components/common/Badge";
 import { PackagePricing } from "@/lib/cms/types";
 import { seedPackages } from "@/data/seed-data";
 
@@ -91,6 +93,11 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-14 lg:mb-16">
+          <div className="mb-3">
+            <Badge variant="tag" size="md">
+              BẢNG GIÁ & ƯU ĐÃI
+            </Badge>
+          </div>
           <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-[42px] leading-tight lg:leading-[46px] text-[#2E2E2E] mb-3 max-w-[800px]">
             Đầu tư thông minh cho sự nghiệp
           </h2>
@@ -99,46 +106,46 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
           </p>
         </div>
 
-        {/* 2-Column Comparison Grid */}
+        {/* 2-Column Comparison Grid (Figma Node 12:1175) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch max-w-[1100px] mx-auto">
-          {/* Column 1: Đăng kí riêng lẻ (Standard / Unbundled) */}
-          <div className="lg:col-span-6 bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+          {/* Column 1: Đăng kí riêng lẻ (Unbundled Card: 5 columns) */}
+          <div className="lg:col-span-5 bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
             <div>
               {/* Pill Header */}
               <div className="mb-6">
-                <span className="inline-block px-4 py-1.5 rounded-full bg-brand-gradient-reverse text-white font-semibold text-sm">
+                <Badge variant="level" size="md" className="bg-neutral-100 text-neutral-700 border-neutral-200">
                   Đăng kí riêng lẻ
-                </span>
+                </Badge>
               </div>
 
               {/* 2 Separate Course Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              <div className="flex flex-col gap-3.5 mb-6">
                 {/* Course 1 */}
-                <div className="border border-[#784080]/30 rounded-xl p-4 flex flex-col justify-between bg-neutral-50/50">
+                <div className="border border-neutral-200/80 rounded-2xl p-4 flex flex-col justify-between bg-neutral-50/70">
                   <div>
                     <h3 className="font-bold text-base text-[#2E2E2E] mb-1">
                       Khóa SQL for Data Analytics
                     </h3>
-                    <p className="text-xs text-[#969696] mb-3 line-clamp-2">
-                      Làm quen với Database và SQL, xây dựng khả năng truy vấn.
+                    <p className="text-xs text-neutral-500 mb-2.5 line-clamp-2">
+                      Làm quen với Database và SQL, xây dựng khả năng truy vấn dữ liệu thực tế.
                     </p>
                   </div>
-                  <p className="font-bold text-lg text-brand-gradient">
+                  <p className="font-bold text-base sm:text-lg text-[#AF445A]">
                     2,990,000VNĐ
                   </p>
                 </div>
 
                 {/* Course 2 */}
-                <div className="border border-[#784080]/30 rounded-xl p-4 flex flex-col justify-between bg-neutral-50/50">
+                <div className="border border-neutral-200/80 rounded-2xl p-4 flex flex-col justify-between bg-neutral-50/70">
                   <div>
                     <h3 className="font-bold text-base text-[#2E2E2E] mb-1">
-                      Khóa Data Analytical Thinking
+                      Analytical Thinking & Dashboard
                     </h3>
-                    <p className="text-xs text-[#969696] mb-3 line-clamp-2">
-                      Học cách xác định vấn đề, lựa chọn metrics, phân tích dữ liệu.
+                    <p className="text-xs text-neutral-500 mb-2.5 line-clamp-2">
+                      Tư duy xác định vấn đề, lựa chọn metrics, thiết kế Dashboard ra quyết định.
                     </p>
                   </div>
-                  <p className="font-bold text-lg text-brand-gradient">
+                  <p className="font-bold text-base sm:text-lg text-[#AF445A]">
                     3,790,000VNĐ
                   </p>
                 </div>
@@ -171,21 +178,24 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
                   <div className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center shrink-0">
                     <X className="w-3.5 h-3.5 text-neutral-400" />
                   </div>
-                  <span>Mất thời gian tìm hiểu</span>
+                  <span>Mất thời gian tìm hiểu riêng rẽ</span>
                 </div>
               </div>
             </div>
 
-            <button
+            <Button
+              variant="secondary"
+              size="md"
+              fullWidth
               onClick={() => handleOpenRegister("Đăng kí riêng lẻ")}
-              className="w-full py-3 rounded-lg border border-neutral-300 text-neutral-700 font-semibold text-sm hover:bg-neutral-50 transition-colors"
+              className="border-neutral-300 text-neutral-700 bg-white hover:bg-neutral-100 font-semibold text-sm"
             >
               Chọn đăng kí riêng lẻ
-            </button>
+            </Button>
           </div>
 
-          {/* Column 2: COMBO END-TO-END ANALYTICS (Featured Pro Card) */}
-          <div className="lg:col-span-6 relative bg-brand-gradient p-1 rounded-2xl shadow-2xl flex flex-col justify-between transform hover:-translate-y-1 transition-all duration-300">
+          {/* Column 2: COMBO END-TO-END ANALYTICS (Featured Pro Card: 7 columns) */}
+          <div className="lg:col-span-7 relative bg-brand-gradient p-1 rounded-3xl shadow-2xl flex flex-col justify-between transform hover:-translate-y-1 transition-all duration-300">
             {/* Top Savings Badge Floating */}
             <div className="absolute -top-4 -right-2 sm:-right-4 z-20 flex items-center justify-center">
               <div className="relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24">
@@ -204,30 +214,26 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
             </div>
 
             {/* Inner Content Box */}
-            <div className="flex flex-col h-full bg-transparent p-5 sm:p-7 text-white">
+            <div className="flex flex-col h-full bg-transparent p-6 sm:p-8 text-white">
               {/* Header inside gradient */}
               <div className="flex items-center gap-2 mb-4">
-                <div className="bg-white rounded-full px-3 py-1 flex items-center gap-1.5 shadow-sm">
-                  <Image
-                    src="/assets/figma/ae7139e451fb9f873198b04a809e63e17fd7844b.png"
-                    alt="Fire hot"
-                    width={18}
-                    height={18}
-                    className="object-contain"
-                  />
-                  <span className="font-bold text-xs text-brand-gradient uppercase">Combo</span>
-                </div>
+                <Badge variant="gold" size="sm" className="bg-white/95 text-[#AF445A] font-bold uppercase shadow-sm">
+                  Combo Nổi Bật
+                </Badge>
+                <Badge variant="discount" size="sm">
+                  Tiết kiệm 1,080,000VNĐ
+                </Badge>
               </div>
 
               <div className="mb-6">
-                <h3 className="font-heading font-bold text-xl sm:text-2xl text-white mb-1">
+                <h3 className="font-heading font-bold text-xl sm:text-2xl text-white mb-1.5">
                   End-to-End Analytics with SQL & Dashboard
                 </h3>
-                <p className="text-white/80 text-sm">2 khóa học hoàn chỉnh trong 1 lộ trình</p>
+                <p className="text-white/85 text-sm sm:text-base">2 khóa học hoàn chỉnh trong 1 lộ trình đào tạo khép kín</p>
               </div>
 
               {/* Price Row */}
-              <div className="bg-white/15 backdrop-blur-md border border-white/25 rounded-xl p-4 flex items-baseline justify-between gap-4 mb-6">
+              <div className="bg-white/15 backdrop-blur-md border border-white/25 rounded-2xl p-4 sm:p-5 flex items-baseline justify-between gap-4 mb-6">
                 <div>
                   <span className="text-xs text-white/75 block">Giá gốc 2 khóa:</span>
                   <span className="line-through text-white/70 text-sm font-medium">{originalPriceStr}</span>
@@ -239,8 +245,8 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
               </div>
 
               {/* White Section with Benefits */}
-              <div className="bg-white rounded-xl p-5 sm:p-6 text-[#34343C] flex-1 flex flex-col justify-between">
-                <div className="space-y-3 mb-6">
+              <div className="bg-white rounded-2xl p-5 sm:p-6 text-[#34343C] flex-1 flex flex-col justify-between">
+                <div className="space-y-3.5 mb-6">
                   <div className="flex items-center gap-3 text-sm font-semibold">
                     <Image
                       src="/assets/figma/bb89cec2b7cc67e662e0f2532b951f267ce166fe.svg"
@@ -297,13 +303,16 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
                   </div>
                 </div>
 
-                <button
+                <Button
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  iconRight={<ArrowRight className="w-5 h-5" />}
                   onClick={() => handleOpenRegister("Combo End-to-End Analytics")}
-                  className="w-full py-4 bg-brand-gradient hover:opacity-95 text-white font-bold text-base rounded-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0"
+                  className="font-bold text-base py-4 rounded-xl shadow-lg hover:shadow-xl"
                 >
-                  <span>Đăng kí combo ngay</span>
-                  <ArrowRight className="w-5 h-5" />
-                </button>
+                  Đăng kí combo ngay
+                </Button>
               </div>
             </div>
           </div>
@@ -313,10 +322,10 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
       {/* Registration Modal Dialog */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
             <button
               onClick={() => setModalOpen(false)}
-              className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-700"
+              className="absolute top-5 right-5 text-neutral-400 hover:text-neutral-700 p-1.5 rounded-full hover:bg-neutral-100 transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -330,12 +339,15 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
                 <p className="text-sm text-neutral-600 mb-6">
                   Đội ngũ Ly Data sẽ liên hệ với bạn qua Zalo/Điện thoại trong vòng 15 phút để hỗ trợ hoàn tất lộ trình học.
                 </p>
-                <button
+                <Button
+                  variant="primary"
+                  size="md"
+                  fullWidth
                   onClick={() => setModalOpen(false)}
-                  className="w-full py-3 bg-brand-gradient text-white font-semibold rounded-xl"
+                  className="font-semibold"
                 >
                   Hoàn tất
-                </button>
+                </Button>
               </div>
             ) : (
               <div>
@@ -353,7 +365,7 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
                       value={leadForm.name}
                       onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
                       placeholder="Nguyễn Văn A"
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-neutral-300 text-sm focus:outline-none focus:border-[#AF445A]"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-sm focus:outline-none focus:border-[#AF445A] focus:ring-1 focus:ring-[#AF445A]"
                     />
                   </div>
 
@@ -365,7 +377,7 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
                       value={leadForm.phone}
                       onChange={(e) => setLeadForm({ ...leadForm, phone: e.target.value })}
                       placeholder="0912 345 678"
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-neutral-300 text-sm focus:outline-none focus:border-[#AF445A]"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-sm focus:outline-none focus:border-[#AF445A] focus:ring-1 focus:ring-[#AF445A]"
                     />
                   </div>
 
@@ -377,23 +389,26 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
                       value={leadForm.email}
                       onChange={(e) => setLeadForm({ ...leadForm, email: e.target.value })}
                       placeholder="email@gmail.com"
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-neutral-300 text-sm focus:outline-none focus:border-[#AF445A]"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-sm focus:outline-none focus:border-[#AF445A] focus:ring-1 focus:ring-[#AF445A]"
                     />
                   </div>
 
                   {errorMessage && (
-                    <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-600 font-medium">
-                      {errorMessage}
-                    </div>
+                    <p className="text-xs text-rose-600 bg-rose-50 p-2.5 rounded-lg font-medium">{errorMessage}</p>
                   )}
 
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-3.5 bg-brand-gradient text-white font-bold rounded-xl shadow-md hover:opacity-95 transition-all mt-4 disabled:opacity-60"
-                  >
-                    {isSubmitting ? "Đang gửi đăng ký..." : "Gửi thông tin nhận ưu đãi"}
-                  </button>
+                  <div className="pt-2">
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      size="lg"
+                      fullWidth
+                      isLoading={isSubmitting}
+                      className="font-bold text-sm sm:text-base py-3"
+                    >
+                      Gửi thông tin đăng ký
+                    </Button>
+                  </div>
                 </form>
               </div>
             )}

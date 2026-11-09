@@ -8,7 +8,7 @@ export default function BlogPostNotFound() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <AnnouncementBar />
-      <Navbar />
+      <Navbar variant="light" />
 
       <main className="flex-1 flex items-center justify-center py-20 px-4 text-center">
         <div className="max-w-md space-y-6">

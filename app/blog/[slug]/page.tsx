@@ -94,7 +94,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       {/* 2. Top Navigation */}
       <AnnouncementBar />
-      <Navbar />
+      <Navbar variant="light" />
 
       <main className="flex-1">
         {/* Breadcrumb Header */}
