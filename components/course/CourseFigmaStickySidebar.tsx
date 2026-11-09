@@ -4,6 +4,8 @@ import React from "react";
 import Image from "next/image";
 import { Course } from "@/lib/cms/types";
 import { openLeadModal } from "@/components/forms/LeadModalManager";
+import { Button } from "@/components/common/Button";
+import { ArrowRight } from "@/components/common/Icons";
 
 interface CourseFigmaStickySidebarProps {
   course: Course;
@@ -74,24 +76,24 @@ export default function CourseFigmaStickySidebar({ course }: CourseFigmaStickySi
 
         {/* Primary CTA Buttons */}
         <div className="space-y-3 mb-6">
-          <button
-            type="button"
+          <Button
+            variant="primary"
+            size="lg"
+            fullWidth
             onClick={handleRegisterClick}
-            className="w-full py-3.5 px-6 bg-gradient-to-r from-[#8B1D2C] to-[#AF445A] hover:from-[#731422] hover:to-[#96374C] text-white text-base font-bold rounded-2xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+            iconRight={<ArrowRight className="w-4 h-4" />}
           >
-            <span>Đăng kí ngay</span>
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </button>
+            Đăng ký ngay
+          </Button>
 
-          <button
-            type="button"
+          <Button
+            variant="outline"
+            size="md"
+            fullWidth
             onClick={handleConsultClick}
-            className="w-full py-3 px-6 bg-[#FAF7F8] hover:bg-[#F3EEF1] text-gray-800 text-sm font-semibold rounded-2xl border border-[#EFE5E7] transition-colors cursor-pointer text-center"
           >
-            Nhận tư vấn lộ trình 1-on-1
-          </button>
+            Nhận tư vấn 1:1
+          </Button>
         </div>
 
         {/* Key Course Inclusions & Metadata */}

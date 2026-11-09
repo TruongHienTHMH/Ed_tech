@@ -53,70 +53,60 @@ const METHODOLOGY_STEPS: StepItem[] = [
 
 export default function CourseMethodologyFlow() {
   return (
-    <section className="w-full bg-[#F8F9FA] py-14 lg:py-20 border-b border-neutral-200">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
-          <span className="inline-block px-4 py-1.5 rounded-full border border-[#AF445A]/30 bg-white font-bold text-xs sm:text-sm text-brand-gradient shadow-xs uppercase tracking-wider mb-3">
-            Phương Pháp Đào Tạo Thực Chiến
-          </span>
-          <h2 className="font-heading font-extrabold text-2xl sm:text-3xl lg:text-4xl text-[#252525] tracking-tight">
-            Sơ Đồ 5 Bước Tư Duy Phân Tích Thực Chiến
-          </h2>
-          <p className="mt-3 text-neutral-600 text-base sm:text-lg leading-relaxed">
-            Tại sao Mentor Hứa Thảo Ly luôn bắt đầu từ bài toán kinh doanh? Bởi một câu lệnh SQL dù chạy nhanh đến mấy cũng vô nghĩa nếu trả lời sai câu hỏi của doanh nghiệp.
-          </p>
-        </div>
+    <section className="mb-12" id="methodology">
+      {/* Section Header */}
+      <div className="flex items-center gap-3 mb-4">
+        <span className="w-2.5 h-6 bg-[#AF445A] rounded-full inline-block" />
+        <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
+          Sơ Đồ 5 Bước Tư Duy Phân Tích Thực Chiến
+        </h2>
+      </div>
+      <p className="text-sm sm:text-base text-neutral-600 mb-6 leading-relaxed">
+        Tại sao Mentor Hứa Thảo Ly luôn bắt đầu từ bài toán kinh doanh? Bởi một câu lệnh SQL dù chạy nhanh đến mấy cũng vô nghĩa nếu trả lời sai câu hỏi của doanh nghiệp.
+      </p>
 
-        {/* 5-Step Process Flow (Desktop horizontal grid, Mobile vertical timeline) */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 lg:gap-5 relative">
-          {METHODOLOGY_STEPS.map((item, index) => {
-            const isLast = index === METHODOLOGY_STEPS.length - 1;
+      {/* 5-Step Process Flow: 2-column balanced grid on desktop, single column vertical on mobile */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {METHODOLOGY_STEPS.map((item, index) => {
+          const isLast = index === METHODOLOGY_STEPS.length - 1;
 
-            return (
-              <div
-                key={item.step}
-                className="relative bg-white rounded-2xl p-5 lg:p-6 border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1"
-              >
-                {/* Step Header */}
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-2xl">{item.icon}</span>
-                    <span className="font-heading font-extrabold text-xs px-2.5 py-1 rounded-md bg-[#AF445A]/10 text-[#AF445A]">
-                      BƯỚC {item.step}
-                    </span>
-                  </div>
-
-                  <h3 className="font-heading font-bold text-lg text-[#252525] mb-1 group-hover:text-[#AF445A] transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs font-semibold text-[#784080] mb-3">
-                    {item.subtitle}
-                  </p>
-
-                  <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-normal">
-                    {item.description}
-                  </p>
+          return (
+            <div
+              key={item.step}
+              className={`bg-white rounded-2xl p-5 border border-neutral-200 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group hover:-translate-y-0.5 ${
+                isLast ? "sm:col-span-2" : ""
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-2xl">{item.icon}</span>
+                  <span className="font-heading font-extrabold text-xs px-2.5 py-1 rounded-md bg-[#AF445A]/10 text-[#AF445A]">
+                    BƯỚC {item.step}
+                  </span>
                 </div>
 
-                {/* Arrow Connector for Desktop (between cards) */}
-                {!isLast && (
-                  <div className="hidden md:flex absolute -right-3.5 top-1/2 -translate-y-1/2 z-20 w-6 h-6 rounded-full bg-[#AF445A] text-white items-center justify-center text-xs shadow-md">
-                    →
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+                <h3 className="font-heading font-bold text-base text-[#252525] mb-1 group-hover:text-[#AF445A] transition-colors">
+                  {item.title}
+                </h3>
+                <p className="text-xs font-semibold text-[#784080] mb-2">
+                  {item.subtitle}
+                </p>
 
-        {/* Highlight Callout Footer */}
-        <div className="mt-10 max-w-2xl mx-auto bg-white rounded-2xl p-4 sm:p-5 border border-dashed border-[#AF445A]/40 text-center shadow-xs">
-          <p className="text-sm text-neutral-700 leading-relaxed">
-            <span className="font-bold text-[#AF445A]">💡 Triết lý đào tạo của DataWithLy:</span>{" "}
-            Không đào tạo thợ gõ code hay vẽ chart vu vơ. Chúng tôi rèn luyện tư duy phản biện sắc bén để bạn tự tin đối thoại cùng Ban Giám Đốc.
-          </p>
-        </div>
+                <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-normal">
+                  {item.description}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Highlight Callout Footer */}
+      <div className="mt-6 bg-[#FAF7F8] rounded-2xl p-4 sm:p-5 border border-dashed border-[#AF445A]/40 shadow-xs">
+        <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed">
+          <span className="font-bold text-[#AF445A]">💡 Triết lý đào tạo của DataWithLy:</span>{" "}
+          Không đào tạo thợ gõ code hay vẽ chart vu vơ. Chúng tôi rèn luyện tư duy phản biện sắc bén để bạn tự tin đối thoại cùng Ban Giám Đốc.
+        </p>
       </div>
     </section>
   );

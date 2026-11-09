@@ -4,7 +4,9 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Course } from "@/lib/cms/types";
-import { Clock, Video, CheckCircle2, ChevronRight, User } from "@/components/common/Icons";
+import { Clock, Video, ChevronRight, Calendar } from "@/components/common/Icons";
+import { Badge } from "@/components/common/Badge";
+import { Button } from "@/components/common/Button";
 import { openLeadModal } from "@/components/forms/LeadModalManager";
 
 interface CourseHeroProps {
@@ -52,14 +54,17 @@ export default function CourseHero({ course }: CourseHeroProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Meta & Call to Actions */}
           <div className="lg:col-span-7 flex flex-col gap-6">
-            {/* Tag Badge */}
+            {/* Badges (Figma Node 12:1427) */}
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center px-3.5 py-1 rounded-full border border-[#AF445A] bg-[#AF445A]/10 text-xs sm:text-sm font-bold text-[#FFC934] tracking-wide uppercase">
+              <Badge variant="tag">
                 {course.tag || "Data Analytics"}
-              </span>
-              <span className="inline-flex items-center px-3 py-1 rounded-full bg-white/10 text-xs sm:text-sm text-white/90 font-medium">
+              </Badge>
+              <Badge variant="level">
                 {course.level || "Người mới bắt đầu"}
-              </span>
+              </Badge>
+              <Badge variant="liveClass">
+                Live Class
+              </Badge>
             </div>
 
             {/* H1 Heading */}
@@ -72,19 +77,23 @@ export default function CourseHero({ course }: CourseHeroProps) {
               {course.description || course.tagline}
             </p>
 
-            {/* Badges: Format, Duration, Schedule */}
-            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-3 text-xs sm:text-sm font-medium text-white/90">
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3.5 py-2 rounded-xl border border-white/10">
+            {/* Course Specifications (Figma Node 12:1430) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-medium text-white/90">
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3.5 py-2.5 rounded-xl border border-white/10">
                 <Clock className="w-4 h-4 text-[#FFC934] shrink-0" />
-                <span>{course.duration || "12 buổi học"}</span>
+                <span>{course.duration || "12 buổi học (24 giờ)"}</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3.5 py-2 rounded-xl border border-white/10">
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3.5 py-2.5 rounded-xl border border-white/10">
+                <Calendar className="w-4 h-4 text-[#FFC934] shrink-0" />
+                <span>Tối Thứ 3 & Thứ 5 (19:30 - 21:30)</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3.5 py-2.5 rounded-xl border border-white/10">
+                <Calendar className="w-4 h-4 text-[#AF445A] shrink-0" />
+                <span>Khai giảng: 15 hàng tháng</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3.5 py-2.5 rounded-xl border border-white/10">
                 <Video className="w-4 h-4 text-[#AF445A] shrink-0" />
-                <span>Live Online qua Zoom</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3.5 py-2 rounded-xl border border-white/10 col-span-2 sm:col-span-1">
-                <User className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Mentor Hứa Thảo Ly trực tiếp kèm</span>
+                <span>Live Class Zoom 100%</span>
               </div>
             </div>
 
@@ -114,41 +123,27 @@ export default function CourseHero({ course }: CourseHeroProps) {
 
             {/* Dual CTAs */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1">
-              <button
-                type="button"
+              <Button
+                variant="primary"
+                size="lg"
                 onClick={() =>
                   openLeadModal({
                     courseId: course.id,
                     ctaLocation: "course_hero_primary",
                   })
                 }
-                className="inline-flex items-center justify-center bg-brand-gradient hover:opacity-95 text-white font-bold text-base px-8 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
                 Đăng ký tư vấn ngay
-              </button>
+              </Button>
 
-              <a
+              <Button
+                variant="outline"
+                size="lg"
                 href="#curriculum"
-                className="inline-flex items-center justify-center bg-white/10 hover:bg-white/15 text-white border border-white/20 font-semibold text-base px-6 py-3.5 rounded-xl transition-colors cursor-pointer text-center"
+                className="border-white/20 text-white hover:bg-white/10 hover:text-white hover:border-white/40"
               >
-                Xem đề cương chi tiết ↓
-              </a>
-            </div>
-
-            {/* Trust Proof Bullets */}
-            <div className="flex flex-wrap items-center gap-y-2 gap-x-5 text-xs sm:text-sm text-white/80 pt-2 border-t border-white/10">
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Học lại miễn phí nếu chưa vững</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Hỗ trợ bài tập 1:1 trọn đời</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Video record lưu trữ xem lại</span>
-              </div>
+                Xem đề cương chi tiết
+              </Button>
             </div>
           </div>
 
