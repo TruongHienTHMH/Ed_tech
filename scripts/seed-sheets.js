@@ -47,6 +47,19 @@ async function runSeed() {
   console.log("=================================================");
 
   try {
+    const isFresh = process.argv.includes("--fresh");
+    const snapshotPath = path.join(rootDir, "database", "seeders", "snapshot.json");
+
+    if (isFresh) {
+      console.log("🔄 [DatabaseSeeder] Phát hiện cờ --fresh: Đang dọn dẹp snapshot cũ trước khi nạp...");
+      if (fs.existsSync(snapshotPath)) {
+        fs.unlinkSync(snapshotPath);
+        console.log("   Đã xóa snapshot cũ thành công.");
+      }
+    } else {
+      console.log("🔒 [DatabaseSeeder] Chế độ bảo toàn (Safe mode): Không xóa dữ liệu ngoài ý muốn.");
+    }
+
     const seederModule = loadTsModule("database/seeders/DatabaseSeeder.ts");
     const DatabaseSeeder = seederModule.DatabaseSeeder;
 
@@ -64,7 +77,6 @@ async function runSeed() {
     console.log(`   - Bài viết Blog: ${snapshot.blogs.length}`);
 
     // Ghi snapshot JSON
-    const snapshotPath = path.join(rootDir, "database", "seeders", "snapshot.json");
     fs.writeFileSync(snapshotPath, JSON.stringify(snapshot, null, 2), "utf8");
     console.log(`💾 [DatabaseSeeder] Đã xuất bản sao lưu: database/seeders/snapshot.json`);
 

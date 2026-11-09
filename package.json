@@ -13,7 +13,9 @@
     "test:lead": "node scripts/test-lead-submission.js",
     "test:rate": "node scripts/test-rate-limiter.js",
     "test": "npm run test:gas && npm run test:lead && npm run test:rate",
+    "db:reset": "node scripts/reset-db.js",
     "db:seed": "node scripts/seed-sheets.js",
+    "db:fresh": "node scripts/reset-db.js && node scripts/seed-sheets.js",
     "ci": "npm run lint && npm run typecheck && npm run test && npm run db:seed && npm run build"
   },
   "dependencies": {

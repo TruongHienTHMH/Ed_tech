@@ -40,6 +40,7 @@ export async function POST(request: NextRequest) {
     // If neither tag nor path is specified, invalidate all content cache
     if (!tag && !path) {
       revalidatePath("/");
+      revalidatePath("/", "layout");
       revalidateTag("cms", "max");
       ContentFetcher.invalidateCache();
     }
@@ -64,5 +65,9 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+export async function GET(request: NextRequest) {
+  return POST(request);
 }
 

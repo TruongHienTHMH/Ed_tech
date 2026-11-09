@@ -3,7 +3,7 @@
  * DATAWITHLY CMS - HỆ THỐNG GOOGLE APPS SCRIPT TRỌN GÓI (ALL-IN-ONE BUNDLE)
  * ==============================================================================
  * Phiên bản: 2.1.0 (DataWithLy Enterprise CMS)
- * Thời gian đóng gói: 2026-11-08T11:36:44.356Z
+ * Thời gian đóng gói: 2026-11-09T11:40:17.942Z
  * Tự động tạo bởi: scripts/bundle-apps-script.js
  *
  * HƯỚNG DẪN SỬ DỤNG:
@@ -122,6 +122,9 @@ var CONFIG = {
   },
 
   // URL Webhook kích hoạt On-Demand ISR Revalidation trên Website DataWithLy
+  REVALIDATION_PROD_URL: "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026",
+  REVALIDATION_LOCAL_URL: "http://localhost:3000/api/revalidate?secret=datawithly_secure_reval_token_2026",
+  ACTIVE_REVALIDATION_ENV: "PROD",
   REVALIDATION_URL: "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026",
 
   // Cấu hình Telegram Bot để nhận cảnh báo khi có học viên đăng ký tư vấn mới (< 2s)
@@ -1598,7 +1601,10 @@ function setupSettingsTab(ss) {
     sheet.appendRow(["zalo_url", "https://zalo.me/0934938431", "Đường dẫn chat Zalo tư vấn nhanh"]);
     sheet.appendRow(["contact_email", "vietds@gmail.com", "Email nhận thư liên hệ"]);
     sheet.appendRow(["announcement_bar", "Level Up Week: Learn More, Save 75%! - 4 days only! Get 70+ online SQL courses and save up to $450", "Thông báo trên thanh header"]);
-    sheet.appendRow(["revalidation_url", "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook làm mới bộ nhớ cache của Website"]);
+    sheet.appendRow(["revalidation_prod_url", "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook Production làm mới bộ nhớ cache Website"]);
+    sheet.appendRow(["revalidation_local_url", "http://localhost:3000/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook Local / Dev Tunnel làm mới bộ nhớ cache"]);
+    sheet.appendRow(["active_revalidation_env", "PROD", "Môi trường đồng bộ kích hoạt (PROD hoặc LOCAL)"]);
+    sheet.appendRow(["revalidation_url", "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook làm mới bộ nhớ cache của Website (dự phòng)"]);
   }
 }
 
@@ -2556,22 +2562,39 @@ function showSoftDeletePrompt() {
 }
 
 /**
- * 4. Kích hoạt On-Demand ISR Revalidation trên Website
+ * 4. Kích hoạt On-Demand ISR Revalidation trên Website (If-Else thông minh theo môi trường)
  */
 function triggerWebsiteRevalidation() {
   var ui = SpreadsheetApp.getUi();
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  var targetUrl = CONFIG.REVALIDATION_URL;
+  var settingsMap = {};
   var settingsSheet = ss.getSheetByName("settings");
   if (settingsSheet) {
     var sData = settingsSheet.getDataRange().getValues();
     for (var i = 1; i < sData.length; i++) {
-      if (sData[i][0] === "revalidation_url" && sData[i][1]) {
-        targetUrl = sData[i][1].toString().trim();
-        break;
+      if (sData[i][0]) {
+        settingsMap[sData[i][0].toString().trim()] = (sData[i][1] || "").toString().trim();
       }
     }
+  }
+
+  var activeEnv = (settingsMap["active_revalidation_env"] || CONFIG.ACTIVE_REVALIDATION_ENV || "PROD").toUpperCase();
+  var prodUrl = settingsMap["revalidation_prod_url"] || settingsMap["revalidation_url"] || CONFIG.REVALIDATION_PROD_URL;
+  var localUrl = settingsMap["revalidation_local_url"] || CONFIG.REVALIDATION_LOCAL_URL;
+
+  var targetUrl = "";
+  var envName = "";
+
+  if (activeEnv === "LOCAL" && localUrl) {
+    targetUrl = localUrl;
+    envName = "💻 LOCALHOST / DEV TUNNEL";
+  } else if (localUrl && !prodUrl) {
+    targetUrl = localUrl;
+    envName = "💻 LOCALHOST / DEV TUNNEL";
+  } else {
+    targetUrl = prodUrl || CONFIG.REVALIDATION_PROD_URL;
+    envName = "🚀 PRODUCTION WEBSITE";
   }
 
   try {
@@ -2581,20 +2604,41 @@ function triggerWebsiteRevalidation() {
     });
 
     if (response.getResponseCode() === 200) {
-      ui.alert("✅ Xuất Bản Thành Công", "Website DataWithLy đã được làm mới tức thì! Học viên sẽ thấy ngay nội dung mới.", ui.ButtonSet.OK);
+      ui.alert(
+        "✅ Xuất Bản Thành Công",
+        "Website DataWithLy đã được làm mới tức thì!\n\n" +
+        "• Môi trường: " + envName + "\n" +
+        "• Endpoint: " + targetUrl + "\n\n" +
+        "Học viên sẽ thấy ngay nội dung mới nhất vừa cập nhật.",
+        ui.ButtonSet.OK
+      );
     } else {
-      ui.alert("⚠️ Phản Hồi Từ Website", "Mã HTTP: " + response.getResponseCode() + "\n" + response.getContentText(), ui.ButtonSet.OK);
+      ui.alert(
+        "⚠️ Phản Hồi Từ Website (" + envName + ")",
+        "Mã HTTP: " + response.getResponseCode() + "\n" + response.getContentText(),
+        ui.ButtonSet.OK
+      );
     }
   } catch (err) {
-    ui.alert(
-      "ℹ️ Thông Báo Kết Nối Website",
-      "Không thể kết nối đến URL Webhook:\n" + targetUrl + "\n\n" +
-      "Lý do: Tên miền đang ở môi trường phát triển (Localhost:3000) hoặc chưa trỏ domain công khai.\n\n" +
-      "👉 Bạn không cần lo lắng! Khi đang chạy thử nghiệm trên máy tính, bạn chỉ cần mở trang:\n" +
-      "http://localhost:3000/tests-data\n" +
-      "và bấm nút [⚡ Đồng Bộ Lại Dữ Liệu Ngay Lập Tức]. Next.js sẽ tự động lấy dữ liệu mới nhất từ Google Sheets này về ngay lập tức!",
-      ui.ButtonSet.OK
-    );
+    var isLocalhost = targetUrl.indexOf("localhost") !== -1 || targetUrl.indexOf("127.0.0.1") !== -1;
+    if (isLocalhost) {
+      ui.alert(
+        "ℹ️ Thông Báo Kết Nối Website (" + envName + ")",
+        "Google Apps Script chạy trên đám mây của Google nên không thể gọi trực tiếp tới 'localhost:3000' mà không qua ngrok/tunnel.\n\n" +
+        "👉 Giải pháp cực nhanh khi chạy Dev cục bộ:\n" +
+        "1. Trên giao diện Web Next.js, bấm ngay nút [⚡ Đồng Bộ Dữ Liệu] ở góc màn hình.\n" +
+        "2. Hoặc tạo đường hầm qua ngrok/Cloudflare Tunnel và điền URL vào dòng 'revalidation_local_url' trong tab settings.\n" +
+        "3. Nếu xuất bản Production, hãy chuyển 'active_revalidation_env' thành PROD.",
+        ui.ButtonSet.OK
+      );
+    } else {
+      ui.alert(
+        "⚠️ Lỗi Kết Nối Webhook (" + envName + ")",
+        "Không thể kết nối đến URL Webhook:\n" + targetUrl + "\n\n" +
+        "Chi tiết lỗi: " + err.message,
+        ui.ButtonSet.OK
+      );
+    }
   }
 }
 

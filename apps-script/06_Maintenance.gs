@@ -409,22 +409,39 @@ function showSoftDeletePrompt() {
 }
 
 /**
- * 4. Kích hoạt On-Demand ISR Revalidation trên Website
+ * 4. Kích hoạt On-Demand ISR Revalidation trên Website (If-Else thông minh theo môi trường)
  */
 function triggerWebsiteRevalidation() {
   var ui = SpreadsheetApp.getUi();
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  var targetUrl = CONFIG.REVALIDATION_URL;
+  var settingsMap = {};
   var settingsSheet = ss.getSheetByName("settings");
   if (settingsSheet) {
     var sData = settingsSheet.getDataRange().getValues();
     for (var i = 1; i < sData.length; i++) {
-      if (sData[i][0] === "revalidation_url" && sData[i][1]) {
-        targetUrl = sData[i][1].toString().trim();
-        break;
+      if (sData[i][0]) {
+        settingsMap[sData[i][0].toString().trim()] = (sData[i][1] || "").toString().trim();
       }
     }
+  }
+
+  var activeEnv = (settingsMap["active_revalidation_env"] || CONFIG.ACTIVE_REVALIDATION_ENV || "PROD").toUpperCase();
+  var prodUrl = settingsMap["revalidation_prod_url"] || settingsMap["revalidation_url"] || CONFIG.REVALIDATION_PROD_URL;
+  var localUrl = settingsMap["revalidation_local_url"] || CONFIG.REVALIDATION_LOCAL_URL;
+
+  var targetUrl = "";
+  var envName = "";
+
+  if (activeEnv === "LOCAL" && localUrl) {
+    targetUrl = localUrl;
+    envName = "💻 LOCALHOST / DEV TUNNEL";
+  } else if (localUrl && !prodUrl) {
+    targetUrl = localUrl;
+    envName = "💻 LOCALHOST / DEV TUNNEL";
+  } else {
+    targetUrl = prodUrl || CONFIG.REVALIDATION_PROD_URL;
+    envName = "🚀 PRODUCTION WEBSITE";
   }
 
   try {
@@ -434,20 +451,41 @@ function triggerWebsiteRevalidation() {
     });
 
     if (response.getResponseCode() === 200) {
-      ui.alert("✅ Xuất Bản Thành Công", "Website DataWithLy đã được làm mới tức thì! Học viên sẽ thấy ngay nội dung mới.", ui.ButtonSet.OK);
+      ui.alert(
+        "✅ Xuất Bản Thành Công",
+        "Website DataWithLy đã được làm mới tức thì!\n\n" +
+        "• Môi trường: " + envName + "\n" +
+        "• Endpoint: " + targetUrl + "\n\n" +
+        "Học viên sẽ thấy ngay nội dung mới nhất vừa cập nhật.",
+        ui.ButtonSet.OK
+      );
     } else {
-      ui.alert("⚠️ Phản Hồi Từ Website", "Mã HTTP: " + response.getResponseCode() + "\n" + response.getContentText(), ui.ButtonSet.OK);
+      ui.alert(
+        "⚠️ Phản Hồi Từ Website (" + envName + ")",
+        "Mã HTTP: " + response.getResponseCode() + "\n" + response.getContentText(),
+        ui.ButtonSet.OK
+      );
     }
   } catch (err) {
-    ui.alert(
-      "ℹ️ Thông Báo Kết Nối Website",
-      "Không thể kết nối đến URL Webhook:\n" + targetUrl + "\n\n" +
-      "Lý do: Tên miền đang ở môi trường phát triển (Localhost:3000) hoặc chưa trỏ domain công khai.\n\n" +
-      "👉 Bạn không cần lo lắng! Khi đang chạy thử nghiệm trên máy tính, bạn chỉ cần mở trang:\n" +
-      "http://localhost:3000/tests-data\n" +
-      "và bấm nút [⚡ Đồng Bộ Lại Dữ Liệu Ngay Lập Tức]. Next.js sẽ tự động lấy dữ liệu mới nhất từ Google Sheets này về ngay lập tức!",
-      ui.ButtonSet.OK
-    );
+    var isLocalhost = targetUrl.indexOf("localhost") !== -1 || targetUrl.indexOf("127.0.0.1") !== -1;
+    if (isLocalhost) {
+      ui.alert(
+        "ℹ️ Thông Báo Kết Nối Website (" + envName + ")",
+        "Google Apps Script chạy trên đám mây của Google nên không thể gọi trực tiếp tới 'localhost:3000' mà không qua ngrok/tunnel.\n\n" +
+        "👉 Giải pháp cực nhanh khi chạy Dev cục bộ:\n" +
+        "1. Trên giao diện Web Next.js, bấm ngay nút [⚡ Đồng Bộ Dữ Liệu] ở góc màn hình.\n" +
+        "2. Hoặc tạo đường hầm qua ngrok/Cloudflare Tunnel và điền URL vào dòng 'revalidation_local_url' trong tab settings.\n" +
+        "3. Nếu xuất bản Production, hãy chuyển 'active_revalidation_env' thành PROD.",
+        ui.ButtonSet.OK
+      );
+    } else {
+      ui.alert(
+        "⚠️ Lỗi Kết Nối Webhook (" + envName + ")",
+        "Không thể kết nối đến URL Webhook:\n" + targetUrl + "\n\n" +
+        "Chi tiết lỗi: " + err.message,
+        ui.ButtonSet.OK
+      );
+    }
   }
 }
 

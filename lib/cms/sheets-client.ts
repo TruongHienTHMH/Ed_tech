@@ -32,6 +32,7 @@ import {
   seedPromotions,
 } from "@/data/seed-data";
 import { LRUCacheManager } from "./cache";
+import { resolveImageUrl } from "@/lib/constants/image-fallbacks";
 
 export interface GoogleSheetsSyncReport {
   ok: boolean;
@@ -174,7 +175,8 @@ export class SheetsClient {
       const originalTuitionVnd = Number(row.original_tuition_vnd || row.price_original || 4500000);
       const duration = String(row.duration || "8 tuần");
       const level = (String(row.level || "Beginner") as Course["level"]);
-      const coverImageUrl = String(row.cover_image_url || row.thumbnail || "/images/courses/default-cover.webp");
+      const rawCover = (row.cover_image_url || row.cover_image || row.image_url || row.thumbnail || row["ảnh_bìa"] || row["anh_bia"]) as string | undefined;
+      const coverImageUrl = resolveImageUrl(rawCover, "course", slug || id);
       const isActive = row.is_active === true || String(row.is_active).toUpperCase() === "TRUE";
       const isFeatured = row.is_featured === true || String(row.is_featured).toUpperCase() === "TRUE";
       const sortOrder = Number(row.sort_order || idx + 1);
@@ -268,7 +270,11 @@ export class SheetsClient {
         tools: toolsRaw ? toolsRaw.split(",").map((t) => t.trim()).filter(Boolean) : [],
         toolsRaw,
         metrics: String(p.metrics || ""),
-        imageUrl: String(p.image_url || p.cover_image || "/uploads/projects/default.jpg"),
+        imageUrl: resolveImageUrl(
+          (p.image_url || p.cover_image || p.image || p.thumbnail || p["ảnh_dự_án"] || p["anh_du_an"]) as string | undefined,
+          "project",
+          idx
+        ),
         sortOrder: Number(p.sort_order || idx + 1),
         isActive: p.is_active === true || String(p.is_active).toUpperCase() === "TRUE",
         demoUrl: p.demo_url ? String(p.demo_url) : undefined,
@@ -286,7 +292,11 @@ export class SheetsClient {
       rating: Number(t.rating || 5),
       comment: String(t.review_text || t.comment || ""),
       reviewText: String(t.review_text || t.comment || ""),
-      avatarUrl: String(t.avatar_url || "/uploads/avatars/default.jpg"),
+      avatarUrl: resolveImageUrl(
+        (t.avatar_url || t.avatar || t.photo_url || t.image || t["avatar"] || t["ảnh_đại_diện"] || t["anh_dai_dien"]) as string | undefined,
+        "avatar",
+        idx
+      ),
       isFeatured: t.is_featured === true || String(t.is_featured).toUpperCase() === "TRUE",
       isActive: t.is_active === true || String(t.is_active).toUpperCase() === "TRUE",
     }));
@@ -301,7 +311,11 @@ export class SheetsClient {
         role,
         title: role,
         bio: String(m.bio || ""),
-        avatarUrl: String(m.avatar_url || "/uploads/mentors/ly-hua.jpg"),
+        avatarUrl: resolveImageUrl(
+          (m.avatar_url || m.avatar || m.photo_url || m.image || m["ảnh_chân_dung"] || m["anh_chan_dung"]) as string | undefined,
+          "mentor",
+          "hua-thao-ly"
+        ),
         companies: rawCompanies.split(",").map((c) => c.trim()).filter(Boolean),
         companiesWorked: rawCompanies,
         linkedinUrl: m.linkedin_url ? String(m.linkedin_url) : undefined,
@@ -361,11 +375,11 @@ export class SheetsClient {
         : undefined,
       authorName: String(b.author_name || b.authorName || "Hứa Thảo Ly"),
       publishedAt: String(b.published_at || b.publishedAt || new Date().toISOString().split("T")[0]),
-      coverImageUrl: b.cover_image_url
-        ? String(b.cover_image_url)
-        : b.coverImageUrl
-        ? String(b.coverImageUrl)
-        : undefined,
+      coverImageUrl: resolveImageUrl(
+        (b.cover_image_url || b.cover_image || b.thumbnail || b.image_url || b.coverImageUrl) as string | undefined,
+        "blog",
+        String(b.slug || b.id || idx)
+      ),
       readTimeMinutes: Number(b.read_time_minutes || b.readTimeMinutes || 5),
       isActive: b.is_active === true || String(b.is_active).toUpperCase() === "TRUE",
     }));
