@@ -102,7 +102,41 @@ async function runSeed() {
 
     if (scriptUrl && scriptUrl.startsWith("http")) {
       console.log(`📡 [DatabaseSeeder] Đang gửi dữ liệu tới Google Sheets Apps Script WebApp: ${scriptUrl}`);
-      // Send seed payload if network allows, or mock
+      try {
+        const payload = {
+          action: "seed_database",
+          secret: secret,
+          snapshot: snapshot,
+        };
+
+        const res = await fetch(scriptUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const resText = await res.text();
+        let jsonRes;
+        try {
+          jsonRes = JSON.parse(resText);
+        } catch {
+          jsonRes = null;
+        }
+
+        if (res.ok && jsonRes && jsonRes.ok) {
+          console.log(`✅ [DatabaseSeeder] GOOGLE SHEETS ĐÃ CẬP NHẬT THÀNH CÔNG 100%!`);
+          console.log(`   - Thống kê nạp:`, JSON.stringify(jsonRes.stats || {}));
+        } else {
+          console.warn(`⚠️ [DatabaseSeeder] Phản hồi từ Google Sheets:`, resText);
+          console.log(`ℹ️ Nếu WebApp chưa nạp được hoặc báo lỗi, bạn cũng có thể mở Google Sheets và bấm menu:`);
+          console.log(`   [🚀 DataWithLy CMS] ➔ [🌱 NẠP LẠI DATA CHUẨN FIGMA 100% (Ghi đè bản mẫu)]`);
+        }
+      } catch (netErr) {
+        console.warn(`⚠️ [DatabaseSeeder] Không thể gửi HTTP tới Google Sheets (${netErr.message}).`);
+        console.log(`ℹ️ Dữ liệu đã được xuất lưu thành công vào snapshot.json cho Website Next.js!`);
+      }
     } else {
       console.log(`ℹ️ [DatabaseSeeder] Chế độ Offline/Snapshot: Google Sheets Apps Script URL chưa cấu hình trong .env.local.`);
       console.log(`   Dữ liệu đã được nạp sẵn sàng 100% vào hệ thống cho Frontend hiển thị bám sát Figma!`);
