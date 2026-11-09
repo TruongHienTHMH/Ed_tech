@@ -9,8 +9,8 @@
 <body>
   <div class="modal-header">
     <div>
-      <h2 class="modal-title">📚 Thêm Chương Lộ Trình Học</h2>
-      <p class="modal-subtitle">Gắn chương mới vào khóa học, tự động tính số thứ tự chương</p>
+      <h2 class="modal-title">📚 Thêm Chương Lộ Trình Hàng Loạt</h2>
+      <p class="modal-subtitle">Thêm nhiều chương / modules cùng lúc cho khóa học được chọn, tự động tính số thứ tự chương</p>
     </div>
   </div>
 
@@ -21,86 +21,148 @@
         <? for (var i = 0; i < coursesList.length; i++) { ?>
         <option value="<?= coursesList[i].id ?>" data-title="<?= coursesList[i].title ?>"
           data-max="<?= coursesList[i].maxModule ?>">
-          <?= coursesList[i].title ?> (Hiện có:
-          <?= coursesList[i].maxModule ?> chương)
+          <?= coursesList[i].title ?> (Hiện có: <?= coursesList[i].maxModule ?> chương)
         </option>
         <? } ?>
       </select>
     </div>
 
-    <div class="form-row">
-      <div class="form-group col-1">
-        <label for="module_number">Số Thứ Tự Chương <span class="required">*</span></label>
-        <input type="number" id="module_number" name="module_number" required min="1" value="1">
-      </div>
-      <div class="form-group col-1">
-        <label for="duration">Thời Lượng Chương</label>
-        <input type="text" id="duration" name="duration" value="2 tuần (6 buổi)">
-      </div>
-      <div class="form-group col-1">
-        <label for="lessons_count">Số Buổi Học</label>
-        <input type="number" id="lessons_count" name="lessons_count" min="1" value="6">
-      </div>
-    </div>
+    <div id="curriculumCardsContainer" class="repeater-container"></div>
 
-    <div class="form-group">
-      <label for="module_title">Tiêu Đề Chương <span class="required">*</span></label>
-      <input type="text" id="module_title" name="module_title" required
-        placeholder="Ví dụ: Chương 1: Nền tảng Cơ sở Dữ liệu & Cú pháp SELECT">
-    </div>
-
-    <div class="form-group">
-      <label for="topics_bullets">Nội Dung Bài Học (Mỗi dòng là một gạch đầu dòng) <span
-          class="required">*</span></label>
-      <textarea id="topics_bullets" name="topics_bullets" rows="5" required
-        placeholder="Tổng quan về RDBMS, Table, Schema&#10;Cú pháp SELECT, WHERE, ORDER BY&#10;Toán tử logic AND, OR, NOT, IN, LIKE&#10;Thực hành Capstone Mini: Phân tích giỏ hàng E-commerce"></textarea>
-      <div class="help-text">Mẹo: Xuống dòng (Enter) để tạo các bullet points riêng biệt trên website.</div>
-    </div>
-
-    <div class="form-group">
-      <label for="sort_order">Thứ Tự Hiển Thị</label>
-      <input type="number" id="sort_order" name="sort_order" value="1" min="1">
-    </div>
+    <button type="button" id="addCurriculumBtn" class="btn-add-repeater">
+      <span>➕ Thêm chương / buổi học</span>
+    </button>
 
     <div id="errorBox" class="alert-banner alert-danger error-msg"></div>
     <div id="successBox" class="alert-banner alert-success fade-in" style="display: none;"></div>
 
     <div class="btn-group">
       <button type="button" class="btn-cancel" onclick="google.script.host.close()">Hủy Bỏ</button>
-      <button type="button" id="saveAndContinueBtn" class="btn-secondary">
-        <span>Lưu & Tạo Tiếp</span>
-      </button>
       <button type="submit" id="submitBtn" class="btn-submit">
-        <span>Lưu Chương Học</span>
+        <span id="submitBtnText">Lưu tất cả (1 chương học)</span>
       </button>
     </div>
   </form>
 
   <script>
     var courseSelect = document.getElementById("course_select");
-    var moduleNumberInput = document.getElementById("module_number");
-    var sortOrderInput = document.getElementById("sort_order");
-    var moduleTitleInput = document.getElementById("module_title");
-    var topicsBulletsInput = document.getElementById("topics_bullets");
-
-    function updateSuggestedModule() {
-      var selected = courseSelect.options[courseSelect.selectedIndex];
-      if (selected) {
-        var maxMod = parseInt(selected.getAttribute("data-max") || "0", 10);
-        var nextMod = maxMod + 1;
-        moduleNumberInput.value = nextMod;
-        sortOrderInput.value = nextMod;
-      }
-    }
-
-    courseSelect.addEventListener("change", updateSuggestedModule);
-    updateSuggestedModule();
-
-    var form = document.getElementById("curriculumForm");
+    var container = document.getElementById("curriculumCardsContainer");
+    var addCurriculumBtn = document.getElementById("addCurriculumBtn");
     var submitBtn = document.getElementById("submitBtn");
-    var saveAndContinueBtn = document.getElementById("saveAndContinueBtn");
+    var submitBtnText = document.getElementById("submitBtnText");
     var errorBox = document.getElementById("errorBox");
     var successBox = document.getElementById("successBox");
+
+    function getBaseModuleNumber() {
+      var selected = courseSelect.options[courseSelect.selectedIndex];
+      return selected ? parseInt(selected.getAttribute("data-max") || "0", 10) : 0;
+    }
+
+    function updateCardIndices() {
+      var cards = container.querySelectorAll(".form-card");
+      var baseMod = getBaseModuleNumber();
+
+      for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        var titleElem = card.querySelector(".form-card-title span");
+        if (titleElem) {
+          titleElem.innerText = "📚 Chương / Buổi học #" + (i + 1);
+        }
+        var modInput = card.querySelector('[name="module_number"]');
+        var sortInput = card.querySelector('[name="sort_order"]');
+        var nextMod = baseMod + i + 1;
+
+        if (modInput && modInput.getAttribute("data-auto") === "true") {
+          modInput.value = nextMod;
+        }
+        if (sortInput && sortInput.getAttribute("data-auto") === "true") {
+          sortInput.value = nextMod;
+        }
+
+        var removeBtn = card.querySelector(".btn-remove-card");
+        if (removeBtn) {
+          removeBtn.style.display = cards.length > 1 ? "inline-block" : "none";
+        }
+      }
+
+      submitBtnText.innerText = "Lưu tất cả (" + cards.length + " chương học)";
+    }
+
+    courseSelect.addEventListener("change", function () {
+      var cards = container.querySelectorAll(".form-card");
+      for (var i = 0; i < cards.length; i++) {
+        var modInput = cards[i].querySelector('[name="module_number"]');
+        var sortInput = cards[i].querySelector('[name="sort_order"]');
+        if (modInput) modInput.setAttribute("data-auto", "true");
+        if (sortInput) sortInput.setAttribute("data-auto", "true");
+      }
+      updateCardIndices();
+    });
+
+    function createCurriculumCard() {
+      var card = document.createElement("div");
+      card.className = "form-card fade-in";
+      card.innerHTML = 
+        '<div class="form-card-header">' +
+          '<div class="form-card-title"><span>📚 Chương / Buổi học</span></div>' +
+          '<button type="button" class="btn-remove-card" title="Xóa thẻ chương này">✕ Xóa</button>' +
+        '</div>' +
+        '<div class="form-row">' +
+          '<div class="form-group col-1">' +
+            '<label>Số Thứ Tự Chương <span class="required">*</span></label>' +
+            '<input type="number" name="module_number" required min="1" data-auto="true">' +
+          '</div>' +
+          '<div class="form-group col-1">' +
+            '<label>Thời Lượng Chương</label>' +
+            '<input type="text" name="duration" value="2 tuần (6 buổi)">' +
+          '</div>' +
+          '<div class="form-group col-1">' +
+            '<label>Số Buổi Học</label>' +
+            '<input type="number" name="lessons_count" min="1" value="6">' +
+          '</div>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Tiêu Đề Chương <span class="required">*</span></label>' +
+          '<input type="text" name="module_title" required placeholder="Ví dụ: Chương 1: Nền tảng Cơ sở Dữ liệu & Cú pháp SELECT">' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Nội Dung Bài Học (Mỗi dòng là một bullet point) <span class="required">*</span></label>' +
+          '<textarea name="topics_bullets" rows="4" required placeholder="Tổng quan về RDBMS, Table, Schema&#10;Cú pháp SELECT, WHERE, ORDER BY&#10;Toán tử logic AND, OR, NOT, IN, LIKE&#10;Thực hành Capstone Mini: Phân tích giỏ hàng E-commerce"></textarea>' +
+          '<div class="help-text">Mẹo: Nhấn Enter / Alt+Enter để tách từng bullet point riêng biệt.</div>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Thứ Tự Hiển Thị</label>' +
+          '<input type="number" name="sort_order" min="1" data-auto="true">' +
+        '</div>';
+
+      var modInput = card.querySelector('[name="module_number"]');
+      modInput.addEventListener("input", function () {
+        this.setAttribute("data-auto", "false");
+      });
+
+      var sortInput = card.querySelector('[name="sort_order"]');
+      sortInput.addEventListener("input", function () {
+        this.setAttribute("data-auto", "false");
+      });
+
+      var removeBtn = card.querySelector(".btn-remove-card");
+      removeBtn.addEventListener("click", function () {
+        card.remove();
+        updateCardIndices();
+      });
+
+      container.appendChild(card);
+      updateCardIndices();
+      return card;
+    }
+
+    addCurriculumBtn.addEventListener("click", function () {
+      var newCard = createCurriculumCard();
+      var input = newCard.querySelector('[name="module_title"]');
+      if (input) input.focus();
+    });
+
+    createCurriculumCard();
 
     function showError(msg) {
       if (successBox) successBox.style.display = "none";
@@ -115,102 +177,78 @@
       successBox.style.display = "flex";
     }
 
-    function setButtonsLoading(isLoading, activeBtn) {
-      if (isLoading) {
-        submitBtn.disabled = true;
-        saveAndContinueBtn.disabled = true;
-        if (activeBtn) {
-          activeBtn.innerHTML = '<span class="spinner"></span> Đang lưu...';
-        }
-      } else {
-        submitBtn.disabled = false;
-        saveAndContinueBtn.disabled = false;
-        submitBtn.innerHTML = '<span>Lưu Chương Học</span>';
-        saveAndContinueBtn.innerHTML = '<span>Lưu & Tạo Tiếp</span>';
-      }
-    }
-
-    function submitCurriculum(isContinue) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
       errorBox.style.display = "none";
       errorBox.innerText = "";
 
       var selected = courseSelect.options[courseSelect.selectedIndex];
       var courseId = selected ? selected.value : "";
       var courseName = selected ? selected.getAttribute("data-title") : "";
-      var moduleTitle = moduleTitleInput.value.trim();
-      var topicsBullets = topicsBulletsInput.value.trim();
 
-      if (!courseId || !moduleTitle) {
-        showError("Vui lòng chọn khóa học và nhập tiêu đề chương.");
-        return;
-      }
-      if (!topicsBullets) {
-        showError("Vui lòng nhập nội dung bài học.");
+      if (!courseId) {
+        showError("Vui lòng chọn khóa học áp dụng.");
         return;
       }
 
-      var modNum = parseInt(moduleNumberInput.value, 10) || 1;
-      var data = {
-        id: courseId + "-mod-" + modNum,
-        course_id: courseId,
-        course_name: courseName,
-        module_number: modNum,
-        module_title: moduleTitle,
-        duration: document.getElementById("duration").value.trim(),
-        lessons_count: parseInt(document.getElementById("lessons_count").value, 10) || 6,
-        topics_bullets: topicsBullets,
-        sort_order: parseInt(sortOrderInput.value, 10) || modNum
-      };
+      var cards = container.querySelectorAll(".form-card");
+      if (cards.length === 0) {
+        showError("Vui lòng thêm ít nhất một chương học.");
+        return;
+      }
 
-      var activeBtn = isContinue ? saveAndContinueBtn : submitBtn;
-      setButtonsLoading(true, activeBtn);
+      var curriculumList = [];
+      for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        var moduleTitle = (card.querySelector('[name="module_title"]').value || "").trim();
+        if (!moduleTitle) {
+          showError("Vui lòng nhập tiêu đề cho chương #" + (i + 1) + ".");
+          card.querySelector('[name="module_title"]').focus();
+          return;
+        }
+
+        var topics = (card.querySelector('[name="topics_bullets"]').value || "").trim();
+        if (!topics) {
+          showError("Vui lòng nhập nội dung bài học cho chương #" + (i + 1) + ".");
+          card.querySelector('[name="topics_bullets"]').focus();
+          return;
+        }
+
+        var modNum = parseInt(card.querySelector('[name="module_number"]').value, 10) || (i + 1);
+        var sortVal = parseInt(card.querySelector('[name="sort_order"]').value, 10) || modNum;
+        var lessonsCount = parseInt(card.querySelector('[name="lessons_count"]').value, 10) || 6;
+        var duration = (card.querySelector('[name="duration"]').value || "").trim();
+
+        curriculumList.push({
+          course_id: courseId,
+          course_name: courseName,
+          module_number: modNum,
+          module_title: moduleTitle,
+          duration: duration || "2 tuần (6 buổi)",
+          lessons_count: lessonsCount,
+          topics_bullets: topics,
+          sort_order: sortVal
+        });
+      }
+
+      submitBtn.disabled = true;
+      addCurriculumBtn.disabled = true;
+      submitBtnText.innerHTML = '<span class="spinner"></span> Đang lưu ' + curriculumList.length + ' chương học...';
 
       google.script.run
         .withSuccessHandler(function (res) {
-          if (!isContinue) {
+          showSuccess("✅ Đã lưu thành công " + (res.count || curriculumList.length) + " chương học vào lộ trình!");
+          setTimeout(function () {
             google.script.host.close();
-            return;
-          }
-
-          setButtonsLoading(false);
-
-          // Hiển thị Banner thông báo màu xanh
-          var savedNum = modNum;
-          showSuccess("✅ Đã lưu thành công chương " + savedNum + "! Tiếp tục nhập chương tiếp theo...");
-
-          // Reset các ô: Tiêu đề chương, Nội dung bài học
-          moduleTitleInput.value = "";
-          topicsBulletsInput.value = "";
-
-          // Tự động tăng số thứ tự chương: module_number.value = parseInt(module_number.value) + 1, sort_order.value = module_number.value
-          var nextModNum = savedNum + 1;
-          moduleNumberInput.value = nextModNum;
-          sortOrderInput.value = nextModNum;
-
-          // Cập nhật data-max của select option hiện tại
-          if (selected) {
-            selected.setAttribute("data-max", savedNum);
-          }
-
-          // Giữ nguyên Khóa học đang chọn và Thời lượng
-          // Tự động focus con trỏ vào ô Tiêu đề chương
-          moduleTitleInput.focus();
+          }, 1200);
         })
         .withFailureHandler(function (err) {
-          setButtonsLoading(false);
+          submitBtn.disabled = false;
+          addCurriculumBtn.disabled = false;
+          updateCardIndices();
           showError("Lỗi: " + (err.message || err.toString()));
         })
-        .addNewCurriculumModuleFromModal(data);
-    }
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      submitCurriculum(false);
-    });
-
-    saveAndContinueBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      submitCurriculum(true);
+        .addCurriculumBatchFromModal(curriculumList);
     });
   </script>
 </body>

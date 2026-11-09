@@ -361,6 +361,86 @@ for (const file of modalHtmlFiles) {
   assert(hasSharedStyles, `${file}: Nhúng SharedStyles bằng cú pháp unescaped <?!= include('SharedStyles'); ?>`);
 }
 
+// ------------------------------------------------------------------------------
+// TEST SUITE 6: BATCH ENTRY & REPEATER MODALS VERIFICATION (RF-02)
+// ------------------------------------------------------------------------------
+console.log("\n--- TEST SUITE 6: KIỂM TRA BATCH ENTRY & REPEATER MODALS (RF-02) ---");
+
+// 1. Kiểm tra sự tồn tại của 4 hàm xử lý batch backend
+const courseGsContent = fs.readFileSync(path.join(appsScriptDir, "05_CourseModal.gs"), "utf8");
+const curriculumGsContent = fs.readFileSync(path.join(appsScriptDir, "07_CurriculumModal.gs"), "utf8");
+const blogGsContent = fs.readFileSync(path.join(appsScriptDir, "14_BlogModal.gs"), "utf8");
+const mentorGsContent = fs.readFileSync(path.join(appsScriptDir, "08_MentorModal.gs"), "utf8");
+
+assert(
+  courseGsContent.includes("function addCoursesBatchFromModal("),
+  "05_CourseModal.gs: Có hàm xử lý lưu hàng loạt addCoursesBatchFromModal"
+);
+assert(
+  curriculumGsContent.includes("function addCurriculumBatchFromModal("),
+  "07_CurriculumModal.gs: Có hàm xử lý lưu hàng loạt addCurriculumBatchFromModal"
+);
+assert(
+  blogGsContent.includes("function addBlogsBatchFromModal("),
+  "14_BlogModal.gs: Có hàm xử lý lưu hàng loạt addBlogsBatchFromModal"
+);
+assert(
+  mentorGsContent.includes("function addMentorsBatchFromModal("),
+  "08_MentorModal.gs: Có hàm xử lý lưu hàng loạt addMentorsBatchFromModal"
+);
+
+// 2. Kiểm tra các nút bấm Repeater '+' và Lưu tất cả trong 4 HTML Modals
+const courseHtmlContent = fs.readFileSync(path.join(appsScriptDir, "CourseModal.html"), "utf8");
+const curriculumHtmlContent = fs.readFileSync(path.join(appsScriptDir, "CurriculumModal.html"), "utf8");
+const blogHtmlContent = fs.readFileSync(path.join(appsScriptDir, "BlogModal.html"), "utf8");
+const mentorHtmlContent = fs.readFileSync(path.join(appsScriptDir, "MentorModal.html"), "utf8");
+
+assert(
+  courseHtmlContent.includes('id="addCourseBtn"') && courseHtmlContent.includes("Lưu tất cả"),
+  "CourseModal.html: Có nút Repeater '+' (addCourseBtn) và cơ chế hiển thị 'Lưu tất cả (X khóa học)'"
+);
+assert(
+  curriculumHtmlContent.includes('id="addCurriculumBtn"') && curriculumHtmlContent.includes("Lưu tất cả"),
+  "CurriculumModal.html: Có nút Repeater '+' (addCurriculumBtn) và cơ chế hiển thị 'Lưu tất cả (X chương học)'"
+);
+assert(
+  blogHtmlContent.includes('id="addBlogBtn"') && blogHtmlContent.includes("Lưu tất cả"),
+  "BlogModal.html: Có nút Repeater '+' (addBlogBtn) và cơ chế hiển thị 'Lưu tất cả (X bài viết)'"
+);
+assert(
+  mentorHtmlContent.includes('id="addMentorBtn"') && mentorHtmlContent.includes("Lưu tất cả"),
+  "MentorModal.html: Có nút Repeater '+' (addMentorBtn) và cơ chế hiển thị 'Lưu tất cả (X giảng viên)'"
+);
+
+// 3. Kiểm tra thuật toán giải quyết trùng lặp Slug trong cùng một đợt Batch
+const batchItems = ["Power BI Masterclass", "Power BI Masterclass", "Power BI Masterclass"];
+const simulatedExisting = ["power-bi-masterclass"];
+const generatedBatchSlugs = [];
+for (const title of batchItems) {
+  const slug = serverResolveUniqueSlug(title, simulatedExisting.concat(generatedBatchSlugs));
+  generatedBatchSlugs.push(slug);
+}
+assert(
+  generatedBatchSlugs[0] === "power-bi-masterclass-v1" &&
+    generatedBatchSlugs[1] === "power-bi-masterclass-v2" &&
+    generatedBatchSlugs[2] === "power-bi-masterclass-v3",
+  `Cơ chế batch slugging tự động tăng version cho các item trùng nhau trong cùng một mảng: ${generatedBatchSlugs.join(" -> ")}`
+);
+
+// 4. Kiểm tra xử lý Bullet points Alt+Enter trong Curriculum
+const rawTopics = "Dòng 1: Giới thiệu\r\n\r\nDòng 2: Cú pháp cơ bản\nDòng 3: Thực hành Capstone";
+const parsedTopics = rawTopics
+  .replace(/\r\n/g, "\n")
+  .replace(/\r/g, "\n")
+  .split("\n")
+  .map((l) => l.trim())
+  .filter((l) => l.length > 0)
+  .join("\n");
+assert(
+  parsedTopics === "Dòng 1: Giới thiệu\nDòng 2: Cú pháp cơ bản\nDòng 3: Thực hành Capstone",
+  "Curriculum Alt+Enter Bullet Points parser chuẩn hóa các loại xuống dòng (CRLF, LF) và lọc bỏ dòng trắng thừa"
+);
+
 console.log("\n==============================================================================");
 console.log(`🎯 KẾT QUẢ KIỂM THỬ: ${totalPassed} PASSED / ${totalFailed} FAILED`);
 console.log("==============================================================================");

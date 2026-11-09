@@ -3,7 +3,7 @@
  */
 function showMentorModal() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName("mentor_profiles") || (setupMentorProfilesTab(ss), ss.getSheetByName("mentor_profiles"));
+  var sheet = ss.getSheetByName("mentor_profiles") || ss.getSheetByName("mentors") || (setupMentorProfilesTab(ss), ss.getSheetByName("mentor_profiles"));
 
   var currentMentor = {
     id: "mentor-ly-hua",
@@ -35,43 +35,94 @@ function showMentorModal() {
 
   var template = createModalTemplate("MentorModal");
   template.currentMentor = currentMentor;
-  var html = template.evaluate().setWidth(640).setHeight(720).setTitle("👤 Quản Trị Hồ Sơ Mentor & AboutUs - DataWithLy CMS");
-  SpreadsheetApp.getUi().showModalDialog(html, "👤 Quản Trị Hồ Sơ Mentor & Giảng Viên");
+  var html = template.evaluate().setWidth(660).setHeight(720).setTitle("👤 Quản Trị Hồ Sơ Giảng Viên Hàng Loạt - DataWithLy CMS");
+  SpreadsheetApp.getUi().showModalDialog(html, "👤 Quản Trị Hồ Sơ Giảng Viên Hàng Loạt");
 }
 
-function saveMentorProfileFromModal(data) {
+function addMentorsBatchFromModal(mentorList) {
+  if (!mentorList || !mentorList.length) {
+    throw new Error("Danh sách giảng viên không được để trống.");
+  }
+
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName("mentor_profiles") || (setupMentorProfilesTab(ss), ss.getSheetByName("mentor_profiles"));
-
-  var id = (data.id || "mentor-ly-hua").toString().trim();
-  var name = (data.name || "").toString().trim();
-  if (!name) throw new Error("Họ và tên Mentor không được để trống.");
-
-  var rowData = [
-    sanitizeFormula(id), sanitizeFormula(name), sanitizeFormula(data.title), sanitizeFormula(data.bio),
-    sanitizeFormula(data.companies_worked), sanitizeFormula(data.avatar_url),
-    sanitizeFormula(data.linkedin_url), data.is_active === true
-  ];
+  var sheet = ss.getSheetByName("mentor_profiles") || ss.getSheetByName("mentors") || (setupMentorProfilesTab(ss), ss.getSheetByName("mentor_profiles"));
 
   var lastRow = sheet.getLastRow();
-  var foundRow = 0;
+  var existingIds = [];
   if (lastRow > 1) {
-    var idList = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
-    for (var i = 0; i < idList.length; i++) {
-      if (idList[i][0] && idList[i][0].toString().trim() === id) {
-        foundRow = i + 2;
-        break;
-      }
+    var vals = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
+    for (var i = 0; i < vals.length; i++) {
+      if (vals[i][0]) existingIds.push(vals[i][0].toString().trim());
     }
   }
 
-  if (foundRow > 0) {
-    sheet.getRange(foundRow, 1, 1, 8).setValues([rowData]);
-    ss.toast("🎉 Đã cập nhật thành công hồ sơ Mentor: " + name, "DataWithLy CMS", 5);
-  } else {
-    sheet.appendRow(rowData);
-    ss.toast("🎉 Đã thêm mới hồ sơ Mentor: " + name, "DataWithLy CMS", 5);
+  var rowsToAdd = [];
+  var addedMentors = [];
+
+  for (var k = 0; k < mentorList.length; k++) {
+    var item = mentorList[k];
+    var name = (item.name || "").toString().trim();
+    if (!name) {
+      throw new Error("Giảng viên #" + (k + 1) + ": Họ và tên Mentor không được để trống.");
+    }
+
+    // Sinh UUID v4 chuẩn RFC 4122 (hoặc giữ ID hợp lệ có sẵn)
+    var uniqueId = item.id && (isValidUUID(item.id, "mentor-") || item.id === "mentor-ly-hua")
+      ? item.id.toString().trim()
+      : generateUUID("mentor-");
+
+    var title = (item.title || "").toString().trim() || "Lead Mentor & Founder DataWithLy";
+    var bio = (item.bio || "").toString().trim();
+    var companies = (item.companies_worked || "").toString().trim();
+    var avatarUrl = (item.avatar_url || "").toString().trim() || "/uploads/mentors/ly-hua.jpg";
+    var linkedinUrl = (item.linkedin_url || "").toString().trim();
+    var isActive = item.is_active === true || item.is_active === "true";
+
+    var foundIndex = -1;
+    for (var r = 0; r < existingIds.length; r++) {
+      if (existingIds[r] === uniqueId) {
+        foundIndex = r + 2;
+        break;
+      }
+    }
+
+    var rowData = [
+      sanitizeFormula(uniqueId),
+      sanitizeFormula(name),
+      sanitizeFormula(title),
+      sanitizeFormula(bio),
+      sanitizeFormula(companies),
+      sanitizeFormula(avatarUrl),
+      sanitizeFormula(linkedinUrl),
+      isActive
+    ];
+
+    if (foundIndex > 0) {
+      sheet.getRange(foundIndex, 1, 1, 8).setValues([rowData]);
+    } else {
+      rowsToAdd.push(rowData);
+      existingIds.push(uniqueId);
+    }
+
+    addedMentors.push({ id: uniqueId, name: name });
   }
 
-  return { success: true, id: id, name: name };
+  if (rowsToAdd.length > 0) {
+    var startRow = sheet.getLastRow() + 1;
+    sheet.getRange(startRow, 1, rowsToAdd.length, 8).setValues(rowsToAdd);
+  }
+
+  var msg = "🎉 Đã lưu thành công " + mentorList.length + " hồ sơ giảng viên vào bảng mentor_profiles!";
+  ss.toast(msg, "DataWithLy CMS", 5);
+
+  return { success: true, count: mentorList.length, mentors: addedMentors };
+}
+
+function saveMentorProfileFromModal(data) {
+  var res = addMentorsBatchFromModal([data]);
+  return {
+    success: true,
+    id: res.mentors[0].id,
+    name: res.mentors[0].name
+  };
 }

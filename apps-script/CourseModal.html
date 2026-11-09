@@ -9,115 +9,25 @@
 <body>
   <div class="modal-header">
     <div>
-      <h2 class="modal-title">➕ Thêm Khóa Học Mới</h2>
-      <p class="modal-subtitle">Tự động chuẩn hóa SEO Slug, kiểm tra trùng lặp và gắn version -v1, -v2</p>
+      <h2 class="modal-title">➕ Thêm Khóa Học Hàng Loạt</h2>
+      <p class="modal-subtitle">Thêm nhiều khóa học cùng lúc với nút "+" Repeater, tự động chuẩn hóa SEO Slug và version -v1, -v2 độc lập</p>
     </div>
   </div>
 
   <form id="courseForm">
-    <div class="form-group">
-      <label for="title">Tên Khóa Học <span class="required">*</span></label>
-      <input type="text" id="title" name="title" required placeholder="Ví dụ: SQL for Data Analytics Thực Chiến"
-        autocomplete="off">
-    </div>
+    <div id="courseCardsContainer" class="repeater-container"></div>
 
-    <div class="preview-box">
-      <div class="preview-header">
-        <span>Xem trước URL & Slug SEO</span>
-        <span id="versionBadge" class="badge-v badge-emerald">Mới duy nhất</span>
-      </div>
-      <div class="preview-content">
-        https://datawithly.edu.vn/courses/<strong id="slugPreview"
-          style="color: var(--primary);">sql-for-data-analytics</strong>
-      </div>
-      <input type="hidden" id="slug" name="slug">
-      <input type="hidden" id="course_id" name="id">
-    </div>
-
-    <div class="form-row">
-      <div class="form-group col-1">
-        <label for="tag">Chủ Đề (Tag) <span class="required">*</span></label>
-        <select id="tag" name="tag">
-          <option value="SQL">SQL</option>
-          <option value="Dashboard">Dashboard (Power BI)</option>
-          <option value="Python">Python</option>
-          <option value="End-to-End">End-to-End Analytics</option>
-        </select>
-      </div>
-      <div class="form-group col-1">
-        <label for="level">Trình Độ</label>
-        <select id="level" name="level">
-          <option value="Beginner">Beginner (Cơ bản)</option>
-          <option value="Intermediate">Intermediate (Trung cấp)</option>
-          <option value="Advanced">Advanced (Nâng cao)</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="tagline">Thông Điệp Ngắn (Tagline)</label>
-      <input type="text" id="tagline" name="tagline"
-        placeholder="Ví dụ: Nắm vững tư duy truy vấn, CTE và Window Functions">
-    </div>
-
-    <div class="form-row">
-      <div class="form-group col-1">
-        <label for="tuition_vnd">Học Phí Ưu Đãi (VNĐ) <span class="required">*</span></label>
-        <input type="number" id="tuition_vnd" name="tuition_vnd" required placeholder="4500000" step="50000">
-      </div>
-      <div class="form-group col-1">
-        <label for="original_tuition_vnd">Học Phí Gốc (VNĐ)</label>
-        <input type="number" id="original_tuition_vnd" name="original_tuition_vnd" placeholder="6000000" step="50000">
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group col-1">
-        <label for="duration">Thời Lượng</label>
-        <input type="text" id="duration" name="duration" value="8 tuần (24 buổi)">
-      </div>
-      <div class="form-group col-1">
-        <label for="sort_order">Thứ Tự Sắp Xếp</label>
-        <input type="number" id="sort_order" name="sort_order" value="1" min="1">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="description">Mô Tả Tổng Quan Khóa Học</label>
-      <textarea id="description" name="description" rows="3"
-        placeholder="Mô tả giá trị thực chiến, mục tiêu đầu ra và đối tượng phù hợp..."></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="cover_image_url">Ảnh Bìa (URL)</label>
-      <input type="text" id="cover_image_url" name="cover_image_url" placeholder="/uploads/courses/sql-course.jpg">
-    </div>
-
-    <div class="form-row" style="margin-top: 6px;">
-      <div class="form-group col-1">
-        <label class="checkbox-group">
-          <input type="checkbox" id="is_active" name="is_active" checked>
-          <span class="checkbox-label">Kích hoạt hiển thị (is_active)</span>
-        </label>
-      </div>
-      <div class="form-group col-1">
-        <label class="checkbox-group">
-          <input type="checkbox" id="is_featured" name="is_featured">
-          <span class="checkbox-label">Khóa học nổi bật (is_featured)</span>
-        </label>
-      </div>
-    </div>
+    <button type="button" id="addCourseBtn" class="btn-add-repeater">
+      <span>➕ Thêm khóa học</span>
+    </button>
 
     <div id="errorBox" class="alert-banner alert-danger error-msg"></div>
     <div id="successBox" class="alert-banner alert-success fade-in" style="display: none;"></div>
 
     <div class="btn-group">
       <button type="button" class="btn-cancel" onclick="google.script.host.close()">Hủy Bỏ</button>
-      <button type="button" id="saveAndContinueBtn" class="btn-secondary">
-        <span>Lưu & Thêm Khóa Tiếp Theo</span>
-      </button>
       <button type="submit" id="submitBtn" class="btn-submit">
-        <span>Lưu Khóa Học</span>
+        <span id="submitBtnText">Lưu tất cả (1 khóa học)</span>
       </button>
     </div>
   </form>
@@ -172,40 +82,11 @@
       }
     }
 
-    var titleInput = document.getElementById("title");
-    var slugPreview = document.getElementById("slugPreview");
-    var slugHidden = document.getElementById("slug");
-    var idHidden = document.getElementById("course_id");
-    var versionBadge = document.getElementById("versionBadge");
-
-    titleInput.addEventListener("input", function () {
-      var rawSlug = slugify(this.value);
-      if (!rawSlug) {
-        slugPreview.innerText = "sql-for-data-analytics";
-        slugHidden.value = "";
-        idHidden.value = "";
-        versionBadge.className = "badge-v badge-slate";
-        versionBadge.innerText = "Chờ nhập liệu";
-        return;
-      }
-
-      var res = resolveUniqueSlugClient(rawSlug, existingSlugs);
-      slugPreview.innerText = res.slug;
-      slugHidden.value = res.slug;
-      idHidden.value = res.slug;
-
-      if (res.isVersioned) {
-        versionBadge.className = "badge-v badge-crimson";
-        versionBadge.innerText = "⚡ Trùng tiêu đề -> Đã gắn: " + res.slug.split("-").pop();
-      } else {
-        versionBadge.className = "badge-v badge-emerald";
-        versionBadge.innerText = "✅ Duy nhất chuẩn SEO";
-      }
-    });
-
     var form = document.getElementById("courseForm");
+    var container = document.getElementById("courseCardsContainer");
+    var addCourseBtn = document.getElementById("addCourseBtn");
     var submitBtn = document.getElementById("submitBtn");
-    var saveAndContinueBtn = document.getElementById("saveAndContinueBtn");
+    var submitBtnText = document.getElementById("submitBtnText");
     var errorBox = document.getElementById("errorBox");
     var successBox = document.getElementById("successBox");
 
@@ -222,110 +103,247 @@
       successBox.style.display = "flex";
     }
 
-    function setButtonsLoading(isLoading, activeBtn) {
-      if (isLoading) {
-        submitBtn.disabled = true;
-        saveAndContinueBtn.disabled = true;
-        if (activeBtn) {
-          activeBtn.innerHTML = '<span class="spinner"></span> Đang lưu...';
-        }
-      } else {
-        submitBtn.disabled = false;
-        saveAndContinueBtn.disabled = false;
-        submitBtn.innerHTML = '<span>Lưu Khóa Học</span>';
-        saveAndContinueBtn.innerHTML = '<span>Lưu & Thêm Khóa Tiếp Theo</span>';
-      }
-    }
+    function updateAllSlugs() {
+      var cards = container.querySelectorAll(".form-card");
+      var batchSlugs = [].concat(existingSlugs);
 
-    function submitCourse(isContinue) {
-      errorBox.style.display = "none";
-      errorBox.innerText = "";
+      for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        var titleInput = card.querySelector('[name="title"]');
+        var slugPreview = card.querySelector(".slug-preview-text");
+        var slugHidden = card.querySelector('[name="slug"]');
+        var versionBadge = card.querySelector(".slug-version-badge");
+        var val = (titleInput.value || "").trim();
+        var rawSlug = slugify(val);
 
-      var title = titleInput.value.trim();
-      if (!title) {
-        showError("Vui lòng nhập tên khóa học.");
-        return;
-      }
-
-      var tuitionVnd = document.getElementById("tuition_vnd").value;
-      if (!tuitionVnd) {
-        showError("Vui lòng nhập học phí ưu đãi.");
-        return;
-      }
-
-      var data = {
-        id: idHidden.value || slugify(title),
-        title: title,
-        slug: slugHidden.value || slugify(title),
-        tag: document.getElementById("tag").value,
-        level: document.getElementById("level").value,
-        tagline: document.getElementById("tagline").value.trim(),
-        tuition_vnd: tuitionVnd,
-        original_tuition_vnd: document.getElementById("original_tuition_vnd").value,
-        duration: document.getElementById("duration").value.trim(),
-        sort_order: document.getElementById("sort_order").value,
-        description: document.getElementById("description").value.trim(),
-        cover_image_url: document.getElementById("cover_image_url").value.trim(),
-        is_active: document.getElementById("is_active").checked,
-        is_featured: document.getElementById("is_featured").checked
-      };
-
-      var activeBtn = isContinue ? saveAndContinueBtn : submitBtn;
-      setButtonsLoading(true, activeBtn);
-
-      google.script.run
-        .withSuccessHandler(function (res) {
-          if (!isContinue) {
-            google.script.host.close();
-            return;
-          }
-
-          setButtonsLoading(false);
-
-          var savedTitle = title;
-          var savedSlug = res && res.slug ? res.slug : data.slug;
-          // Ghi nhớ slug mới tạo vào bộ nhớ client để phòng ngừa trùng lặp ở khóa học tiếp theo
-          if (existingSlugs.indexOf(savedSlug) === -1) {
-            existingSlugs.push(savedSlug);
-          }
-
-          showSuccess("✅ Đã lưu thành công khóa học \"" + savedTitle + "\"! Tiếp tục thêm khóa học tiếp theo...");
-
-          // Reset các trường nhập liệu cho khóa học tiếp theo
-          titleInput.value = "";
-          slugHidden.value = "";
-          idHidden.value = "";
+        if (!rawSlug) {
           slugPreview.innerText = "sql-for-data-analytics";
-          versionBadge.className = "badge-v badge-slate";
+          slugHidden.value = "";
+          versionBadge.className = "badge-v badge-slate slug-version-badge";
           versionBadge.innerText = "Chờ nhập liệu";
+          continue;
+        }
 
-          document.getElementById("tagline").value = "";
-          document.getElementById("description").value = "";
-          document.getElementById("cover_image_url").value = "";
+        var res = resolveUniqueSlugClient(rawSlug, batchSlugs);
+        slugPreview.innerText = res.slug;
+        slugHidden.value = res.slug;
+        batchSlugs.push(res.slug);
 
-          var sortOrderEl = document.getElementById("sort_order");
-          if (sortOrderEl) {
-            sortOrderEl.value = (parseInt(sortOrderEl.value, 10) || 1) + 1;
-          }
-
-          // Tự động focus con trỏ vào ô Tên khóa học
-          titleInput.focus();
-        })
-        .withFailureHandler(function (err) {
-          setButtonsLoading(false);
-          showError("Lỗi: " + (err.message || err.toString()));
-        })
-        .addNewCourseFromModal(data);
+        if (res.isVersioned) {
+          versionBadge.className = "badge-v badge-crimson slug-version-badge";
+          versionBadge.innerText = "⚡ Trùng tiêu đề -> Đã gắn: " + res.slug.split("-").pop();
+        } else {
+          versionBadge.className = "badge-v badge-emerald slug-version-badge";
+          versionBadge.innerText = "✅ Duy nhất chuẩn SEO";
+        }
+      }
     }
+
+    function updateCardHeaders() {
+      var cards = container.querySelectorAll(".form-card");
+      for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        var titleElem = card.querySelector(".form-card-title span");
+        if (titleElem) {
+          titleElem.innerText = "📘 Khóa học #" + (i + 1);
+        }
+        var sortOrderInput = card.querySelector('[name="sort_order"]');
+        if (sortOrderInput && (!sortOrderInput.value || sortOrderInput.getAttribute("data-auto") === "true")) {
+          sortOrderInput.value = i + 1;
+          sortOrderInput.setAttribute("data-auto", "true");
+        }
+        var removeBtn = card.querySelector(".btn-remove-card");
+        if (removeBtn) {
+          removeBtn.style.display = cards.length > 1 ? "inline-block" : "none";
+        }
+      }
+      submitBtnText.innerText = "Lưu tất cả (" + cards.length + " khóa học)";
+    }
+
+    function createCourseCard() {
+      var card = document.createElement("div");
+      card.className = "form-card fade-in";
+      card.innerHTML = 
+        '<div class="form-card-header">' +
+          '<div class="form-card-title"><span>📘 Khóa học</span></div>' +
+          '<button type="button" class="btn-remove-card" title="Xóa thẻ khóa học này">✕ Xóa</button>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Tên Khóa Học <span class="required">*</span></label>' +
+          '<input type="text" name="title" required placeholder="Ví dụ: SQL for Data Analytics Thực Chiến" autocomplete="off">' +
+        '</div>' +
+        '<div class="preview-box">' +
+          '<div class="preview-header">' +
+            '<span>Xem trước URL & Slug SEO</span>' +
+            '<span class="badge-v badge-slate slug-version-badge">Chờ nhập liệu</span>' +
+          '</div>' +
+          '<div class="preview-content">' +
+            'https://datawithly.edu.vn/courses/<strong class="slug-preview-text" style="color: var(--primary);">sql-for-data-analytics</strong>' +
+          '</div>' +
+          '<input type="hidden" name="slug">' +
+          '<input type="hidden" name="id">' +
+        '</div>' +
+        '<div class="form-row">' +
+          '<div class="form-group col-1">' +
+            '<label>Chủ Đề (Tag) <span class="required">*</span></label>' +
+            '<select name="tag">' +
+              '<option value="SQL">SQL</option>' +
+              '<option value="Dashboard">Dashboard (Power BI)</option>' +
+              '<option value="Python">Python</option>' +
+              '<option value="End-to-End">End-to-End Analytics</option>' +
+            '</select>' +
+          '</div>' +
+          '<div class="form-group col-1">' +
+            '<label>Trình Độ</label>' +
+            '<select name="level">' +
+              '<option value="Beginner">Beginner (Cơ bản)</option>' +
+              '<option value="Intermediate">Intermediate (Trung cấp)</option>' +
+              '<option value="Advanced">Advanced (Nâng cao)</option>' +
+            '</select>' +
+          '</div>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Thông Điệp Ngắn (Tagline)</label>' +
+          '<input type="text" name="tagline" placeholder="Ví dụ: Nắm vững tư duy truy vấn, CTE và Window Functions">' +
+        '</div>' +
+        '<div class="form-row">' +
+          '<div class="form-group col-1">' +
+            '<label>Học Phí Ưu Đãi (VNĐ) <span class="required">*</span></label>' +
+            '<input type="number" name="tuition_vnd" required placeholder="4500000" step="50000">' +
+          '</div>' +
+          '<div class="form-group col-1">' +
+            '<label>Học Phí Gốc (VNĐ)</label>' +
+            '<input type="number" name="original_tuition_vnd" placeholder="6000000" step="50000">' +
+          '</div>' +
+        '</div>' +
+        '<div class="form-row">' +
+          '<div class="form-group col-1">' +
+            '<label>Thời Lượng</label>' +
+            '<input type="text" name="duration" value="8 tuần (24 buổi)">' +
+          '</div>' +
+          '<div class="form-group col-1">' +
+            '<label>Thứ Tự Sắp Xếp</label>' +
+            '<input type="number" name="sort_order" min="1" data-auto="true">' +
+          '</div>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Mô Tả Tổng Quan Khóa Học</label>' +
+          '<textarea name="description" rows="2" placeholder="Mô tả giá trị thực chiến, mục tiêu đầu ra và đối tượng phù hợp..."></textarea>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Ảnh Bìa (URL)</label>' +
+          '<input type="text" name="cover_image_url" placeholder="/uploads/courses/sql-course.jpg">' +
+        '</div>' +
+        '<div class="form-row" style="margin-top: 6px;">' +
+          '<div class="form-group col-1">' +
+            '<label class="checkbox-group">' +
+              '<input type="checkbox" name="is_active" checked>' +
+              '<span class="checkbox-label">Kích hoạt hiển thị (is_active)</span>' +
+            '</label>' +
+          '</div>' +
+          '<div class="form-group col-1">' +
+            '<label class="checkbox-group">' +
+              '<input type="checkbox" name="is_featured">' +
+              '<span class="checkbox-label">Khóa học nổi bật (is_featured)</span>' +
+            '</label>' +
+          '</div>' +
+        '</div>';
+
+      var titleInput = card.querySelector('[name="title"]');
+      titleInput.addEventListener("input", updateAllSlugs);
+
+      var removeBtn = card.querySelector(".btn-remove-card");
+      removeBtn.addEventListener("click", function () {
+        card.remove();
+        updateCardHeaders();
+        updateAllSlugs();
+      });
+
+      var sortInput = card.querySelector('[name="sort_order"]');
+      sortInput.addEventListener("input", function () {
+        this.setAttribute("data-auto", "false");
+      });
+
+      container.appendChild(card);
+      updateCardHeaders();
+      updateAllSlugs();
+      return card;
+    }
+
+    addCourseBtn.addEventListener("click", function () {
+      var newCard = createCourseCard();
+      var input = newCard.querySelector('[name="title"]');
+      if (input) input.focus();
+    });
+
+    createCourseCard();
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      submitCourse(false);
-    });
+      errorBox.style.display = "none";
+      errorBox.innerText = "";
 
-    saveAndContinueBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      submitCourse(true);
+      var cards = container.querySelectorAll(".form-card");
+      if (cards.length === 0) {
+        showError("Vui lòng thêm ít nhất một khóa học.");
+        return;
+      }
+
+      var courseList = [];
+      for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        var title = (card.querySelector('[name="title"]').value || "").trim();
+        if (!title) {
+          showError("Vui lòng nhập tên cho khóa học #" + (i + 1) + ".");
+          card.querySelector('[name="title"]').focus();
+          return;
+        }
+
+        var tuitionVnd = card.querySelector('[name="tuition_vnd"]').value;
+        if (!tuitionVnd || isNaN(Number(tuitionVnd)) || Number(tuitionVnd) < 0) {
+          showError("Vui lòng nhập học phí ưu đãi hợp lệ cho khóa học #" + (i + 1) + ".");
+          card.querySelector('[name="tuition_vnd"]').focus();
+          return;
+        }
+
+        var origTuition = card.querySelector('[name="original_tuition_vnd"]').value;
+        var sortVal = card.querySelector('[name="sort_order"]').value;
+
+        courseList.push({
+          title: title,
+          slug: card.querySelector('[name="slug"]').value || slugify(title),
+          tag: card.querySelector('[name="tag"]').value,
+          level: card.querySelector('[name="level"]').value,
+          tagline: (card.querySelector('[name="tagline"]').value || "").trim(),
+          tuition_vnd: tuitionVnd,
+          original_tuition_vnd: origTuition || tuitionVnd,
+          duration: (card.querySelector('[name="duration"]').value || "").trim(),
+          sort_order: sortVal || (i + 1),
+          description: (card.querySelector('[name="description"]').value || "").trim(),
+          cover_image_url: (card.querySelector('[name="cover_image_url"]').value || "").trim(),
+          is_active: card.querySelector('[name="is_active"]').checked,
+          is_featured: card.querySelector('[name="is_featured"]').checked
+        });
+      }
+
+      submitBtn.disabled = true;
+      addCourseBtn.disabled = true;
+      submitBtnText.innerHTML = '<span class="spinner"></span> Đang lưu ' + courseList.length + ' khóa học...';
+
+      google.script.run
+        .withSuccessHandler(function (res) {
+          showSuccess("✅ Đã lưu thành công " + (res.count || courseList.length) + " khóa học vào hệ thống!");
+          setTimeout(function () {
+            google.script.host.close();
+          }, 1200);
+        })
+        .withFailureHandler(function (err) {
+          submitBtn.disabled = false;
+          addCourseBtn.disabled = false;
+          updateCardHeaders();
+          showError("Lỗi: " + (err.message || err.toString()));
+        })
+        .addCoursesBatchFromModal(courseList);
     });
   </script>
 </body>
