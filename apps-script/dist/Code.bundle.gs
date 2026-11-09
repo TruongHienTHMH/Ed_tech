@@ -3,7 +3,7 @@
  * DATAWITHLY CMS - HỆ THỐNG GOOGLE APPS SCRIPT TRỌN GÓI (ALL-IN-ONE BUNDLE)
  * ==============================================================================
  * Phiên bản: 2.1.0 (DataWithLy Enterprise CMS)
- * Thời gian đóng gói: 2026-11-08T11:36:44.356Z
+ * Thời gian đóng gói: 2026-11-09T11:55:30.868Z
  * Tự động tạo bởi: scripts/bundle-apps-script.js
  *
  * HƯỚNG DẪN SỬ DỤNG:
@@ -122,6 +122,9 @@ var CONFIG = {
   },
 
   // URL Webhook kích hoạt On-Demand ISR Revalidation trên Website DataWithLy
+  REVALIDATION_PROD_URL: "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026",
+  REVALIDATION_LOCAL_URL: "http://localhost:3000/api/revalidate?secret=datawithly_secure_reval_token_2026",
+  ACTIVE_REVALIDATION_ENV: "PROD",
   REVALIDATION_URL: "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026",
 
   // Cấu hình Telegram Bot để nhận cảnh báo khi có học viên đăng ký tư vấn mới (< 2s)
@@ -855,6 +858,7 @@ function onOpen() {
   ui.createMenu("🚀 DataWithLy CMS")
     // Khởi tạo
     .addItem("⚡ CÀI ĐẶT TOÀN BỘ 12 TAB (1-Click Setup)", "setupDataWithLyTables")
+    .addItem("🌱 NẠP LẠI DATA CHUẨN FIGMA 100% (Ghi đè bản mẫu)", "forceReseedFigmaData")
     .addSeparator()
 
     // Khóa học & Lộ trình
@@ -1249,7 +1253,7 @@ function setupCoursesTab(ss) {
       5690000, 6780000, "27 buổi",
       "Beginner", true, true, 1,
       "Xây dựng nền tảng Data Analytics toàn diện, từ truy vấn và xử lý dữ liệu với SQL đến tư duy phân tích, trực quan hóa và thiết kế Dashboard hoàn chỉnh cho doanh nghiệp.",
-      "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png"
+      "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png"
     ]);
 
     sheet.appendRow([
@@ -1261,7 +1265,7 @@ function setupCoursesTab(ss) {
       2990000, 3500000, "12 buổi",
       "Beginner", true, true, 2,
       "Làm quen với Database và SQL, xây dựng khả năng truy vấn, lọc, biến đổi và tối ưu dữ liệu từ các hệ thống cơ sở dữ liệu lớn trong thực tế doanh nghiệp.",
-      "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png"
+      "/assets/figma/05ab7dcc030820120da8f65c6b464967f554e0d8.png"
     ]);
 
     sheet.appendRow([
@@ -1273,7 +1277,7 @@ function setupCoursesTab(ss) {
       3790000, 4500000, "15 buổi",
       "Intermediate", true, true, 3,
       "Học cách xác định vấn đề kinh doanh, phân rã chỉ số (Metrics Tree), phân tích dữ liệu chuyên sâu và trực quan hóa Dashboard phục vụ quyết định quản trị.",
-      "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png"
+      "/assets/figma/b1c9fe6fd2d3dafb5b4b32d30320f68d7cde1f5c.png"
     ]);
   }
 }
@@ -1598,7 +1602,10 @@ function setupSettingsTab(ss) {
     sheet.appendRow(["zalo_url", "https://zalo.me/0934938431", "Đường dẫn chat Zalo tư vấn nhanh"]);
     sheet.appendRow(["contact_email", "vietds@gmail.com", "Email nhận thư liên hệ"]);
     sheet.appendRow(["announcement_bar", "Level Up Week: Learn More, Save 75%! - 4 days only! Get 70+ online SQL courses and save up to $450", "Thông báo trên thanh header"]);
-    sheet.appendRow(["revalidation_url", "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook làm mới bộ nhớ cache của Website"]);
+    sheet.appendRow(["revalidation_prod_url", "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook Production làm mới bộ nhớ cache Website"]);
+    sheet.appendRow(["revalidation_local_url", "http://localhost:3000/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook Local / Dev Tunnel làm mới bộ nhớ cache"]);
+    sheet.appendRow(["active_revalidation_env", "PROD", "Môi trường đồng bộ kích hoạt (PROD hoặc LOCAL)"]);
+    sheet.appendRow(["revalidation_url", "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook làm mới bộ nhớ cache của Website (dự phòng)"]);
   }
 }
 
@@ -1722,6 +1729,53 @@ function setupPromotionsTab(ss) {
     ]);
   }
 }
+
+/**
+ * NẠP LẠI TOÀN BỘ DỮ LIỆU CHUẨN FIGMA (FORCE RESEED)
+ * Xóa trắng các dòng dữ liệu mẫu cũ và ghi đè lại 100% dữ liệu chuẩn Figma sắc nét.
+ */
+function forceReseedFigmaData() {
+  var ui = SpreadsheetApp.getUi();
+  var confirm = ui.alert(
+    "🌱 Xác Nhận Nạp Lại Dữ Liệu Chuẩn Figma 100%",
+    "Thao tác này sẽ xóa các dòng dữ liệu cũ trong 10 Tab (Courses, Curriculum, Packages, Student Projects, Mentors, Testimonials, FAQs, Settings, Blogs, Promotions) và nạp lại toàn bộ dữ liệu mẫu chuẩn Figma (Ảnh bìa 4K, 9 Dự án, 6 Đánh giá học viên).\n\nTab 'leads (private)' sẽ được BẢO TỒN NGUYÊN VẸN 100% không bị xóa.\n\nBạn có muốn tiếp tục không?",
+    ui.ButtonSet.YES_NO
+  );
+
+  if (confirm !== ui.Button.YES) return;
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  var cmsTabs = [
+    "courses", "curriculum", "packages_pricing", "student_projects",
+    "mentor_profiles", "testimonials", "faqs", "blog_posts", "promotions"
+  ];
+
+  for (var i = 0; i < cmsTabs.length; i++) {
+    var s = ss.getSheetByName(cmsTabs[i]);
+    if (s && s.getLastRow() > 1) {
+      s.getRange(2, 1, s.getLastRow() - 1, s.getLastColumn()).clearContent();
+    }
+  }
+
+  // Gọi lại các hàm setup để nạp dữ liệu chuẩn
+  setupCoursesTab(ss);
+  setupCurriculumTab(ss);
+  setupPackagesPricingTab(ss);
+  setupStudentProjectsTab(ss);
+  setupMentorProfilesTab(ss);
+  setupTestimonialsTab(ss);
+  setupFaqsTab(ss);
+  setupBlogPostsTab(ss);
+  setupPromotionsTab(ss);
+
+  ui.alert(
+    "🎉 Nạp Dữ Liệu Thành Công!",
+    "Đã cập nhật lại toàn bộ dữ liệu chuẩn Figma 100% vào các Tab Google Sheets.\nBây giờ bạn có thể bấm [⚡ Đồng Bộ Lên Website Ngay Lập Tức] để xuất bản nội dung mới lên Web!",
+    ui.ButtonSet.OK
+  );
+}
+
 
 
 
@@ -1907,6 +1961,17 @@ function doPost(e) {
 
     var action = payload.action || "submit_lead";
 
+    // 0. NẠP TOÀN BỘ DATABASE CHUẨN FIGMA TỪ SEEDER (seed_database)
+    if (action === "seed_database" || action === "bulk_seed") {
+      var seedStats = applySeedSnapshotToSpreadsheet(payload.snapshot || payload.data);
+      return ContentService.createTextOutput(JSON.stringify({
+        ok: true,
+        action: "seed_database",
+        message: "Đã nạp toàn bộ dữ liệu chuẩn Figma 100% vào Google Sheets thành công!",
+        stats: seedStats
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
     // 1. THÊM KHÓA HỌC (add_course)
     if (action === "add_course") {
       var courseResult = addNewCourseFromModal(payload);
@@ -2024,6 +2089,169 @@ function doPost(e) {
     lock.releaseLock();
   }
 }
+
+/**
+ * GHI ĐÈ DỮ LIỆU CHUẨN FIGMA TỪ DATABASE SEEDER VÀO SPREADSHEET
+ */
+function applySeedSnapshotToSpreadsheet(snapshot) {
+  if (!snapshot) throw new Error("Dữ liệu snapshot không hợp lệ hoặc để trống.");
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var stats = {};
+
+  // 1. Courses
+  if (snapshot.courses && snapshot.courses.length) {
+    var cSheet = ss.getSheetByName("courses") || (setupCoursesTab(ss), ss.getSheetByName("courses"));
+    if (cSheet.getLastRow() > 1) {
+      cSheet.getRange(2, 1, cSheet.getLastRow() - 1, cSheet.getLastColumn()).clearContent();
+    }
+    var cRows = snapshot.courses.map(function(c, i) {
+      return [
+        c.id || ("crs-" + (i + 1)),
+        c.title || "",
+        c.slug || c.id || "",
+        c.tag || "SQL",
+        c.tagline || "",
+        Number(c.tuitionVnd || c.tuition_vnd || 0),
+        Number(c.originalTuitionVnd || c.original_tuition_vnd || 0),
+        c.duration || "8 tuần",
+        c.level || "Beginner",
+        c.isActive !== false,
+        c.isFeatured === true,
+        Number(c.sortOrder || c.sort_order || (i + 1)),
+        c.description || "",
+        c.coverImageUrl || c.cover_image_url || "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png"
+      ];
+    });
+    cSheet.getRange(2, 1, cRows.length, 14).setValues(cRows);
+    cSheet.getRange(2, 6, cRows.length, 2).setNumberFormat('#,##0 "đ"');
+    stats.courses = cRows.length;
+  }
+
+  // 2. Curriculum
+  if (snapshot.curriculum && snapshot.curriculum.length) {
+    var curSheet = ss.getSheetByName("curriculum") || (setupCurriculumTab(ss), ss.getSheetByName("curriculum"));
+    if (curSheet.getLastRow() > 1) {
+      curSheet.getRange(2, 1, curSheet.getLastRow() - 1, curSheet.getLastColumn()).clearContent();
+    }
+    var curRows = snapshot.curriculum.map(function(m, i) {
+      var bullets = Array.isArray(m.bulletPoints) ? m.bulletPoints.join("\n") : (m.topicsBullets || m.topics_bullets || "");
+      return [
+        m.id || ("cur-" + (i + 1)),
+        m.courseId || m.course_id || "",
+        m.courseName || m.course_name || "",
+        Number(m.moduleNumber || m.module_number || (i + 1)),
+        m.title || m.module_title || "",
+        m.duration || "2 tuần",
+        Number(m.lessonsCount || m.lessons_count || 4),
+        bullets,
+        Number(m.sortOrder || m.sort_order || (i + 1))
+      ];
+    });
+    curSheet.getRange(2, 1, curRows.length, 9).setValues(curRows);
+    stats.curriculum = curRows.length;
+  }
+
+  // 3. Packages
+  if (snapshot.packages && snapshot.packages.length) {
+    var pkgSheet = ss.getSheetByName("packages_pricing") || (setupPackagesPricingTab(ss), ss.getSheetByName("packages_pricing"));
+    if (pkgSheet.getLastRow() > 1) {
+      pkgSheet.getRange(2, 1, pkgSheet.getLastRow() - 1, pkgSheet.getLastColumn()).clearContent();
+    }
+    var pkgRows = snapshot.packages.map(function(p, i) {
+      var feats = Array.isArray(p.featuresList) ? p.featuresList.join("\n") : (p.features_list || "");
+      return [
+        p.id || ("pkg-" + (i + 1)),
+        p.packageId || p.package_id || p.id || "",
+        p.name || "",
+        Number(p.originalPrice || p.original_price || 0),
+        Number(p.salePrice || p.sale_price || 0),
+        p.badge || "",
+        feats,
+        p.isPopular === true,
+        p.isActive !== false,
+        Number(p.sortOrder || p.sort_order || (i + 1))
+      ];
+    });
+    pkgSheet.getRange(2, 1, pkgRows.length, 10).setValues(pkgRows);
+    pkgSheet.getRange(2, 4, pkgRows.length, 2).setNumberFormat('#,##0 "đ"');
+    stats.packages = pkgRows.length;
+  }
+
+  // 4. Student Projects
+  if (snapshot.projects && snapshot.projects.length) {
+    var pSheet = ss.getSheetByName("student_projects") || (setupStudentProjectsTab(ss), ss.getSheetByName("student_projects"));
+    if (pSheet.getLastRow() > 1) {
+      pSheet.getRange(2, 1, pSheet.getLastRow() - 1, pSheet.getLastColumn()).clearContent();
+    }
+    var pRows = snapshot.projects.map(function(p, i) {
+      var tools = Array.isArray(p.tools) ? p.tools.join(", ") : (p.toolsRaw || p.tools || "");
+      return [
+        p.projectId || p.id || ("proj-" + (i + 1)),
+        p.title || "",
+        p.category || "Data Analytics",
+        p.authorName || p.author_name || p.author || "Học viên",
+        tools,
+        p.metrics || "",
+        p.imageUrl || p.image_url || "/assets/figma/2643f19ffd20e9e83bc82fe8862b51f3796c7604.png",
+        Number(p.sortOrder || p.sort_order || (i + 1)),
+        p.isActive !== false
+      ];
+    });
+    pSheet.getRange(2, 1, pRows.length, 9).setValues(pRows);
+    stats.projects = pRows.length;
+  }
+
+  // 5. Mentors
+  if (snapshot.mentors && snapshot.mentors.length) {
+    var mSheet = ss.getSheetByName("mentor_profiles") || (setupMentorProfilesTab(ss), ss.getSheetByName("mentor_profiles"));
+    if (mSheet.getLastRow() > 1) {
+      mSheet.getRange(2, 1, mSheet.getLastRow() - 1, mSheet.getLastColumn()).clearContent();
+    }
+    var mRows = snapshot.mentors.map(function(m, i) {
+      var comps = Array.isArray(m.companies) ? m.companies.join(", ") : (m.companiesWorked || m.companies_worked || "");
+      return [
+        m.id || ("men-" + (i + 1)),
+        m.name || "Hứa Thảo Ly",
+        m.role || "Founder & Lead Mentor",
+        m.title || m.role || "",
+        m.bio || "",
+        comps,
+        m.avatarUrl || m.avatar_url || "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+        m.linkedinUrl || m.linkedin_url || "",
+        m.isActive !== false
+      ];
+    });
+    mSheet.getRange(2, 1, mRows.length, 9).setValues(mRows);
+    stats.mentors = mRows.length;
+  }
+
+  // 6. Testimonials
+  if (snapshot.testimonials && snapshot.testimonials.length) {
+    var tSheet = ss.getSheetByName("testimonials") || (setupTestimonialsTab(ss), ss.getSheetByName("testimonials"));
+    if (tSheet.getLastRow() > 1) {
+      tSheet.getRange(2, 1, tSheet.getLastRow() - 1, tSheet.getLastColumn()).clearContent();
+    }
+    var tRows = snapshot.testimonials.map(function(t, i) {
+      return [
+        t.id || ("tst-" + (i + 1)),
+        t.studentName || t.student_name || t.name || "",
+        t.studentRole || t.role || "",
+        t.company || "",
+        t.avatarUrl || t.avatar_url || "/assets/figma/e40866062bc7c3587c903859bd52be66623217cc.png",
+        t.courseId || t.course_id || "ALL",
+        t.rating ? t.rating.toString() : "5",
+        t.reviewText || t.comment || "",
+        t.isFeatured === true,
+        t.isActive !== false
+      ];
+    });
+    tSheet.getRange(2, 1, tRows.length, 10).setValues(tRows);
+    stats.testimonials = tRows.length;
+  }
+
+  return stats;
+}
+
 
 
 // ==============================================================================
@@ -2556,22 +2784,39 @@ function showSoftDeletePrompt() {
 }
 
 /**
- * 4. Kích hoạt On-Demand ISR Revalidation trên Website
+ * 4. Kích hoạt On-Demand ISR Revalidation trên Website (If-Else thông minh theo môi trường)
  */
 function triggerWebsiteRevalidation() {
   var ui = SpreadsheetApp.getUi();
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  var targetUrl = CONFIG.REVALIDATION_URL;
+  var settingsMap = {};
   var settingsSheet = ss.getSheetByName("settings");
   if (settingsSheet) {
     var sData = settingsSheet.getDataRange().getValues();
     for (var i = 1; i < sData.length; i++) {
-      if (sData[i][0] === "revalidation_url" && sData[i][1]) {
-        targetUrl = sData[i][1].toString().trim();
-        break;
+      if (sData[i][0]) {
+        settingsMap[sData[i][0].toString().trim()] = (sData[i][1] || "").toString().trim();
       }
     }
+  }
+
+  var activeEnv = (settingsMap["active_revalidation_env"] || CONFIG.ACTIVE_REVALIDATION_ENV || "PROD").toUpperCase();
+  var prodUrl = settingsMap["revalidation_prod_url"] || settingsMap["revalidation_url"] || CONFIG.REVALIDATION_PROD_URL;
+  var localUrl = settingsMap["revalidation_local_url"] || CONFIG.REVALIDATION_LOCAL_URL;
+
+  var targetUrl = "";
+  var envName = "";
+
+  if (activeEnv === "LOCAL" && localUrl) {
+    targetUrl = localUrl;
+    envName = "💻 LOCALHOST / DEV TUNNEL";
+  } else if (localUrl && !prodUrl) {
+    targetUrl = localUrl;
+    envName = "💻 LOCALHOST / DEV TUNNEL";
+  } else {
+    targetUrl = prodUrl || CONFIG.REVALIDATION_PROD_URL;
+    envName = "🚀 PRODUCTION WEBSITE";
   }
 
   try {
@@ -2581,20 +2826,41 @@ function triggerWebsiteRevalidation() {
     });
 
     if (response.getResponseCode() === 200) {
-      ui.alert("✅ Xuất Bản Thành Công", "Website DataWithLy đã được làm mới tức thì! Học viên sẽ thấy ngay nội dung mới.", ui.ButtonSet.OK);
+      ui.alert(
+        "✅ Xuất Bản Thành Công",
+        "Website DataWithLy đã được làm mới tức thì!\n\n" +
+        "• Môi trường: " + envName + "\n" +
+        "• Endpoint: " + targetUrl + "\n\n" +
+        "Học viên sẽ thấy ngay nội dung mới nhất vừa cập nhật.",
+        ui.ButtonSet.OK
+      );
     } else {
-      ui.alert("⚠️ Phản Hồi Từ Website", "Mã HTTP: " + response.getResponseCode() + "\n" + response.getContentText(), ui.ButtonSet.OK);
+      ui.alert(
+        "⚠️ Phản Hồi Từ Website (" + envName + ")",
+        "Mã HTTP: " + response.getResponseCode() + "\n" + response.getContentText(),
+        ui.ButtonSet.OK
+      );
     }
   } catch (err) {
-    ui.alert(
-      "ℹ️ Thông Báo Kết Nối Website",
-      "Không thể kết nối đến URL Webhook:\n" + targetUrl + "\n\n" +
-      "Lý do: Tên miền đang ở môi trường phát triển (Localhost:3000) hoặc chưa trỏ domain công khai.\n\n" +
-      "👉 Bạn không cần lo lắng! Khi đang chạy thử nghiệm trên máy tính, bạn chỉ cần mở trang:\n" +
-      "http://localhost:3000/tests-data\n" +
-      "và bấm nút [⚡ Đồng Bộ Lại Dữ Liệu Ngay Lập Tức]. Next.js sẽ tự động lấy dữ liệu mới nhất từ Google Sheets này về ngay lập tức!",
-      ui.ButtonSet.OK
-    );
+    var isLocalhost = targetUrl.indexOf("localhost") !== -1 || targetUrl.indexOf("127.0.0.1") !== -1;
+    if (isLocalhost) {
+      ui.alert(
+        "ℹ️ Thông Báo Kết Nối Website (" + envName + ")",
+        "Google Apps Script chạy trên đám mây của Google nên không thể gọi trực tiếp tới 'localhost:3000' mà không qua ngrok/tunnel.\n\n" +
+        "👉 Giải pháp cực nhanh khi chạy Dev cục bộ:\n" +
+        "1. Trên giao diện Web Next.js, bấm ngay nút [⚡ Đồng Bộ Dữ Liệu] ở góc màn hình.\n" +
+        "2. Hoặc tạo đường hầm qua ngrok/Cloudflare Tunnel và điền URL vào dòng 'revalidation_local_url' trong tab settings.\n" +
+        "3. Nếu xuất bản Production, hãy chuyển 'active_revalidation_env' thành PROD.",
+        ui.ButtonSet.OK
+      );
+    } else {
+      ui.alert(
+        "⚠️ Lỗi Kết Nối Webhook (" + envName + ")",
+        "Không thể kết nối đến URL Webhook:\n" + targetUrl + "\n\n" +
+        "Chi tiết lỗi: " + err.message,
+        ui.ButtonSet.OK
+      );
+    }
   }
 }
 

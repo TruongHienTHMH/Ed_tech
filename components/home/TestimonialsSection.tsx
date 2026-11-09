@@ -1,11 +1,12 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { User } from "@/components/common/Icons";
 import { Badge } from "@/components/common/Badge";
 import { Testimonial } from "@/lib/cms/types";
 import { seedTestimonials } from "@/data/seed-data";
+import { SafeImage } from "@/components/common/SafeImage";
+import { resolveImageUrl, getFigmaFallback } from "@/lib/constants/image-fallbacks";
 
 interface TestimonialsSectionProps {
   testimonials?: Testimonial[];
@@ -19,7 +20,7 @@ export default function TestimonialsSection({ testimonials = seedTestimonials }:
     role: t.studentRole || "Học viên DataWithLy",
     quote: t.comment || t.reviewText || "Khóa học rất thực chiến.",
     rating: t.rating || 5,
-    avatarUrl: t.avatarUrl,
+    avatarUrl: resolveImageUrl(t.avatarUrl, "avatar", idx),
   }));
 
   return (
@@ -65,8 +66,9 @@ export default function TestimonialsSection({ testimonials = seedTestimonials }:
               <div className="flex items-center gap-3 pt-4 border-t border-neutral-100">
                 {item.avatarUrl ? (
                   <div className="relative w-11 h-11 rounded-full overflow-hidden shrink-0 border border-[#AF445A]/20">
-                    <Image
+                    <SafeImage
                       src={item.avatarUrl}
+                      fallbackSrc={getFigmaFallback("avatar", item.id)}
                       alt={item.name}
                       fill
                       className="object-cover"

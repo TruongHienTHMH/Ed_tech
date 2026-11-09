@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import { ChevronLeft, ChevronRight, Clock, Video } from "@/components/common/Icons";
 import { Button } from "@/components/common/Button";
 import { Badge } from "@/components/common/Badge";
 import { Course } from "@/lib/cms/types";
 import { seedCourses } from "@/data/seed-data";
 import { openLeadModal } from "@/components/forms/LeadModalManager";
+import { SafeImage } from "@/components/common/SafeImage";
+import { resolveImageUrl, getFigmaFallback } from "@/lib/constants/image-fallbacks";
 
 interface CoursesSectionProps {
   courses?: Course[];
@@ -26,7 +27,7 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
     rating: "5.0",
     studentsCount: 250 + i * 50,
     badge: c.isFeatured ? "Khóa học nổi bật" : "Live Class",
-    thumbnail: c.coverImageUrl || "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
+    thumbnail: resolveImageUrl(c.coverImageUrl, "course", c.slug || c.id),
   }));
 
   const currentCourse = activeCourses[currentIndex] || activeCourses[0];
@@ -137,8 +138,9 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
 
               {/* Right Column: Thumbnail Showcase */}
               <div className="lg:col-span-5 relative w-full aspect-[16/10] sm:aspect-[16/9] lg:aspect-square max-h-[380px] rounded-2xl overflow-hidden shadow-xl border-2 border-white/10">
-                <Image
+                <SafeImage
                   src={currentCourse.thumbnail}
+                  fallbackSrc={getFigmaFallback("course", currentCourse.slug || currentCourse.id)}
                   alt={currentCourse.title}
                   fill
                   sizes="(max-width: 1024px) 100vw, 450px"

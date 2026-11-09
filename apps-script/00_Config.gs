@@ -47,6 +47,9 @@ var CONFIG = {
   },
 
   // URL Webhook kích hoạt On-Demand ISR Revalidation trên Website DataWithLy
+  REVALIDATION_PROD_URL: "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026",
+  REVALIDATION_LOCAL_URL: "http://localhost:3000/api/revalidate?secret=datawithly_secure_reval_token_2026",
+  ACTIVE_REVALIDATION_ENV: "PROD",
   REVALIDATION_URL: "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026",
 
   // Cấu hình Telegram Bot để nhận cảnh báo khi có học viên đăng ký tư vấn mới (< 2s)

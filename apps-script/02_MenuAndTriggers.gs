@@ -29,6 +29,7 @@ function onOpen() {
   ui.createMenu("🚀 DataWithLy CMS")
     // Khởi tạo
     .addItem("⚡ CÀI ĐẶT TOÀN BỘ 12 TAB (1-Click Setup)", "setupDataWithLyTables")
+    .addItem("🌱 NẠP LẠI DATA CHUẨN FIGMA 100% (Ghi đè bản mẫu)", "forceReseedFigmaData")
     .addSeparator()
 
     // Khóa học & Lộ trình

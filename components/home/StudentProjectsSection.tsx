@@ -7,6 +7,8 @@ import { Button } from "@/components/common/Button";
 import { Badge } from "@/components/common/Badge";
 import { StudentProject } from "@/lib/cms/types";
 import { seedStudentProjects } from "@/data/seed-data";
+import { SafeImage } from "@/components/common/SafeImage";
+import { resolveImageUrl, getFigmaFallback } from "@/lib/constants/image-fallbacks";
 
 interface StudentProjectsSectionProps {
   projects?: StudentProject[];
@@ -20,7 +22,7 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
     id: p.id || `p-${idx}`,
     title: p.title,
     studentName: p.authorName,
-    image: p.imageUrl || "/assets/figma/2643f19ffd20e9e83bc82fe8862b51f3796c7604.png",
+    image: resolveImageUrl(p.imageUrl, "project", idx),
     aspect: idx >= 6 ? "tall" : "normal",
   }));
 
@@ -54,8 +56,9 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
                   isTall ? "h-[290px] sm:h-[320px]" : "h-[200px] sm:h-[216px]"
                 }`}
               >
-                <Image
+                <SafeImage
                   src={project.image}
+                  fallbackSrc={getFigmaFallback("project", idx)}
                   alt={project.title}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

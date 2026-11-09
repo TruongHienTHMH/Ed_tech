@@ -2,12 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Course } from "@/lib/cms/types";
 import { Clock, Video, ChevronRight, Calendar } from "@/components/common/Icons";
 import { Badge } from "@/components/common/Badge";
 import { Button } from "@/components/common/Button";
 import { openLeadModal } from "@/components/forms/LeadModalManager";
+import { SafeImage } from "@/components/common/SafeImage";
+import { resolveImageUrl, getFigmaFallback } from "@/lib/constants/image-fallbacks";
 
 interface CourseHeroProps {
   course: Course;
@@ -151,8 +152,9 @@ export default function CourseHero({ course }: CourseHeroProps) {
           <div className="lg:col-span-5">
             <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#252525]">
               <div className="relative aspect-[4/3] w-full">
-                <Image
-                  src={course.coverImageUrl || "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png"}
+                <SafeImage
+                  src={resolveImageUrl(course.coverImageUrl, "course", course.slug || course.id)}
+                  fallbackSrc={getFigmaFallback("course", course.slug || course.id)}
                   alt={course.title}
                   fill
                   className="object-cover"

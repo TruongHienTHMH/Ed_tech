@@ -122,7 +122,7 @@ function setupCoursesTab(ss) {
       5690000, 6780000, "27 buổi",
       "Beginner", true, true, 1,
       "Xây dựng nền tảng Data Analytics toàn diện, từ truy vấn và xử lý dữ liệu với SQL đến tư duy phân tích, trực quan hóa và thiết kế Dashboard hoàn chỉnh cho doanh nghiệp.",
-      "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png"
+      "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png"
     ]);
 
     sheet.appendRow([
@@ -134,7 +134,7 @@ function setupCoursesTab(ss) {
       2990000, 3500000, "12 buổi",
       "Beginner", true, true, 2,
       "Làm quen với Database và SQL, xây dựng khả năng truy vấn, lọc, biến đổi và tối ưu dữ liệu từ các hệ thống cơ sở dữ liệu lớn trong thực tế doanh nghiệp.",
-      "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png"
+      "/assets/figma/05ab7dcc030820120da8f65c6b464967f554e0d8.png"
     ]);
 
     sheet.appendRow([
@@ -146,7 +146,7 @@ function setupCoursesTab(ss) {
       3790000, 4500000, "15 buổi",
       "Intermediate", true, true, 3,
       "Học cách xác định vấn đề kinh doanh, phân rã chỉ số (Metrics Tree), phân tích dữ liệu chuyên sâu và trực quan hóa Dashboard phục vụ quyết định quản trị.",
-      "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png"
+      "/assets/figma/b1c9fe6fd2d3dafb5b4b32d30320f68d7cde1f5c.png"
     ]);
   }
 }
@@ -471,7 +471,10 @@ function setupSettingsTab(ss) {
     sheet.appendRow(["zalo_url", "https://zalo.me/0934938431", "Đường dẫn chat Zalo tư vấn nhanh"]);
     sheet.appendRow(["contact_email", "vietds@gmail.com", "Email nhận thư liên hệ"]);
     sheet.appendRow(["announcement_bar", "Level Up Week: Learn More, Save 75%! - 4 days only! Get 70+ online SQL courses and save up to $450", "Thông báo trên thanh header"]);
-    sheet.appendRow(["revalidation_url", "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook làm mới bộ nhớ cache của Website"]);
+    sheet.appendRow(["revalidation_prod_url", "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook Production làm mới bộ nhớ cache Website"]);
+    sheet.appendRow(["revalidation_local_url", "http://localhost:3000/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook Local / Dev Tunnel làm mới bộ nhớ cache"]);
+    sheet.appendRow(["active_revalidation_env", "PROD", "Môi trường đồng bộ kích hoạt (PROD hoặc LOCAL)"]);
+    sheet.appendRow(["revalidation_url", "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook làm mới bộ nhớ cache của Website (dự phòng)"]);
   }
 }
 
@@ -595,5 +598,52 @@ function setupPromotionsTab(ss) {
     ]);
   }
 }
+
+/**
+ * NẠP LẠI TOÀN BỘ DỮ LIỆU CHUẨN FIGMA (FORCE RESEED)
+ * Xóa trắng các dòng dữ liệu mẫu cũ và ghi đè lại 100% dữ liệu chuẩn Figma sắc nét.
+ */
+function forceReseedFigmaData() {
+  var ui = SpreadsheetApp.getUi();
+  var confirm = ui.alert(
+    "🌱 Xác Nhận Nạp Lại Dữ Liệu Chuẩn Figma 100%",
+    "Thao tác này sẽ xóa các dòng dữ liệu cũ trong 10 Tab (Courses, Curriculum, Packages, Student Projects, Mentors, Testimonials, FAQs, Settings, Blogs, Promotions) và nạp lại toàn bộ dữ liệu mẫu chuẩn Figma (Ảnh bìa 4K, 9 Dự án, 6 Đánh giá học viên).\n\nTab 'leads (private)' sẽ được BẢO TỒN NGUYÊN VẸN 100% không bị xóa.\n\nBạn có muốn tiếp tục không?",
+    ui.ButtonSet.YES_NO
+  );
+
+  if (confirm !== ui.Button.YES) return;
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  var cmsTabs = [
+    "courses", "curriculum", "packages_pricing", "student_projects",
+    "mentor_profiles", "testimonials", "faqs", "blog_posts", "promotions"
+  ];
+
+  for (var i = 0; i < cmsTabs.length; i++) {
+    var s = ss.getSheetByName(cmsTabs[i]);
+    if (s && s.getLastRow() > 1) {
+      s.getRange(2, 1, s.getLastRow() - 1, s.getLastColumn()).clearContent();
+    }
+  }
+
+  // Gọi lại các hàm setup để nạp dữ liệu chuẩn
+  setupCoursesTab(ss);
+  setupCurriculumTab(ss);
+  setupPackagesPricingTab(ss);
+  setupStudentProjectsTab(ss);
+  setupMentorProfilesTab(ss);
+  setupTestimonialsTab(ss);
+  setupFaqsTab(ss);
+  setupBlogPostsTab(ss);
+  setupPromotionsTab(ss);
+
+  ui.alert(
+    "🎉 Nạp Dữ Liệu Thành Công!",
+    "Đã cập nhật lại toàn bộ dữ liệu chuẩn Figma 100% vào các Tab Google Sheets.\nBây giờ bạn có thể bấm [⚡ Đồng Bộ Lên Website Ngay Lập Tức] để xuất bản nội dung mới lên Web!",
+    ui.ButtonSet.OK
+  );
+}
+
 
 

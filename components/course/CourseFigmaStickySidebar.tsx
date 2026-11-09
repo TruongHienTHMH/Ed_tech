@@ -1,11 +1,12 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { Course } from "@/lib/cms/types";
 import { openLeadModal } from "@/components/forms/LeadModalManager";
 import { Button } from "@/components/common/Button";
 import { ArrowRight } from "@/components/common/Icons";
+import { SafeImage } from "@/components/common/SafeImage";
+import { resolveImageUrl, getFigmaFallback } from "@/lib/constants/image-fallbacks";
 
 interface CourseFigmaStickySidebarProps {
   course: Course;
@@ -37,15 +38,16 @@ export default function CourseFigmaStickySidebar({ course }: CourseFigmaStickySi
       <div className="sticky top-24 bg-white border border-[#EFE5E7] rounded-3xl p-6 shadow-lg shadow-gray-200/50 overflow-hidden">
         {/* Course Thumbnail */}
         <div className="relative w-full h-48 rounded-2xl overflow-hidden mb-6 bg-gray-100 border border-gray-100">
-          <Image
-            src={course.coverImageUrl || "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png"}
+          <SafeImage
+            src={resolveImageUrl(course.coverImageUrl, "course", course.slug || course.id)}
+            fallbackSrc={getFigmaFallback("course", course.slug || course.id)}
             alt={course.title}
             fill
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 384px"
             priority
           />
-          <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-full">
+          <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-full z-10">
             {course.tag || "Chuyên sâu"}
           </div>
         </div>
