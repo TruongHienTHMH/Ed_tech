@@ -18,39 +18,39 @@ export default function HeroSection() {
 
   return (
     <section className="relative w-full bg-white pt-10 pb-12 sm:pt-16 sm:pb-16 lg:pt-20 lg:pb-20 overflow-hidden">
-      {/* Left Artwork (Figma Node 12:702) */}
-      <div className="hidden lg:block absolute left-0 lg:-left-12 xl:-left-4 2xl:left-0 top-1/2 -translate-y-1/2 w-[340px] lg:w-[400px] xl:w-[460px] 2xl:w-[520px] pointer-events-none select-none z-10">
+      {/* Left Artwork (Figma Node 12:702 - Hidden on Mobile/Tablet to keep view clean & centered) */}
+      <div className="hidden xl:block absolute left-0 xl:-left-8 2xl:left-0 top-1/2 -translate-y-1/2 w-[300px] xl:w-[350px] 2xl:w-[420px] pointer-events-none select-none z-10">
         <Image
           src="/assets/decorations/hero-left-artwork.png"
           alt="Data Analytics Team Work Illustration"
-          width={1020}
-          height={1050}
+          width={980}
+          height={1120}
           className="w-full h-auto object-contain"
           priority
         />
       </div>
 
-      {/* Right Artwork (Figma Node 12:708) */}
-      <div className="hidden lg:block absolute right-0 lg:-right-12 xl:-right-4 2xl:right-0 top-1/2 -translate-y-1/2 w-[340px] lg:w-[400px] xl:w-[460px] 2xl:w-[520px] pointer-events-none select-none z-10">
+      {/* Right Artwork (Figma Node 12:708 - Clean 3D Laptop & Charts, Hidden on Mobile/Tablet) */}
+      <div className="hidden xl:block absolute right-0 xl:-right-8 2xl:right-0 top-1/2 -translate-y-1/2 w-[280px] xl:w-[330px] 2xl:w-[390px] pointer-events-none select-none z-10">
         <Image
           src="/assets/decorations/hero-right-artwork.png"
           alt="3D Analytics Dashboard & Tech Illustration"
-          width={1048}
-          height={1050}
+          width={803}
+          height={1120}
           className="w-full h-auto object-contain"
           priority
         />
       </div>
 
-      {/* Central Content Area */}
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 flex flex-col items-center text-center relative z-20">
+      {/* Central Content Area - Perfectly Centered & Spaced */}
+      <div className="max-w-[860px] mx-auto px-4 sm:px-6 flex flex-col items-center text-center relative z-20">
         {/* Eyebrow text */}
         <p className="text-[#676767] tracking-[1.5px] text-xs sm:text-sm uppercase font-medium mb-3">
           ONLINE DATA ANALYTICS COURSE
         </p>
 
-        {/* Main Headline */}
-        <h1 className="font-heading font-bold text-3xl sm:text-5xl lg:text-[62px] leading-tight lg:leading-[70px] text-[#252525] max-w-[850px] mb-4">
+        {/* Main Headline - Balanced typography across all screens */}
+        <h1 className="font-heading font-bold text-3xl sm:text-4xl md:text-5xl xl:text-[56px] 2xl:text-[62px] leading-tight xl:leading-[66px] text-[#252525] max-w-[800px] mb-4">
           Học Data Analytics từ tư duy đến thực hành.
         </h1>
 

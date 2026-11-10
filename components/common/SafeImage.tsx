@@ -17,17 +17,31 @@ export const SafeImage: React.FC<SafeImageProps> = ({
   fallbackSrc = DEFAULT_FALLBACK_IMAGE,
   className = "",
   containerClassName = "",
+  fill,
   ...rest
 }) => {
-  const [imgSrc, setImgSrc] = useState(src);
-  const [isLoading, setIsLoading] = useState(true);
+  const [prevSrc, setPrevSrc] = useState(src);
   const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  if (src !== prevSrc) {
+    setPrevSrc(src);
+    setHasError(false);
+    setIsLoading(true);
+  }
+
+  const effectiveSrc = hasError ? fallbackSrc : src;
 
   return (
-    <div className={`relative overflow-hidden ${containerClassName}`}>
+    <div
+      className={`relative overflow-hidden ${
+        fill ? "w-full h-full" : ""
+      } ${containerClassName}`}
+    >
       <Image
         {...rest}
-        src={hasError ? fallbackSrc : imgSrc}
+        fill={fill}
+        src={effectiveSrc}
         alt={alt || "DataWithLy Image"}
         className={`transition-all duration-300 ${
           isLoading ? "scale-105 blur-sm grayscale" : "scale-100 blur-0 grayscale-0"
@@ -35,7 +49,6 @@ export const SafeImage: React.FC<SafeImageProps> = ({
         onLoad={() => setIsLoading(false)}
         onError={() => {
           setHasError(true);
-          setImgSrc(fallbackSrc);
           setIsLoading(false);
         }}
       />

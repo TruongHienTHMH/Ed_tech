@@ -149,14 +149,15 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
                 </div>
               </div>
 
-              {/* Right Column: Thumbnail Showcase */}
-              <div className="lg:col-span-5 relative w-full aspect-[16/10] sm:aspect-[16/9] lg:aspect-square max-h-[380px] rounded-2xl overflow-hidden shadow-xl border-2 border-white/10">
+              {/* Right Column: Thumbnail Showcase (Figma Node 12:791) */}
+              <div className="lg:col-span-5 relative w-full h-[260px] sm:h-[320px] lg:h-[380px] rounded-[24px] overflow-hidden shadow-2xl border-2 border-white/10 bg-[#151922]">
                 <SafeImage
                   src={currentCourse.thumbnail}
                   fallbackSrc={getFigmaFallback("course", currentCourse.slug || currentCourse.id)}
                   alt={currentCourse.title}
                   fill
-                  sizes="(max-width: 1024px) 100vw, 450px"
+                  containerClassName="w-full h-full"
+                  sizes="(max-width: 1024px) 100vw, 500px"
                   className="object-cover"
                   priority
                 />
