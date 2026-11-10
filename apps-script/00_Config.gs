@@ -36,8 +36,9 @@ function getSharedSecret() {
     }
   } catch (err) {}
 
-  // Nếu chưa thiết lập qua Script Properties hoặc Settings, fallback secret mặc định của dự án ed_da_tech
-  return "96e77022e0f8c18c7da95b88b2be38810aa205e2c452e70cad121272bc3d03dd";
+  // Bắt buộc cấu hình SHARED_SECRET trong Script Properties của Google Apps Script
+  // Trả về chuỗi rỗng nếu chưa cấu hình để bảo vệ an toàn cho hệ thống
+  return "";
 }
 
 var CONFIG = {
@@ -55,6 +56,21 @@ var CONFIG = {
   // Cấu hình Telegram Bot để nhận cảnh báo khi có học viên đăng ký tư vấn mới (< 2s)
   TELEGRAM_BOT_TOKEN: "", // Điền Telegram Bot Token nếu muốn nhận thông báo (Ví dụ: 123456:ABC-DEF...)
   TELEGRAM_CHAT_ID: "",   // Điền Chat ID nhận thông báo
+
+  // Danh sách Email nhận thông báo Lead mới (Client & Quản trị viên)
+  get CLIENT_NOTIFICATION_EMAILS() {
+    var emails = ["hientruongthmh@gmail.com"];
+    try {
+      var propEmail = PropertiesService.getScriptProperties().getProperty("CLIENT_NOTIFICATION_EMAIL");
+      if (propEmail && propEmail.trim() && emails.indexOf(propEmail.trim()) === -1) {
+        emails.push(propEmail.trim());
+      }
+    } catch (e) {}
+    return emails;
+  },
+
+  // Đường dẫn kết nối Zalo tư vấn nhanh
+  ZALO_CONTACT_URL: "https://zalo.me/0901234567",
 
   // Thời gian tối đa giữ Mutex Lock để chống xung đột race-condition (10 giây)
   LOCK_TIMEOUT_MS: 10000,

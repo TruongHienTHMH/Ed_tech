@@ -188,18 +188,57 @@ export class SheetsClient {
       const isFeatured = row.is_featured === true || String(row.is_featured).toUpperCase() === "TRUE";
       const sortOrder = Number(row.sort_order || idx + 1);
 
-      // Find matching curriculum modules
-      const courseCurriculum: CurriculumModule[] = rawCurriculum
-        .filter((m) => String(m.course_id || "").toLowerCase() === id.toLowerCase())
+      // Find matching curriculum modules (smart column resolution & alias matching)
+      let courseCurriculum: CurriculumModule[] = rawCurriculum
+        .filter((m) => {
+          const rawCId = String(m.course_id || m.courseId || m.course_slug || m.slug || "").trim().toLowerCase();
+          return rawCId === id.toLowerCase() || rawCId === slug.toLowerCase();
+        })
         .map((m, mIdx) => {
           const modId = String(m.id || `${id}-mod-${mIdx + 1}`);
-          const modNum = Number(m.module_number || mIdx + 1);
-          const modTitle = String(m.module_title || m.title || `Buổi ${modNum}`);
+
+          // Smart recovery for shifted headers in Google Sheets
+          let modNum = Number(m.module_number);
+          let modTitle = String(m.module_title || m.title || "");
+          let modDuration = String(m.duration || "2 tuần");
+          let lessonsCount = Number(m.lessons_count || 6);
+
+          if (isNaN(modNum) || typeof m.module_title === "number" || (!isNaN(Number(m.module_title)) && isNaN(Number(m.duration_hours)))) {
+            if (!isNaN(Number(m.module_title))) {
+              modNum = Number(m.module_title);
+            }
+            if (m.duration_hours && typeof m.duration_hours === "string" && isNaN(Number(m.duration_hours))) {
+              modTitle = String(m.duration_hours);
+            }
+            if (typeof m.bullets === "string" && m.bullets.includes("tuần")) {
+              modDuration = String(m.bullets);
+            }
+            if (typeof m.summary === "number" || (!isNaN(Number(m.summary)) && Number(m.summary) > 0)) {
+              lessonsCount = Number(m.summary);
+            }
+          }
+
+          if (isNaN(modNum) || modNum <= 0) {
+            modNum = mIdx + 1;
+          }
+          if (!modTitle || modTitle === String(modNum)) {
+            modTitle = `Buổi ${modNum}: Nền tảng & Thực hành chuyên sâu`;
+          }
+
           const courseName = String(m.course_name || title);
-          const modDuration = String(m.duration || "2 tuần");
-          const lessonsCount = Number(m.lessons_count || 6);
           const topicsRaw = m.topics_bullets || m.bullets || m.content || "";
           const modSort = Number(m.sort_order || modNum);
+          let bulletPoints = this.parseMultilineText(topicsRaw);
+
+          if (!bulletPoints || bulletPoints.length === 0) {
+            bulletPoints = [
+              "Nắm vững tư duy và kiến thức nền tảng thực chiến",
+              "Thực hành giải quyết bài toán kinh doanh thực tế",
+              "Ứng dụng công cụ chuyên sâu theo quy chuẩn doanh nghiệp",
+            ];
+          }
+
+          const weekNum = Math.ceil(modNum / 2);
 
           return {
             id: modId,
@@ -207,14 +246,28 @@ export class SheetsClient {
             courseName,
             moduleNumber: modNum,
             title: modTitle,
-            summary: String(m.summary || ""),
-            bulletPoints: this.parseMultilineText(topicsRaw),
-            durationHours: Number(m.duration_hours || lessonsCount * 2 || 2),
+            summary: String(m.summary && typeof m.summary === "string" ? m.summary : modTitle),
+            bulletPoints,
+            durationHours: Number(m.duration_hours && !isNaN(Number(m.duration_hours)) ? m.duration_hours : 3),
             duration: modDuration,
             lessonsCount,
             sortOrder: modSort,
+            weekNumber: weekNum,
+            weekLabel: `Week ${weekNum}`,
+            sessionDateBadge: `TH${10} 0${modNum}`,
+            isMilestone: modNum % 6 === 0,
           };
         });
+
+      // Fallback to authoritative Seed Curriculum if this course has 0 modules in Sheets
+      if (courseCurriculum.length === 0) {
+        const fallbackModules = seedCurriculum.filter(
+          (sm) => sm.courseId.toLowerCase() === id.toLowerCase() || sm.courseId.toLowerCase() === slug.toLowerCase()
+        );
+        if (fallbackModules.length > 0) {
+          courseCurriculum = fallbackModules.map((sm) => ({ ...sm, courseId: id }));
+        }
+      }
 
       return {
         id,

@@ -3,7 +3,7 @@
  * DATAWITHLY CMS - HỆ THỐNG GOOGLE APPS SCRIPT TRỌN GÓI (ALL-IN-ONE BUNDLE)
  * ==============================================================================
  * Phiên bản: 2.1.0 (DataWithLy Enterprise CMS)
- * Thời gian đóng gói: 2026-11-09T12:32:55.430Z
+ * Thời gian đóng gói: 2026-11-10T15:37:12.580Z
  * Tự động tạo bởi: scripts/bundle-apps-script.js
  *
  * HƯỚNG DẪN SỬ DỤNG:
@@ -111,8 +111,9 @@ function getSharedSecret() {
     }
   } catch (err) {}
 
-  // Nếu chưa thiết lập qua Script Properties hoặc Settings, fallback secret mặc định của dự án ed_da_tech
-  return "96e77022e0f8c18c7da95b88b2be38810aa205e2c452e70cad121272bc3d03dd";
+  // Bắt buộc cấu hình SHARED_SECRET trong Script Properties của Google Apps Script
+  // Trả về chuỗi rỗng nếu chưa cấu hình để bảo vệ an toàn cho hệ thống
+  return "";
 }
 
 var CONFIG = {
@@ -130,6 +131,21 @@ var CONFIG = {
   // Cấu hình Telegram Bot để nhận cảnh báo khi có học viên đăng ký tư vấn mới (< 2s)
   TELEGRAM_BOT_TOKEN: "", // Điền Telegram Bot Token nếu muốn nhận thông báo (Ví dụ: 123456:ABC-DEF...)
   TELEGRAM_CHAT_ID: "",   // Điền Chat ID nhận thông báo
+
+  // Danh sách Email nhận thông báo Lead mới (Client & Quản trị viên)
+  get CLIENT_NOTIFICATION_EMAILS() {
+    var emails = ["hientruongthmh@gmail.com"];
+    try {
+      var propEmail = PropertiesService.getScriptProperties().getProperty("CLIENT_NOTIFICATION_EMAIL");
+      if (propEmail && propEmail.trim() && emails.indexOf(propEmail.trim()) === -1) {
+        emails.push(propEmail.trim());
+      }
+    } catch (e) {}
+    return emails;
+  },
+
+  // Đường dẫn kết nối Zalo tư vấn nhanh
+  ZALO_CONTACT_URL: "https://zalo.me/0901234567",
 
   // Thời gian tối đa giữ Mutex Lock để chống xung đột race-condition (10 giây)
   LOCK_TIMEOUT_MS: 10000,
@@ -2074,6 +2090,13 @@ function doPost(e) {
       sendTelegramNotification(payload);
     }
 
+    // Gửi email thông báo 2 chiều (Client hientruongthmh@gmail.com & Học viên kèm Zalo)
+    try {
+      sendLeadEmails(payload);
+    } catch (mailErr) {
+      console.warn("Lỗi gửi email lead:", mailErr);
+    }
+
     return ContentService.createTextOutput(JSON.stringify({
       ok: true,
       submissionId: payload.submission_id,
@@ -2250,6 +2273,107 @@ function applySeedSnapshotToSpreadsheet(snapshot) {
   }
 
   return stats;
+}
+
+/**
+ * Gửi email thông báo 2 chiều khi tiếp nhận Lead học viên mới:
+ * 1. Email cho Client / Đội ngũ tuyển sinh (hientruongthmh@gmail.com)
+ * 2. Email cảm ơn & xác nhận cho Học viên kèm link và mã kết nối Zalo
+ */
+function sendLeadEmails(payload) {
+  if (!payload) return;
+
+  var leadName = payload.name || "Học viên";
+  var leadPhone = payload.phone || "Chưa cung cấp";
+  var leadEmail = payload.email || "";
+  var courseName = payload.course_name || "Data Analytics";
+  var courseId = payload.course_id || "general";
+  var message = payload.message || "Không có";
+  var timeStr = Utilities.formatDate(new Date(), "Asia/Ho_Chi_Minh", "dd/MM/yyyy HH:mm:ss");
+  var zaloUrl = CONFIG.ZALO_CONTACT_URL || "https://zalo.me/0901234567";
+
+  // --- 1. EMAIL GỬI CHO CLIENT (ADMIN / TUYỂN SINH) ---
+  var clientRecipients = CONFIG.CLIENT_NOTIFICATION_EMAILS;
+  if (clientRecipients && clientRecipients.length > 0) {
+    var clientSubject = "🔥 [DataWithLy - Lead Mới] " + leadName + " vừa đăng ký tư vấn khóa " + courseName;
+    var clientHtml = [
+      "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #E5E7EB; border-radius: 8px;'>",
+      "<div style='background: #8B1D2C; color: #FFFFFF; padding: 15px 20px; border-radius: 6px 6px 0 0;'>",
+      "<h2 style='margin: 0; font-size: 18px;'>🔥 THÔNG BÁO HỌC VIÊN ĐĂNG KÝ TƯ VẤN MỚI</h2>",
+      "</div>",
+      "<div style='padding: 20px; background: #FFFFFF;'>",
+      "<p style='font-size: 14px; color: #374151;'>Hệ thống vừa tiếp nhận một lượt đăng ký tư vấn mới từ website DataWithLy:</p>",
+      "<table style='width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px;'>",
+      "<tr style='background: #F9FAFB;'><td style='padding: 10px; border: 1px solid #E5E7EB; font-weight: bold; width: 35%;'>Họ và tên:</td><td style='padding: 10px; border: 1px solid #E5E7EB; color: #111827;'>" + leadName + "</td></tr>",
+      "<tr><td style='padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;'>Số điện thoại:</td><td style='padding: 10px; border: 1px solid #E5E7EB;'><a href='tel:" + leadPhone + "' style='color: #8B1D2C; font-weight: bold; text-decoration: none;'>" + leadPhone + "</a> (Bấm để gọi)</td></tr>",
+      "<tr style='background: #F9FAFB;'><td style='padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;'>Email:</td><td style='padding: 10px; border: 1px solid #E5E7EB;'><a href='mailto:" + leadEmail + "' style='color: #2563EB; text-decoration: none;'>" + leadEmail + "</a></td></tr>",
+      "<tr><td style='padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;'>Khóa học quan tâm:</td><td style='padding: 10px; border: 1px solid #E5E7EB; font-weight: bold; color: #784080;'>" + courseName + " (" + courseId + ")</td></tr>",
+      "<tr style='background: #F9FAFB;'><td style='padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;'>Lời nhắn / Ghi chú:</td><td style='padding: 10px; border: 1px solid #E5E7EB;'>" + message + "</td></tr>",
+      "<tr><td style='padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;'>Thời gian đăng ký:</td><td style='padding: 10px; border: 1px solid #E5E7EB; color: #6B7280;'>" + timeStr + "</td></tr>",
+      "</table>",
+      "<div style='margin-top: 20px; padding: 12px; background: #FEF3C7; border-left: 4px solid #F59E0B; border-radius: 4px; font-size: 13px; color: #92400E;'>",
+      "⚡ <strong>Hành động nhanh:</strong> Vui lòng liên hệ học viên trong vòng 15-30 phút để đạt tỷ lệ chuyển đổi cao nhất.",
+      "</div>",
+      "</div>",
+      "</div>"
+    ].join("");
+
+    for (var i = 0; i < clientRecipients.length; i++) {
+      try {
+        MailApp.sendEmail({
+          to: clientRecipients[i],
+          subject: clientSubject,
+          htmlBody: clientHtml
+        });
+      } catch (err) {
+        console.warn("Không thể gửi email đến client " + clientRecipients[i] + ":", err);
+      }
+    }
+  }
+
+  // --- 2. EMAIL GỬI CHO HỌC VIÊN (CẢM ƠN & KẾT NỐI ZALO) ---
+  if (leadEmail && leadEmail.indexOf("@") !== -1) {
+    var studentSubject = "🎓 [DataWithLy] Xác nhận đăng ký tư vấn khóa học " + courseName;
+    var studentHtml = [
+      "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #E5E7EB; border-radius: 12px; background: #FFFFFF;'>",
+      "<div style='text-align: center; padding-bottom: 20px; border-bottom: 1px solid #F3F4F6;'>",
+      "<h1 style='color: #8B1D2C; font-size: 24px; margin: 0 0 8px 0; font-weight: bold;'>DATAWITHLY</h1>",
+      "<p style='color: #6B7280; font-size: 14px; margin: 0;'>Đào Tạo Data Analytics Thực Chiến cùng Mentor Hứa Thảo Ly</p>",
+      "</div>",
+      "<div style='padding: 24px 0;'>",
+      "<p style='font-size: 16px; color: #111827; margin-top: 0;'>Chào <strong>" + leadName + "</strong>,</p>",
+      "<p style='font-size: 14px; color: #4B5563; line-height: 1.6;'>Cảm ơn bạn đã quan tâm và đăng ký tư vấn khóa học <strong>" + courseName + "</strong> tại DataWithLy!</p>",
+      "<p style='font-size: 14px; color: #4B5563; line-height: 1.6;'>Đội ngũ tuyển sinh và Mentor đã nhận được thông tin của bạn. Chúng tôi sẽ <strong>liên hệ trực tiếp qua Điện thoại / Zalo trong vòng 15 - 30 phút tới</strong> để lắng nghe nhu cầu, tư vấn lộ trình học tối ưu và gửi tặng bạn các ưu đãi học phí tốt nhất.</p>",
+      "<div style='background: #FDF2F4; border: 1px solid #FBCFE8; border-radius: 8px; padding: 16px; margin: 24px 0; text-align: center;'>",
+      "<h3 style='color: #8B1D2C; margin: 0 0 8px 0; font-size: 16px;'>Cần hỗ trợ hoặc nhận đề cương ngay?</h3>",
+      "<p style='color: #4B5563; font-size: 13px; margin: 0 0 16px 0;'>Bạn có thể kết nối trực tiếp với Mentor qua Zalo để được giải đáp thắc mắc ngay lập tức:</p>",
+      "<a href='" + zaloUrl + "' target='_blank' style='display: inline-block; background: #0068FF; color: #FFFFFF; font-weight: bold; font-size: 15px; padding: 12px 28px; border-radius: 25px; text-decoration: none; box-shadow: 0 4px 10px rgba(0, 104, 255, 0.25);'>💬 Kết Nối Zalo Với Mentor Ngay</a>",
+      "<p style='color: #9CA3AF; font-size: 11px; margin: 10px 0 0 0;'>Hoặc tìm kiếm số Zalo Hotline: 0901 234 567</p>",
+      "</div>",
+      "<div style='background: #F9FAFB; padding: 16px; border-radius: 8px; margin-top: 20px; font-size: 13px; color: #4B5563;'>",
+      "<p style='margin: 0 0 8px 0; font-weight: bold; color: #111827;'>Tóm tắt thông tin đăng ký của bạn:</p>",
+      "<p style='margin: 4px 0;'>• <strong>Khóa học:</strong> " + courseName + "</p>",
+      "<p style='margin: 4px 0;'>• <strong>Số điện thoại:</strong> " + leadPhone + "</p>",
+      "<p style='margin: 4px 0;'>• <strong>Email:</strong> " + leadEmail + "</p>",
+      "</div>",
+      "</div>",
+      "<div style='border-top: 1px solid #F3F4F6; padding-top: 16px; text-align: center; color: #9CA3AF; font-size: 12px;'>",
+      "<p style='margin: 0;'>DataWithLy — Học Data Analytics từ tư duy đến thực hành</p>",
+      "<p style='margin: 4px 0 0 0;'>Email: tuyensinh@datawithly.edu.vn | Hotline / Zalo: 0901 234 567</p>",
+      "</div>",
+      "</div>"
+    ].join("");
+
+    try {
+      MailApp.sendEmail({
+        to: leadEmail,
+        subject: studentSubject,
+        htmlBody: studentHtml
+      });
+    } catch (err) {
+      console.warn("Không thể gửi email cảm ơn đến học viên " + leadEmail + ":", err);
+    }
+  }
 }
 
 

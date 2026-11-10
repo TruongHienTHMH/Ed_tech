@@ -30,8 +30,14 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files (strict ignore, keep only sanitized .env.example)
+.env
+.env*.local
+.env.development
+.env.test
+.env.production
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -40,21 +46,19 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-#python generate and xlsx file
+# credentials, keys & local secret notes
+*.pem
+*.key
+credentials*.json
+service-account*.json
+*.local.txt
+*.local.md
+
+# python generate and xlsx file
 *.xlsx
 *.py
 
-#app_script code
-# (root level temp .gs files ignored, but apps-script/ directory is tracked)
+# app_script code & clasp credentials
 /*.gs
-
-#docs to work with agent (tracked in git for PR reports & architectural trace)
-!.docs/
-!.docs/**
-
-
-# uploads
-/public/uploads/*
-!/public/uploads/.gitkeep
-
 .clasp.json
+.clasprc.json
