@@ -4,6 +4,7 @@ import GoogleTagManager from "@/components/analytics/GoogleTagManager";
 import AttributionTracker from "@/components/analytics/AttributionTracker";
 import LeadModalManager from "@/components/forms/LeadModalManager";
 import DevSyncButton from "@/components/common/DevSyncButton";
+import QueryProvider from "@/components/providers/QueryProvider";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://datawithly.com"),
@@ -28,11 +29,13 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col font-sans bg-white text-[#252525] selection:bg-[#AF445A]/20 selection:text-[#AF445A]">
-        <GoogleTagManager />
-        <AttributionTracker />
-        {children}
-        <LeadModalManager />
-        <DevSyncButton />
+        <QueryProvider>
+          <GoogleTagManager />
+          <AttributionTracker />
+          {children}
+          <LeadModalManager />
+          <DevSyncButton />
+        </QueryProvider>
       </body>
     </html>
   );
