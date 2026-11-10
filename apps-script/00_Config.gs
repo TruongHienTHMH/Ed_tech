@@ -56,6 +56,21 @@ var CONFIG = {
   TELEGRAM_BOT_TOKEN: "", // Điền Telegram Bot Token nếu muốn nhận thông báo (Ví dụ: 123456:ABC-DEF...)
   TELEGRAM_CHAT_ID: "",   // Điền Chat ID nhận thông báo
 
+  // Danh sách Email nhận thông báo Lead mới (Client & Quản trị viên)
+  get CLIENT_NOTIFICATION_EMAILS() {
+    var emails = ["hientruongthmh@gmail.com"];
+    try {
+      var propEmail = PropertiesService.getScriptProperties().getProperty("CLIENT_NOTIFICATION_EMAIL");
+      if (propEmail && propEmail.trim() && emails.indexOf(propEmail.trim()) === -1) {
+        emails.push(propEmail.trim());
+      }
+    } catch (e) {}
+    return emails;
+  },
+
+  // Đường dẫn kết nối Zalo tư vấn nhanh
+  ZALO_CONTACT_URL: "https://zalo.me/0901234567",
+
   // Thời gian tối đa giữ Mutex Lock để chống xung đột race-condition (10 giây)
   LOCK_TIMEOUT_MS: 10000,
 };

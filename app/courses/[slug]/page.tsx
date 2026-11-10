@@ -82,7 +82,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
 
   // Concurrent fetch for curriculum and student projects
   const [modules, studentProjects] = await Promise.all([
-    CourseService.getCurriculumByCourseId(course.id).catch(() => []),
+    CourseService.getCurriculumByCourseId(course.id, course.slug).catch(() => []),
     ContentFetcher.getStudentProjects().catch(() => []),
   ]);
 

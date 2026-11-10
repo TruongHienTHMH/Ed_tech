@@ -5,6 +5,7 @@
 
 import { Course, CurriculumModule } from "@/lib/cms/types";
 import { SheetsClient } from "@/lib/cms/sheets-client";
+import { seedCurriculum } from "@/data/seed-data";
 
 export class CourseService {
   /**
@@ -57,34 +58,61 @@ export class CourseService {
 
   /**
    * Fetch curriculum modules for a specific course
-   * For the combo course `end-to-end-analytics`, if dedicated modules are insufficient (< 10),
-   * automatically merges the complete curriculum of both SQL and Dashboard courses.
+   * Accepts both primary identifier (id) and secondary identifier (slug)
+   * Resolves aliases and fallbacks seamlessly without modifying Google Sheets
+   * For the combo course `end-to-end-analytics`, automatically combines SQL and Dashboard journeys.
    */
-  public static async getCurriculumByCourseId(courseId: string): Promise<CurriculumModule[]> {
+  public static async getCurriculumByCourseId(
+    courseId: string,
+    secondaryIdentifier?: string
+  ): Promise<CurriculumModule[]> {
     const report = await SheetsClient.getLiveSyncReport();
-    const allModules = report.curriculum || [];
+    const liveModules = report.curriculum || [];
     const normalized = courseId.trim().toLowerCase();
     const targetKey = this.SLUG_ALIASES[normalized] || normalized;
 
+    const normalizedSec = secondaryIdentifier ? secondaryIdentifier.trim().toLowerCase() : undefined;
+    const secTargetKey = normalizedSec ? (this.SLUG_ALIASES[normalizedSec] || normalizedSec) : undefined;
+
+    const validKeys = new Set(
+      [targetKey, normalized, secTargetKey, normalizedSec].filter((k): k is string => Boolean(k))
+    );
+
     // Check if querying the End-to-End Combo course
-    if (targetKey === "end-to-end-analytics") {
-      const existingCombo = allModules.filter(
-        (m) => m.courseId.toLowerCase() === "end-to-end-analytics"
+    if (validKeys.has("end-to-end-analytics")) {
+      const existingCombo = liveModules.filter(
+        (m) => validKeys.has(m.courseId.toLowerCase())
       );
 
-      // If combo already has full 20+ modules, return directly
+      // If combo already has full 10+ modules, return directly
       if (existingCombo.length >= 10) {
         return existingCombo.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
       }
 
       // Otherwise, synthesize complete journey: SQL modules (Part 1) + Dashboard modules (Part 2)
-      const sqlModules = allModules
-        .filter((m) => m.courseId.toLowerCase() === "sql-for-data-analytics")
-        .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+      let sqlModules = liveModules.filter(
+        (m) => m.courseId.toLowerCase() === "sql-for-data-analytics"
+      );
+      if (sqlModules.length === 0) {
+        sqlModules = seedCurriculum.filter(
+          (m) => m.courseId.toLowerCase() === "sql-for-data-analytics"
+        );
+      }
+      sqlModules.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 
-      const thinkModules = allModules
-        .filter((m) => m.courseId.toLowerCase() === "data-analytical-thinking")
-        .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+      let thinkModules = liveModules.filter(
+        (m) =>
+          m.courseId.toLowerCase() === "data-analytical-thinking" ||
+          m.courseId.toLowerCase() === "analytical-thinking-dashboard-design"
+      );
+      if (thinkModules.length === 0) {
+        thinkModules = seedCurriculum.filter(
+          (m) =>
+            m.courseId.toLowerCase() === "data-analytical-thinking" ||
+            m.courseId.toLowerCase() === "analytical-thinking-dashboard-design"
+        );
+      }
+      thinkModules.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 
       let sessionCounter = 1;
       const merged: CurriculumModule[] = [];
@@ -119,9 +147,18 @@ export class CourseService {
     }
 
     // Standard single course modules lookup
-    return allModules
-      .filter((m) => m.courseId.toLowerCase() === targetKey || m.courseId.toLowerCase() === normalized)
+    let matchedModules = liveModules
+      .filter((m) => validKeys.has(m.courseId.toLowerCase()))
       .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+
+    // Robust Fallback: If 0 modules in live report, look up from authoritative seedCurriculum
+    if (matchedModules.length === 0) {
+      matchedModules = seedCurriculum
+        .filter((m) => validKeys.has(m.courseId.toLowerCase()))
+        .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    }
+
+    return matchedModules;
   }
 
   /**

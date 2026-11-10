@@ -3,7 +3,6 @@ import "./globals.css";
 import GoogleTagManager from "@/components/analytics/GoogleTagManager";
 import AttributionTracker from "@/components/analytics/AttributionTracker";
 import LeadModalManager from "@/components/forms/LeadModalManager";
-import DevSyncButton from "@/components/common/DevSyncButton";
 import QueryProvider from "@/components/providers/QueryProvider";
 
 export const metadata: Metadata = {
@@ -34,7 +33,6 @@ export default function RootLayout({
           <AttributionTracker />
           {children}
           <LeadModalManager />
-          <DevSyncButton />
         </QueryProvider>
       </body>
     </html>
