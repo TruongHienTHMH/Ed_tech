@@ -92,7 +92,7 @@ export class CourseService {
       for (const sql of sqlModules) {
         merged.push({
           ...sql,
-          id: `combo-sql-${sql.moduleNumber}`,
+          id: `combo-sql-${sessionCounter}`,
           courseId: "end-to-end-analytics",
           courseName: "End-to-End Analytics with SQL & Dashboard",
           moduleNumber: sessionCounter,
@@ -105,7 +105,7 @@ export class CourseService {
       for (const think of thinkModules) {
         merged.push({
           ...think,
-          id: `combo-think-${think.moduleNumber}`,
+          id: `combo-think-${sessionCounter}`,
           courseId: "end-to-end-analytics",
           courseName: "End-to-End Analytics with SQL & Dashboard",
           moduleNumber: sessionCounter,

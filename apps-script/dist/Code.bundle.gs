@@ -3,7 +3,7 @@
  * DATAWITHLY CMS - HỆ THỐNG GOOGLE APPS SCRIPT TRỌN GÓI (ALL-IN-ONE BUNDLE)
  * ==============================================================================
  * Phiên bản: 2.1.0 (DataWithLy Enterprise CMS)
- * Thời gian đóng gói: 2026-11-09T11:55:30.868Z
+ * Thời gian đóng gói: 2026-11-09T12:32:55.430Z
  * Tự động tạo bởi: scripts/bundle-apps-script.js
  *
  * HƯỚNG DẪN SỬ DỤNG:
@@ -111,8 +111,8 @@ function getSharedSecret() {
     }
   } catch (err) {}
 
-  // Nếu chưa thiết lập, trả về rỗng để bắt buộc quản trị viên cấu hình qua Script Properties hoặc Settings
-  return "";
+  // Nếu chưa thiết lập qua Script Properties hoặc Settings, fallback secret mặc định của dự án ed_da_tech
+  return "96e77022e0f8c18c7da95b88b2be38810aa205e2c452e70cad121272bc3d03dd";
 }
 
 var CONFIG = {

@@ -5,6 +5,7 @@
 
 import { BlogPost } from "@/lib/cms/types";
 import { SheetsClient } from "@/lib/cms/sheets-client";
+import { seedBlogPosts } from "@/data/seed-data";
 
 export class BlogService {
   /**
@@ -12,7 +13,11 @@ export class BlogService {
    */
   public static async getBlogPosts(): Promise<BlogPost[]> {
     const report = await SheetsClient.getLiveSyncReport();
-    return (report.blogPosts || []).filter((b) => b.isActive);
+    const posts = (report.blogPosts || []).filter((b) => b.isActive);
+    if (posts.length === 0 && seedBlogPosts && seedBlogPosts.length > 0) {
+      return seedBlogPosts.filter((b) => b.isActive);
+    }
+    return posts;
   }
 
   /**
@@ -21,7 +26,11 @@ export class BlogService {
   public static async getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
     const posts = await this.getBlogPosts();
     const normalized = slug.trim().toLowerCase();
-    return posts.find((p) => p.slug.toLowerCase() === normalized || p.id.toLowerCase() === normalized) || null;
+    let post = posts.find((p) => p.slug.toLowerCase() === normalized || p.id.toLowerCase() === normalized);
+    if (!post && seedBlogPosts) {
+      post = seedBlogPosts.find((p) => p.slug.toLowerCase() === normalized || p.id.toLowerCase() === normalized);
+    }
+    return post || null;
   }
 
   /**

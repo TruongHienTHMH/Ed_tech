@@ -127,7 +127,8 @@ export class SheetsClient {
 
       if (json && json.ok && json.tabs) {
         const report = this.parseRawTabs(json.tabs, latencyMs);
-        LRUCacheManager.set(this.CACHE_KEY, report);
+        const ttlMs = process.env.NODE_ENV === "development" ? 5 * 1000 : undefined;
+        LRUCacheManager.set(this.CACHE_KEY, report, ttlMs);
         return report;
       }
 
@@ -142,7 +143,8 @@ export class SheetsClient {
         "fallback_snapshot"
       );
 
-      LRUCacheManager.set(this.CACHE_KEY, report, 30 * 1000); // 30s TTL on error
+      const errorTtlMs = process.env.NODE_ENV === "development" ? 5 * 1000 : 30 * 1000;
+      LRUCacheManager.set(this.CACHE_KEY, report, errorTtlMs);
       return report;
     }
   }
@@ -161,7 +163,12 @@ export class SheetsClient {
     const rawFaqs = (tabs.faqs as Record<string, unknown>[]) || [];
     const rawTrust = (tabs.trust_metrics as Record<string, unknown>[]) || [];
     const rawSettings = (tabs.settings as Record<string, unknown>[]) || [];
-    const rawBlogs = (tabs.blog_posts as Record<string, unknown>[]) || [];
+    const rawBlogs =
+      (tabs.blog_posts as Record<string, unknown>[]) ||
+      (tabs.blogs as Record<string, unknown>[]) ||
+      (tabs.blog as Record<string, unknown>[]) ||
+      (tabs.posts as Record<string, unknown>[]) ||
+      [];
 
     // Parse Courses
     const parsedCourses: Course[] = rawCourses.map((row, idx) => {
@@ -381,7 +388,13 @@ export class SheetsClient {
         String(b.slug || b.id || idx)
       ),
       readTimeMinutes: Number(b.read_time_minutes || b.readTimeMinutes || 5),
-      isActive: b.is_active === true || String(b.is_active).toUpperCase() === "TRUE",
+      isActive:
+        b.is_active === undefined
+          ? true
+          : b.is_active === true ||
+            String(b.is_active).toUpperCase() === "TRUE" ||
+            b.is_active === "1" ||
+            b.is_active === 1,
     }));
 
     const activeCount = parsedCourses.filter((c) => c.isActive).length;
