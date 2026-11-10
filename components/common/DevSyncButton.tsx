@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface DevSyncButtonProps {
   className?: string;
@@ -13,6 +14,7 @@ export function DevSyncButton({
   secretToken = "datawithly_secure_reval_token_2026",
 }: DevSyncButtonProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [isSyncing, setIsSyncing] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [statusType, setStatusType] = useState<"success" | "error" | null>(null);
@@ -36,6 +38,8 @@ export function DevSyncButton({
       if (data.revalidated) {
         setStatusType("success");
         setStatusMessage("Đã làm mới dữ liệu!");
+        // Invalidate TanStack Query cache to instantly refresh UI
+        await queryClient.invalidateQueries();
         // Refresh Next.js server components cache
         router.refresh();
       } else {

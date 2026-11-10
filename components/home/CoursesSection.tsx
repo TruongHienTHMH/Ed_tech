@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight, Clock, Video } from "@/components/common/Icons";
 import { Button } from "@/components/common/Button";
 import { Badge } from "@/components/common/Badge";
@@ -41,8 +42,20 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
   };
 
   return (
-    <section id="courses" className="relative w-full bg-white py-14 lg:py-20">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
+    <section id="courses" className="relative w-full bg-white">
+      {/* Upper Transition Banner (Figma Node 12:779) */}
+      <div className="w-full overflow-hidden leading-none select-none pointer-events-none">
+        <Image
+          src="/assets/decorations/banner-upper.png"
+          alt="Transition Upper Banner"
+          width={3840}
+          height={100}
+          className="w-full h-auto max-h-[40px] sm:max-h-[60px] object-cover"
+          priority
+        />
+      </div>
+
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-12 sm:pb-16">
         {/* Upper Transition Header & Badge (Figma Node 12:779) */}
         <div className="flex flex-col items-center text-center mb-10 lg:mb-14">
           <div className="mb-3">
@@ -200,6 +213,17 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
             <span>Review CV & Hỗ trợ việc làm trọn đời</span>
           </div>
         </div>
+      </div>
+
+      {/* Lower Transition Banner (Figma Node 12:781) */}
+      <div className="w-full overflow-hidden leading-none select-none pointer-events-none">
+        <Image
+          src="/assets/decorations/banner-lower.png"
+          alt="Transition Lower Banner"
+          width={3840}
+          height={100}
+          className="w-full h-auto max-h-[40px] sm:max-h-[60px] object-cover"
+        />
       </div>
     </section>
   );
