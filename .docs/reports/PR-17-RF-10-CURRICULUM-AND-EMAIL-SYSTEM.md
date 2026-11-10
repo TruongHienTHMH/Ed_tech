@@ -59,3 +59,4 @@
 | **TypeScript** | `npm run typecheck` | ✅ 0 Lỗi | Toàn vẹn kiểu dữ liệu |
 | **Test Suites** | `npm run test` | ✅ 108/108 PASS | Bao gồm GAS (80), Lead (10), Rate Limiter, Email (18) |
 | **Production Build** | `npm run build` | ✅ 19/19 routes | Tạo thành công SSG cho tất cả 4 khóa học |
+

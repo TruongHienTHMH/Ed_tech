@@ -22,7 +22,7 @@ Milestone RF-07 xử lý triệt để 4 vấn đề kỹ thuật và tối ưu 
    - Thiếu fallback an toàn về `seedBlogPosts` khi kết nối Google Sheets trả về danh sách rỗng, tiềm ẩn nguy cơ trắng trang.
 
 3. **Tối ưu hóa phản ánh dữ liệu tức thì từ Google Sheets lên Website:**
-   - Bổ sung fallback secret token trong Apps Script `00_Config.gs` khớp với `.env.local` (`96e77022e0f8c18c7da95b88b2be38810aa205e2c452e70cad121272bc3d03dd`) để ngăn chặn lỗi từ chối xác thực `UNAUTHORIZED` khi chưa set Script Properties.
+   - Bổ sung fallback secret token trong Apps Script `00_Config.gs` khớp với `.env.local` (`[REDACTED_DEV_SECRET]`) để ngăn chặn lỗi từ chối xác thực `UNAUTHORIZED` khi chưa set Script Properties.
    - Điều chỉnh TTL của `LRUCacheManager` xuống 5 giây khi chạy môi trường `development` (`process.env.NODE_ENV === "development"`), giúp dữ liệu chỉnh sửa trên Google Sheets lập tức phản ánh lên Web khi F5 hoặc gọi Dev Sync.
 
 4. **Thiết lập Docker & Docker Compose phục vụ Client Demo:**
@@ -71,9 +71,9 @@ Milestone RF-07 xử lý triệt để 4 vấn đề kỹ thuật và tối ưu 
 
 #### 2.3. Khắc Phục Đồng Bộ Google Sheets (Secret Token & Dev Cache TTL)
 - **File:** `apps-script/00_Config.gs`:
-  - Trong hàm `getSharedSecret()`: Thêm giá trị fallback mặc định:
+  - Trong hàm `getSharedSecret()`: Đọc trực tiếp từ `Script Properties`:
     ```javascript
-    return "96e77022e0f8c18c7da95b88b2be38810aa205e2c452e70cad121272bc3d03dd";
+    return PropertiesService.getScriptProperties().getProperty("SHARED_SECRET") || "";
     ```
   - Chạy `npm run bundle:gas` đóng gói lại `apps-script/dist/Code.bundle.gs` (3714 dòng, 243.5 KB).
 - **File:** `lib/cms/sheets-client.ts`:

@@ -36,8 +36,9 @@ function getSharedSecret() {
     }
   } catch (err) {}
 
-  // Nếu chưa thiết lập qua Script Properties hoặc Settings, fallback secret mặc định của dự án ed_da_tech
-  return "96e77022e0f8c18c7da95b88b2be38810aa205e2c452e70cad121272bc3d03dd";
+  // Bắt buộc cấu hình SHARED_SECRET trong Script Properties của Google Apps Script
+  // Trả về chuỗi rỗng nếu chưa cấu hình để bảo vệ an toàn cho hệ thống
+  return "";
 }
 
 var CONFIG = {
