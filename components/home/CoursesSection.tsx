@@ -64,10 +64,10 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
             </Badge>
           </div>
           <h2 className="font-heading font-bold text-2xl sm:text-4xl lg:text-[40px] text-[#252525] tracking-tight mb-3 max-w-[700px]">
-            Lựa chọn lộ trình phù hợp với mục tiêu của bạn
+            Xây dựng từng kỹ năng cần thiết trên hành trình trở thành Data Analyst.
           </h2>
           <p className="text-[#676767] text-sm sm:text-base max-w-[620px] leading-relaxed">
-            Học thực chiến cùng Mentor với các dự án thực tế, trang bị trọn bộ kỹ năng từ truy vấn cơ sở dữ liệu đến thiết kế báo cáo quản trị.
+            Học thực chiến cùng Mentor làm việc tại các công ty hàng đầu Việt Nam - MoMo, Tiki, ACB.
           </p>
         </div>
 
@@ -84,7 +84,7 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
                     {currentCourse.badge}
                   </Badge>
                   <Badge variant="liveClass" size="md">
-                    Zoom Live 1:1 Support
+                    Zoom Live
                   </Badge>
                 </div>
 
@@ -191,9 +191,8 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
                 aria-label={`Chuyển tới slide ${idx + 1}`}
-                className={`h-2 transition-all rounded-full cursor-pointer ${
-                  idx === currentIndex ? "w-8 bg-brand-gradient" : "w-2 bg-neutral-300"
-                }`}
+                className={`h-2 transition-all rounded-full cursor-pointer ${idx === currentIndex ? "w-8 bg-brand-gradient" : "w-2 bg-neutral-300"
+                  }`}
               />
             ))}
           </div>
