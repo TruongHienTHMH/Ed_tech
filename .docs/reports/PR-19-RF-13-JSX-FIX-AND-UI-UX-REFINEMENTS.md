@@ -51,3 +51,4 @@
 | **ESLint** | `npm run lint` | ✅ 0 Lỗi | Đạt chuẩn Next.js 16 / React 19 |
 | **Test Suites** | `npm run test` | ✅ 108/108 PASS | Bao gồm GAS (80), Lead (10), Rate Limiter, Email (18) |
 | **Production Build** | `npm run build` | ✅ 19/19 routes | Tạo thành công toàn bộ các trang SSG & dynamic |
+

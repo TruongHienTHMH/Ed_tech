@@ -121,9 +121,6 @@ export default async function CourseDetailPage({ params }: PageProps) {
 
               {/* 6. Dự án học viên tiêu biểu */}
               <CourseOutcomes projects={studentProjects} />
-
-              {/* 7. Câu hỏi thường gặp */}
-              <CourseFaq courseId={course.id} courseTitle={course.title} />
             </div>
 
             {/* CỘT PHẢI STICKY (384px): Học phí, Rating 4.8, CTA, Khóa học bao gồm, Zoom */}
@@ -131,7 +128,10 @@ export default async function CourseDetailPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* 3. Combo Upsell Banner (Trọn bộ End-to-End) */}
+        {/* 3. Câu hỏi thường gặp & Tư vấn 1:1 (Full Width Container 1200px) */}
+        <CourseFaq courseId={course.id} courseTitle={course.title} />
+
+        {/* 4. Combo Upsell Banner (Trọn bộ End-to-End) */}
         <CourseComboUpsell course={course} />
       </main>
 

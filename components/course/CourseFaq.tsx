@@ -49,57 +49,62 @@ export default function CourseFaq({ courseId, courseTitle }: CourseFaqProps) {
   };
 
   return (
-    <section className="w-full bg-white py-14 lg:py-20">
+    <section id="faq" className="w-full bg-white py-14 lg:py-20 border-t border-neutral-100">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Left Column: FAQ Accordion */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+          {/* Left Column: FAQ Accordion (7 cols) */}
           <div className="lg:col-span-7">
-            <div className="mb-8">
-              <span className="inline-block px-3.5 py-1 rounded-full bg-[#AF445A]/10 text-xs font-bold text-[#AF445A] uppercase tracking-wider mb-2">
+            <div>
+              <span className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#AF445A]/10 text-xs font-bold text-[#AF445A] uppercase tracking-wider mb-2.5">
                 Hỏi Đáp Thường Gặp
               </span>
               <h2 className="font-heading font-extrabold text-2xl sm:text-3xl text-[#252525] tracking-tight">
                 Giải Đáp Thắc Mắc Trước Khi Đăng Ký
               </h2>
-              <p className="mt-2 text-sm text-neutral-600">
-                Những điều học viên thường băn khoăn về lịch học, phương pháp đào tạo và quyền lợi.
+              <p className="mt-2 text-sm sm:text-base text-neutral-600 leading-relaxed">
+                Những điều học viên thường băn khoăn về lịch học, phương pháp đào tạo và quyền lợi hỗ trợ.
               </p>
             </div>
 
-            <div className="space-y-3.5">
+            <div className="space-y-3.5 mt-8">
               {faqs.map((faq, idx) => {
                 const isOpen = openIndex === idx;
 
                 return (
                   <div
                     key={idx}
-                    className={`rounded-2xl border transition-all duration-200 overflow-hidden ${isOpen
-                      ? "border-[#AF445A]/40 bg-neutral-50/60 shadow-xs"
-                      : "border-neutral-200 bg-white hover:border-neutral-300"
-                      }`}
+                    className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+                      isOpen
+                        ? "border-[#AF445A]/40 bg-[#FAF7F8]/80 shadow-xs ring-1 ring-[#AF445A]/20"
+                        : "border-neutral-200 bg-white hover:border-neutral-300 hover:bg-neutral-50/50"
+                    }`}
                   >
                     <button
                       type="button"
                       onClick={() => toggleFaq(idx)}
                       aria-expanded={isOpen}
-                      className="w-full text-left p-4 sm:p-5 flex items-start justify-between gap-4 cursor-pointer focus:outline-none"
+                      className="w-full text-left p-4 sm:p-5 flex items-start justify-between gap-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#AF445A]/30 rounded-2xl"
                     >
                       <span
-                        className={`font-heading font-bold text-sm sm:text-base leading-snug transition-colors ${isOpen ? "text-[#AF445A]" : "text-[#252525]"
-                          }`}
+                        className={`font-heading font-bold text-sm sm:text-base leading-snug transition-colors ${
+                          isOpen ? "text-[#8B1D2C]" : "text-[#252525]"
+                        }`}
                       >
                         {faq.q}
                       </span>
                       <div
-                        className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-transform duration-200 ${isOpen ? "rotate-180 bg-[#AF445A]/10 text-[#AF445A]" : "bg-neutral-100 text-neutral-500"
-                          }`}
+                        className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
+                          isOpen
+                            ? "rotate-180 bg-[#8B1D2C] text-white shadow-xs"
+                            : "bg-neutral-100 text-neutral-500"
+                        }`}
                       >
                         <ChevronDown className="w-4 h-4" />
                       </div>
                     </button>
 
                     {isOpen && (
-                      <div className="px-4 pb-5 sm:px-5 sm:pb-5 pt-1 text-xs sm:text-sm text-neutral-700 leading-relaxed border-t border-neutral-150 animate-in fade-in duration-150 font-normal">
+                      <div className="px-4 pb-5 sm:px-5 sm:pb-5 pt-1 text-xs sm:text-sm text-neutral-700 leading-relaxed border-t border-neutral-100 font-normal">
                         {faq.a}
                       </div>
                     )}
@@ -107,21 +112,45 @@ export default function CourseFaq({ courseId, courseTitle }: CourseFaqProps) {
                 );
               })}
             </div>
+
+            {/* Quick Helper Note */}
+            <div className="mt-6 p-4 rounded-2xl bg-neutral-50 border border-neutral-200/70 flex items-center gap-3 text-xs sm:text-sm text-neutral-600">
+              <span className="text-base shrink-0">💬</span>
+              <span>
+                Bạn còn câu hỏi khác? Hãy điền biểu mẫu tư vấn bên cạnh hoặc liên hệ qua Hotline/Zalo để được Mentor giải đáp trực tiếp.
+              </span>
+            </div>
           </div>
 
-          {/* Right Column: Embedded Lead Consultation Form */}
-          <div className="lg:col-span-5 bg-neutral-50 border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-sm">
-            <div className="mb-6">
-              <span className="text-xs font-bold text-[#AF445A] uppercase tracking-wider">
+          {/* Right Column: Embedded Lead Consultation Form (5 cols) */}
+          <div className="lg:col-span-5 bg-gradient-to-b from-[#FAF7F8] to-white border border-[#EFE5E7] rounded-3xl p-6 sm:p-8 shadow-sm lg:sticky lg:top-24">
+            <div className="mb-5">
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#8B1D2C]/10 text-xs font-bold text-[#8B1D2C] uppercase tracking-wider mb-2">
                 Tư Vấn Miễn Phí 1:1
               </span>
-              <h3 className="font-heading font-bold text-xl sm:text-2xl text-[#252525] mt-1">
+              <h3 className="font-heading font-bold text-xl sm:text-2xl text-[#252525]">
                 Nhận Lộ Trình Học Phù Hợp
               </h3>
-              <p className="text-xs sm:text-sm text-neutral-600 mt-1">
-                Điền thông tin để được Mentor liên hệ tư vấn chi tiết về khóa học{" "}
-                <strong className="text-neutral-900">{courseTitle}</strong>.
+              <p className="text-xs sm:text-sm text-neutral-600 mt-1.5 leading-relaxed">
+                Điền thông tin để Mentor Hứa Thảo Ly tư vấn chi tiết về khóa học{" "}
+                <strong className="text-neutral-900 font-semibold">{courseTitle}</strong>.
               </p>
+            </div>
+
+            {/* Value Props Row */}
+            <div className="grid grid-cols-3 gap-2 py-3 px-2 mb-5 rounded-xl bg-white border border-[#EFE5E7] text-center text-[11px] sm:text-xs font-medium text-neutral-700">
+              <div className="flex flex-col items-center gap-0.5">
+                <span className="text-xs">⚡</span>
+                <span>Tư vấn trong 15p</span>
+              </div>
+              <div className="flex flex-col items-center gap-0.5 border-x border-neutral-200/60">
+                <span className="text-xs">🎯</span>
+                <span>Đúng năng lực</span>
+              </div>
+              <div className="flex flex-col items-center gap-0.5">
+                <span className="text-xs">🔒</span>
+                <span>Bảo mật 100%</span>
+              </div>
             </div>
 
             <LeadForm
