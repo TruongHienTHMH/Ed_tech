@@ -121,7 +121,7 @@ export default function HeroSection() {
               ★★★★★
             </div>
             <span className="font-semibold text-xs sm:text-sm text-neutral-700">
-              500+ học viên đã tham gia
+              200+ học viên đã tham gia
             </span>
           </div>
         </div>
