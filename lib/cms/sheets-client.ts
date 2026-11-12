@@ -188,6 +188,16 @@ export class SheetsClient {
       const isFeatured = row.is_featured === true || String(row.is_featured).toUpperCase() === "TRUE";
       const sortOrder = Number(row.sort_order || idx + 1);
 
+      // Parse course_kind from Google Sheets with intelligent semantic fallback
+      const rawKind = row.course_kind || row.kind || row.course_type || row.type || row.badge || row.huy_hieu;
+      const courseKind = rawKind
+        ? String(rawKind).trim()
+        : (slug === "end-to-end-analytics" || id === "end-to-end-analytics"
+            ? "Khóa học nổi bật"
+            : slug === "sql-for-data-analytics"
+            ? "Khóa học nền tảng"
+            : "Khóa học chuyên sâu");
+
       // Find matching curriculum modules (smart column resolution & alias matching)
       let courseCurriculum: CurriculumModule[] = rawCurriculum
         .filter((m) => {
@@ -284,6 +294,7 @@ export class SheetsClient {
         isActive,
         isFeatured,
         sortOrder,
+        courseKind,
         curriculumModules: courseCurriculum,
       };
     });

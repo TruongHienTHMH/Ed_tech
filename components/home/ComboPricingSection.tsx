@@ -101,8 +101,8 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
           <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-[42px] leading-tight lg:leading-[46px] text-[#2E2E2E] mb-3 max-w-[800px]">
             Đầu tư thông minh cho sự nghiệp
           </h2>
-          <p className="font-medium text-base sm:text-lg text-[#676767] max-w-[620px] leading-relaxed">
-            Học trọn bộ 2 kỹ năng quan trọng nhất của một Data Analyst với mức chi phí tiết kiệm hơn so với đăng kí riêng lẻ từng kỹ năng.
+          <p className="font-medium text-base sm:text-lg text-[#676767] max-w-[680px] leading-relaxed">
+            Kết hợp SQL và Analytical Thinking &amp; Dashboard trong một lộ trình xuyên suốt, giúp bạn xây dựng nền tảng Data Analytics có hệ thống và tiết kiệm hơn so với đăng ký từng khóa riêng lẻ.
           </p>
         </div>
 
@@ -154,31 +154,19 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
               {/* Divider */}
               <div className="h-px bg-neutral-200 my-6" />
 
-              {/* Cons / Limitations */}
-              <div className="space-y-3.5 mb-8">
-                <div className="flex items-center gap-3 text-sm text-[#34343C]">
-                  <div className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center shrink-0">
-                    <X className="w-3.5 h-3.5 text-neutral-400" />
-                  </div>
-                  <span>Tự tìm lộ trình phù hợp</span>
+              {/* Features / Fit */}
+              <div className="space-y-4 mb-8">
+                <div className="flex items-start gap-3 text-sm text-[#34343C]">
+                  <div className="w-2 h-2 rounded-full bg-[#AF445A]/70 mt-1.5 shrink-0" />
+                  <span className="leading-relaxed">
+                    Phù hợp nếu bạn muốn tập trung vào một nhóm kỹ năng hoặc đã có nền tảng trước đó.
+                  </span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-[#34343C]">
-                  <div className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center shrink-0">
-                    <X className="w-3.5 h-3.5 text-neutral-400" />
-                  </div>
-                  <span>Kiến thức thiếu liên kết</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-[#34343C]">
-                  <div className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center shrink-0">
-                    <X className="w-3.5 h-3.5 text-neutral-400" />
-                  </div>
-                  <span>Chi phí cao hơn (Tổng 6,780,000VNĐ)</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-[#34343C]">
-                  <div className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center shrink-0">
-                    <X className="w-3.5 h-3.5 text-neutral-400" />
-                  </div>
-                  <span>Mất thời gian tìm hiểu riêng rẽ</span>
+                <div className="flex items-start gap-3 text-sm text-[#34343C]">
+                  <div className="w-2 h-2 rounded-full bg-[#AF445A]/70 mt-1.5 shrink-0" />
+                  <span className="leading-relaxed font-semibold text-[#AF445A]">
+                    Chi phí cao hơn (Tổng 6.780.000VNĐ)
+                  </span>
                 </div>
               </div>
             </div>
@@ -278,28 +266,6 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
                       className="shrink-0"
                     />
                     <span>{savingsStr}</span>
-                  </div>
-
-                  <div className="flex items-center gap-3 text-sm font-semibold">
-                    <Image
-                      src="/assets/figma/bb89cec2b7cc67e662e0f2532b951f267ce166fe.svg"
-                      alt="check"
-                      width={22}
-                      height={22}
-                      className="shrink-0"
-                    />
-                    <span>Community với hơn 1,200+ members</span>
-                  </div>
-
-                  <div className="flex items-center gap-3 text-sm font-semibold">
-                    <Image
-                      src="/assets/figma/bb89cec2b7cc67e662e0f2532b951f267ce166fe.svg"
-                      alt="check"
-                      width={22}
-                      height={22}
-                      className="shrink-0"
-                    />
-                    <span>Update nội dung kiến thức trọn đời</span>
                   </div>
                 </div>
 

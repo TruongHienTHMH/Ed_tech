@@ -67,6 +67,7 @@ export default function Navbar({
           >
             <button
               type="button"
+              onClick={() => setCourseDropdownOpen((prev) => !prev)}
               className={`flex items-center gap-1.5 py-2 transition-colors focus:outline-none cursor-pointer ${
                 isLight ? "hover:text-[#AF445A]" : "hover:text-white"
               }`}
@@ -76,57 +77,62 @@ export default function Navbar({
             </button>
 
             {courseDropdownOpen && (
-              <div
-                className={`absolute top-full left-0 w-72 rounded-xl shadow-xl py-2 mt-1 z-50 animate-in fade-in slide-in-from-top-1 ${
-                  isLight
-                    ? "bg-white border border-neutral-200 text-[#252525]"
-                    : "bg-[#252525] border border-white/10 text-white shadow-2xl"
-                }`}
-              >
-                <Link
-                  href="/courses/sql-for-data-analytics"
-                  className={`block px-4 py-2.5 text-sm transition-colors ${
-                    isLight ? "hover:bg-neutral-50" : "hover:bg-white/10"
-                  }`}
-                >
-                  <p className={`font-semibold ${isLight ? "text-[#252525]" : "text-white"}`}>
-                    Khóa SQL for Data Analytics
-                  </p>
-                  <p className={`text-xs ${isLight ? "text-neutral-500" : "text-white/60"}`}>
-                    Truy vấn & xử lý dữ liệu thực chiến (12 buổi)
-                  </p>
-                </Link>
-                <Link
-                  href="/courses/analytical-thinking-dashboard-design"
-                  className={`block px-4 py-2.5 text-sm transition-colors ${
-                    isLight ? "hover:bg-neutral-50" : "hover:bg-white/10"
-                  }`}
-                >
-                  <p className={`font-semibold ${isLight ? "text-[#252525]" : "text-white"}`}>
-                    Analytical Thinking & Dashboard
-                  </p>
-                  <p className={`text-xs ${isLight ? "text-neutral-500" : "text-white/60"}`}>
-                    Tư duy phân tích số liệu & BI (15 buổi)
-                  </p>
-                </Link>
+              <div className="absolute top-full left-0 pt-1.5 z-50">
                 <div
-                  className={`h-px my-1 ${
-                    isLight ? "bg-neutral-200/80" : "bg-white/10"
-                  }`}
-                />
-                <Link
-                  href="/courses/end-to-end-analytics"
-                  className={`block px-4 py-2.5 text-sm font-semibold transition-colors ${
+                  className={`w-72 rounded-xl shadow-xl py-2 animate-in fade-in slide-in-from-top-1 ${
                     isLight
-                      ? "text-[#AF445A] hover:bg-neutral-50"
-                      : "text-[#FFC934] hover:bg-white/10"
+                      ? "bg-white border border-neutral-200 text-[#252525]"
+                      : "bg-[#252525] border border-white/10 text-white shadow-2xl"
                   }`}
                 >
-                  <p className="font-semibold">Combo End-to-End Analytics</p>
-                  <p className={`text-xs ${isLight ? "text-neutral-500" : "text-white/70"}`}>
-                    Trọn gói 27 buổi - Tiết kiệm 16% →
-                  </p>
-                </Link>
+                  <Link
+                    href="/courses/sql-for-data-analytics"
+                    onClick={() => setCourseDropdownOpen(false)}
+                    className={`block px-4 py-2.5 text-sm transition-colors ${
+                      isLight ? "hover:bg-neutral-50" : "hover:bg-white/10"
+                    }`}
+                  >
+                    <p className={`font-semibold ${isLight ? "text-[#252525]" : "text-white"}`}>
+                      Khóa SQL for Data Analytics
+                    </p>
+                    <p className={`text-xs ${isLight ? "text-neutral-500" : "text-white/60"}`}>
+                      Truy vấn & xử lý dữ liệu thực chiến (12 buổi)
+                    </p>
+                  </Link>
+                  <Link
+                    href="/courses/analytical-thinking-dashboard-design"
+                    onClick={() => setCourseDropdownOpen(false)}
+                    className={`block px-4 py-2.5 text-sm transition-colors ${
+                      isLight ? "hover:bg-neutral-50" : "hover:bg-white/10"
+                    }`}
+                  >
+                    <p className={`font-semibold ${isLight ? "text-[#252525]" : "text-white"}`}>
+                      Analytical Thinking & Dashboard
+                    </p>
+                    <p className={`text-xs ${isLight ? "text-neutral-500" : "text-white/60"}`}>
+                      Tư duy phân tích số liệu & BI (15 buổi)
+                    </p>
+                  </Link>
+                  <div
+                    className={`h-px my-1 ${
+                      isLight ? "bg-neutral-200/80" : "bg-white/10"
+                    }`}
+                  />
+                  <Link
+                    href="/courses/end-to-end-analytics"
+                    onClick={() => setCourseDropdownOpen(false)}
+                    className={`block px-4 py-2.5 text-sm font-semibold transition-colors ${
+                      isLight
+                        ? "text-[#AF445A] hover:bg-neutral-50"
+                        : "text-[#FFC934] hover:bg-white/10"
+                    }`}
+                  >
+                    <p className="font-semibold">Combo End-to-End Analytics</p>
+                    <p className={`text-xs ${isLight ? "text-neutral-500" : "text-white/70"}`}>
+                      Trọn gói 27 buổi - Tiết kiệm 16% →
+                    </p>
+                  </Link>
+                </div>
               </div>
             )}
           </div>

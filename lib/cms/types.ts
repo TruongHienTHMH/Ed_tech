@@ -18,6 +18,7 @@ export interface Course {
   isActive: boolean;                  // Soft delete flag
   isFeatured: boolean;
   sortOrder: number;
+  courseKind?: string;                // e.g. "Khóa học nổi bật", "Khóa học nền tảng", "Khóa học chuyên sâu"
   curriculumModules?: CurriculumModule[];
 }
 

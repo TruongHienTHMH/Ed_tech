@@ -83,15 +83,8 @@ export default function HeroSection() {
             >
               Khám phá các khóa học
             </button>
-            <p className="text-[11px] text-neutral-500 mt-2.5 text-center leading-normal">
-              By continuing, you accept our{" "}
-              <a href="/terms" className="text-[#AF445A] hover:underline font-medium">
-                Terms of Use
-              </a>{" "}
-              and our{" "}
-              <a href="/privacy" className="text-[#AF445A] hover:underline font-medium">
-                Privacy Policy
-              </a>
+            <p className="text-xs text-neutral-600 mt-2.5 text-center leading-normal font-medium">
+              ✨ Nhập email để nhận ngay trọn bộ lộ trình chi tiết &amp; tư vấn 1:1 miễn phí từ Mentor Hứa Thảo Ly
             </p>
           </form>
         </div>
