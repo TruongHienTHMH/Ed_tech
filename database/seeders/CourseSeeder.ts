@@ -20,6 +20,7 @@ export class CourseSeeder implements Seeder<Course> {
         isActive: true,
         isFeatured: true,
         sortOrder: 1,
+        courseKind: "Khóa học nổi bật",
       },
       {
         id: "sql-for-data-analytics",
@@ -35,8 +36,9 @@ export class CourseSeeder implements Seeder<Course> {
         level: "Beginner",
         coverImageUrl: "/assets/figma/05ab7dcc030820120da8f65c6b464967f554e0d8.png",
         isActive: true,
-        isFeatured: true,
+        isFeatured: false,
         sortOrder: 2,
+        courseKind: "Khóa học nền tảng",
       },
       {
         id: "data-analytical-thinking",
@@ -52,8 +54,9 @@ export class CourseSeeder implements Seeder<Course> {
         level: "Intermediate",
         coverImageUrl: "/assets/figma/b1c9fe6fd2d3dafb5b4b32d30320f68d7cde1f5c.png",
         isActive: true,
-        isFeatured: true,
+        isFeatured: false,
         sortOrder: 3,
+        courseKind: "Khóa học chuyên sâu",
       },
     ];
   }

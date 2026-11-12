@@ -95,8 +95,8 @@ export class SheetsClient {
       if (cached) return cached;
     }
 
-    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_CMS_URL || process.env.GOOGLE_APPS_SCRIPT_URL;
-    const secret = process.env.GOOGLE_APPS_SCRIPT_CMS_SECRET || process.env.GOOGLE_APPS_SCRIPT_SECRET || "";
+    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_CMS_URL;
+    const secret = process.env.GOOGLE_APPS_SCRIPT_CMS_SECRET || "";
     const startTime = Date.now();
 
     // 1. If no URL configured, return typed mock report from seed
@@ -187,6 +187,16 @@ export class SheetsClient {
       const isActive = row.is_active === true || String(row.is_active).toUpperCase() === "TRUE";
       const isFeatured = row.is_featured === true || String(row.is_featured).toUpperCase() === "TRUE";
       const sortOrder = Number(row.sort_order || idx + 1);
+
+      // Parse course_kind from Google Sheets with intelligent semantic fallback
+      const rawKind = row.course_kind || row.kind || row.course_type || row.type || row.badge || row.huy_hieu;
+      const courseKind = rawKind
+        ? String(rawKind).trim()
+        : (slug === "end-to-end-analytics" || id === "end-to-end-analytics"
+          ? "Khóa học nổi bật"
+          : slug === "sql-for-data-analytics"
+            ? "Khóa học nền tảng"
+            : "Khóa học chuyên sâu");
 
       // Find matching curriculum modules (smart column resolution & alias matching)
       let courseCurriculum: CurriculumModule[] = rawCurriculum
@@ -284,6 +294,7 @@ export class SheetsClient {
         isActive,
         isFeatured,
         sortOrder,
+        courseKind,
         curriculumModules: courseCurriculum,
       };
     });
@@ -431,8 +442,8 @@ export class SheetsClient {
       contentMarkdown: b.content_markdown
         ? String(b.content_markdown)
         : b.contentMarkdown
-        ? String(b.contentMarkdown)
-        : undefined,
+          ? String(b.contentMarkdown)
+          : undefined,
       authorName: String(b.author_name || b.authorName || "Hứa Thảo Ly"),
       publishedAt: String(b.published_at || b.publishedAt || new Date().toISOString().split("T")[0]),
       coverImageUrl: resolveImageUrl(
@@ -445,9 +456,9 @@ export class SheetsClient {
         b.is_active === undefined
           ? true
           : b.is_active === true ||
-            String(b.is_active).toUpperCase() === "TRUE" ||
-            b.is_active === "1" ||
-            b.is_active === 1,
+          String(b.is_active).toUpperCase() === "TRUE" ||
+          b.is_active === "1" ||
+          b.is_active === 1,
     }));
 
     const activeCount = parsedCourses.filter((c) => c.isActive).length;

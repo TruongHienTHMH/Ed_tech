@@ -27,7 +27,13 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
     level: c.level || "Live Class",
     rating: "5.0",
     studentsCount: 250 + i * 50,
-    badge: c.isFeatured ? "Khóa học nổi bật" : "Live Class",
+    courseKind:
+      c.courseKind ||
+      (c.slug === "end-to-end-analytics" || c.id === "end-to-end-analytics"
+        ? "Khóa học nổi bật"
+        : c.slug === "sql-for-data-analytics"
+        ? "Khóa học nền tảng"
+        : "Khóa học chuyên sâu"),
     thumbnail: resolveImageUrl(c.coverImageUrl, "course", c.slug || c.id),
   }));
 
@@ -80,8 +86,11 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
               <div className="lg:col-span-7 flex flex-col gap-6">
                 {/* Badge Status */}
                 <div className="flex items-center gap-2.5">
-                  <Badge variant="gold" size="md">
-                    {currentCourse.badge}
+                  <Badge
+                    variant={currentCourse.courseKind === "Khóa học nổi bật" ? "gold" : "level"}
+                    size="md"
+                  >
+                    {currentCourse.courseKind}
                   </Badge>
                   <Badge variant="liveClass" size="md">
                     Zoom Live
