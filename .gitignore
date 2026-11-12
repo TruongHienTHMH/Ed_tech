@@ -62,3 +62,5 @@ service-account*.json
 /*.gs
 .clasp.json
 .clasprc.json
+
+.docs/deployment/VERCEL_DEPLOYMENT_GUIDE.md

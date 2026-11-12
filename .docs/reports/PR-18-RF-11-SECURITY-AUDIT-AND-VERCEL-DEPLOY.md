@@ -38,3 +38,4 @@
 | **TypeScript** | `npm run typecheck` | ✅ 0 Lỗi | Đảm bảo tính toàn vẹn kiểu dữ liệu |
 | **Test Suites** | `npm run test` | ✅ 108/108 PASS | GAS duplicate (80), Lead (10), Rate Limiter, Email (18) |
 | **Production Build** | `npm run build` | ✅ 19/19 routes | Tạo thành công toàn bộ các trang SSG & dynamic |
+
