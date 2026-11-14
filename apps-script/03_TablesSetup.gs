@@ -19,6 +19,79 @@
  * ==============================================================================
  */
 
+/**
+ * ==============================================================================
+ * DESIGN PATTERN 2: SCHEMA REGISTRY (TABLE SCHEMAS REGISTRY)
+ * ==============================================================================
+ * Từ điển quản lý cấu trúc chuẩn hóa cho 11 Tabs CMS Content và 1 Tab Leads CRM
+ * ==============================================================================
+ */
+var CMS_TABLE_SCHEMAS = {
+  courses: {
+    sheetName: "courses",
+    headers: ["id", "title", "slug", "tag", "tagline", "tuition_vnd", "original_tuition_vnd", "duration", "level", "is_active", "is_featured", "sort_order", "description", "cover_image_url", "start_date", "end_date"],
+    headerColor: "#8B1D2C"
+  },
+  curriculum: {
+    sheetName: "curriculum",
+    headers: ["id", "course_id", "course_name", "week", "day", "date", "session_title", "session_desc", "sub_content", "duration", "sort_order"],
+    headerColor: "#8B1D2C"
+  },
+  packages_pricing: {
+    sheetName: "packages_pricing",
+    headers: ["id", "package_id", "name", "original_price", "sale_price", "badge", "features_list", "is_popular", "is_active", "sort_order"],
+    headerColor: "#1F242F"
+  },
+  student_projects: {
+    sheetName: "student_projects",
+    headers: ["project_id", "title", "category", "author_name", "tools", "metrics", "image_url", "sort_order", "is_active"],
+    headerColor: "#1F242F"
+  },
+  mentor_profiles: {
+    sheetName: "mentor_profiles",
+    headers: ["id", "name", "title", "bio", "companies_worked", "avatar_url", "linkedin_url", "is_active"],
+    headerColor: "#1F242F"
+  },
+  testimonials: {
+    sheetName: "testimonials",
+    headers: ["id", "student_name", "role", "company", "avatar_url", "course_id", "rating", "review_text", "is_featured", "is_active"],
+    headerColor: "#1F242F"
+  },
+  faqs: {
+    sheetName: "faqs",
+    headers: ["id", "category", "question", "answer", "is_active", "sort_order"],
+    headerColor: "#1F242F"
+  },
+  trust_metrics: {
+    sheetName: "trust_metrics",
+    headers: ["metric_key", "number_display", "label", "icon_name", "is_active", "sort_order"],
+    headerColor: "#1F242F"
+  },
+  settings: {
+    sheetName: "settings",
+    headers: ["key", "value", "description"],
+    headerColor: "#1F242F"
+  },
+  blog_posts: {
+    sheetName: "blog_posts",
+    headers: ["id", "title", "slug", "category", "excerpt", "author_name", "published_at", "is_active"],
+    headerColor: "#1F242F"
+  },
+  promotions: {
+    sheetName: "promotions",
+    headers: ["id", "code", "title", "discount_type", "discount_value", "start_date", "end_date", "applicable_courses", "badge", "is_active", "sort_order"],
+    headerColor: "#8B1D2C"
+  },
+  leads: {
+    sheetName: "leads",
+    headers: ["submission_id", "timestamp", "name", "phone", "email", "coaching_course", "target_or_goal", "attendance_commitment", "status", "notes", "assigned_to", "source", "updated_at"],
+    headerColor: "#7F1D1D"
+  }
+};
+
+/**
+ * 1. setupDataWithLyTables(): Tự động tạo toàn bộ các Tab chuẩn hóa kèm dữ liệu mẫu & Dropdown.
+ */
 function setupDataWithLyTables() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var ui = SpreadsheetApp.getUi();
@@ -62,6 +135,86 @@ function setupDataWithLyTables() {
 }
 
 /**
+ * Khởi tạo riêng 11 Tab CMS Content cho Spreadsheet 1 (Content Master)
+ * Không chứa tab Leads, an toàn tuyệt đối khi phân quyền cho Marketing / Biên tập viên.
+ */
+function setupCmsContentSpreadsheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ui = SpreadsheetApp.getUi();
+
+  var confirm = ui.alert(
+    "Khởi Tạo 11 Tab CMS Content Master (Spreadsheet 1)",
+    "Hệ thống sẽ tạo đủ 11 Tab nội dung (Courses, Curriculum, Packages, Student Projects, Mentors, Testimonials, FAQs, Trust, Settings, Blogs, Promotions) kèm dữ liệu mẫu chuẩn Figma.\n\nFile này sẽ KHÔNG chứa tab Leads cá nhân để bảo mật PII.\n\nBạn có muốn tiếp tục không?",
+    ui.ButtonSet.YES_NO
+  );
+
+  if (confirm !== ui.Button.YES) return;
+
+  try {
+    setupCoursesTab(ss);
+    setupCurriculumTab(ss);
+    setupPackagesPricingTab(ss);
+    setupStudentProjectsTab(ss);
+    setupMentorProfilesTab(ss);
+    setupTestimonialsTab(ss);
+    setupFaqsTab(ss);
+    setupTrustMetricsTab(ss);
+    setupSettingsTab(ss);
+    setupBlogPostsTab(ss);
+    setupPromotionsTab(ss);
+
+    // Xóa Sheet1 mặc định nếu rỗng
+    var sheet1 = ss.getSheetByName("Sheet1") || ss.getSheetByName("Trang tính1");
+    if (sheet1 && ss.getSheets().length > 1) {
+      try { ss.deleteSheet(sheet1); } catch (e) {}
+    }
+
+    ui.alert(
+      "🎉 Cài Đặt Hoàn Tất 100%!",
+      "Đã khởi tạo thành công 11 Tab nội dung CMS Content Master.\nTrang tính này an toàn tuyệt đối để chia sẻ cho các biên tập viên nội dung!",
+      ui.ButtonSet.OK
+    );
+  } catch (err) {
+    ui.alert("❌ Lỗi Khi Cài Đặt", err.toString(), ui.ButtonSet.OK);
+  }
+}
+
+/**
+ * Khởi tạo Tab Leads CRM trên Spreadsheet 2 (Private Leads & CRM)
+ * Chuẩn hóa 100% theo thiết kế Figma Node 12-3320 với Dropdown Selection.
+ */
+function setupDedicatedLeadsSpreadsheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ui = SpreadsheetApp.getUi();
+
+  var confirm = ui.alert(
+    "🔒 Khởi Tạo Bảng Leads CRM Chuẩn Figma 12-3320 (Spreadsheet 2)",
+    "Thao tác này sẽ tạo bảng 'leads' với 13 cột chuyên biệt cho quản trị tuyển sinh và chăm sóc khách hàng:\n" +
+    "- Cột Dropdown: Khóa coaching quan tâm (SQL, Looker Studio, Combo, 1-1)\n" +
+    "- Cột Dropdown: Cam kết xuất hiện đúng giờ\n" +
+    "- Cột Dropdown: Trạng thái Lead CRM (NEW, CONTACTING, CONSULTED, ENROLLED, DROPPED, SPAM)\n" +
+    "- Cột: Ghi chú tư vấn, Phân công tư vấn viên, Kênh đăng ký (source)\n\n" +
+    "Bạn có muốn tiếp tục không?",
+    ui.ButtonSet.YES_NO
+  );
+
+  if (confirm !== ui.Button.YES) return;
+
+  try {
+    setupLeadsDatabaseSpreadsheet(ss, "leads");
+
+    ui.alert(
+      "🎉 Cài Đặt Thành Công!",
+      "Đã thiết lập xong bảng Leads CRM bảo mật PII trên trang tính này!\n" +
+      "Bạn có thể sao chép ID của Spreadsheet này và dùng lệnh [🔗 Cài Đặt ID Spreadsheet Leads Riêng] trên file CMS Content để liên kết.",
+      ui.ButtonSet.OK
+    );
+  } catch (err) {
+    ui.alert("❌ Lỗi Khi Cài Đặt", err.toString(), ui.ButtonSet.OK);
+  }
+}
+
+/**
  * Helper: Tạo hoặc định dạng lại dòng tiêu đề header
  */
 function getOrCreateSheetWithHeader(ss, sheetName, headers, headerColor) {
@@ -96,7 +249,7 @@ function setupCoursesTab(ss) {
     "id", "title", "slug", "tag", "tagline",
     "tuition_vnd", "original_tuition_vnd", "duration",
     "level", "is_active", "is_featured", "sort_order",
-    "description", "cover_image_url"
+    "description", "cover_image_url", "start_date", "end_date"
   ];
   var sheet = getOrCreateSheetWithHeader(ss, "courses", headers, "#8B1D2C");
 
@@ -122,7 +275,9 @@ function setupCoursesTab(ss) {
       5690000, 6780000, "27 buổi",
       "Beginner", true, true, 1,
       "Xây dựng nền tảng Data Analytics toàn diện, từ truy vấn và xử lý dữ liệu với SQL đến tư duy phân tích, trực quan hóa và thiết kế Dashboard hoàn chỉnh cho doanh nghiệp.",
-      "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png"
+      "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png",
+      "2026-03-15",
+      "2026-05-30"
     ]);
 
     sheet.appendRow([
@@ -134,7 +289,9 @@ function setupCoursesTab(ss) {
       2990000, 3500000, "12 buổi",
       "Beginner", true, true, 2,
       "Làm quen với Database và SQL, xây dựng khả năng truy vấn, lọc, biến đổi và tối ưu dữ liệu từ các hệ thống cơ sở dữ liệu lớn trong thực tế doanh nghiệp.",
-      "/assets/figma/05ab7dcc030820120da8f65c6b464967f554e0d8.png"
+      "/assets/figma/05ab7dcc030820120da8f65c6b464967f554e0d8.png",
+      "2026-03-20",
+      "2026-04-30"
     ]);
 
     sheet.appendRow([
@@ -146,64 +303,74 @@ function setupCoursesTab(ss) {
       3790000, 4500000, "15 buổi",
       "Intermediate", true, true, 3,
       "Học cách xác định vấn đề kinh doanh, phân rã chỉ số (Metrics Tree), phân tích dữ liệu chuyên sâu và trực quan hóa Dashboard phục vụ quyết định quản trị.",
-      "/assets/figma/b1c9fe6fd2d3dafb5b4b32d30320f68d7cde1f5c.png"
+      "/assets/figma/b1c9fe6fd2d3dafb5b4b32d30320f68d7cde1f5c.png",
+      "2026-04-05",
+      "2026-05-20"
     ]);
   }
 }
 
 /**
- * TAB 2: curriculum (Đề cương chi tiết theo Khóa học)
+ * TAB 2: curriculum (Đề cương & Lộ trình chi tiết theo từng Buổi học)
  */
 function setupCurriculumTab(ss) {
   var headers = [
-    "id", "course_id", "course_name", "module_number", "module_title",
-    "duration", "lessons_count", "topics_bullets", "sort_order"
+    "id", "course_id", "course_name", "week", "day", "date",
+    "session_title", "session_desc", "sub_content", "duration", "sort_order"
   ];
   var sheet = getOrCreateSheetWithHeader(ss, "curriculum", headers, "#8B1D2C");
 
   if (sheet.getLastRow() === 1) {
     sheet.appendRow([
-      "sql-for-data-analytics-mod-1",
+      "cur-sql-01",
       "sql-for-data-analytics",
       "SQL for Data Analytics: Từ Cơ Bản Đến Nâng Cao",
       1,
-      "Chương 1: Nền tảng Cơ sở Dữ liệu & Cú pháp SELECT",
-      "2 tuần",
-      6,
-      "Tổng quan về RDBMS, Table, Schema, Primary Key & Foreign Key\nSELECT, WHERE, DISTINCT, ORDER BY, LIMIT\nCác toán tử logic AND, OR, NOT, IN, BETWEEN, LIKE\nBài tập thực hành: Truy vấn bảng đơn hàng E-commerce",
+      1,
+      "TH10 03",
+      "Buổi 1: Làm quen Database & Cú pháp truy vấn cơ bản",
+      "Hiểu kiến trúc Relational Database, cài đặt DBeaver, thực hành SELECT, WHERE, ORDER BY, GROUP BY.",
+      "Tổng quan về cơ sở dữ liệu quan hệ (RDBMS) trong doanh nghiệp\nCài đặt DBeaver và kết nối hệ quản trị PostgreSQL / MySQL\nCú pháp SELECT, ALIAS, DISTINCT, toán tử lọc WHERE, AND/OR/IN/BETWEEN\nThực hành truy vấn cơ bản trên bộ dữ liệu E-commerce thực tế",
+      "3 giờ",
       1
     ]);
     sheet.appendRow([
-      "sql-for-data-analytics-mod-2",
+      "cur-sql-02",
       "sql-for-data-analytics",
       "SQL for Data Analytics: Từ Cơ Bản Đến Nâng Cao",
+      1,
       2,
-      "Chương 2: Aggregate Functions & Nhóm Dữ Liệu",
-      "2 tuần",
-      6,
-      "Hàm tính toán COUNT, SUM, AVG, MIN, MAX\nGROUP BY và điều kiện lọc HAVING\nXử lý giá trị NULL (COALESCE, IFNULL)\nBài tập: Tính doanh thu theo từng tháng và danh mục sản phẩm",
+      "TH10 05",
+      "Buổi 2: Các hàm biến đổi dữ liệu (Scalar & Aggregate Functions)",
+      "Xử lý chuỗi văn bản, ngày tháng, ép kiểu CAST và tính toán tổng hợp SUM/AVG/COUNT.",
+      "Xử lý chuỗi với LIKE, CONCAT, SUBSTRING, TRIM, UPPER/LOWER\nXử lý ngày tháng chuyên sâu: DATE_TRUNC, EXTRACT, INTERVAL\nPhân nhóm và tính toán tổng hợp với GROUP BY và điều kiện lọc HAVING\nBài tập tính doanh thu theo tháng và tần suất mua sắm",
+      "3 giờ",
       2
     ]);
     sheet.appendRow([
-      "sql-for-data-analytics-mod-3",
+      "cur-sql-03",
       "sql-for-data-analytics",
       "SQL for Data Analytics: Từ Cơ Bản Đến Nâng Cao",
+      2,
       3,
-      "Chương 3: Ghép Bảng (JOINs) & Subqueries",
-      "2 tuần",
-      6,
-      "INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN\nSelf JOIN và xử lý phân cấp nhân viên/quản lý\nSubqueries trong WHERE, FROM và SELECT\nBài tập: Kết hợp 5 bảng đối soát tài chính ngân hàng",
+      "TH10 26",
+      "Buổi 3: Kết hợp bảng nâng cao với JOINs (INNER, LEFT, RIGHT, FULL)",
+      "Tư duy quan hệ dữ liệu nhiều bảng, liên kết dữ liệu khách hàng, đơn hàng và sản phẩm.",
+      "Mô hình Entity-Relationship (ERD) và khóa chính (PK) / khóa ngoại (FK)\nBản chất đại số của INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN\nXử lý bẫy NULL values và phép nhân Cartesian (Cartesian Explosion)\nThực hành trích xuất dữ liệu tổng hợp đa chiều từ 5 bảng liên kết",
+      "3 giờ",
       3
     ]);
     sheet.appendRow([
-      "sql-for-data-analytics-mod-4",
+      "cur-sql-04",
       "sql-for-data-analytics",
       "SQL for Data Analytics: Từ Cơ Bản Đến Nâng Cao",
+      2,
       4,
-      "Chương 4: Phân Tích Chuyên Sâu với Window Functions & CTE",
-      "2 tuần",
-      6,
-      "Common Table Expressions (WITH clause) giúp code sạch và dễ đọc\nROW_NUMBER, RANK, DENSE_RANK\nLEAD, LAG để so sánh kỳ này với kỳ trước (MoM, YoY growth)\nRunning Total & Moving Average\nCapstone Project: Báo cáo retention rate và churn analysis",
+      "TH10 28",
+      "Buổi 4: Bài thực hành 1 (Hands-on Lab 1) - Báo cáo Doanh thu & Giỏ hàng",
+      "Tự tay viết script phân tích toàn bộ quy trình giỏ hàng, doanh số và tỉ lệ drop-off.",
+      "Đọc yêu cầu bài toán kinh doanh từ Stakeholder\nXác định bảng nguồn, viết truy vấn kết nối đơn hàng, coupon, hoàn trả\nTính toán AOV (Average Order Value) và tỉ lệ áp mã giảm giá\nMentor review code trực tiếp và chỉ ra các lỗi logic thường gặp",
+      "3 giờ",
       4
     ]);
   }
@@ -471,10 +638,8 @@ function setupSettingsTab(ss) {
     sheet.appendRow(["zalo_url", "https://zalo.me/0934938431", "Đường dẫn chat Zalo tư vấn nhanh"]);
     sheet.appendRow(["contact_email", "vietds@gmail.com", "Email nhận thư liên hệ"]);
     sheet.appendRow(["announcement_bar", "Level Up Week: Learn More, Save 75%! - 4 days only! Get 70+ online SQL courses and save up to $450", "Thông báo trên thanh header"]);
-    sheet.appendRow(["revalidation_prod_url", "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook Production làm mới bộ nhớ cache Website"]);
-    sheet.appendRow(["revalidation_local_url", "http://localhost:3000/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook Local / Dev Tunnel làm mới bộ nhớ cache"]);
+    sheet.appendRow(["web_deploy_url", "https://ed-tech-mu-umber.vercel.app", "URL Website Production chính thức trên Vercel"]);
     sheet.appendRow(["active_revalidation_env", "PROD", "Môi trường đồng bộ kích hoạt (PROD hoặc LOCAL)"]);
-    sheet.appendRow(["revalidation_url", "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook làm mới bộ nhớ cache của Website (dự phòng)"]);
   }
 }
 
@@ -517,33 +682,73 @@ function setupBlogPostsTab(ss) {
 }
 
 /**
- * TAB 11: leads (private) (Danh sách Lead học viên bảo mật PII)
+ * TAB LEADS CRM (Chuẩn Figma Node 12-3320): Quản lý khách hàng tiềm năng & Tuyển sinh
+ * Thiết kế cho SPREADSHEET 2 (Private Leads & CRM) độc lập để bảo mật tuyệt đối PII.
+ * Cột 'coaching_course' có Dropdown Selection chọn Khóa coaching bạn quan tâm.
  */
-function setupLeadsPrivateTab(ss) {
+function setupLeadsDatabaseSpreadsheet(ss, sheetTitle) {
+  var targetSs = ss || SpreadsheetApp.getActiveSpreadsheet();
+  var name = sheetTitle || "leads";
   var headers = [
-    "submission_id", "timestamp", "name (private)", "phone (private)", "email (private)",
-    "course_id", "course_name", "message (private)", "status"
+    "submission_id", "timestamp", "name", "phone", "email",
+    "coaching_course", "target_or_goal", "attendance_commitment",
+    "status", "notes", "assigned_to", "source", "updated_at"
   ];
-  var sheet = getOrCreateSheetWithHeader(ss, "leads (private)", headers, "#7F1D1D");
+  var sheet = getOrCreateSheetWithHeader(targetSs, name, headers, "#7F1D1D");
 
+  // Dropdown Selection 1: Khóa coaching bạn quan tâm (Figma 12-3320)
+  var courseRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(COACHING_COURSES_LIST, true)
+    .build();
+  sheet.getRange("F2:F500").setDataValidation(courseRule);
+
+  // Dropdown Selection 2: Bạn nhớ xuất hiện đúng giờ hẹn nhé (Figma 12-3320)
+  var attendanceRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(ATTENDANCE_COMMITMENTS_LIST, true)
+    .build();
+  sheet.getRange("H2:H500").setDataValidation(attendanceRule);
+
+  // Dropdown Selection 3: Trạng thái Lead CRM
   var statusRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(["NEW", "CONTACTING", "CONSULTED", "ENROLLED", "DROPPED", "SPAM"], true)
+    .requireValueInList(LEAD_STATUSES_LIST, true)
     .build();
   sheet.getRange("I2:I500").setDataValidation(statusRule);
 
+  // Định dạng Plain Text cho cột Số điện thoại để không mất số 0
+  sheet.getRange("D2:D500").setNumberFormat("@");
+
   if (sheet.getLastRow() === 1) {
     sheet.appendRow([
-      "sub_sample_001", new Date().toISOString(), "Nguyễn Hoàng Nam (Mẫu)", "'0912345678", "nam.hoang@gmail.com",
-      "sql-for-data-analytics", "SQL for Data Analytics", "Muốn tư vấn lịch học buổi tối T3-T5", "NEW"
+      "sub_sample_figma_001",
+      new Date().toISOString(),
+      "Nguyễn Hoàng Nam",
+      "'0912345678",
+      "nam.hoang@gmail.com",
+      "SQL for Data Analytics",
+      "Chuyển ngành sang Data Analyst trong 3 tháng tới",
+      "Tôi chắc chắn",
+      "NEW",
+      "Học viên mong muốn học ca tối thứ 3 - thứ 5",
+      "Mentor Hứa Thảo Ly",
+      "homepage_consultation_form",
+      new Date().toISOString()
     ]);
   }
+  return sheet;
+}
+
+/**
+ * TAB 11: leads (private) (Bảo mật PII - Tương thích ngược)
+ */
+function setupLeadsPrivateTab(ss) {
+  return setupLeadsDatabaseSpreadsheet(ss, "leads (private)");
 }
 
 /**
  * Alias cho Tab 11 leads
  */
 function setupLeadsTab(ss) {
-  return setupLeadsPrivateTab(ss);
+  return setupLeadsDatabaseSpreadsheet(ss, "leads");
 }
 
 /**

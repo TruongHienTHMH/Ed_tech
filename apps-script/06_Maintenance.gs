@@ -519,14 +519,15 @@ function sendTelegramNotification(payload) {
 
 /**
  * 6. Cập nhật trạng thái Lead học viên (Lead Status Management)
+ * Tự động tìm kiếm trên Spreadsheet Leads (Spreadsheet 2) hoặc Active Spreadsheet
  */
 function showUpdateLeadStatusPrompt() {
   var ui = SpreadsheetApp.getUi();
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName("leads (private)") || ss.getSheetByName("Leads") || ss.getSheetByName("private_leads");
+  var ss = SpreadsheetFactory.getLeadsSpreadsheet();
+  var sheet = ss.getSheetByName("leads") || ss.getSheetByName("leads (private)") || ss.getSheetByName("Leads");
 
   if (!sheet || sheet.getLastRow() <= 1) {
-    ui.alert("Thông Báo", "Chưa có danh sách Lead học viên trong tab 'leads (private)'.", ui.ButtonSet.OK);
+    ui.alert("Thông Báo", "Chưa có danh sách Lead học viên trong bảng Leads.", ui.ButtonSet.OK);
     return;
   }
 
@@ -543,6 +544,12 @@ function showUpdateLeadStatusPrompt() {
   var data = sheet.getDataRange().getValues();
   var foundRow = 0;
   var leadInfo = {};
+  var headers = data[0].map(function(h) {
+    return h.toString().toLowerCase().trim().replace(/[\s-]+/g, "_").replace(/_?\(private\)/g, "");
+  });
+
+  var statusColIdx = headers.indexOf("status");
+  if (statusColIdx === -1) statusColIdx = 8; // Cột 9 mặc định
 
   for (var i = 1; i < data.length; i++) {
     var subId = (data[i][0] || "").toString().toLowerCase().trim();
@@ -554,8 +561,8 @@ function showUpdateLeadStatusPrompt() {
         subId: data[i][0],
         name: data[i][2] || "N/A",
         phone: data[i][3] || "N/A",
-        course: data[i][6] || "N/A",
-        currentStatus: data[i][8] || "NEW"
+        course: data[i][5] || data[i][6] || "N/A",
+        currentStatus: data[i][statusColIdx] || "NEW"
       };
       break;
     }
@@ -600,13 +607,64 @@ function showUpdateLeadStatusPrompt() {
     return;
   }
 
-  sheet.getRange(foundRow, 9).setValue(sanitizeFormula(newStatus));
+  sheet.getRange(foundRow, statusColIdx + 1).setValue(sanitizeFormula(newStatus));
+
+  // Cập nhật updated_at nếu có cột
+  var updateIdx = headers.indexOf("updated_at");
+  if (updateIdx !== -1) {
+    sheet.getRange(foundRow, updateIdx + 1).setValue(new Date().toISOString());
+  }
+
   ss.toast("🎉 Đã cập nhật trạng thái Lead " + leadInfo.name + " -> " + newStatus, "DataWithLy CRM", 5);
   ui.alert("✅ Cập Nhật Thành Công", "Học viên: " + leadInfo.name + "\nTrạng thái mới: " + newStatus, ui.ButtonSet.OK);
 }
 
 /**
- * 6. Thiết lập mã Secret bảo mật vào Google Cloud Script Properties
+ * 7. Thiết lập ID của Google Spreadsheet Leads Riêng Biệt (Spreadsheet 2 - Private Leads CRM)
+ */
+function promptSetLeadsSpreadsheetId() {
+  var ui = SpreadsheetApp.getUi();
+  var currentId = CONFIG.LEADS_SPREADSHEET_ID || "";
+  var displayStatus = currentId ? currentId : "(Chưa cấu hình, đang dùng file hiện tại)";
+
+  var prompt = ui.prompt(
+    "🔗 Cấu Hình Spreadsheet Leads Riêng Biệt (Spreadsheet 2)",
+    "Trạng thái hiện tại: " + displayStatus + "\n\n" +
+    "Nhập Google Spreadsheet ID của file chứa dữ liệu Leads riêng biệt (Bảo mật PII):\n" +
+    "(Bạn có thể lấy ID từ URL của file Sheets: /spreadsheets/d/[ID_Ở_ĐÂY]/edit)",
+    ui.ButtonSet.OK_CANCEL
+  );
+
+  if (prompt.getSelectedButton() !== ui.Button.OK) return;
+  var inputId = prompt.getResponseText().trim();
+  if (!inputId) {
+    ui.alert("Thông Báo", "Bạn chưa nhập ID hoặc đã để trống.", ui.ButtonSet.OK);
+    return;
+  }
+
+  try {
+    var targetFile = SpreadsheetApp.openById(inputId);
+    PropertiesService.getScriptProperties().setProperty("LEADS_SPREADSHEET_ID", inputId);
+
+    ui.alert(
+      "🎉 Kết Nối Thành Công!",
+      "Đã lưu LEADS_SPREADSHEET_ID vào Script Properties an toàn.\n" +
+      "Tên trang tính kết nối: " + targetFile.getName() + "\n\n" +
+      "Từ bây giờ, mọi lượt đăng ký học viên mới sẽ tự động được ghi vào file Leads riêng biệt này!",
+      ui.ButtonSet.OK
+    );
+  } catch (err) {
+    ui.alert(
+      "❌ Không Thể Mở Spreadsheet",
+      "Lỗi khi kiểm tra ID: " + err.message + "\n\n" +
+      "Vui lòng đảm bảo bạn nhập đúng Spreadsheet ID và tài khoản Google hiện tại có quyền Chỉnh sửa (Editor) đối với file đó.",
+      ui.ButtonSet.OK
+    );
+  }
+}
+
+/**
+ * 8. Thiết lập mã Secret bảo mật vào Google Cloud Script Properties
  * Giúp mã bí mật được lưu trữ chuẩn Enterprise, không bị lộ trong mã nguồn Git hay bảng tính.
  */
 function promptSetSharedSecret() {

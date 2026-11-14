@@ -118,27 +118,39 @@ export class CourseService {
       const merged: CurriculumModule[] = [];
 
       for (const sql of sqlModules) {
+        const titleStr = `[Phần 1: SQL] ${(sql.sessionTitle || sql.title).replace(/^Buổi\s*\d+:\s*/i, "")}`;
         merged.push({
           ...sql,
           id: `combo-sql-${sessionCounter}`,
           courseId: "end-to-end-analytics",
           courseName: "End-to-End Analytics with SQL & Dashboard",
           moduleNumber: sessionCounter,
+          day: sessionCounter,
+          week: Math.ceil(sessionCounter / 2),
           sortOrder: sessionCounter,
-          title: `[Phần 1: SQL] ${sql.title.replace(/^Buổi\s*\d+:\s*/i, "")}`,
+          title: titleStr,
+          sessionTitle: titleStr,
+          sessionDesc: sql.sessionDesc || sql.summary,
+          subContent: sql.subContent || sql.bulletPoints,
         });
         sessionCounter++;
       }
 
       for (const think of thinkModules) {
+        const titleStr = `[Phần 2: Tư Duy & Dashboard] ${(think.sessionTitle || think.title).replace(/^Buổi\s*\d+:\s*/i, "")}`;
         merged.push({
           ...think,
           id: `combo-think-${sessionCounter}`,
           courseId: "end-to-end-analytics",
           courseName: "End-to-End Analytics with SQL & Dashboard",
           moduleNumber: sessionCounter,
+          day: sessionCounter,
+          week: Math.ceil(sessionCounter / 2),
           sortOrder: sessionCounter,
-          title: `[Phần 2: Tư Duy & Dashboard] ${think.title.replace(/^Buổi\s*\d+:\s*/i, "")}`,
+          title: titleStr,
+          sessionTitle: titleStr,
+          sessionDesc: think.sessionDesc || think.summary,
+          subContent: think.subContent || think.bulletPoints,
         });
         sessionCounter++;
       }

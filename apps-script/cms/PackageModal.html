@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <?!= include('SharedStyles'); ?>
+</head>
+
+<body>
+  <div class="modal-header">
+    <div>
+      <h2 class="modal-title">📦 Quản Trị Gói Combo & Bảng Giá</h2>
+      <p class="modal-subtitle">Thiết lập các gói học phí Combo, huy hiệu khuyến mãi và danh sách quyền lợi</p>
+    </div>
+  </div>
+
+  <form id="packageForm">
+    <div class="form-row">
+      <div class="form-group col-2">
+        <label for="name">Tên Gói Combo <span class="required">*</span></label>
+        <input type="text" id="name" name="name" required placeholder="Gói Nền Tảng (SQL + Power BI)"
+          autocomplete="off">
+      </div>
+      <div class="form-group col-1">
+        <label for="package_id">Mã Gói (ID) <span class="required">*</span></label>
+        <input type="text" id="package_id" name="package_id" required placeholder="combo-foundation"
+          style="font-family: monospace;">
+      </div>
+    </div>
+
+    <div class="preview-box">
+      <div class="preview-header">
+        <span>Xem trước Card Bảng Giá</span>
+        <span id="previewBadge" class="badge-v badge-crimson">Tiết Kiệm 32%</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <div>
+          <div id="previewName" style="font-size: 14px; font-weight: 700; color: var(--primary);">Gói Nền Tảng (SQL +
+            Power BI)</div>
+          <div id="previewFeaturesCount" style="font-size: 11px; color: var(--slate-muted); margin-top: 2px;">0 quyền
+            lợi đi kèm</div>
+        </div>
+        <div style="text-align: right;">
+          <div id="previewSalePrice" style="font-size: 16px; font-weight: 800; color: var(--primary);">0 đ</div>
+          <del id="previewOrigPrice" style="font-size: 11px; color: var(--slate-light);">0 đ</del>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="sale_price">Học Phí Ưu Đãi (VNĐ) <span class="required">*</span></label>
+        <input type="number" id="sale_price" name="sale_price" required placeholder="8900000" step="50000">
+      </div>
+      <div class="form-group col-1">
+        <label for="original_price">Học Phí Gốc (VNĐ)</label>
+        <input type="number" id="original_price" name="original_price" placeholder="13000000" step="50000">
+      </div>
+      <div class="form-group col-1">
+        <label for="badge">Huy Hiệu (Badge)</label>
+        <input type="text" id="badge" name="badge" placeholder="Tiết Kiệm 32%">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="features_list">Danh Sách Tính Năng / Quyền Lợi (Mỗi dòng một mục) <span
+          class="required">*</span></label>
+      <textarea id="features_list" name="features_list" rows="4" required
+        placeholder="Trọn bộ 2 khóa SQL và Power BI từ cơ bản đến chuyên sâu&#10;Review CV và định hướng lộ trình cá nhân 1-1&#10;Tham gia cộng đồng Alumni DataWithLy trọn đời&#10;Hỗ trợ sửa bài tập hàng tuần bởi Mentor"></textarea>
+      <div class="help-text">Mỗi dòng (Enter) sẽ hiển thị thành một gạch đầu dòng có dấu tích xanh trên Bảng giá
+        website.</div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="sort_order">Thứ Tự Sắp Xếp</label>
+        <input type="number" id="sort_order" name="sort_order" value="1" min="1">
+      </div>
+      <div class="form-group col-1" style="display: flex; align-items: flex-end;">
+        <label class="checkbox-group" style="width: 100%;">
+          <input type="checkbox" id="is_popular" name="is_popular">
+          <span class="checkbox-label">Gói phổ biến nhất (is_popular)</span>
+        </label>
+      </div>
+      <div class="form-group col-1" style="display: flex; align-items: flex-end;">
+        <label class="checkbox-group" style="width: 100%;">
+          <input type="checkbox" id="is_active" name="is_active" checked>
+          <span class="checkbox-label">Kích hoạt (is_active)</span>
+        </label>
+      </div>
+    </div>
+
+    <div id="errorBox" class="alert-banner alert-danger error-msg"></div>
+
+    <div class="btn-group">
+      <button type="button" class="btn-cancel" onclick="google.script.host.close()">Hủy Bỏ</button>
+      <button type="submit" id="submitBtn" class="btn-submit">
+        <span>Lưu Gói Combo</span>
+      </button>
+    </div>
+  </form>
+
+  <script>
+    var nameInput = document.getElementById("name");
+    var pkgIdInput = document.getElementById("package_id");
+    var origPriceInput = document.getElementById("original_price");
+    var salePriceInput = document.getElementById("sale_price");
+    var badgeInput = document.getElementById("badge");
+    var featuresInput = document.getElementById("features_list");
+
+    var previewName = document.getElementById("previewName");
+    var previewBadge = document.getElementById("previewBadge");
+    var previewSalePrice = document.getElementById("previewSalePrice");
+    var previewOrigPrice = document.getElementById("previewOrigPrice");
+    var previewFeaturesCount = document.getElementById("previewFeaturesCount");
+
+    function slugify(text) {
+      if (!text) return "";
+      var str = text.toString().toLowerCase().trim();
+      str = str.replace(/[áàảãạăắằẳẵặâấầẩẫậ]/g, "a");
+      str = str.replace(/[éèẻẽẹêếềểễệ]/g, "e");
+      str = str.replace(/[íìỉĩị]/g, "i");
+      str = str.replace(/[óòỏõọôốồổỗộơớờởỡợ]/g, "o");
+      str = str.replace(/[úùủũụưứừửữự]/g, "u");
+      str = str.replace(/[ýỳỷỹỵ]/g, "y");
+      str = str.replace(/đ/g, "d");
+      str = str.replace(/[\s_]+/g, "-");
+      str = str.replace(/[^a-z0-9-]/g, "");
+      str = str.replace(/-+/g, "-");
+      str = str.replace(/^-+|-+$/g, "");
+      return str;
+    }
+
+    function formatVND(num) {
+      return Number(num || 0).toLocaleString("vi-VN") + " đ";
+    }
+
+    function updatePreview() {
+      previewName.innerText = nameInput.value || "Tên gói combo";
+      var sale = parseFloat(salePriceInput.value) || 0;
+      var orig = parseFloat(origPriceInput.value) || 0;
+      previewSalePrice.innerText = formatVND(sale);
+      previewOrigPrice.innerText = orig > sale ? formatVND(orig) : "";
+
+      var badge = badgeInput.value.trim();
+      if (!badge && orig > sale && orig > 0) {
+        var pct = Math.round(((orig - sale) / orig) * 100);
+        badge = "Tiết Kiệm " + pct + "%";
+      }
+      previewBadge.innerText = badge || "Gói Combo";
+
+      var lines = featuresInput.value.split("\n").filter(function (l) { return l.trim().length > 0; });
+      previewFeaturesCount.innerText = lines.length + " quyền lợi đi kèm";
+    }
+
+    nameInput.addEventListener("input", function () {
+      if (!pkgIdInput.value || pkgIdInput.dataset.touched !== "true") {
+        pkgIdInput.value = "combo-" + slugify(this.value);
+      }
+      updatePreview();
+    });
+
+    pkgIdInput.addEventListener("input", function () {
+      this.dataset.touched = "true";
+    });
+
+    salePriceInput.addEventListener("input", updatePreview);
+    origPriceInput.addEventListener("input", updatePreview);
+    badgeInput.addEventListener("input", updatePreview);
+    featuresInput.addEventListener("input", updatePreview);
+
+    var form = document.getElementById("packageForm");
+    var submitBtn = document.getElementById("submitBtn");
+    var errorBox = document.getElementById("errorBox");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      errorBox.style.display = "none";
+      errorBox.innerText = "";
+
+      var name = nameInput.value.trim();
+      var pkgId = pkgIdInput.value.trim();
+      var salePrice = parseFloat(salePriceInput.value) || 0;
+
+      if (!name || !pkgId || salePrice <= 0) {
+        showError("Vui lòng nhập tên gói, mã gói và học phí hợp lệ.");
+        return;
+      }
+
+      var origPrice = parseFloat(origPriceInput.value) || salePrice;
+      var badge = badgeInput.value.trim();
+      if (!badge && origPrice > salePrice) {
+        badge = "Tiết Kiệm " + Math.round(((origPrice - salePrice) / origPrice) * 100) + "%";
+      }
+
+      var data = {
+        id: "pkg-" + pkgId.replace(/^combo-/, ""),
+        package_id: pkgId,
+        name: name,
+        original_price: origPrice,
+        sale_price: salePrice,
+        badge: badge,
+        features_list: featuresInput.value.trim(),
+        is_popular: document.getElementById("is_popular").checked,
+        is_active: document.getElementById("is_active").checked,
+        sort_order: parseInt(document.getElementById("sort_order").value, 10) || 1
+      };
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> Đang lưu...';
+
+      google.script.run
+        .withSuccessHandler(function () {
+          google.script.host.close();
+        })
+        .withFailureHandler(function (err) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>Lưu Gói Combo</span>';
+          showError("Lỗi: " + (err.message || err.toString()));
+        })
+        .savePackageFromModal(data);
+    });
+
+    function showError(msg) {
+      errorBox.innerText = msg;
+      errorBox.style.display = "block";
+    }
+  </script>
+</body>
+
+</html>

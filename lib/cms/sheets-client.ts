@@ -95,8 +95,8 @@ export class SheetsClient {
       if (cached) return cached;
     }
 
-    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_CMS_URL;
-    const secret = process.env.GOOGLE_APPS_SCRIPT_CMS_SECRET || "";
+    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_CMS_URL || process.env.GOOGLE_APPS_SCRIPT_URL;
+    const secret = process.env.GOOGLE_APPS_SCRIPT_CMS_SECRET || process.env.GOOGLE_APPS_SCRIPT_SECRET || "";
     const startTime = Date.now();
 
     // 1. If no URL configured, return typed mock report from seed
@@ -114,6 +114,10 @@ export class SheetsClient {
         method: "GET",
         signal: controller.signal,
         redirect: "follow",
+        next: {
+          tags: ["cms", "sheets"],
+          revalidate: 300,
+        },
       });
 
       clearTimeout(timeoutId);
@@ -198,86 +202,91 @@ export class SheetsClient {
             ? "Khóa học nền tảng"
             : "Khóa học chuyên sâu");
 
-      // Find matching curriculum modules (smart column resolution & alias matching)
-      let courseCurriculum: CurriculumModule[] = rawCurriculum
+      // Find matching curriculum modules directly from Google Sheets
+      const courseCurriculum: CurriculumModule[] = rawCurriculum
         .filter((m) => {
           const rawCId = String(m.course_id || m.courseId || m.course_slug || m.slug || "").trim().toLowerCase();
           return rawCId === id.toLowerCase() || rawCId === slug.toLowerCase();
         })
         .map((m, mIdx) => {
-          const modId = String(m.id || `${id}-mod-${mIdx + 1}`);
+          const modId = String(m.id || `${id}-d${mIdx + 1}`);
 
-          // Smart recovery for shifted headers in Google Sheets
-          let modNum = Number(m.module_number);
-          let modTitle = String(m.module_title || m.title || "");
-          let modDuration = String(m.duration || "2 tuần");
-          let lessonsCount = Number(m.lessons_count || 6);
-
-          if (isNaN(modNum) || typeof m.module_title === "number" || (!isNaN(Number(m.module_title)) && isNaN(Number(m.duration_hours)))) {
-            if (!isNaN(Number(m.module_title))) {
-              modNum = Number(m.module_title);
-            }
-            if (m.duration_hours && typeof m.duration_hours === "string" && isNaN(Number(m.duration_hours))) {
-              modTitle = String(m.duration_hours);
-            }
-            if (typeof m.bullets === "string" && m.bullets.includes("tuần")) {
-              modDuration = String(m.bullets);
-            }
-            if (typeof m.summary === "number" || (!isNaN(Number(m.summary)) && Number(m.summary) > 0)) {
-              lessonsCount = Number(m.summary);
-            }
+          // 1. Buổi học (Day / Session Number)
+          let day = Number(m.day || m.module_number || m.buoi);
+          if (isNaN(day) || day <= 0) {
+            day = mIdx + 1;
           }
 
-          if (isNaN(modNum) || modNum <= 0) {
-            modNum = mIdx + 1;
+          // 2. Tuần học (Week)
+          const weekVal = m.week || m.tuan || m.week_number;
+          let weekNumber = Number(weekVal);
+          if (isNaN(weekNumber) || weekNumber <= 0) {
+            weekNumber = Math.ceil(day / 2);
           }
-          if (!modTitle || modTitle === String(modNum)) {
-            modTitle = `Buổi ${modNum}: Nền tảng & Thực hành chuyên sâu`;
+          const weekLabel = typeof weekVal === "string" && isNaN(Number(weekVal))
+            ? weekVal
+            : `Tuần ${weekNumber}`;
+
+          // 3. Ngày của buổi học (Date - ví dụ: TH10 03 hoặc 03/10)
+          const date = String(m.date || m.session_date || m.ngay || m.session_date_badge || `TH10 0${day}`).trim();
+
+          // 4. Nội dung của từng buổi (Session Title)
+          let sessionTitle = String(m.session_title || m.noi_dung || m.week_title || m.module_title || m.title || "").trim();
+          if (!sessionTitle || sessionTitle === String(day)) {
+            sessionTitle = `Buổi ${day}: Nền tảng & Thực hành chuyên sâu`;
           }
 
-          const courseName = String(m.course_name || title);
-          const topicsRaw = m.topics_bullets || m.bullets || m.content || "";
-          const modSort = Number(m.sort_order || modNum);
-          let bulletPoints = this.parseMultilineText(topicsRaw);
+          // 5. Miêu tả nội dung buổi học (Session Description / Content)
+          const sessionDesc = String(m.session_desc || m.mieu_ta || m.content || m.summary || sessionTitle).trim();
 
-          if (!bulletPoints || bulletPoints.length === 0) {
-            bulletPoints = [
+          // 6. Sub Content (Chi tiết buổi học - dot list khi bấm dropdown)
+          const rawSubContent = m.sub_content || m.subcontent || m.chi_tiet || m.topics_bullets || m.bullets || "";
+          let subContent = this.parseMultilineText(rawSubContent);
+          if (!subContent || subContent.length === 0) {
+            subContent = [
               "Nắm vững tư duy và kiến thức nền tảng thực chiến",
               "Thực hành giải quyết bài toán kinh doanh thực tế",
               "Ứng dụng công cụ chuyên sâu theo quy chuẩn doanh nghiệp",
             ];
           }
 
-          const weekNum = Math.ceil(modNum / 2);
+          // 7. Thời lượng & Thứ tự
+          const duration = String(m.duration || "3 giờ").trim();
+          const durationHours = parseFloat(duration) || 3;
+          const sortOrder = Number(m.sort_order || day);
+          const courseName = String(m.course_name || title);
+
+          const startDate = m.start_date ? String(m.start_date).trim() : undefined;
+          const endDate = m.end_date ? String(m.end_date).trim() : undefined;
 
           return {
             id: modId,
             courseId: id,
             courseName,
-            moduleNumber: modNum,
-            title: modTitle,
-            summary: String(m.summary && typeof m.summary === "string" ? m.summary : modTitle),
-            bulletPoints,
-            durationHours: Number(m.duration_hours && !isNaN(Number(m.duration_hours)) ? m.duration_hours : 3),
-            duration: modDuration,
-            lessonsCount,
-            sortOrder: modSort,
-            weekNumber: weekNum,
-            weekLabel: `Week ${weekNum}`,
-            sessionDateBadge: `TH${10} 0${modNum}`,
-            isMilestone: modNum % 6 === 0,
+            week: weekNumber,
+            day,
+            date,
+            sessionTitle,
+            sessionDesc,
+            subContent,
+            duration,
+            sortOrder,
+            startDate,
+            endDate,
+            // Tương thích ngược:
+            moduleNumber: day,
+            title: sessionTitle,
+            summary: sessionDesc,
+            bulletPoints: subContent,
+            durationHours,
+            lessonsCount: subContent.length,
+            weekNumber,
+            weekLabel,
+            sessionDateBadge: date,
+            isMilestone: day % 4 === 0,
+            milestoneBadge: day % 4 === 0 ? "Thực hành" : undefined,
           };
         });
-
-      // Fallback to authoritative Seed Curriculum if this course has 0 modules in Sheets
-      if (courseCurriculum.length === 0) {
-        const fallbackModules = seedCurriculum.filter(
-          (sm) => sm.courseId.toLowerCase() === id.toLowerCase() || sm.courseId.toLowerCase() === slug.toLowerCase()
-        );
-        if (fallbackModules.length > 0) {
-          courseCurriculum = fallbackModules.map((sm) => ({ ...sm, courseId: id }));
-        }
-      }
 
       return {
         id,
@@ -438,7 +447,8 @@ export class SheetsClient {
       title: String(b.title || ""),
       slug: String(b.slug || b.id || `blg-${idx + 1}`),
       category: String(b.category || "Sự nghiệp"),
-      excerpt: String(b.excerpt || ""),
+      excerpt: String(b.excerpt || b.description || ""),
+      description: b.description ? String(b.description) : (b.excerpt ? String(b.excerpt) : undefined),
       contentMarkdown: b.content_markdown
         ? String(b.content_markdown)
         : b.contentMarkdown
