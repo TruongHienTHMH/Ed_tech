@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://datawithly.com"),
   title: "DataWithLy - Học Data Analytics từ tư duy đến thực hành",
   description:
-    "Lộ trình bài bản từ cơ bản đến nâng cao, dự án thực tế, hỗ trợ tận tâm cùng Mentor Hứa Thảo Ly.",
+    "Đồng hành cùng mentor có hơn 5 năm kinh nghiệm tại MoMo, Tiki, từ kiến thức nền tảng đến thực hành giải quyết bài toán dữ liệu",
 };
 
 export default function RootLayout({

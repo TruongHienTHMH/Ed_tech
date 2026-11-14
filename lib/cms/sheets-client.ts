@@ -139,10 +139,7 @@ export class SheetsClient {
       throw new Error(json.error?.message || "Cấu trúc phản hồi từ Google Sheets không hợp lệ.");
     } catch (err: unknown) {
       const latencyMs = Date.now() - startTime;
-      const maskedSecret = secret
-        ? `${secret.slice(0, 4)}...${secret.slice(-4)} (len: ${secret.length})`
-        : "(chuỗi rỗng / undefined)";
-      console.warn(`[SheetsClient] Lỗi kết nối Google Sheets (Secret gửi từ Web: ${maskedSecret}), phục vụ Fallback Snapshot:`, (err as Error)?.message);
+      console.warn("[SheetsClient] Lỗi kết nối Google Sheets, phục vụ Fallback Snapshot:", (err as Error)?.message);
 
       const report = this.buildFallbackReport(
         latencyMs,
