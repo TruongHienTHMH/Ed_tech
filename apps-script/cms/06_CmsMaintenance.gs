@@ -477,7 +477,16 @@ function triggerWebsiteRevalidation() {
   }
 
   // 3. Gắn kèm mã bí mật REVALIDATION_SECRET nếu chưa có trong URL
-  var secret = CONFIG.REVALIDATION_SECRET || "datawithly_secure_reval_token_2026";
+  var secret = (CONFIG.REVALIDATION_SECRET || "").toString().trim();
+  if (!secret) {
+    ui.alert(
+      "⚠️ Thiếu Mã Bí Mật REVALIDATION_SECRET",
+      "Hệ thống chưa tìm thấy mã REVALIDATION_SECRET trong Script Properties.\n\n" +
+      "👉 Vui lòng vào thanh menu: 🚀 DataWithLy CMS ➔ 🔑 Cài Đặt Revalidation Secret để nhập mã.",
+      ui.ButtonSet.OK
+    );
+    return;
+  }
   if (targetUrl.indexOf("secret=") === -1) {
     targetUrl += (targetUrl.indexOf("?") === -1 ? "?" : "&") + "secret=" + encodeURIComponent(secret);
   }
@@ -710,9 +719,7 @@ function promptSetLeadsSpreadsheetId() {
 function promptSetSharedSecret() {
   var ui = SpreadsheetApp.getUi();
   var current = (CONFIG.SHARED_SECRET || "").toString().trim();
-  var displayStatus = current
-    ? ("●●●●●●●● (" + current.substring(0, 4) + "..." + current.substring(current.length - 4) + ", độ dài: " + current.length + " ký tự)")
-    : "(Chưa thiết lập - Khuyến nghị cài đặt ngay)";
+  var displayStatus = current ? "●●●●●●●● (Đã được cấu hình an toàn)" : "(Chưa thiết lập - Khuyến nghị cài đặt ngay)";
 
   var prompt = ui.prompt(
     "🔐 Cấu Hình Mã Secret Bảo Mật (SHARED_SECRET)",
@@ -730,7 +737,6 @@ function promptSetSharedSecret() {
       ui.alert(
         "✅ Cấu Hình Thành Công!",
         "Mã Secret đã được lưu vĩnh viễn trong Google Cloud Script Properties.\n\n" +
-        "Mã Secret đã lưu: " + val.substring(0, 4) + "..." + val.substring(val.length - 4) + " (" + val.length + " ký tự).\n\n" +
         "👉 Hãy đảm bảo trên Vercel (Settings > Environment Variables) biến GOOGLE_APPS_SCRIPT_CMS_SECRET có đúng giá trị này!",
         ui.ButtonSet.OK
       );

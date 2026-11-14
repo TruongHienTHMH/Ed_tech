@@ -42,6 +42,23 @@ export class LeadService {
 
     const clean = validation.cleanData!;
 
+    const targetOrGoal = (() => {
+      const parts: string[] = [];
+      if (dto.preferred_date && dto.preferred_time_slot) {
+        parts.push(`Lịch hẹn: ${dto.preferred_date} (${dto.preferred_time_slot})`);
+      } else if (dto.preferred_date) {
+        parts.push(`Ngày hẹn: ${dto.preferred_date}`);
+      } else if (dto.preferred_time_slot) {
+        parts.push(`Khung giờ: ${dto.preferred_time_slot}`);
+      }
+      if (dto.target_or_goal && dto.target_or_goal.trim()) {
+        parts.push(dto.target_or_goal.trim());
+      } else if (clean.message && clean.message.trim()) {
+        parts.push(clean.message.trim());
+      }
+      return parts.join(" | ");
+    })();
+
     // 3. Construct sanitized payload for Sheets
     const rowPayload = {
       submission_id: sanitizeSpreadsheetValue(clean.submission_id),
@@ -52,7 +69,9 @@ export class LeadService {
       course_id: sanitizeSpreadsheetValue(clean.course_id),
       course_name: sanitizeSpreadsheetValue(clean.course_name),
       coaching_course: sanitizeSpreadsheetValue(dto.coaching_course || clean.course_name),
-      target_or_goal: sanitizeSpreadsheetValue(dto.target_or_goal || clean.message),
+      preferred_date: sanitizeSpreadsheetValue(dto.preferred_date || ""),
+      preferred_time_slot: sanitizeSpreadsheetValue(dto.preferred_time_slot || ""),
+      target_or_goal: sanitizeSpreadsheetValue(targetOrGoal),
       attendance_commitment: sanitizeSpreadsheetValue(dto.attendance_commitment || "Tôi chắc chắn"),
       message: sanitizeSpreadsheetValue(clean.message),
       action: "submit_lead",

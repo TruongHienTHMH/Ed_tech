@@ -27,6 +27,8 @@ interface FormDataState {
   email: string;
   phone: string;
   interestedCourses: string[];
+  preferredDate: string;
+  preferredTimeSlot: string;
   message: string;
   attendanceCommitment: "Tôi chắc chắn" | "Tôi cam kết";
   _hp: string; // Honeypot
@@ -92,6 +94,8 @@ export default function LeadForm({
       email: "",
       phone: "",
       interestedCourses: getInitialCourses(defaultCourseId),
+      preferredDate: "Thứ 2",
+      preferredTimeSlot: "10h - 10h30",
       message: "",
       attendanceCommitment: "Tôi chắc chắn",
       _hp: "",
@@ -247,6 +251,11 @@ export default function LeadForm({
       email: formData.email.trim(),
       course_id: primaryCourse,
       course_name: selectedCourseNames,
+      coaching_course: selectedCourseNames,
+      preferred_date: formData.preferredDate,
+      preferred_time_slot: formData.preferredTimeSlot,
+      attendance_commitment: formData.attendanceCommitment,
+      target_or_goal: `Lịch hẹn: ${formData.preferredDate} (${formData.preferredTimeSlot})${formData.message ? ` | ${formData.message}` : ""}`,
       message: noteLines.join("\n"),
       _hp: formData._hp,
       form_id: formId,
@@ -349,6 +358,8 @@ export default function LeadForm({
       email: "",
       phone: "",
       interestedCourses: getInitialCourses(defaultCourseId),
+      preferredDate: "Thứ 2",
+      preferredTimeSlot: "10h - 10h30",
       message: "",
       attendanceCommitment: "Tôi chắc chắn",
       _hp: "",
@@ -583,33 +594,78 @@ export default function LeadForm({
         )}
       </div>
 
-      {/* 5. Input: Mục tiêu học tập hoặc vị trí hiện tại */}
+      {/* 5. Dropdown: Ngày trao đổi thuận tiện với bạn nhất là (Figma 12:3320) */}
       <div className="space-y-1">
         <label
-          htmlFor={`message_${formId}`}
-          className="block text-xs font-bold text-neutral-800 uppercase tracking-wider"
+          htmlFor={`preferredDate_${formId}`}
+          className="flex items-center gap-1 text-[13px] font-medium text-[#68656c]"
         >
-          Mục tiêu học tập hoặc vị trí hiện tại
+          <span>Ngày trao đổi thuận tiện với bạn nhất là</span>
+          <span className="text-[#AF445A] font-bold">*</span>
         </label>
-        <input
-          id={`message_${formId}`}
-          type="text"
-          placeholder="Ví dụ: Chuyển ngành sang DA, nâng cao kỹ năng xử lý data..."
-          value={formData.message}
-          onFocus={handleFieldFocus}
-          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-          disabled={isSubmitting}
-          className="w-full px-4 py-2.5 rounded-xl border border-neutral-300 text-sm font-medium bg-neutral-50/70 text-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#8B1D2C]/40 focus:border-[#8B1D2C] transition-all"
-        />
+        <div className="relative">
+          <select
+            id={`preferredDate_${formId}`}
+            value={formData.preferredDate}
+            onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
+            disabled={isSubmitting}
+            className="w-full h-[40px] px-3.5 pr-10 rounded-[8px] border border-[#CECDD0] text-[15px] font-medium text-[#1c1b1d] bg-white focus:outline-none focus:ring-2 focus:ring-[#784080]/30 focus:border-[#784080] appearance-none cursor-pointer transition-all"
+          >
+            <option value="Thứ 2">Thứ 2</option>
+            <option value="Thứ 3">Thứ 3</option>
+            <option value="Thứ 4">Thứ 4</option>
+            <option value="Thứ 5">Thứ 5</option>
+            <option value="Thứ 6">Thứ 6</option>
+            <option value="Thứ 7">Thứ 7</option>
+            <option value="Chủ Nhật">Chủ Nhật</option>
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-neutral-500">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
       </div>
 
-      {/* 6. Radio Group: Bạn nhớ xuất hiện đúng giờ hẹn nhé */}
-      <div className="space-y-2">
-        <label className="block text-xs font-bold text-neutral-800 uppercase tracking-wider">
+      {/* 6. Dropdown: Khung giờ phù hợp để trao đổi với bạn là (Figma 12:3320) */}
+      <div className="space-y-1">
+        <label
+          htmlFor={`preferredTimeSlot_${formId}`}
+          className="flex items-center gap-1 text-[13px] font-medium text-[#68656c]"
+        >
+          <span>Khung giờ phù hợp để trao đổi với bạn là</span>
+          <span className="text-[#AF445A] font-bold">*</span>
+        </label>
+        <div className="relative">
+          <select
+            id={`preferredTimeSlot_${formId}`}
+            value={formData.preferredTimeSlot}
+            onChange={(e) => setFormData({ ...formData, preferredTimeSlot: e.target.value })}
+            disabled={isSubmitting}
+            className="w-full h-[40px] px-3.5 pr-10 rounded-[8px] border border-[#CECDD0] text-[15px] font-medium text-[#1c1b1d] bg-white focus:outline-none focus:ring-2 focus:ring-[#784080]/30 focus:border-[#784080] appearance-none cursor-pointer transition-all"
+          >
+            <option value="10h - 10h30">10h - 10h30</option>
+            <option value="09h - 09h30">09h - 09h30</option>
+            <option value="14h - 14h30">14h - 14h30</option>
+            <option value="15h - 15h30">15h - 15h30</option>
+            <option value="19h - 19h30">19h - 19h30</option>
+            <option value="20h - 20h30">20h - 20h30</option>
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-neutral-500">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* 7. Radio Group: Bạn nhớ xuất hiện đúng giờ hẹn nhé (Figma 12:3320) */}
+      <div className="space-y-1.5 pt-1">
+        <label className="block text-[13px] font-medium text-[#68656c]">
           Bạn nhớ xuất hiện đúng giờ hẹn nhé
         </label>
-        <div className="flex items-center gap-6 bg-neutral-50/80 p-3 rounded-xl border border-neutral-200">
-          <label className="flex items-center gap-2 text-sm font-medium text-neutral-800 cursor-pointer select-none">
+        <div className="flex items-center gap-6 py-1">
+          <label className="flex items-center gap-2 text-sm font-medium text-[#1c1b1d] cursor-pointer select-none">
             <input
               type="radio"
               name={`attendance_${formId}`}
@@ -619,11 +675,11 @@ export default function LeadForm({
                 setFormData({ ...formData, attendanceCommitment: "Tôi chắc chắn" })
               }
               disabled={isSubmitting}
-              className="w-4 h-4 text-[#8B1D2C] accent-[#8B1D2C] focus:ring-[#8B1D2C] cursor-pointer"
+              className="w-4 h-4 text-[#784080] accent-[#784080] focus:ring-[#784080] cursor-pointer"
             />
             <span>Tôi chắc chắn</span>
           </label>
-          <label className="flex items-center gap-2 text-sm font-medium text-neutral-800 cursor-pointer select-none">
+          <label className="flex items-center gap-2 text-sm font-medium text-[#1c1b1d] cursor-pointer select-none">
             <input
               type="radio"
               name={`attendance_${formId}`}
@@ -633,24 +689,24 @@ export default function LeadForm({
                 setFormData({ ...formData, attendanceCommitment: "Tôi cam kết" })
               }
               disabled={isSubmitting}
-              className="w-4 h-4 text-[#8B1D2C] accent-[#8B1D2C] focus:ring-[#8B1D2C] cursor-pointer"
+              className="w-4 h-4 text-[#784080] accent-[#784080] focus:ring-[#784080] cursor-pointer"
             />
             <span>Tôi cam kết</span>
           </label>
         </div>
       </div>
 
-      {/* 7. Submit Button */}
+      {/* 8. Submit Button (Figma 12:3348) */}
       <div className="pt-2">
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-3.5 px-6 rounded-2xl text-base font-bold text-white bg-gradient-to-r from-[#8B1D2C] to-[#AF445A] hover:from-[#731422] hover:to-[#96374C] disabled:opacity-60 transition-all shadow-lg hover:shadow-xl active:scale-98 cursor-pointer flex items-center justify-center gap-2"
+          className="w-full py-3.5 px-6 rounded-[12px] text-sm font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#784080] to-[#AF445A] hover:opacity-95 disabled:opacity-60 transition-all shadow-md hover:shadow-lg active:scale-98 cursor-pointer flex items-center justify-center gap-2"
         >
           {isSubmitting ? (
             <>
               <svg
-                className="animate-spin w-5 h-5 text-white"
+                className="animate-spin w-4 h-4 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -671,7 +727,7 @@ export default function LeadForm({
               <span>Đang gửi thông tin...</span>
             </>
           ) : (
-            <span>Đăng Ký Tư Vấn</span>
+            <span>ĐĂNG KÝ NGAY</span>
           )}
         </button>
       </div>

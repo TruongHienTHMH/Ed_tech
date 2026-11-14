@@ -9,10 +9,24 @@ export async function POST(request: NextRequest) {
     const tag = searchParams.get("tag");
     const path = searchParams.get("path");
 
-    const expectedSecret = process.env.REVALIDATION_SECRET || "datawithly_secure_reval_token_2026";
+    const expectedSecret = process.env.REVALIDATION_SECRET;
+
+    if (!expectedSecret) {
+      console.error("[Revalidate API] Lỗi cấu hình: Biến môi trường REVALIDATION_SECRET chưa được thiết lập trên server.");
+      return NextResponse.json(
+        {
+          revalidated: false,
+          error: {
+            code: "SERVER_MISCONFIGURED",
+            message: "Máy chủ chưa được cấu hình biến môi trường.",
+          },
+        },
+        { status: 500 }
+      );
+    }
 
     // 1. Authenticate secret token
-    if (!secret || secret !== expectedSecret) {
+    if (!secret || secret.trim() !== expectedSecret.trim()) {
       return NextResponse.json(
         {
           revalidated: false,

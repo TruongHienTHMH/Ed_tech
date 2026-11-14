@@ -13,6 +13,8 @@ export interface LeadInputDto extends Partial<FlatAttributionPayload> {
   course_id?: string;
   course_name?: string;
   coaching_course?: string;
+  preferred_date?: string;
+  preferred_time_slot?: string;
   target_or_goal?: string;
   attendance_commitment?: string;
   message?: string;
