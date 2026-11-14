@@ -37,7 +37,7 @@ function doGet(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var ss = SpreadsheetFactory.getContentSpreadsheet();
 
     // Lấy riêng 1 tab
     if (action === "get_tab") {
@@ -258,31 +258,159 @@ function doPost(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 10. TIẾP NHẬN LEAD HỌC VIÊN (submit_lead)
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = ss.getSheetByName("leads (private)") || ss.getSheetByName("Leads") || ss.getSheetByName("private_leads");
-
-    if (!sheet) {
-      sheet = ss.insertSheet("leads (private)");
-      sheet.appendRow([
-        "submission_id", "timestamp", "name (private)", "phone (private)", "email (private)",
-        "course_id", "course_name", "message (private)", "status"
-      ]);
+    // 10. TRUY VẤN DANH SÁCH LEADS (get_leads) - Bảo mật SHARED_SECRET cho Web Leads CRM
+    if (action === "get_leads") {
+      var leadsSs = SpreadsheetFactory.getLeadsSpreadsheet();
+      var leadsSheet = leadsSs.getSheetByName("leads") || leadsSs.getSheetByName("leads (private)") || leadsSs.getSheetByName("Leads");
+      if (!leadsSheet || leadsSheet.getLastRow() <= 1) {
+        return ContentService.createTextOutput(JSON.stringify({
+          ok: true, action: "get_leads", total: 0, data: []
+        })).setMimeType(ContentService.MimeType.JSON);
+      }
+      var leadRows = getSheetRowsAsObjects(leadsSheet);
+      var filterStatus = (payload.status || "ALL").toUpperCase();
+      var searchTerm = (payload.search || "").toLowerCase().trim();
+      if (filterStatus !== "ALL") {
+        leadRows = leadRows.filter(function(r) { return (r.status || "").toUpperCase() === filterStatus; });
+      }
+      if (searchTerm) {
+        leadRows = leadRows.filter(function(r) {
+          return (r.name || "").toLowerCase().indexOf(searchTerm) !== -1 ||
+                 (r.phone || "").toLowerCase().indexOf(searchTerm) !== -1 ||
+                 (r.email || "").toLowerCase().indexOf(searchTerm) !== -1 ||
+                 (r.coaching_course || r.course_name || "").toLowerCase().indexOf(searchTerm) !== -1;
+        });
+      }
+      return ContentService.createTextOutput(JSON.stringify({
+        ok: true,
+        action: "get_leads",
+        total: leadRows.length,
+        data: leadRows
+      })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    var timestamp = new Date().toISOString();
+    // 11. CẬP NHẬT TRẠNG THÁI LEAD (update_lead) - Hỗ trợ Web Leads CRM
+    if (action === "update_lead") {
+      var updateSs = SpreadsheetFactory.getLeadsSpreadsheet();
+      var updateSheet = updateSs.getSheetByName("leads") || updateSs.getSheetByName("leads (private)") || updateSs.getSheetByName("Leads");
+      if (!updateSheet || updateSheet.getLastRow() <= 1) {
+        return ContentService.createTextOutput(JSON.stringify({
+          ok: false, error: { code: "NOT_FOUND", message: "Không tìm thấy dữ liệu Leads." }
+        })).setMimeType(ContentService.MimeType.JSON);
+      }
+      var targetSubId = (payload.submission_id || "").toString().trim();
+      var sheetData = updateSheet.getDataRange().getValues();
+      var isUpdated = false;
+      var rawHeaders = sheetData[0].map(function(h) {
+        return h.toString().toLowerCase().trim().replace(/[\s-]+/g, "_").replace(/_?\(private\)/g, "");
+      });
+
+      for (var r = 1; r < sheetData.length; r++) {
+        if ((sheetData[r][0] || "").toString().trim() === targetSubId) {
+          var targetRow = r + 1;
+          if (payload.status) {
+            var sIdx = rawHeaders.indexOf("status");
+            if (sIdx !== -1) updateSheet.getRange(targetRow, sIdx + 1).setValue(sanitizeFormula(payload.status));
+          }
+          if (payload.notes !== undefined) {
+            var nIdx = rawHeaders.indexOf("notes");
+            if (nIdx !== -1) updateSheet.getRange(targetRow, nIdx + 1).setValue(sanitizeFormula(payload.notes));
+          }
+          if (payload.assigned_to !== undefined) {
+            var aIdx = rawHeaders.indexOf("assigned_to");
+            if (aIdx !== -1) updateSheet.getRange(targetRow, aIdx + 1).setValue(sanitizeFormula(payload.assigned_to));
+          }
+          var uIdx = rawHeaders.indexOf("updated_at");
+          if (uIdx !== -1) {
+            updateSheet.getRange(targetRow, uIdx + 1).setValue(new Date().toISOString());
+          }
+          isUpdated = true;
+          break;
+        }
+      }
+      return ContentService.createTextOutput(JSON.stringify({
+        ok: isUpdated,
+        action: "update_lead",
+        message: isUpdated ? "Cập nhật Lead thành công!" : "Không tìm thấy submission_id: " + targetSubId
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 12. THỐNG KÊ DASHBOARD LEADS (get_lead_stats)
+    if (action === "get_lead_stats") {
+      var statsSs = SpreadsheetFactory.getLeadsSpreadsheet();
+      var statsSheet = statsSs.getSheetByName("leads") || statsSs.getSheetByName("leads (private)") || statsSs.getSheetByName("Leads");
+      var stats = { total: 0, new: 0, contacting: 0, consulted: 0, enrolled: 0, dropped: 0, spam: 0 };
+      if (statsSheet && statsSheet.getLastRow() > 1) {
+        var allLeads = getSheetRowsAsObjects(statsSheet);
+        stats.total = allLeads.length;
+        allLeads.forEach(function(l) {
+          var st = (l.status || "NEW").toUpperCase();
+          if (st === "NEW") stats.new++;
+          else if (st === "CONTACTING") stats.contacting++;
+          else if (st === "CONSULTED") stats.consulted++;
+          else if (st === "ENROLLED") stats.enrolled++;
+          else if (st === "DROPPED") stats.dropped++;
+          else if (st === "SPAM") stats.spam++;
+        });
+      }
+      return ContentService.createTextOutput(JSON.stringify({
+        ok: true, action: "get_lead_stats", stats: stats
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 13. TIẾP NHẬN LEAD HỌC VIÊN (submit_lead) - Chuẩn Figma Node 12-3320 & Ghi vào Leads Spreadsheet
+    var targetLeadSs = SpreadsheetFactory.getLeadsSpreadsheet();
+    var sheet = targetLeadSs.getSheetByName("leads") || targetLeadSs.getSheetByName("leads (private)") || targetLeadSs.getSheetByName("Leads");
+
+    if (!sheet) {
+      sheet = setupLeadsDatabaseSpreadsheet(targetLeadSs, "leads");
+    }
+
+    var timestamp = payload.client_submitted_at || new Date().toISOString();
     var safePhone = payload.phone ? ("'" + payload.phone.toString().trim().replace(/^[=+\-@\t\r]+/, "")) : "";
-    sheet.appendRow([
-      sanitizeFormula(payload.submission_id || Utilities.getUuid()),
-      timestamp,
-      sanitizeFormula(payload.name || ""),
-      safePhone,
-      sanitizeFormula(payload.email || ""),
-      sanitizeFormula(payload.course_id || "general"),
-      sanitizeFormula(payload.course_name || "Tư vấn chung"),
-      sanitizeFormula(payload.message || ""),
-      "NEW"
-    ]);
+    var coachingCourse = sanitizeFormula(payload.course_name || payload.interested_courses || payload.course_id || "SQL for Data Analytics");
+    var targetOrGoal = sanitizeFormula(payload.message || payload.target_or_goal || "");
+    var attendanceCommit = sanitizeFormula(payload.attendance_commitment || "Tôi chắc chắn");
+    var statusVal = sanitizeFormula(payload.status || "NEW");
+    var notesVal = sanitizeFormula(payload.notes || "");
+    var assignedToVal = sanitizeFormula(payload.assigned_to || "");
+    var sourceVal = sanitizeFormula(payload.source || payload.form_id || "website");
+    var updatedAt = new Date().toISOString();
+
+    // Đối chiếu cấu trúc header để ghi đúng vị trí cột
+    var headerRow = sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), 1)).getValues()[0] || [];
+    var hasFigmaSchema = headerRow.indexOf("coaching_course") !== -1 || headerRow.length >= 13;
+
+    if (hasFigmaSchema) {
+      sheet.appendRow([
+        sanitizeFormula(payload.submission_id || Utilities.getUuid()),
+        timestamp,
+        sanitizeFormula(payload.name || ""),
+        safePhone,
+        sanitizeFormula(payload.email || ""),
+        coachingCourse,
+        targetOrGoal,
+        attendanceCommit,
+        statusVal,
+        notesVal,
+        assignedToVal,
+        sourceVal,
+        updatedAt
+      ]);
+    } else {
+      // Fallback cho tab leads (private) cũ (9 cột)
+      sheet.appendRow([
+        sanitizeFormula(payload.submission_id || Utilities.getUuid()),
+        timestamp,
+        sanitizeFormula(payload.name || ""),
+        safePhone,
+        sanitizeFormula(payload.email || ""),
+        sanitizeFormula(payload.course_id || "general"),
+        coachingCourse,
+        targetOrGoal,
+        statusVal
+      ]);
+    }
 
     if (CONFIG.TELEGRAM_BOT_TOKEN && CONFIG.TELEGRAM_CHAT_ID) {
       sendTelegramNotification(payload);
@@ -355,20 +483,32 @@ function applySeedSnapshotToSpreadsheet(snapshot) {
       curSheet.getRange(2, 1, curSheet.getLastRow() - 1, curSheet.getLastColumn()).clearContent();
     }
     var curRows = snapshot.curriculum.map(function(m, i) {
-      var bullets = Array.isArray(m.bulletPoints) ? m.bulletPoints.join("\n") : (m.topicsBullets || m.topics_bullets || "");
+      var bullets = Array.isArray(m.subContent) ? m.subContent.join("\n")
+        : (Array.isArray(m.bulletPoints) ? m.bulletPoints.join("\n")
+        : (m.sub_content || m.topicsBullets || m.topics_bullets || ""));
+      var weekNum = Number(m.week || m.weekNumber) || Math.ceil((i + 1) / 2);
+      var dayNum = Number(m.day || m.moduleNumber || m.module_number) || (i + 1);
+      var dateBadge = m.date || m.sessionDateBadge || ("TH10 " + (dayNum < 10 ? "0" + dayNum : dayNum));
+      var sessionTitle = m.sessionTitle || m.title || m.module_title || ("Buổi " + dayNum);
+      var sessionDesc = m.sessionDesc || m.summary || m.content || "";
+      var durationVal = m.duration || (m.durationHours ? m.durationHours + " giờ" : "3 giờ");
+      var sortVal = Number(m.sortOrder || m.sort_order || (i + 1));
+
       return [
         m.id || ("cur-" + (i + 1)),
         m.courseId || m.course_id || "",
         m.courseName || m.course_name || "",
-        Number(m.moduleNumber || m.module_number || (i + 1)),
-        m.title || m.module_title || "",
-        m.duration || "2 tuần",
-        Number(m.lessonsCount || m.lessons_count || 4),
+        weekNum,
+        dayNum,
+        dateBadge,
+        sessionTitle,
+        sessionDesc,
         bullets,
-        Number(m.sortOrder || m.sort_order || (i + 1))
+        durationVal,
+        sortVal
       ];
     });
-    curSheet.getRange(2, 1, curRows.length, 9).setValues(curRows);
+    curSheet.getRange(2, 1, curRows.length, 11).setValues(curRows);
     stats.curriculum = curRows.length;
   }
 

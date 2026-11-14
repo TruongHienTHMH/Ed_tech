@@ -26,16 +26,24 @@ export interface CurriculumModule {
   id: string;
   courseId: string;
   courseName?: string;
-  moduleNumber: number;
-  title: string;
-  summary: string;
+  week?: number | string;             // Tuần học (e.g. 1, "Tuần 1")
+  day?: number;                       // Buổi học (e.g. 1, 2, 3...)
+  date?: string;                      // Ngày của buổi học (e.g. "TH10 03")
+  sessionTitle?: string;              // Nội dung của từng buổi
+  sessionDesc?: string;               // Miêu tả nội dung buổi học
+  subContent?: string[];              // Sub content: Dot list khi bấm drop down
+  duration?: string;                  // Thời lượng (e.g. "3 giờ")
+  sortOrder?: number;
+  startDate?: string;                 // Ngày bắt đầu học phần (e.g. "2026-03-01")
+  endDate?: string;                   // Ngày kết thúc học phần (e.g. "2026-04-30")
+  moduleNumber: number;               // Day / Buổi số
+  title: string;                      // Tiêu đề buổi học
+  summary: string;                    // Miêu tả tóm tắt
   bulletPoints: string[];             // Parsed from multiline text (\n or Alt+Enter)
   durationHours: number;
-  duration?: string;
   lessonsCount?: number;
-  sortOrder?: number;
   weekNumber?: number;                // e.g. 1, 2, 3, 4, 5, 6
-  weekLabel?: string;                 // e.g. "Week 1", "Week 2"
+  weekLabel?: string;                 // e.g. "Tuần 1", "Week 1"
   sessionDateBadge?: string;          // e.g. "TH10 03", "TH10 26", "TH11 01"
   isMilestone?: boolean;              // Highlighted session (e.g. Capstone project, Practice)
   milestoneBadge?: string;            // e.g. "Thực hành", "Capstone Project"
@@ -145,6 +153,7 @@ export interface BlogPost {
   slug: string;
   category: string;
   excerpt: string;
+  description?: string;               // Short / SEO description
   contentMarkdown?: string;
   coverImageUrl?: string;
   authorName: string;
@@ -160,8 +169,15 @@ export interface LeadSubmission {
   name: string;
   phone: string;
   email: string;
-  courseId: string;
-  courseName: string;
-  message: string;
+  courseId?: string;
+  courseName?: string;
+  coachingCourse?: string;
+  targetOrGoal?: string;
+  attendanceCommitment?: string;
+  message?: string;
   status: "NEW" | "CONTACTING" | "CONSULTED" | "ENROLLED" | "DROPPED" | "SPAM" | string;
+  notes?: string;
+  assignedTo?: string;
+  source?: string;
+  updatedAt?: string;
 }

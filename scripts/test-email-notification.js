@@ -21,10 +21,12 @@ console.log("===================================================================
 console.log("🧪 KIỂM THỬ TỰ ĐỘNG: EMAIL NOTIFICATION SYSTEM & RECIPIENT VERIFICATION");
 console.log("==============================================================================\n");
 
-// 1. Kiểm tra cấu hình và triển khai trong Google Apps Script
-console.log("--- TEST 1: KIỂM TRA MÃ NGUỒN APPS SCRIPT (dist/Code.bundle.gs) ---");
-const bundlePath = path.join(rootDir, "apps-script", "dist", "Code.bundle.gs");
-assert(fs.existsSync(bundlePath), "File apps-script/dist/Code.bundle.gs tồn tại");
+// 1. Kiểm tra cấu hình và triển khai trong Google Apps Script (Leads CRM Bundle)
+console.log("--- TEST 1: KIỂM TRA MÃ NGUỒN APPS SCRIPT (apps-script/leads/dist/Code.leads.bundle.gs) ---");
+const leadsBundlePath = path.join(rootDir, "apps-script", "leads", "dist", "Code.leads.bundle.gs");
+const legacyBundlePath = path.join(rootDir, "apps-script", "dist", "Code.bundle.gs");
+const bundlePath = fs.existsSync(leadsBundlePath) ? leadsBundlePath : legacyBundlePath;
+assert(fs.existsSync(bundlePath), "File bundle Apps Script Leads CRM tồn tại");
 
 const gasCode = fs.readFileSync(bundlePath, "utf8");
 
@@ -41,14 +43,14 @@ assert(
 );
 
 assert(
-  gasCode.includes("function sendLeadEmails(record)") ||
+  gasCode.includes("function sendLeadEmails(") ||
   gasCode.includes("sendLeadEmails"),
   "Hàm nghiệp vụ sendLeadEmails() đã được định nghĩa trong bundle"
 );
 
 assert(
   gasCode.includes("sendLeadEmails(payload)") &&
-  (gasCode.includes("leads (private)") || gasCode.includes("submit_lead")),
+  (gasCode.includes("leads") || gasCode.includes("submit_lead")),
   "doPost() với action submit_lead tự động kích hoạt sendLeadEmails(payload) khi có lead mới"
 );
 

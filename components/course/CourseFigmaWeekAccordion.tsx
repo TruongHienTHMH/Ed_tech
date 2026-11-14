@@ -11,17 +11,18 @@ interface CourseFigmaWeekAccordionProps {
 export default function CourseFigmaWeekAccordion({
   modules,
 }: CourseFigmaWeekAccordionProps) {
-  // Group modules by weekNumber or weekLabel
+  // Group modules by week
   const groupedWeeks = React.useMemo(() => {
-    const map = new Map<string, { label: string; modules: CurriculumModule[] }>();
+    const map = new Map<string, { label: string; weekNum: number; modules: CurriculumModule[] }>();
 
     modules.forEach((mod, idx) => {
-      const weekNum = mod.weekNumber || Math.ceil((idx + 1) / 2);
+      const weekVal = mod.week ?? mod.weekNumber ?? Math.ceil((idx + 1) / 2);
+      const weekNum = typeof weekVal === "number" ? weekVal : (parseInt(String(weekVal), 10) || Math.ceil((idx + 1) / 2));
       const weekKey = `week-${weekNum}`;
-      const weekLabel = mod.weekLabel || `Tuần ${weekNum}`;
+      const weekLabel = typeof weekVal === "string" && isNaN(Number(weekVal)) ? weekVal : `Tuần ${weekNum}`;
 
       if (!map.has(weekKey)) {
-        map.set(weekKey, { label: weekLabel, modules: [] });
+        map.set(weekKey, { label: weekLabel, weekNum, modules: [] });
       }
       map.get(weekKey)!.modules.push(mod);
     });
@@ -29,7 +30,12 @@ export default function CourseFigmaWeekAccordion({
     return Array.from(map.entries()).map(([key, data]) => ({
       key,
       label: data.label,
-      modules: data.modules.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)),
+      weekNum: data.weekNum,
+      modules: data.modules.sort((a, b) => {
+        const orderA = a.sortOrder ?? a.day ?? a.moduleNumber ?? 0;
+        const orderB = b.sortOrder ?? b.day ?? b.moduleNumber ?? 0;
+        return orderA - orderB;
+      }),
     }));
   }, [modules]);
 
@@ -65,11 +71,19 @@ export default function CourseFigmaWeekAccordion({
     });
   };
 
-  // Helper to parse date badge (e.g. "TH10 03" -> month: "TH10", day: "03")
+  // Helper to parse date badge (e.g. "TH10 03", "03/10" -> month: "TH10", day: "03")
   const parseDateBadge = (badge?: string, idx: number = 0) => {
-    if (badge && badge.includes(" ")) {
-      const parts = badge.split(" ");
-      return { month: parts[0], day: parts[1] };
+    if (badge && badge.trim()) {
+      const clean = badge.trim();
+      if (clean.includes(" ")) {
+        const parts = clean.split(/\s+/);
+        return { month: parts[0], day: parts[1] };
+      }
+      if (clean.includes("/")) {
+        const parts = clean.split("/");
+        return { month: `TH${parts[1]}`, day: parts[0] };
+      }
+      return { month: "TH10", day: clean };
     }
     // Fallback date badge simulation for realistic look
     const days = ["03", "05", "26", "28", "01", "03", "05", "07", "10", "12", "15", "17"];
@@ -115,7 +129,7 @@ export default function CourseFigmaWeekAccordion({
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
-              <span>Expand all lessons</span>
+              <span>Mở rộng tất cả</span>
             </>
           )}
         </button>
@@ -143,7 +157,12 @@ export default function CourseFigmaWeekAccordion({
               {week.modules.map((mod, modIndex) => {
                 const globalIndex = weekIndex * 2 + modIndex;
                 const isExpanded = expandedIds.has(mod.id);
-                const dateBadge = parseDateBadge(mod.sessionDateBadge, globalIndex);
+                const dateBadge = parseDateBadge(mod.date || mod.sessionDateBadge, globalIndex);
+                const dayNumber = mod.day ?? mod.moduleNumber ?? (modIndex + 1);
+                const sessionTitle = (mod.sessionTitle || mod.title || "").replace(/^Buổi\s*\d+:\s*/i, "").trim();
+                const sessionDesc = mod.sessionDesc || mod.summary;
+                const dots = (mod.subContent && mod.subContent.length > 0) ? mod.subContent : mod.bulletPoints;
+                const durationText = mod.duration || (mod.durationHours ? `${mod.durationHours} giờ` : "3 giờ");
 
                 return (
                   <div key={mod.id} className="transition-colors hover:bg-gray-50/50">
@@ -169,7 +188,7 @@ export default function CourseFigmaWeekAccordion({
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2 flex-wrap mb-1">
                             <span className="text-xs font-semibold text-gray-500">
-                              Buổi {mod.moduleNumber}:
+                              Buổi {dayNumber}:
                             </span>
                             {mod.isMilestone && (
                               <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 border border-amber-200">
@@ -178,7 +197,7 @@ export default function CourseFigmaWeekAccordion({
                             )}
                           </div>
                           <h4 className="text-base font-bold text-gray-900 truncate">
-                            {mod.title.replace(/^Buổi\s*\d+:\s*/i, "")}
+                            {sessionTitle}
                           </h4>
                         </div>
                       </div>
@@ -186,7 +205,7 @@ export default function CourseFigmaWeekAccordion({
                       {/* Right Chevron & Time Indicator */}
                       <div className="shrink-0 flex items-center gap-3">
                         <span className="hidden sm:inline-block text-xs text-gray-400 font-medium">
-                          {mod.durationHours ? `${mod.durationHours}h` : "3 giờ"}
+                          {durationText}
                         </span>
                         <div
                           className={`w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-200 ${
@@ -203,21 +222,28 @@ export default function CourseFigmaWeekAccordion({
                     {/* Expanded Content Panel */}
                     {isExpanded && (
                       <div className="px-5 pb-5 pt-1 pl-[4.5rem]">
-                        {mod.summary && (
-                          <p className="text-sm text-gray-600 mb-3 leading-relaxed bg-[#FAF9FA] p-3 rounded-xl border border-gray-100">
-                            {mod.summary}
+                        {/* Miêu tả nội dung buổi học */}
+                        {sessionDesc && (
+                          <p className="text-sm text-gray-700 mb-3.5 leading-relaxed bg-[#FAF9FA] p-3.5 rounded-xl border border-gray-100">
+                            {sessionDesc}
                           </p>
                         )}
 
-                        {mod.bulletPoints && mod.bulletPoints.length > 0 && (
-                          <ul className="space-y-2">
-                            {mod.bulletPoints.map((point, pIndex) => (
-                              <li key={pIndex} className="text-sm text-gray-700 flex items-start gap-2.5">
-                                <span className="text-[#AF445A] mt-0.5 font-bold">•</span>
-                                <span className="flex-1">{point}</span>
-                              </li>
-                            ))}
-                          </ul>
+                        {/* Sub Content - Dot List chi tiết khi bấm dropdown */}
+                        {dots && dots.length > 0 && (
+                          <div className="space-y-1.5">
+                            <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-1">
+                              Nội dung chi tiết buổi học:
+                            </span>
+                            <ul className="space-y-2">
+                              {dots.map((point, pIndex) => (
+                                <li key={pIndex} className="text-sm text-gray-700 flex items-start gap-2.5 leading-relaxed">
+                                  <span className="text-[#AF445A] mt-0.5 font-bold text-base shrink-0 leading-none">•</span>
+                                  <span className="flex-1">{point}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         )}
                       </div>
                     )}
@@ -231,4 +257,3 @@ export default function CourseFigmaWeekAccordion({
     </section>
   );
 }
-

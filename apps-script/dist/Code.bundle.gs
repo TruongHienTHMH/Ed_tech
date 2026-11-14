@@ -1,24 +1,16 @@
 /**
  * ==============================================================================
- * DATAWITHLY CMS - HỆ THỐNG GOOGLE APPS SCRIPT TRỌN GÓI (ALL-IN-ONE BUNDLE)
+ * DATAWITHLY CMS CONTENT MASTER - GOOGLE APPS SCRIPT BUNDLE (ALL-IN-ONE)
  * ==============================================================================
- * Phiên bản: 2.1.0 (DataWithLy Enterprise CMS)
- * Thời gian đóng gói: 2026-11-10T15:37:12.580Z
- * Tự động tạo bởi: scripts/bundle-apps-script.js
- *
- * HƯỚNG DẪN SỬ DỤNG:
- * 1. Mở Google Sheets -> Tiện ích mở rộng -> Apps Script.
- * 2. Dán toàn bộ nội dung file Code.gs này vào trình soạn thảo.
- * 3. File đã được inlined toàn bộ giao diện HTML Modals (chạy 100% không cần tạo file .html phụ).
- * 4. Bấm Lưu và chạy hàm onOpen() hoặc tải lại trang Google Sheets!
+ * Phiên bản: 2.2.0 (DataWithLy CMS Content Master)
+ * Thời gian đóng gói: 2026-11-14T13:44:42.259Z
  * ==============================================================================
  */
 
-// BẢN INLINED GIAO DIỆN HTML CHO TẤT CẢ CÁC MODALS (HỖ TRỢ CHẠY 1 FILE DUY NHẤT)
 var INLINED_HTML = {
-  "BlogModal": "<!DOCTYPE html>\n<html>\n\n<head>\n  <base target=\"_top\">\n  <?!= include('SharedStyles'); ?>\n</head>\n\n<body>\n  <div class=\"modal-header\">\n    <div>\n      <h2 class=\"modal-title\">✍️ Thêm Bài Viết Blog Hàng Loạt</h2>\n      <p class=\"modal-subtitle\">Xuất bản bài viết kiến thức, tự động sinh slug chuẩn SEO và chống trùng lặp theo thời gian thực</p>\n    </div>\n  </div>\n\n  <form id=\"blogForm\">\n    <div id=\"blogCardsContainer\" class=\"repeater-container\"></div>\n\n    <button type=\"button\" id=\"addBlogBtn\" class=\"btn-add-repeater\">\n      <span>➕ Thêm bài viết</span>\n    </button>\n\n    <div id=\"errorBox\" class=\"alert-banner alert-danger error-msg\"></div>\n    <div id=\"successBox\" class=\"alert-banner alert-success fade-in\" style=\"display: none;\"></div>\n\n    <div class=\"btn-group\">\n      <button type=\"button\" class=\"btn-cancel\" onclick=\"google.script.host.close()\">Hủy Bỏ</button>\n      <button type=\"submit\" id=\"submitBtn\" class=\"btn-submit\">\n        <span id=\"submitBtnText\">Lưu tất cả (1 bài viết)</span>\n      </button>\n    </div>\n  </form>\n\n  <script>\n    var existingSlugs = <?!= JSON.stringify(existingSlugs || []) ?>;\n\n    function slugify(text) {\n      if (!text) return \"\";\n      var str = text.toString().toLowerCase().trim();\n      str = str.replace(/[áàảãạăắằẳẵặâấầẩẫậ]/g, \"a\");\n      str = str.replace(/[éèẻẽẹêếềểễệ]/g, \"e\");\n      str = str.replace(/[íìỉĩị]/g, \"i\");\n      str = str.replace(/[óòỏõọôốồổỗộơớờởỡợ]/g, \"o\");\n      str = str.replace(/[úùủũụưứừửữự]/g, \"u\");\n      str = str.replace(/[ýỳỷỹỵ]/g, \"y\");\n      str = str.replace(/đ/g, \"d\");\n      str = str.replace(/[\\s_]+/g, \"-\");\n      str = str.replace(/[^a-z0-9-]/g, \"\");\n      str = str.replace(/-+/g, \"-\");\n      str = str.replace(/^-+|-+$/g, \"\");\n      return str;\n    }\n\n    function resolveUniqueSlugClient(rawInput, existingSlugs, currentSlug) {\n      var base = slugify(rawInput);\n      if (!base) return { slug: \"\", isVersioned: false };\n\n      var cleanBase = base.replace(/-v\\d+$/, \"\");\n      var slugMap = {};\n      var list = existingSlugs || [];\n      var cur = (currentSlug || \"\").toString().trim().toLowerCase();\n\n      for (var i = 0; i < list.length; i++) {\n        var s = (list[i] || \"\").toString().trim().toLowerCase();\n        if (s && s !== cur) {\n          slugMap[s] = true;\n        }\n      }\n\n      if (!slugMap[cleanBase]) {\n        return { slug: cleanBase, isVersioned: false };\n      }\n\n      var version = 1;\n      while (true) {\n        var candidate = cleanBase + \"-v\" + version;\n        if (!slugMap[candidate]) {\n          return { slug: candidate, isVersioned: true };\n        }\n        version++;\n      }\n    }\n\n    var form = document.getElementById(\"blogForm\");\n    var container = document.getElementById(\"blogCardsContainer\");\n    var addBlogBtn = document.getElementById(\"addBlogBtn\");\n    var submitBtn = document.getElementById(\"submitBtn\");\n    var submitBtnText = document.getElementById(\"submitBtnText\");\n    var errorBox = document.getElementById(\"errorBox\");\n    var successBox = document.getElementById(\"successBox\");\n\n    function showError(msg) {\n      if (successBox) successBox.style.display = \"none\";\n      errorBox.innerText = msg;\n      errorBox.style.display = \"block\";\n    }\n\n    function showSuccess(msg) {\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n      successBox.innerText = msg;\n      successBox.style.display = \"flex\";\n    }\n\n    function updateAllSlugs() {\n      var cards = container.querySelectorAll(\".form-card\");\n      var batchSlugs = [].concat(existingSlugs);\n\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var titleInput = card.querySelector('[name=\"title\"]');\n        var slugPreview = card.querySelector(\".slug-preview-text\");\n        var slugHidden = card.querySelector('[name=\"slug\"]');\n        var versionBadge = card.querySelector(\".slug-version-badge\");\n        var val = (titleInput.value || \"\").trim();\n        var rawSlug = slugify(val);\n\n        if (!rawSlug) {\n          slugPreview.innerText = \"lo-trinh-chuyen-nganh-data-analytics\";\n          slugHidden.value = \"\";\n          versionBadge.className = \"badge-v badge-slate slug-version-badge\";\n          versionBadge.innerText = \"Chờ nhập liệu\";\n          continue;\n        }\n\n        var res = resolveUniqueSlugClient(rawSlug, batchSlugs);\n        slugPreview.innerText = res.slug;\n        slugHidden.value = res.slug;\n        batchSlugs.push(res.slug);\n\n        if (res.isVersioned) {\n          versionBadge.className = \"badge-v badge-crimson slug-version-badge\";\n          versionBadge.innerText = \"⚡ Trùng tiêu đề -> Đã gắn: \" + res.slug.split(\"-\").pop();\n        } else {\n          versionBadge.className = \"badge-v badge-emerald slug-version-badge\";\n          versionBadge.innerText = \"✅ Duy nhất chuẩn SEO\";\n        }\n      }\n    }\n\n    function updateCardHeaders() {\n      var cards = container.querySelectorAll(\".form-card\");\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var titleElem = card.querySelector(\".form-card-title span\");\n        if (titleElem) {\n          titleElem.innerText = \"✍️ Bài viết #\" + (i + 1);\n        }\n        var removeBtn = card.querySelector(\".btn-remove-card\");\n        if (removeBtn) {\n          removeBtn.style.display = cards.length > 1 ? \"inline-block\" : \"none\";\n        }\n      }\n      submitBtnText.innerText = \"Lưu tất cả (\" + cards.length + \" bài viết)\";\n    }\n\n    function createBlogCard() {\n      var card = document.createElement(\"div\");\n      card.className = \"form-card fade-in\";\n      card.innerHTML =\n        '<div class=\"form-card-header\">' +\n          '<div class=\"form-card-title\"><span>✍️ Bài viết</span></div>' +\n          '<button type=\"button\" class=\"btn-remove-card\" title=\"Xóa bài viết này\">✕ Xóa</button>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Tiêu Đề Bài Viết <span class=\"required\">*</span></label>' +\n          '<input type=\"text\" name=\"title\" required placeholder=\"Lộ trình chuyển ngành Data Analytics từ con số 0 năm 2026\" autocomplete=\"off\">' +\n        '</div>' +\n        '<div class=\"preview-box\">' +\n          '<div class=\"preview-header\">' +\n            '<span>Xem trước URL Bài Viết Blog</span>' +\n            '<span class=\"badge-v badge-slate slug-version-badge\">Chờ nhập liệu</span>' +\n          '</div>' +\n          '<div class=\"preview-content\">' +\n            'https://datawithly.edu.vn/blog/<strong class=\"slug-preview-text\" style=\"color: var(--primary);\">lo-trinh-chuyen-nganh-data-analytics</strong>' +\n          '</div>' +\n          '<input type=\"hidden\" name=\"slug\">' +\n          '<input type=\"hidden\" name=\"id\">' +\n        '</div>' +\n        '<div class=\"form-row\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Chuyên Mục Bài Viết <span class=\"required\">*</span></label>' +\n            '<select name=\"category\">' +\n              '<option value=\"Sự nghiệp\">Sự nghiệp (Career Path)</option>' +\n              '<option value=\"Kỹ thuật\">Kỹ thuật (SQL / BI / Python)</option>' +\n              '<option value=\"Case Study\">Case Study Thực Chiến</option>' +\n              '<option value=\"Góc nhìn\">Góc nhìn & Tư duy Dữ liệu</option>' +\n            '</select>' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Tác Giả <span class=\"required\">*</span></label>' +\n            '<input type=\"text\" name=\"author_name\" required value=\"Hứa Thảo Ly\" placeholder=\"Hứa Thảo Ly\">' +\n          '</div>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Đoạn Tóm Tắt Ngắn (Meta Description & Excerpt) <span class=\"required\">*</span></label>' +\n          '<textarea name=\"excerpt\" rows=\"2\" required placeholder=\"Chi tiết từng giai đoạn học tập, kỹ năng cần chuẩn bị và cách xây dựng Portfolio...\"></textarea>' +\n        '</div>' +\n        '<div class=\"form-row\" style=\"margin-top: 6px;\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Ngày Xuất Bản</label>' +\n            '<input type=\"date\" name=\"published_at\">' +\n          '</div>' +\n          '<div class=\"form-group col-1\" style=\"display: flex; align-items: flex-end;\">' +\n            '<label class=\"checkbox-group\" style=\"width: 100%;\">' +\n              '<input type=\"checkbox\" name=\"is_active\" checked>' +\n              '<span class=\"checkbox-label\">Xuất bản công khai (is_active)</span>' +\n            '</label>' +\n          '</div>' +\n        '</div>';\n\n      var dateInput = card.querySelector('[name=\"published_at\"]');\n      if (dateInput) {\n        dateInput.value = new Date().toISOString().split(\"T\")[0];\n      }\n\n      var titleInput = card.querySelector('[name=\"title\"]');\n      titleInput.addEventListener(\"input\", updateAllSlugs);\n\n      var removeBtn = card.querySelector(\".btn-remove-card\");\n      removeBtn.addEventListener(\"click\", function () {\n        card.remove();\n        updateCardHeaders();\n        updateAllSlugs();\n      });\n\n      container.appendChild(card);\n      updateCardHeaders();\n      updateAllSlugs();\n      return card;\n    }\n\n    addBlogBtn.addEventListener(\"click\", function () {\n      var newCard = createBlogCard();\n      var input = newCard.querySelector('[name=\"title\"]');\n      if (input) input.focus();\n    });\n\n    createBlogCard();\n\n    form.addEventListener(\"submit\", function (e) {\n      e.preventDefault();\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n\n      var cards = container.querySelectorAll(\".form-card\");\n      if (cards.length === 0) {\n        showError(\"Vui lòng thêm ít nhất một bài viết.\");\n        return;\n      }\n\n      var blogList = [];\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var title = (card.querySelector('[name=\"title\"]').value || \"\").trim();\n        if (!title) {\n          showError(\"Vui lòng nhập tiêu đề cho bài viết #\" + (i + 1) + \".\");\n          card.querySelector('[name=\"title\"]').focus();\n          return;\n        }\n\n        var excerpt = (card.querySelector('[name=\"excerpt\"]').value || \"\").trim();\n        if (!excerpt) {\n          showError(\"Vui lòng nhập đoạn tóm tắt cho bài viết #\" + (i + 1) + \".\");\n          card.querySelector('[name=\"excerpt\"]').focus();\n          return;\n        }\n\n        var author = (card.querySelector('[name=\"author_name\"]').value || \"\").trim() || \"Hứa Thảo Ly\";\n        var publishedAt = card.querySelector('[name=\"published_at\"]').value || new Date().toISOString().split(\"T\")[0];\n\n        blogList.push({\n          title: title,\n          slug: card.querySelector('[name=\"slug\"]').value || slugify(title),\n          category: card.querySelector('[name=\"category\"]').value,\n          excerpt: excerpt,\n          author_name: author,\n          published_at: publishedAt,\n          is_active: card.querySelector('[name=\"is_active\"]').checked\n        });\n      }\n\n      submitBtn.disabled = true;\n      addBlogBtn.disabled = true;\n      submitBtnText.innerHTML = '<span class=\"spinner\"></span> Đang xuất bản ' + blogList.length + ' bài viết...';\n\n      google.script.run\n        .withSuccessHandler(function (res) {\n          showSuccess(\"✅ Đã xuất bản thành công \" + (res.count || blogList.length) + \" bài viết!\");\n          setTimeout(function () {\n            google.script.host.close();\n          }, 1200);\n        })\n        .withFailureHandler(function (err) {\n          submitBtn.disabled = false;\n          addBlogBtn.disabled = false;\n          updateCardHeaders();\n          showError(\"Lỗi: \" + (err.message || err.toString()));\n        })\n        .addBlogsBatchFromModal(blogList);\n    });\n  </script>\n</body>\n\n</html>\n",
-  "CourseModal": "<!DOCTYPE html>\n<html>\n\n<head>\n  <base target=\"_top\">\n  <?!= include('SharedStyles'); ?>\n</head>\n\n<body>\n  <div class=\"modal-header\">\n    <div>\n      <h2 class=\"modal-title\">➕ Thêm Khóa Học Hàng Loạt</h2>\n      <p class=\"modal-subtitle\">Thêm nhiều khóa học cùng lúc với nút \"+\" Repeater, tự động chuẩn hóa SEO Slug và version -v1, -v2 độc lập</p>\n    </div>\n  </div>\n\n  <form id=\"courseForm\">\n    <div id=\"courseCardsContainer\" class=\"repeater-container\"></div>\n\n    <button type=\"button\" id=\"addCourseBtn\" class=\"btn-add-repeater\">\n      <span>➕ Thêm khóa học</span>\n    </button>\n\n    <div id=\"errorBox\" class=\"alert-banner alert-danger error-msg\"></div>\n    <div id=\"successBox\" class=\"alert-banner alert-success fade-in\" style=\"display: none;\"></div>\n\n    <div class=\"btn-group\">\n      <button type=\"button\" class=\"btn-cancel\" onclick=\"google.script.host.close()\">Hủy Bỏ</button>\n      <button type=\"submit\" id=\"submitBtn\" class=\"btn-submit\">\n        <span id=\"submitBtnText\">Lưu tất cả (1 khóa học)</span>\n      </button>\n    </div>\n  </form>\n\n  <script>\n    var existingSlugs = <?!= JSON.stringify(existingSlugs || []) ?>;\n\n    function slugify(text) {\n      if (!text) return \"\";\n      var str = text.toString().toLowerCase().trim();\n      str = str.replace(/[áàảãạăắằẳẵặâấầẩẫậ]/g, \"a\");\n      str = str.replace(/[éèẻẽẹêếềểễệ]/g, \"e\");\n      str = str.replace(/[íìỉĩị]/g, \"i\");\n      str = str.replace(/[óòỏõọôốồổỗộơớờởỡợ]/g, \"o\");\n      str = str.replace(/[úùủũụưứừửữự]/g, \"u\");\n      str = str.replace(/[ýỳỷỹỵ]/g, \"y\");\n      str = str.replace(/đ/g, \"d\");\n      str = str.replace(/[\\s_]+/g, \"-\");\n      str = str.replace(/[^a-z0-9-]/g, \"\");\n      str = str.replace(/-+/g, \"-\");\n      str = str.replace(/^-+|-+$/g, \"\");\n      return str;\n    }\n\n    function resolveUniqueSlugClient(rawInput, existingSlugs, currentSlug) {\n      var base = slugify(rawInput);\n      if (!base) return { slug: \"\", isVersioned: false };\n\n      var cleanBase = base.replace(/-v\\d+$/, \"\");\n      var slugMap = {};\n      var list = existingSlugs || [];\n      var cur = (currentSlug || \"\").toString().trim().toLowerCase();\n\n      for (var i = 0; i < list.length; i++) {\n        var s = (list[i] || \"\").toString().trim().toLowerCase();\n        if (s && s !== cur) {\n          slugMap[s] = true;\n        }\n      }\n\n      if (!slugMap[cleanBase]) {\n        return { slug: cleanBase, isVersioned: false };\n      }\n\n      var version = 1;\n      while (true) {\n        var candidate = cleanBase + \"-v\" + version;\n        if (!slugMap[candidate]) {\n          return { slug: candidate, isVersioned: true };\n        }\n        version++;\n      }\n    }\n\n    var form = document.getElementById(\"courseForm\");\n    var container = document.getElementById(\"courseCardsContainer\");\n    var addCourseBtn = document.getElementById(\"addCourseBtn\");\n    var submitBtn = document.getElementById(\"submitBtn\");\n    var submitBtnText = document.getElementById(\"submitBtnText\");\n    var errorBox = document.getElementById(\"errorBox\");\n    var successBox = document.getElementById(\"successBox\");\n\n    function showError(msg) {\n      if (successBox) successBox.style.display = \"none\";\n      errorBox.innerText = msg;\n      errorBox.style.display = \"block\";\n    }\n\n    function showSuccess(msg) {\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n      successBox.innerText = msg;\n      successBox.style.display = \"flex\";\n    }\n\n    function updateAllSlugs() {\n      var cards = container.querySelectorAll(\".form-card\");\n      var batchSlugs = [].concat(existingSlugs);\n\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var titleInput = card.querySelector('[name=\"title\"]');\n        var slugPreview = card.querySelector(\".slug-preview-text\");\n        var slugHidden = card.querySelector('[name=\"slug\"]');\n        var versionBadge = card.querySelector(\".slug-version-badge\");\n        var val = (titleInput.value || \"\").trim();\n        var rawSlug = slugify(val);\n\n        if (!rawSlug) {\n          slugPreview.innerText = \"sql-for-data-analytics\";\n          slugHidden.value = \"\";\n          versionBadge.className = \"badge-v badge-slate slug-version-badge\";\n          versionBadge.innerText = \"Chờ nhập liệu\";\n          continue;\n        }\n\n        var res = resolveUniqueSlugClient(rawSlug, batchSlugs);\n        slugPreview.innerText = res.slug;\n        slugHidden.value = res.slug;\n        batchSlugs.push(res.slug);\n\n        if (res.isVersioned) {\n          versionBadge.className = \"badge-v badge-crimson slug-version-badge\";\n          versionBadge.innerText = \"⚡ Trùng tiêu đề -> Đã gắn: \" + res.slug.split(\"-\").pop();\n        } else {\n          versionBadge.className = \"badge-v badge-emerald slug-version-badge\";\n          versionBadge.innerText = \"✅ Duy nhất chuẩn SEO\";\n        }\n      }\n    }\n\n    function updateCardHeaders() {\n      var cards = container.querySelectorAll(\".form-card\");\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var titleElem = card.querySelector(\".form-card-title span\");\n        if (titleElem) {\n          titleElem.innerText = \"📘 Khóa học #\" + (i + 1);\n        }\n        var sortOrderInput = card.querySelector('[name=\"sort_order\"]');\n        if (sortOrderInput && (!sortOrderInput.value || sortOrderInput.getAttribute(\"data-auto\") === \"true\")) {\n          sortOrderInput.value = i + 1;\n          sortOrderInput.setAttribute(\"data-auto\", \"true\");\n        }\n        var removeBtn = card.querySelector(\".btn-remove-card\");\n        if (removeBtn) {\n          removeBtn.style.display = cards.length > 1 ? \"inline-block\" : \"none\";\n        }\n      }\n      submitBtnText.innerText = \"Lưu tất cả (\" + cards.length + \" khóa học)\";\n    }\n\n    function createCourseCard() {\n      var card = document.createElement(\"div\");\n      card.className = \"form-card fade-in\";\n      card.innerHTML = \n        '<div class=\"form-card-header\">' +\n          '<div class=\"form-card-title\"><span>📘 Khóa học</span></div>' +\n          '<button type=\"button\" class=\"btn-remove-card\" title=\"Xóa thẻ khóa học này\">✕ Xóa</button>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Tên Khóa Học <span class=\"required\">*</span></label>' +\n          '<input type=\"text\" name=\"title\" required placeholder=\"Ví dụ: SQL for Data Analytics Thực Chiến\" autocomplete=\"off\">' +\n        '</div>' +\n        '<div class=\"preview-box\">' +\n          '<div class=\"preview-header\">' +\n            '<span>Xem trước URL & Slug SEO</span>' +\n            '<span class=\"badge-v badge-slate slug-version-badge\">Chờ nhập liệu</span>' +\n          '</div>' +\n          '<div class=\"preview-content\">' +\n            'https://datawithly.edu.vn/courses/<strong class=\"slug-preview-text\" style=\"color: var(--primary);\">sql-for-data-analytics</strong>' +\n          '</div>' +\n          '<input type=\"hidden\" name=\"slug\">' +\n          '<input type=\"hidden\" name=\"id\">' +\n        '</div>' +\n        '<div class=\"form-row\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Chủ Đề (Tag) <span class=\"required\">*</span></label>' +\n            '<select name=\"tag\">' +\n              '<option value=\"SQL\">SQL</option>' +\n              '<option value=\"Dashboard\">Dashboard (Power BI)</option>' +\n              '<option value=\"Python\">Python</option>' +\n              '<option value=\"End-to-End\">End-to-End Analytics</option>' +\n            '</select>' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Trình Độ</label>' +\n            '<select name=\"level\">' +\n              '<option value=\"Beginner\">Beginner (Cơ bản)</option>' +\n              '<option value=\"Intermediate\">Intermediate (Trung cấp)</option>' +\n              '<option value=\"Advanced\">Advanced (Nâng cao)</option>' +\n            '</select>' +\n          '</div>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Thông Điệp Ngắn (Tagline)</label>' +\n          '<input type=\"text\" name=\"tagline\" placeholder=\"Ví dụ: Nắm vững tư duy truy vấn, CTE và Window Functions\">' +\n        '</div>' +\n        '<div class=\"form-row\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Học Phí Ưu Đãi (VNĐ) <span class=\"required\">*</span></label>' +\n            '<input type=\"number\" name=\"tuition_vnd\" required placeholder=\"4500000\" step=\"50000\">' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Học Phí Gốc (VNĐ)</label>' +\n            '<input type=\"number\" name=\"original_tuition_vnd\" placeholder=\"6000000\" step=\"50000\">' +\n          '</div>' +\n        '</div>' +\n        '<div class=\"form-row\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Thời Lượng</label>' +\n            '<input type=\"text\" name=\"duration\" value=\"8 tuần (24 buổi)\">' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Thứ Tự Sắp Xếp</label>' +\n            '<input type=\"number\" name=\"sort_order\" min=\"1\" data-auto=\"true\">' +\n          '</div>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Mô Tả Tổng Quan Khóa Học</label>' +\n          '<textarea name=\"description\" rows=\"2\" placeholder=\"Mô tả giá trị thực chiến, mục tiêu đầu ra và đối tượng phù hợp...\"></textarea>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Ảnh Bìa (URL)</label>' +\n          '<input type=\"text\" name=\"cover_image_url\" placeholder=\"/uploads/courses/sql-course.jpg\">' +\n        '</div>' +\n        '<div class=\"form-row\" style=\"margin-top: 6px;\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label class=\"checkbox-group\">' +\n              '<input type=\"checkbox\" name=\"is_active\" checked>' +\n              '<span class=\"checkbox-label\">Kích hoạt hiển thị (is_active)</span>' +\n            '</label>' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label class=\"checkbox-group\">' +\n              '<input type=\"checkbox\" name=\"is_featured\">' +\n              '<span class=\"checkbox-label\">Khóa học nổi bật (is_featured)</span>' +\n            '</label>' +\n          '</div>' +\n        '</div>';\n\n      var titleInput = card.querySelector('[name=\"title\"]');\n      titleInput.addEventListener(\"input\", updateAllSlugs);\n\n      var removeBtn = card.querySelector(\".btn-remove-card\");\n      removeBtn.addEventListener(\"click\", function () {\n        card.remove();\n        updateCardHeaders();\n        updateAllSlugs();\n      });\n\n      var sortInput = card.querySelector('[name=\"sort_order\"]');\n      sortInput.addEventListener(\"input\", function () {\n        this.setAttribute(\"data-auto\", \"false\");\n      });\n\n      container.appendChild(card);\n      updateCardHeaders();\n      updateAllSlugs();\n      return card;\n    }\n\n    addCourseBtn.addEventListener(\"click\", function () {\n      var newCard = createCourseCard();\n      var input = newCard.querySelector('[name=\"title\"]');\n      if (input) input.focus();\n    });\n\n    createCourseCard();\n\n    form.addEventListener(\"submit\", function (e) {\n      e.preventDefault();\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n\n      var cards = container.querySelectorAll(\".form-card\");\n      if (cards.length === 0) {\n        showError(\"Vui lòng thêm ít nhất một khóa học.\");\n        return;\n      }\n\n      var courseList = [];\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var title = (card.querySelector('[name=\"title\"]').value || \"\").trim();\n        if (!title) {\n          showError(\"Vui lòng nhập tên cho khóa học #\" + (i + 1) + \".\");\n          card.querySelector('[name=\"title\"]').focus();\n          return;\n        }\n\n        var tuitionVnd = card.querySelector('[name=\"tuition_vnd\"]').value;\n        if (!tuitionVnd || isNaN(Number(tuitionVnd)) || Number(tuitionVnd) < 0) {\n          showError(\"Vui lòng nhập học phí ưu đãi hợp lệ cho khóa học #\" + (i + 1) + \".\");\n          card.querySelector('[name=\"tuition_vnd\"]').focus();\n          return;\n        }\n\n        var origTuition = card.querySelector('[name=\"original_tuition_vnd\"]').value;\n        var sortVal = card.querySelector('[name=\"sort_order\"]').value;\n\n        courseList.push({\n          title: title,\n          slug: card.querySelector('[name=\"slug\"]').value || slugify(title),\n          tag: card.querySelector('[name=\"tag\"]').value,\n          level: card.querySelector('[name=\"level\"]').value,\n          tagline: (card.querySelector('[name=\"tagline\"]').value || \"\").trim(),\n          tuition_vnd: tuitionVnd,\n          original_tuition_vnd: origTuition || tuitionVnd,\n          duration: (card.querySelector('[name=\"duration\"]').value || \"\").trim(),\n          sort_order: sortVal || (i + 1),\n          description: (card.querySelector('[name=\"description\"]').value || \"\").trim(),\n          cover_image_url: (card.querySelector('[name=\"cover_image_url\"]').value || \"\").trim(),\n          is_active: card.querySelector('[name=\"is_active\"]').checked,\n          is_featured: card.querySelector('[name=\"is_featured\"]').checked\n        });\n      }\n\n      submitBtn.disabled = true;\n      addCourseBtn.disabled = true;\n      submitBtnText.innerHTML = '<span class=\"spinner\"></span> Đang lưu ' + courseList.length + ' khóa học...';\n\n      google.script.run\n        .withSuccessHandler(function (res) {\n          showSuccess(\"✅ Đã lưu thành công \" + (res.count || courseList.length) + \" khóa học vào hệ thống!\");\n          setTimeout(function () {\n            google.script.host.close();\n          }, 1200);\n        })\n        .withFailureHandler(function (err) {\n          submitBtn.disabled = false;\n          addCourseBtn.disabled = false;\n          updateCardHeaders();\n          showError(\"Lỗi: \" + (err.message || err.toString()));\n        })\n        .addCoursesBatchFromModal(courseList);\n    });\n  </script>\n</body>\n\n</html>\n",
-  "CurriculumModal": "<!DOCTYPE html>\n<html>\n\n<head>\n  <base target=\"_top\">\n  <?!= include('SharedStyles'); ?>\n</head>\n\n<body>\n  <div class=\"modal-header\">\n    <div>\n      <h2 class=\"modal-title\">📚 Thêm Chương Lộ Trình Hàng Loạt</h2>\n      <p class=\"modal-subtitle\">Thêm nhiều chương / modules cùng lúc cho khóa học được chọn, tự động tính số thứ tự chương</p>\n    </div>\n  </div>\n\n  <form id=\"curriculumForm\">\n    <div class=\"form-group\">\n      <label for=\"course_select\">Khóa Học Áp Dụng <span class=\"required\">*</span></label>\n      <select id=\"course_select\" name=\"course_select\" required>\n        <? for (var i = 0; i < coursesList.length; i++) { ?>\n        <option value=\"<?= coursesList[i].id ?>\" data-title=\"<?= coursesList[i].title ?>\"\n          data-max=\"<?= coursesList[i].maxModule ?>\">\n          <?= coursesList[i].title ?> (Hiện có: <?= coursesList[i].maxModule ?> chương)\n        </option>\n        <? } ?>\n      </select>\n    </div>\n\n    <div id=\"curriculumCardsContainer\" class=\"repeater-container\"></div>\n\n    <button type=\"button\" id=\"addCurriculumBtn\" class=\"btn-add-repeater\">\n      <span>➕ Thêm chương / buổi học</span>\n    </button>\n\n    <div id=\"errorBox\" class=\"alert-banner alert-danger error-msg\"></div>\n    <div id=\"successBox\" class=\"alert-banner alert-success fade-in\" style=\"display: none;\"></div>\n\n    <div class=\"btn-group\">\n      <button type=\"button\" class=\"btn-cancel\" onclick=\"google.script.host.close()\">Hủy Bỏ</button>\n      <button type=\"submit\" id=\"submitBtn\" class=\"btn-submit\">\n        <span id=\"submitBtnText\">Lưu tất cả (1 chương học)</span>\n      </button>\n    </div>\n  </form>\n\n  <script>\n    var courseSelect = document.getElementById(\"course_select\");\n    var container = document.getElementById(\"curriculumCardsContainer\");\n    var addCurriculumBtn = document.getElementById(\"addCurriculumBtn\");\n    var submitBtn = document.getElementById(\"submitBtn\");\n    var submitBtnText = document.getElementById(\"submitBtnText\");\n    var errorBox = document.getElementById(\"errorBox\");\n    var successBox = document.getElementById(\"successBox\");\n\n    function getBaseModuleNumber() {\n      var selected = courseSelect.options[courseSelect.selectedIndex];\n      return selected ? parseInt(selected.getAttribute(\"data-max\") || \"0\", 10) : 0;\n    }\n\n    function updateCardIndices() {\n      var cards = container.querySelectorAll(\".form-card\");\n      var baseMod = getBaseModuleNumber();\n\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var titleElem = card.querySelector(\".form-card-title span\");\n        if (titleElem) {\n          titleElem.innerText = \"📚 Chương / Buổi học #\" + (i + 1);\n        }\n        var modInput = card.querySelector('[name=\"module_number\"]');\n        var sortInput = card.querySelector('[name=\"sort_order\"]');\n        var nextMod = baseMod + i + 1;\n\n        if (modInput && modInput.getAttribute(\"data-auto\") === \"true\") {\n          modInput.value = nextMod;\n        }\n        if (sortInput && sortInput.getAttribute(\"data-auto\") === \"true\") {\n          sortInput.value = nextMod;\n        }\n\n        var removeBtn = card.querySelector(\".btn-remove-card\");\n        if (removeBtn) {\n          removeBtn.style.display = cards.length > 1 ? \"inline-block\" : \"none\";\n        }\n      }\n\n      submitBtnText.innerText = \"Lưu tất cả (\" + cards.length + \" chương học)\";\n    }\n\n    courseSelect.addEventListener(\"change\", function () {\n      var cards = container.querySelectorAll(\".form-card\");\n      for (var i = 0; i < cards.length; i++) {\n        var modInput = cards[i].querySelector('[name=\"module_number\"]');\n        var sortInput = cards[i].querySelector('[name=\"sort_order\"]');\n        if (modInput) modInput.setAttribute(\"data-auto\", \"true\");\n        if (sortInput) sortInput.setAttribute(\"data-auto\", \"true\");\n      }\n      updateCardIndices();\n    });\n\n    function createCurriculumCard() {\n      var card = document.createElement(\"div\");\n      card.className = \"form-card fade-in\";\n      card.innerHTML = \n        '<div class=\"form-card-header\">' +\n          '<div class=\"form-card-title\"><span>📚 Chương / Buổi học</span></div>' +\n          '<button type=\"button\" class=\"btn-remove-card\" title=\"Xóa thẻ chương này\">✕ Xóa</button>' +\n        '</div>' +\n        '<div class=\"form-row\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Số Thứ Tự Chương <span class=\"required\">*</span></label>' +\n            '<input type=\"number\" name=\"module_number\" required min=\"1\" data-auto=\"true\">' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Thời Lượng Chương</label>' +\n            '<input type=\"text\" name=\"duration\" value=\"2 tuần (6 buổi)\">' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Số Buổi Học</label>' +\n            '<input type=\"number\" name=\"lessons_count\" min=\"1\" value=\"6\">' +\n          '</div>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Tiêu Đề Chương <span class=\"required\">*</span></label>' +\n          '<input type=\"text\" name=\"module_title\" required placeholder=\"Ví dụ: Chương 1: Nền tảng Cơ sở Dữ liệu & Cú pháp SELECT\">' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Nội Dung Bài Học (Mỗi dòng là một bullet point) <span class=\"required\">*</span></label>' +\n          '<textarea name=\"topics_bullets\" rows=\"4\" required placeholder=\"Tổng quan về RDBMS, Table, Schema&#10;Cú pháp SELECT, WHERE, ORDER BY&#10;Toán tử logic AND, OR, NOT, IN, LIKE&#10;Thực hành Capstone Mini: Phân tích giỏ hàng E-commerce\"></textarea>' +\n          '<div class=\"help-text\">Mẹo: Nhấn Enter / Alt+Enter để tách từng bullet point riêng biệt.</div>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Thứ Tự Hiển Thị</label>' +\n          '<input type=\"number\" name=\"sort_order\" min=\"1\" data-auto=\"true\">' +\n        '</div>';\n\n      var modInput = card.querySelector('[name=\"module_number\"]');\n      modInput.addEventListener(\"input\", function () {\n        this.setAttribute(\"data-auto\", \"false\");\n      });\n\n      var sortInput = card.querySelector('[name=\"sort_order\"]');\n      sortInput.addEventListener(\"input\", function () {\n        this.setAttribute(\"data-auto\", \"false\");\n      });\n\n      var removeBtn = card.querySelector(\".btn-remove-card\");\n      removeBtn.addEventListener(\"click\", function () {\n        card.remove();\n        updateCardIndices();\n      });\n\n      container.appendChild(card);\n      updateCardIndices();\n      return card;\n    }\n\n    addCurriculumBtn.addEventListener(\"click\", function () {\n      var newCard = createCurriculumCard();\n      var input = newCard.querySelector('[name=\"module_title\"]');\n      if (input) input.focus();\n    });\n\n    createCurriculumCard();\n\n    function showError(msg) {\n      if (successBox) successBox.style.display = \"none\";\n      errorBox.innerText = msg;\n      errorBox.style.display = \"block\";\n    }\n\n    function showSuccess(msg) {\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n      successBox.innerText = msg;\n      successBox.style.display = \"flex\";\n    }\n\n    form.addEventListener(\"submit\", function (e) {\n      e.preventDefault();\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n\n      var selected = courseSelect.options[courseSelect.selectedIndex];\n      var courseId = selected ? selected.value : \"\";\n      var courseName = selected ? selected.getAttribute(\"data-title\") : \"\";\n\n      if (!courseId) {\n        showError(\"Vui lòng chọn khóa học áp dụng.\");\n        return;\n      }\n\n      var cards = container.querySelectorAll(\".form-card\");\n      if (cards.length === 0) {\n        showError(\"Vui lòng thêm ít nhất một chương học.\");\n        return;\n      }\n\n      var curriculumList = [];\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var moduleTitle = (card.querySelector('[name=\"module_title\"]').value || \"\").trim();\n        if (!moduleTitle) {\n          showError(\"Vui lòng nhập tiêu đề cho chương #\" + (i + 1) + \".\");\n          card.querySelector('[name=\"module_title\"]').focus();\n          return;\n        }\n\n        var topics = (card.querySelector('[name=\"topics_bullets\"]').value || \"\").trim();\n        if (!topics) {\n          showError(\"Vui lòng nhập nội dung bài học cho chương #\" + (i + 1) + \".\");\n          card.querySelector('[name=\"topics_bullets\"]').focus();\n          return;\n        }\n\n        var modNum = parseInt(card.querySelector('[name=\"module_number\"]').value, 10) || (i + 1);\n        var sortVal = parseInt(card.querySelector('[name=\"sort_order\"]').value, 10) || modNum;\n        var lessonsCount = parseInt(card.querySelector('[name=\"lessons_count\"]').value, 10) || 6;\n        var duration = (card.querySelector('[name=\"duration\"]').value || \"\").trim();\n\n        curriculumList.push({\n          course_id: courseId,\n          course_name: courseName,\n          module_number: modNum,\n          module_title: moduleTitle,\n          duration: duration || \"2 tuần (6 buổi)\",\n          lessons_count: lessonsCount,\n          topics_bullets: topics,\n          sort_order: sortVal\n        });\n      }\n\n      submitBtn.disabled = true;\n      addCurriculumBtn.disabled = true;\n      submitBtnText.innerHTML = '<span class=\"spinner\"></span> Đang lưu ' + curriculumList.length + ' chương học...';\n\n      google.script.run\n        .withSuccessHandler(function (res) {\n          showSuccess(\"✅ Đã lưu thành công \" + (res.count || curriculumList.length) + \" chương học vào lộ trình!\");\n          setTimeout(function () {\n            google.script.host.close();\n          }, 1200);\n        })\n        .withFailureHandler(function (err) {\n          submitBtn.disabled = false;\n          addCurriculumBtn.disabled = false;\n          updateCardIndices();\n          showError(\"Lỗi: \" + (err.message || err.toString()));\n        })\n        .addCurriculumBatchFromModal(curriculumList);\n    });\n  </script>\n</body>\n\n</html>\n",
+  "BlogModal": "<!DOCTYPE html>\n<html>\n\n<head>\n  <base target=\"_top\">\n  <?!= include('SharedStyles'); ?>\n</head>\n\n<body>\n  <div class=\"modal-header\">\n    <div>\n      <h2 class=\"modal-title\">✍️ Thêm Bài Viết Blog Hàng Loạt</h2>\n      <p class=\"modal-subtitle\">Xuất bản bài viết kiến thức, tự động sinh slug chuẩn SEO và chống trùng lặp theo thời gian thực</p>\n    </div>\n  </div>\n\n  <form id=\"blogForm\">\n    <div id=\"blogCardsContainer\" class=\"repeater-container\"></div>\n\n    <button type=\"button\" id=\"addBlogBtn\" class=\"btn-add-repeater\">\n      <span>➕ Thêm bài viết</span>\n    </button>\n\n    <div id=\"errorBox\" class=\"alert-banner alert-danger error-msg\"></div>\n    <div id=\"successBox\" class=\"alert-banner alert-success fade-in\" style=\"display: none;\"></div>\n\n    <div class=\"btn-group\">\n      <button type=\"button\" class=\"btn-cancel\" onclick=\"google.script.host.close()\">Hủy Bỏ</button>\n      <button type=\"submit\" id=\"submitBtn\" class=\"btn-submit\">\n        <span id=\"submitBtnText\">Lưu tất cả (1 bài viết)</span>\n      </button>\n    </div>\n  </form>\n\n  <script>\n    var existingSlugs = <?!= JSON.stringify(existingSlugs || []) ?>;\n\n    function slugify(text) {\n      if (!text) return \"\";\n      var str = text.toString().toLowerCase().trim();\n      str = str.replace(/[áàảãạăắằẳẵặâấầẩẫậ]/g, \"a\");\n      str = str.replace(/[éèẻẽẹêếềểễệ]/g, \"e\");\n      str = str.replace(/[íìỉĩị]/g, \"i\");\n      str = str.replace(/[óòỏõọôốồổỗộơớờởỡợ]/g, \"o\");\n      str = str.replace(/[úùủũụưứừửữự]/g, \"u\");\n      str = str.replace(/[ýỳỷỹỵ]/g, \"y\");\n      str = str.replace(/đ/g, \"d\");\n      str = str.replace(/[\\s_]+/g, \"-\");\n      str = str.replace(/[^a-z0-9-]/g, \"\");\n      str = str.replace(/-+/g, \"-\");\n      str = str.replace(/^-+|-+$/g, \"\");\n      return str;\n    }\n\n    function resolveUniqueSlugClient(rawInput, existingSlugs, currentSlug) {\n      var base = slugify(rawInput);\n      if (!base) return { slug: \"\", isVersioned: false };\n\n      var cleanBase = base.replace(/-v\\d+$/, \"\");\n      var slugMap = {};\n      var list = existingSlugs || [];\n      var cur = (currentSlug || \"\").toString().trim().toLowerCase();\n\n      for (var i = 0; i < list.length; i++) {\n        var s = (list[i] || \"\").toString().trim().toLowerCase();\n        if (s && s !== cur) {\n          slugMap[s] = true;\n        }\n      }\n\n      if (!slugMap[cleanBase]) {\n        return { slug: cleanBase, isVersioned: false };\n      }\n\n      var version = 1;\n      while (true) {\n        var candidate = cleanBase + \"-v\" + version;\n        if (!slugMap[candidate]) {\n          return { slug: candidate, isVersioned: true };\n        }\n        version++;\n      }\n    }\n\n    var form = document.getElementById(\"blogForm\");\n    var container = document.getElementById(\"blogCardsContainer\");\n    var addBlogBtn = document.getElementById(\"addBlogBtn\");\n    var submitBtn = document.getElementById(\"submitBtn\");\n    var submitBtnText = document.getElementById(\"submitBtnText\");\n    var errorBox = document.getElementById(\"errorBox\");\n    var successBox = document.getElementById(\"successBox\");\n\n    function showError(msg) {\n      if (successBox) successBox.style.display = \"none\";\n      errorBox.innerText = msg;\n      errorBox.style.display = \"block\";\n    }\n\n    function showSuccess(msg) {\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n      successBox.innerText = msg;\n      successBox.style.display = \"flex\";\n    }\n\n    function updateAllSlugs() {\n      var cards = container.querySelectorAll(\".form-card\");\n      var batchSlugs = [].concat(existingSlugs);\n\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var titleInput = card.querySelector('[name=\"title\"]');\n        var slugPreview = card.querySelector(\".slug-preview-text\");\n        var slugHidden = card.querySelector('[name=\"slug\"]');\n        var versionBadge = card.querySelector(\".slug-version-badge\");\n        var val = (titleInput.value || \"\").trim();\n        var rawSlug = slugify(val);\n\n        if (!rawSlug) {\n          slugPreview.innerText = \"lo-trinh-chuyen-nganh-data-analytics\";\n          slugHidden.value = \"\";\n          versionBadge.className = \"badge-v badge-slate slug-version-badge\";\n          versionBadge.innerText = \"Chờ nhập liệu\";\n          continue;\n        }\n\n        var res = resolveUniqueSlugClient(rawSlug, batchSlugs);\n        slugPreview.innerText = res.slug;\n        slugHidden.value = res.slug;\n        batchSlugs.push(res.slug);\n\n        if (res.isVersioned) {\n          versionBadge.className = \"badge-v badge-crimson slug-version-badge\";\n          versionBadge.innerText = \"⚡ Trùng tiêu đề -> Đã gắn: \" + res.slug.split(\"-\").pop();\n        } else {\n          versionBadge.className = \"badge-v badge-emerald slug-version-badge\";\n          versionBadge.innerText = \"✅ Duy nhất chuẩn SEO\";\n        }\n      }\n    }\n\n    function updateCardHeaders() {\n      var cards = container.querySelectorAll(\".form-card\");\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var titleElem = card.querySelector(\".form-card-title span\");\n        if (titleElem) {\n          titleElem.innerText = \"✍️ Bài viết #\" + (i + 1);\n        }\n        var removeBtn = card.querySelector(\".btn-remove-card\");\n        if (removeBtn) {\n          removeBtn.style.display = cards.length > 1 ? \"inline-block\" : \"none\";\n        }\n      }\n      submitBtnText.innerText = \"Lưu tất cả (\" + cards.length + \" bài viết)\";\n    }\n\n    function createBlogCard() {\n      var card = document.createElement(\"div\");\n      card.className = \"form-card fade-in\";\n      card.innerHTML =\n        '<div class=\"form-card-header\">' +\n          '<div class=\"form-card-title\"><span>✍️ Bài viết</span></div>' +\n          '<button type=\"button\" class=\"btn-remove-card\" title=\"Xóa bài viết này\">✕ Xóa</button>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Tiêu Đề Bài Viết <span class=\"required\">*</span></label>' +\n          '<input type=\"text\" name=\"title\" required placeholder=\"Lộ trình chuyển ngành Data Analytics từ con số 0 năm 2026\" autocomplete=\"off\">' +\n        '</div>' +\n        '<div class=\"preview-box\">' +\n          '<div class=\"preview-header\">' +\n            '<span>Xem trước URL Bài Viết Blog</span>' +\n            '<span class=\"badge-v badge-slate slug-version-badge\">Chờ nhập liệu</span>' +\n          '</div>' +\n          '<div class=\"preview-content\">' +\n            'https://datawithly.edu.vn/blog/<strong class=\"slug-preview-text\" style=\"color: var(--primary);\">lo-trinh-chuyen-nganh-data-analytics</strong>' +\n          '</div>' +\n          '<input type=\"hidden\" name=\"slug\">' +\n          '<input type=\"hidden\" name=\"id\">' +\n        '</div>' +\n        '<div class=\"form-row\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Chuyên Mục Bài Viết <span class=\"required\">*</span></label>' +\n            '<select name=\"category\">' +\n              '<option value=\"Sự nghiệp\">Sự nghiệp (Career Path)</option>' +\n              '<option value=\"Kỹ thuật\">Kỹ thuật (SQL / BI / Python)</option>' +\n              '<option value=\"Case Study\">Case Study Thực Chiến</option>' +\n              '<option value=\"Góc nhìn\">Góc nhìn & Tư duy Dữ liệu</option>' +\n            '</select>' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Tác Giả <span class=\"required\">*</span></label>' +\n            '<input type=\"text\" name=\"author_name\" required value=\"Hứa Thảo Ly\" placeholder=\"Hứa Thảo Ly\">' +\n          '</div>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Mô Tả Ngắn (SEO Description) <span class=\"required\">*</span></label>' +\n          '<input type=\"text\" name=\"description\" required placeholder=\"Mô tả ngắn gọn 1-2 câu hiển thị cho Google Search & mạng xã hội...\">' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Đoạn Trích Dẫn (Excerpt) <span class=\"required\">*</span></label>' +\n          '<textarea name=\"excerpt\" rows=\"2\" required placeholder=\"Đoạn văn mở đầu hiển thị trên thẻ bài viết trang danh sách...\"></textarea>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Nội Dung Bài Viết (Hỗ trợ Markdown) <span class=\"required\">*</span></label>' +\n          '<textarea name=\"content_markdown\" rows=\"6\" required placeholder=\"## 1. Mở đầu bài viết\\nNội dung chi tiết phân tích...\\n\\n```sql\\nSELECT * FROM data;\\n```\"></textarea>' +\n        '</div>' +\n        '<div class=\"form-row\" style=\"margin-top: 6px;\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Ngày Xuất Bản</label>' +\n            '<input type=\"date\" name=\"published_at\">' +\n          '</div>' +\n          '<div class=\"form-group col-1\" style=\"display: flex; align-items: flex-end;\">' +\n            '<label class=\"checkbox-group\" style=\"width: 100%;\">' +\n              '<input type=\"checkbox\" name=\"is_active\" checked>' +\n              '<span class=\"checkbox-label\">Xuất bản công khai (is_active)</span>' +\n            '</label>' +\n          '</div>' +\n        '</div>';\n\n      var dateInput = card.querySelector('[name=\"published_at\"]');\n      if (dateInput) {\n        dateInput.value = new Date().toISOString().split(\"T\")[0];\n      }\n\n      var titleInput = card.querySelector('[name=\"title\"]');\n      titleInput.addEventListener(\"input\", updateAllSlugs);\n\n      var removeBtn = card.querySelector(\".btn-remove-card\");\n      removeBtn.addEventListener(\"click\", function () {\n        card.remove();\n        updateCardHeaders();\n        updateAllSlugs();\n      });\n\n      container.appendChild(card);\n      updateCardHeaders();\n      updateAllSlugs();\n      return card;\n    }\n\n    addBlogBtn.addEventListener(\"click\", function () {\n      var newCard = createBlogCard();\n      var input = newCard.querySelector('[name=\"title\"]');\n      if (input) input.focus();\n    });\n\n    createBlogCard();\n\n    form.addEventListener(\"submit\", function (e) {\n      e.preventDefault();\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n\n      var cards = container.querySelectorAll(\".form-card\");\n      if (cards.length === 0) {\n        showError(\"Vui lòng thêm ít nhất một bài viết.\");\n        return;\n      }\n\n      var blogList = [];\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var title = (card.querySelector('[name=\"title\"]').value || \"\").trim();\n        if (!title) {\n          showError(\"Vui lòng nhập tiêu đề cho bài viết #\" + (i + 1) + \".\");\n          card.querySelector('[name=\"title\"]').focus();\n          return;\n        }\n\n        var excerpt = (card.querySelector('[name=\"excerpt\"]').value || \"\").trim();\n        if (!excerpt) {\n          showError(\"Vui lòng nhập đoạn tóm tắt cho bài viết #\" + (i + 1) + \".\");\n          card.querySelector('[name=\"excerpt\"]').focus();\n          return;\n        }\n\n        var author = (card.querySelector('[name=\"author_name\"]').value || \"\").trim() || \"Hứa Thảo Ly\";\n        var publishedAt = card.querySelector('[name=\"published_at\"]').value || new Date().toISOString().split(\"T\")[0];\n\n        blogList.push({\n          title: title,\n          slug: card.querySelector('[name=\"slug\"]').value || slugify(title),\n          category: card.querySelector('[name=\"category\"]').value,\n          excerpt: excerpt,\n          author_name: author,\n          published_at: publishedAt,\n          is_active: card.querySelector('[name=\"is_active\"]').checked\n        });\n      }\n\n      submitBtn.disabled = true;\n      addBlogBtn.disabled = true;\n      submitBtnText.innerHTML = '<span class=\"spinner\"></span> Đang xuất bản ' + blogList.length + ' bài viết...';\n\n      google.script.run\n        .withSuccessHandler(function (res) {\n          showSuccess(\"✅ Đã xuất bản thành công \" + (res.count || blogList.length) + \" bài viết!\");\n          setTimeout(function () {\n            google.script.host.close();\n          }, 1200);\n        })\n        .withFailureHandler(function (err) {\n          submitBtn.disabled = false;\n          addBlogBtn.disabled = false;\n          updateCardHeaders();\n          showError(\"Lỗi: \" + (err.message || err.toString()));\n        })\n        .addBlogsBatchFromModal(blogList);\n    });\n  </script>\n</body>\n\n</html>\n",
+  "CourseModal": "<!DOCTYPE html>\n<html>\n\n<head>\n  <base target=\"_top\">\n  <?!= include('SharedStyles'); ?>\n</head>\n\n<body>\n  <div class=\"modal-header\">\n    <div>\n      <h2 class=\"modal-title\">➕ Thêm Khóa Học Hàng Loạt</h2>\n      <p class=\"modal-subtitle\">Thêm nhiều khóa học cùng lúc với nút \"+\" Repeater, tự động chuẩn hóa SEO Slug và version -v1, -v2 độc lập</p>\n    </div>\n  </div>\n\n  <form id=\"courseForm\">\n    <div id=\"courseCardsContainer\" class=\"repeater-container\"></div>\n\n    <button type=\"button\" id=\"addCourseBtn\" class=\"btn-add-repeater\">\n      <span>➕ Thêm khóa học</span>\n    </button>\n\n    <div id=\"errorBox\" class=\"alert-banner alert-danger error-msg\"></div>\n    <div id=\"successBox\" class=\"alert-banner alert-success fade-in\" style=\"display: none;\"></div>\n\n    <div class=\"btn-group\">\n      <button type=\"button\" class=\"btn-cancel\" onclick=\"google.script.host.close()\">Hủy Bỏ</button>\n      <button type=\"submit\" id=\"submitBtn\" class=\"btn-submit\">\n        <span id=\"submitBtnText\">Lưu tất cả (1 khóa học)</span>\n      </button>\n    </div>\n  </form>\n\n  <script>\n    var existingSlugs = <?!= JSON.stringify(existingSlugs || []) ?>;\n\n    function slugify(text) {\n      if (!text) return \"\";\n      var str = text.toString().toLowerCase().trim();\n      str = str.replace(/[áàảãạăắằẳẵặâấầẩẫậ]/g, \"a\");\n      str = str.replace(/[éèẻẽẹêếềểễệ]/g, \"e\");\n      str = str.replace(/[íìỉĩị]/g, \"i\");\n      str = str.replace(/[óòỏõọôốồổỗộơớờởỡợ]/g, \"o\");\n      str = str.replace(/[úùủũụưứừửữự]/g, \"u\");\n      str = str.replace(/[ýỳỷỹỵ]/g, \"y\");\n      str = str.replace(/đ/g, \"d\");\n      str = str.replace(/[\\s_]+/g, \"-\");\n      str = str.replace(/[^a-z0-9-]/g, \"\");\n      str = str.replace(/-+/g, \"-\");\n      str = str.replace(/^-+|-+$/g, \"\");\n      return str;\n    }\n\n    function resolveUniqueSlugClient(rawInput, existingSlugs, currentSlug) {\n      var base = slugify(rawInput);\n      if (!base) return { slug: \"\", isVersioned: false };\n\n      var cleanBase = base.replace(/-v\\d+$/, \"\");\n      var slugMap = {};\n      var list = existingSlugs || [];\n      var cur = (currentSlug || \"\").toString().trim().toLowerCase();\n\n      for (var i = 0; i < list.length; i++) {\n        var s = (list[i] || \"\").toString().trim().toLowerCase();\n        if (s && s !== cur) {\n          slugMap[s] = true;\n        }\n      }\n\n      if (!slugMap[cleanBase]) {\n        return { slug: cleanBase, isVersioned: false };\n      }\n\n      var version = 1;\n      while (true) {\n        var candidate = cleanBase + \"-v\" + version;\n        if (!slugMap[candidate]) {\n          return { slug: candidate, isVersioned: true };\n        }\n        version++;\n      }\n    }\n\n    var form = document.getElementById(\"courseForm\");\n    var container = document.getElementById(\"courseCardsContainer\");\n    var addCourseBtn = document.getElementById(\"addCourseBtn\");\n    var submitBtn = document.getElementById(\"submitBtn\");\n    var submitBtnText = document.getElementById(\"submitBtnText\");\n    var errorBox = document.getElementById(\"errorBox\");\n    var successBox = document.getElementById(\"successBox\");\n\n    function showError(msg) {\n      if (successBox) successBox.style.display = \"none\";\n      errorBox.innerText = msg;\n      errorBox.style.display = \"block\";\n    }\n\n    function showSuccess(msg) {\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n      successBox.innerText = msg;\n      successBox.style.display = \"flex\";\n    }\n\n    function updateAllSlugs() {\n      var cards = container.querySelectorAll(\".form-card\");\n      var batchSlugs = [].concat(existingSlugs);\n\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var titleInput = card.querySelector('[name=\"title\"]');\n        var slugPreview = card.querySelector(\".slug-preview-text\");\n        var slugHidden = card.querySelector('[name=\"slug\"]');\n        var versionBadge = card.querySelector(\".slug-version-badge\");\n        var val = (titleInput.value || \"\").trim();\n        var rawSlug = slugify(val);\n\n        if (!rawSlug) {\n          slugPreview.innerText = \"sql-for-data-analytics\";\n          slugHidden.value = \"\";\n          versionBadge.className = \"badge-v badge-slate slug-version-badge\";\n          versionBadge.innerText = \"Chờ nhập liệu\";\n          continue;\n        }\n\n        var res = resolveUniqueSlugClient(rawSlug, batchSlugs);\n        slugPreview.innerText = res.slug;\n        slugHidden.value = res.slug;\n        batchSlugs.push(res.slug);\n\n        if (res.isVersioned) {\n          versionBadge.className = \"badge-v badge-crimson slug-version-badge\";\n          versionBadge.innerText = \"⚡ Trùng tiêu đề -> Đã gắn: \" + res.slug.split(\"-\").pop();\n        } else {\n          versionBadge.className = \"badge-v badge-emerald slug-version-badge\";\n          versionBadge.innerText = \"✅ Duy nhất chuẩn SEO\";\n        }\n      }\n    }\n\n    function updateCardHeaders() {\n      var cards = container.querySelectorAll(\".form-card\");\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var titleElem = card.querySelector(\".form-card-title span\");\n        if (titleElem) {\n          titleElem.innerText = \"📘 Khóa học #\" + (i + 1);\n        }\n        var sortOrderInput = card.querySelector('[name=\"sort_order\"]');\n        if (sortOrderInput && (!sortOrderInput.value || sortOrderInput.getAttribute(\"data-auto\") === \"true\")) {\n          sortOrderInput.value = i + 1;\n          sortOrderInput.setAttribute(\"data-auto\", \"true\");\n        }\n        var removeBtn = card.querySelector(\".btn-remove-card\");\n        if (removeBtn) {\n          removeBtn.style.display = cards.length > 1 ? \"inline-block\" : \"none\";\n        }\n      }\n      submitBtnText.innerText = \"Lưu tất cả (\" + cards.length + \" khóa học)\";\n    }\n\n    function createCourseCard() {\n      var card = document.createElement(\"div\");\n      card.className = \"form-card fade-in\";\n      card.innerHTML = \n        '<div class=\"form-card-header\">' +\n          '<div class=\"form-card-title\"><span>📘 Khóa học</span></div>' +\n          '<button type=\"button\" class=\"btn-remove-card\" title=\"Xóa thẻ khóa học này\">✕ Xóa</button>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Tên Khóa Học <span class=\"required\">*</span></label>' +\n          '<input type=\"text\" name=\"title\" required placeholder=\"Ví dụ: SQL for Data Analytics Thực Chiến\" autocomplete=\"off\">' +\n        '</div>' +\n        '<div class=\"preview-box\">' +\n          '<div class=\"preview-header\">' +\n            '<span>Xem trước URL & Slug SEO</span>' +\n            '<span class=\"badge-v badge-slate slug-version-badge\">Chờ nhập liệu</span>' +\n          '</div>' +\n          '<div class=\"preview-content\">' +\n            'https://datawithly.edu.vn/courses/<strong class=\"slug-preview-text\" style=\"color: var(--primary);\">sql-for-data-analytics</strong>' +\n          '</div>' +\n          '<input type=\"hidden\" name=\"slug\">' +\n          '<input type=\"hidden\" name=\"id\">' +\n        '</div>' +\n        '<div class=\"form-row\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Loại Khóa Học (Course Kind) <span class=\"required\">*</span></label>' +\n            '<select name=\"course_kind\">' +\n              '<option value=\"Khóa học nổi bật\" selected>Khóa học nổi bật</option>' +\n              '<option value=\"Khóa học mới\">Khóa học mới</option>' +\n              '<option value=\"Khóa học nền tảng\">Khóa học nền tảng</option>' +\n              '<option value=\"Khóa học chuyên sâu\">Khóa học chuyên sâu</option>' +\n              '<option value=\"Combo\">Combo</option>' +\n            '</select>' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Chủ Đề (Tag) <span class=\"required\">*</span></label>' +\n            '<select name=\"tag\">' +\n              '<option value=\"SQL\">SQL</option>' +\n              '<option value=\"Dashboard\">Dashboard (Power BI)</option>' +\n              '<option value=\"Python\">Python</option>' +\n              '<option value=\"End-to-End\">End-to-End Analytics</option>' +\n            '</select>' +\n          '</div>' +\n        '</div>' +\n        '<div class=\"form-row\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Trình Độ</label>' +\n            '<select name=\"level\">' +\n              '<option value=\"Beginner\">Beginner (Cơ bản)</option>' +\n              '<option value=\"Intermediate\">Intermediate (Trung cấp)</option>' +\n              '<option value=\"Advanced\">Advanced (Nâng cao)</option>' +\n            '</select>' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Thông Điệp Ngắn (Tagline)</label>' +\n            '<input type=\"text\" name=\"tagline\" placeholder=\"Ví dụ: Nắm vững tư duy truy vấn, CTE và Window Functions\">' +\n          '</div>' +\n        '</div>' +\n        '<div class=\"form-row\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Học Phí Ưu Đãi (VNĐ) <span class=\"required\">*</span></label>' +\n            '<input type=\"number\" name=\"tuition_vnd\" required placeholder=\"4500000\" step=\"50000\">' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Học Phí Gốc (VNĐ)</label>' +\n            '<input type=\"number\" name=\"original_tuition_vnd\" placeholder=\"6000000\" step=\"50000\">' +\n          '</div>' +\n        '</div>' +\n        '<div class=\"form-row\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Thời Lượng</label>' +\n            '<input type=\"text\" name=\"duration\" value=\"8 tuần (24 buổi)\">' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Thứ Tự Sắp Xếp</label>' +\n            '<input type=\"number\" name=\"sort_order\" min=\"1\" data-auto=\"true\">' +\n          '</div>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Mô Tả Tổng Quan Khóa Học</label>' +\n          '<textarea name=\"description\" rows=\"2\" placeholder=\"Mô tả giá trị thực chiến, mục tiêu đầu ra và đối tượng phù hợp...\"></textarea>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Ảnh Bìa (URL)</label>' +\n          '<input type=\"text\" name=\"cover_image_url\" placeholder=\"/uploads/courses/sql-course.jpg\">' +\n        '</div>' +\n        '<div class=\"form-row\" style=\"margin-top: 6px;\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label class=\"checkbox-group\">' +\n              '<input type=\"checkbox\" name=\"is_active\" checked>' +\n              '<span class=\"checkbox-label\">Kích hoạt hiển thị (is_active)</span>' +\n            '</label>' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label class=\"checkbox-group\">' +\n              '<input type=\"checkbox\" name=\"is_featured\">' +\n              '<span class=\"checkbox-label\">Khóa học nổi bật (is_featured)</span>' +\n            '</label>' +\n          '</div>' +\n        '</div>';\n\n      var titleInput = card.querySelector('[name=\"title\"]');\n      titleInput.addEventListener(\"input\", updateAllSlugs);\n\n      var removeBtn = card.querySelector(\".btn-remove-card\");\n      removeBtn.addEventListener(\"click\", function () {\n        card.remove();\n        updateCardHeaders();\n        updateAllSlugs();\n      });\n\n      var sortInput = card.querySelector('[name=\"sort_order\"]');\n      sortInput.addEventListener(\"input\", function () {\n        this.setAttribute(\"data-auto\", \"false\");\n      });\n\n      container.appendChild(card);\n      updateCardHeaders();\n      updateAllSlugs();\n      return card;\n    }\n\n    addCourseBtn.addEventListener(\"click\", function () {\n      var newCard = createCourseCard();\n      var input = newCard.querySelector('[name=\"title\"]');\n      if (input) input.focus();\n    });\n\n    createCourseCard();\n\n    form.addEventListener(\"submit\", function (e) {\n      e.preventDefault();\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n\n      var cards = container.querySelectorAll(\".form-card\");\n      if (cards.length === 0) {\n        showError(\"Vui lòng thêm ít nhất một khóa học.\");\n        return;\n      }\n\n      var courseList = [];\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var title = (card.querySelector('[name=\"title\"]').value || \"\").trim();\n        if (!title) {\n          showError(\"Vui lòng nhập tên cho khóa học #\" + (i + 1) + \".\");\n          card.querySelector('[name=\"title\"]').focus();\n          return;\n        }\n\n        var tuitionVnd = card.querySelector('[name=\"tuition_vnd\"]').value;\n        if (!tuitionVnd || isNaN(Number(tuitionVnd)) || Number(tuitionVnd) < 0) {\n          showError(\"Vui lòng nhập học phí ưu đãi hợp lệ cho khóa học #\" + (i + 1) + \".\");\n          card.querySelector('[name=\"tuition_vnd\"]').focus();\n          return;\n        }\n\n        var origTuition = card.querySelector('[name=\"original_tuition_vnd\"]').value;\n        var sortVal = card.querySelector('[name=\"sort_order\"]').value;\n\n        courseList.push({\n          title: title,\n          slug: card.querySelector('[name=\"slug\"]').value || slugify(title),\n          tag: card.querySelector('[name=\"tag\"]').value,\n          level: card.querySelector('[name=\"level\"]').value,\n          tagline: (card.querySelector('[name=\"tagline\"]').value || \"\").trim(),\n          tuition_vnd: tuitionVnd,\n          original_tuition_vnd: origTuition || tuitionVnd,\n          duration: (card.querySelector('[name=\"duration\"]').value || \"\").trim(),\n          sort_order: sortVal || (i + 1),\n          description: (card.querySelector('[name=\"description\"]').value || \"\").trim(),\n          cover_image_url: (card.querySelector('[name=\"cover_image_url\"]').value || \"\").trim(),\n          is_active: card.querySelector('[name=\"is_active\"]').checked,\n          is_featured: card.querySelector('[name=\"is_featured\"]').checked\n        });\n      }\n\n      submitBtn.disabled = true;\n      addCourseBtn.disabled = true;\n      submitBtnText.innerHTML = '<span class=\"spinner\"></span> Đang lưu ' + courseList.length + ' khóa học...';\n\n      google.script.run\n        .withSuccessHandler(function (res) {\n          showSuccess(\"✅ Đã lưu thành công \" + (res.count || courseList.length) + \" khóa học vào hệ thống!\");\n          setTimeout(function () {\n            google.script.host.close();\n          }, 1200);\n        })\n        .withFailureHandler(function (err) {\n          submitBtn.disabled = false;\n          addCourseBtn.disabled = false;\n          updateCardHeaders();\n          showError(\"Lỗi: \" + (err.message || err.toString()));\n        })\n        .addCoursesBatchFromModal(courseList);\n    });\n  </script>\n</body>\n\n</html>\n",
+  "CurriculumModal": "<!DOCTYPE html>\n<html>\n\n<head>\n  <base target=\"_top\">\n  <?!= include('SharedStyles'); ?>\n</head>\n\n<body>\n  <div class=\"modal-header\">\n    <div>\n      <h2 class=\"modal-title\">📚 Quản Trị Lộ Trình Khóa Học (Curriculum Modules)</h2>\n      <p class=\"modal-subtitle\">Khởi tạo số lượng buổi học linh hoạt (1, 2, 3, 4 buổi/tuần), thiết lập ngày bắt đầu/kết thúc và nội dung chi tiết</p>\n    </div>\n  </div>\n\n  <form id=\"curriculumForm\">\n    <!-- KHỐI 1: CHỌN KHÓA HỌC & THỜI GIAN KHÓA HỌC -->\n    <div class=\"form-group\">\n      <label for=\"course_select\">Khóa Học Áp Dụng <span class=\"required\">*</span></label>\n      <select id=\"course_select\" name=\"course_select\" required>\n        <? for (var i = 0; i < coursesList.length; i++) { ?>\n        <option value=\"<?= coursesList[i].id ?>\" data-title=\"<?= coursesList[i].title ?>\"\n          data-start=\"<?= coursesList[i].startDate || '' ?>\"\n          data-end=\"<?= coursesList[i].endDate || '' ?>\"\n          data-max=\"<?= coursesList[i].maxModule ?>\">\n          <?= coursesList[i].title ?> (Hiện có: <?= coursesList[i].maxModule ?> buổi học)\n        </option>\n        <? } ?>\n      </select>\n    </div>\n\n    <div class=\"form-row\">\n      <div class=\"form-group col-1\">\n        <label for=\"course_start_date\">Ngày Bắt Đầu Khóa Học (Khai Giảng)</label>\n        <input type=\"date\" id=\"course_start_date\" name=\"course_start_date\">\n      </div>\n      <div class=\"form-group col-1\">\n        <label for=\"course_end_date\">Ngày Kết Thúc Khóa Học (Bế Giảng)</label>\n        <input type=\"date\" id=\"course_end_date\" name=\"course_end_date\">\n      </div>\n    </div>\n\n    <!-- KHỐI 2: CẤU HÌNH SINH BUỔI HỌC TỰ ĐỘNG THEO TUẦN -->\n    <div style=\"background: #F8F9FA; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 16px; margin-bottom: 20px;\">\n      <div style=\"font-weight: 700; font-size: 13px; color: #1F242F; margin-bottom: 8px;\">\n        ⚙️ Thiết Lập Sinh Form Buổi Học Nhanh\n      </div>\n      <div class=\"form-row\" style=\"margin-bottom: 0; align-items: flex-end;\">\n        <div class=\"form-group col-1\" style=\"margin-bottom: 0;\">\n          <label for=\"sessions_per_week\">Số Buổi Mỗi Tuần</label>\n          <select id=\"sessions_per_week\" name=\"sessions_per_week\">\n            <option value=\"1\">1 buổi / tuần</option>\n            <option value=\"2\">2 buổi / tuần</option>\n            <option value=\"3\" selected>3 buổi / tuần</option>\n            <option value=\"4\">4 buổi / tuần</option>\n          </select>\n        </div>\n        <div class=\"form-group col-1\" style=\"margin-bottom: 0;\">\n          <label for=\"total_sessions\">Tổng Số Buổi Cần Tạo</label>\n          <input type=\"number\" id=\"total_sessions\" name=\"total_sessions\" min=\"1\" max=\"60\" value=\"12\">\n        </div>\n        <div style=\"padding-bottom: 2px;\">\n          <button type=\"button\" id=\"generateCardsBtn\" class=\"btn-submit\" style=\"padding: 10px 18px; font-size: 13px; background: #8B1D2C;\">\n            ⚡ Khởi Tạo Form\n          </button>\n        </div>\n      </div>\n      <div style=\"font-size: 11px; color: #6B7280; margin-top: 8px;\">\n        💡 Chọn số buổi/tuần (ví dụ 3 buổi/tuần) và bấm <strong>Khởi Tạo Form</strong>, hệ thống sẽ tự động tạo đúng số buổi học và chia tuần chuẩn xác.\n      </div>\n    </div>\n\n    <!-- KHỐI 3: DANH SÁCH FORM CARDS BUỔI HỌC -->\n    <div id=\"curriculumCardsContainer\" class=\"repeater-container\"></div>\n\n    <button type=\"button\" id=\"addCurriculumBtn\" class=\"btn-add-repeater\">\n      <span>➕ Thêm 1 buổi học lẻ</span>\n    </button>\n\n    <div id=\"errorBox\" class=\"alert-banner alert-danger error-msg\"></div>\n    <div id=\"successBox\" class=\"alert-banner alert-success fade-in\" style=\"display: none;\"></div>\n\n    <div class=\"btn-group\">\n      <button type=\"button\" class=\"btn-cancel\" onclick=\"google.script.host.close()\">Hủy Bỏ</button>\n      <button type=\"submit\" id=\"submitBtn\" class=\"btn-submit\">\n        <span id=\"submitBtnText\">Lưu tất cả (12 buổi học)</span>\n      </button>\n    </div>\n  </form>\n\n  <script>\n    var courseSelect = document.getElementById(\"course_select\");\n    var startDateInput = document.getElementById(\"course_start_date\");\n    var endDateInput = document.getElementById(\"course_end_date\");\n    var sessionsPerWeekSelect = document.getElementById(\"sessions_per_week\");\n    var totalSessionsInput = document.getElementById(\"total_sessions\");\n    var generateCardsBtn = document.getElementById(\"generateCardsBtn\");\n    var container = document.getElementById(\"curriculumCardsContainer\");\n    var addCurriculumBtn = document.getElementById(\"addCurriculumBtn\");\n    var submitBtn = document.getElementById(\"submitBtn\");\n    var submitBtnText = document.getElementById(\"submitBtnText\");\n    var errorBox = document.getElementById(\"errorBox\");\n    var successBox = document.getElementById(\"successBox\");\n    var form = document.getElementById(\"curriculumForm\");\n\n    function getSelectedCourseOption() {\n      return courseSelect.options[courseSelect.selectedIndex];\n    }\n\n    function syncCourseDates() {\n      var opt = getSelectedCourseOption();\n      if (opt) {\n        if (opt.getAttribute(\"data-start\")) {\n          startDateInput.value = opt.getAttribute(\"data-start\");\n        }\n        if (opt.getAttribute(\"data-end\")) {\n          endDateInput.value = opt.getAttribute(\"data-end\");\n        }\n      }\n    }\n\n    syncCourseDates();\n    courseSelect.addEventListener(\"change\", syncCourseDates);\n\n    // Tính toán ngày badge gợi ý (ví dụ TH10 26) dựa trên start_date\n    function calculateSuggestedDate(sessionIndex, perWeek) {\n      var startVal = startDateInput.value;\n      if (!startVal) {\n        var dayNum = sessionIndex + 1;\n        return \"TH10 \" + (dayNum < 10 ? \"0\" + dayNum : dayNum);\n      }\n      try {\n        var baseDate = new Date(startVal);\n        var weekIndex = Math.floor(sessionIndex / perWeek);\n        var dayInWeek = sessionIndex % perWeek;\n        // Mỗi tuần cách nhau 7 ngày, mỗi buổi trong tuần cách nhau 2-3 ngày\n        var offsetDays = weekIndex * 7 + dayInWeek * 2;\n        var sDate = new Date(baseDate.getTime() + offsetDays * 24 * 60 * 60 * 1000);\n        var m = sDate.getMonth() + 1;\n        var d = sDate.getDate();\n        var mStr = m < 10 ? \"0\" + m : \"\" + m;\n        var dStr = d < 10 ? \"0\" + d : \"\" + d;\n        return \"TH\" + mStr + \" \" + dStr;\n      } catch (e) {\n        return \"TH10 01\";\n      }\n    }\n\n    function updateCardIndices() {\n      var cards = container.querySelectorAll(\".form-card\");\n      var perWeek = parseInt(sessionsPerWeekSelect.value, 10) || 2;\n\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var titleElem = card.querySelector(\".form-card-title span\");\n        var dayNum = i + 1;\n        var weekNum = Math.ceil(dayNum / perWeek);\n\n        if (titleElem) {\n          titleElem.innerText = \"📚 Buổi học #\" + dayNum + \" (Tuần \" + weekNum + \")\";\n        }\n\n        var dayInput = card.querySelector('[name=\"day\"]');\n        var weekInput = card.querySelector('[name=\"week\"]');\n        var sortInput = card.querySelector('[name=\"sort_order\"]');\n\n        if (dayInput && dayInput.getAttribute(\"data-auto\") === \"true\") {\n          dayInput.value = dayNum;\n        }\n        if (weekInput && weekInput.getAttribute(\"data-auto\") === \"true\") {\n          weekInput.value = weekNum;\n        }\n        if (sortInput && sortInput.getAttribute(\"data-auto\") === \"true\") {\n          sortInput.value = dayNum;\n        }\n\n        var removeBtn = card.querySelector(\".btn-remove-card\");\n        if (removeBtn) {\n          removeBtn.style.display = cards.length > 1 ? \"inline-block\" : \"none\";\n        }\n      }\n\n      submitBtnText.innerText = \"Lưu tất cả (\" + cards.length + \" buổi học)\";\n    }\n\n    function createCurriculumCard(customData) {\n      var card = document.createElement(\"div\");\n      card.className = \"form-card fade-in\";\n      card.innerHTML = \n        '<div class=\"form-card-header\">' +\n          '<div class=\"form-card-title\"><span>📚 Buổi học</span></div>' +\n          '<button type=\"button\" class=\"btn-remove-card\" title=\"Xóa buổi học này\">✕ Xóa</button>' +\n        '</div>' +\n        '<div class=\"form-row\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Tuần (Week) <span class=\"required\">*</span></label>' +\n            '<input type=\"number\" name=\"week\" required min=\"1\" value=\"1\" data-auto=\"true\">' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Buổi số (Day) <span class=\"required\">*</span></label>' +\n            '<input type=\"number\" name=\"day\" required min=\"1\" data-auto=\"true\">' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Ngày học (Date)</label>' +\n            '<input type=\"text\" name=\"date\" placeholder=\"Ví dụ: TH10 03\">' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Thời Lượng</label>' +\n            '<input type=\"text\" name=\"duration\" value=\"3 giờ\">' +\n          '</div>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Nội Dung Từng Buổi (Session Title) <span class=\"required\">*</span></label>' +\n          '<input type=\"text\" name=\"session_title\" required placeholder=\"Ví dụ: Buổi 1: Làm quen Database & Cú pháp SELECT cơ bản\">' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Miêu Tả Nội Dung Buổi Học (Session Description)</label>' +\n          '<textarea name=\"session_desc\" rows=\"2\" placeholder=\"Ví dụ: Hiểu kiến trúc Relational Database, cài đặt DBeaver, thực hành SELECT, WHERE, ORDER BY, GROUP BY.\"></textarea>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Sub Content - Chi Tiết Điểm Kiến Thức (Mỗi dòng là một dot list khi mở dropdown) <span class=\"required\">*</span></label>' +\n          '<textarea name=\"sub_content\" rows=\"4\" required placeholder=\"Tổng quan về cơ sở dữ liệu quan hệ (RDBMS) trong doanh nghiệp&#10;Cài đặt DBeaver và kết nối hệ quản trị PostgreSQL / MySQL&#10;Cú pháp SELECT, ALIAS, DISTINCT, toán tử lọc WHERE, AND/OR/IN/BETWEEN&#10;Thực hành truy vấn cơ bản trên bộ dữ liệu E-commerce thực tế\"></textarea>' +\n          '<div class=\"help-text\">💡 Mẹo: Nhấn Enter để tách từng gạch đầu dòng (dot list). Khi học viên bấm mở dropdown trên web sẽ thấy danh sách này.</div>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Thứ Tự Hiển Thị</label>' +\n          '<input type=\"number\" name=\"sort_order\" min=\"1\" data-auto=\"true\">' +\n        '</div>';\n\n      if (customData) {\n        if (customData.week) card.querySelector('[name=\"week\"]').value = customData.week;\n        if (customData.day) card.querySelector('[name=\"day\"]').value = customData.day;\n        if (customData.date) card.querySelector('[name=\"date\"]').value = customData.date;\n        if (customData.title) card.querySelector('[name=\"session_title\"]').value = customData.title;\n        if (customData.desc) card.querySelector('[name=\"session_desc\"]').value = customData.desc;\n        if (customData.sub) card.querySelector('[name=\"sub_content\"]').value = customData.sub;\n      }\n\n      var dayInput = card.querySelector('[name=\"day\"]');\n      dayInput.addEventListener(\"input\", function () {\n        this.setAttribute(\"data-auto\", \"false\");\n      });\n\n      var weekInput = card.querySelector('[name=\"week\"]');\n      weekInput.addEventListener(\"input\", function () {\n        this.setAttribute(\"data-auto\", \"false\");\n      });\n\n      var sortInput = card.querySelector('[name=\"sort_order\"]');\n      sortInput.addEventListener(\"input\", function () {\n        this.setAttribute(\"data-auto\", \"false\");\n      });\n\n      var removeBtn = card.querySelector(\".btn-remove-card\");\n      removeBtn.addEventListener(\"click\", function () {\n        card.remove();\n        updateCardIndices();\n      });\n\n      container.appendChild(card);\n      return card;\n    }\n\n    // Khởi tạo hàng loạt cards theo cấu hình\n    function generateBatchCards() {\n      var total = parseInt(totalSessionsInput.value, 10) || 12;\n      var perWeek = parseInt(sessionsPerWeekSelect.value, 10) || 3;\n      if (total < 1) total = 1;\n\n      container.innerHTML = \"\";\n\n      for (var i = 0; i < total; i++) {\n        var dayNum = i + 1;\n        var weekNum = Math.ceil(dayNum / perWeek);\n        var dateSuggested = calculateSuggestedDate(i, perWeek);\n\n        createCurriculumCard({\n          week: weekNum,\n          day: dayNum,\n          date: dateSuggested,\n          title: \"Buổi \" + dayNum + \": \",\n          desc: \"\",\n          sub: \"\"\n        });\n      }\n\n      updateCardIndices();\n    }\n\n    generateCardsBtn.addEventListener(\"click\", generateBatchCards);\n\n    addCurriculumBtn.addEventListener(\"click\", function () {\n      var cards = container.querySelectorAll(\".form-card\");\n      var perWeek = parseInt(sessionsPerWeekSelect.value, 10) || 3;\n      var nextDay = cards.length + 1;\n      var nextWeek = Math.ceil(nextDay / perWeek);\n      var dateSuggested = calculateSuggestedDate(cards.length, perWeek);\n\n      var newCard = createCurriculumCard({\n        week: nextWeek,\n        day: nextDay,\n        date: dateSuggested,\n        title: \"Buổi \" + nextDay + \": \"\n      });\n      updateCardIndices();\n      var input = newCard.querySelector('[name=\"session_title\"]');\n      if (input) input.focus();\n    });\n\n    // Mặc định sinh sẵn form theo cấu hình ban đầu\n    generateBatchCards();\n\n    function showError(msg) {\n      if (successBox) successBox.style.display = \"none\";\n      errorBox.innerText = msg;\n      errorBox.style.display = \"block\";\n    }\n\n    function showSuccess(msg) {\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n      successBox.innerText = msg;\n      successBox.style.display = \"flex\";\n    }\n\n    form.addEventListener(\"submit\", function (e) {\n      e.preventDefault();\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n\n      var selected = courseSelect.options[courseSelect.selectedIndex];\n      var courseId = selected ? selected.value : \"\";\n      var courseName = selected ? selected.getAttribute(\"data-title\") : \"\";\n\n      if (!courseId) {\n        showError(\"Vui lòng chọn khóa học áp dụng.\");\n        return;\n      }\n\n      var cards = container.querySelectorAll(\".form-card\");\n      if (cards.length === 0) {\n        showError(\"Vui lòng thêm ít nhất một buổi học.\");\n        return;\n      }\n\n      var curriculumList = [];\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var sessionTitle = (card.querySelector('[name=\"session_title\"]').value || \"\").trim();\n        if (!sessionTitle) {\n          showError(\"Vui lòng nhập nội dung cho buổi học #\" + (i + 1) + \".\");\n          card.querySelector('[name=\"session_title\"]').focus();\n          return;\n        }\n\n        var subContent = (card.querySelector('[name=\"sub_content\"]').value || \"\").trim();\n        if (!subContent) {\n          showError(\"Vui lòng nhập Sub Content chi tiết cho buổi học #\" + (i + 1) + \".\");\n          card.querySelector('[name=\"sub_content\"]').focus();\n          return;\n        }\n\n        var sessionDesc = (card.querySelector('[name=\"session_desc\"]').value || \"\").trim();\n        var dayVal = parseInt(card.querySelector('[name=\"day\"]').value, 10) || (i + 1);\n        var weekVal = parseInt(card.querySelector('[name=\"week\"]').value, 10) || Math.ceil(dayVal / 2);\n        var dateVal = (card.querySelector('[name=\"date\"]').value || \"\").trim();\n        var durationVal = (card.querySelector('[name=\"duration\"]').value || \"\").trim();\n        var sortVal = parseInt(card.querySelector('[name=\"sort_order\"]').value, 10) || dayVal;\n\n        curriculumList.push({\n          course_id: courseId,\n          course_name: courseName,\n          week: weekVal,\n          day: dayVal,\n          date: dateVal || (\"TH10 \" + (dayVal < 10 ? \"0\" + dayVal : dayVal)),\n          session_title: sessionTitle,\n          session_desc: sessionDesc,\n          sub_content: subContent,\n          duration: durationVal || \"3 giờ\",\n          sort_order: sortVal,\n          // Aliases tương thích ngược:\n          module_number: dayVal,\n          module_title: sessionTitle,\n          topics_bullets: subContent,\n          summary: sessionDesc\n        });\n      }\n\n      var payload = {\n        course_id: courseId,\n        course_name: courseName,\n        course_start_date: startDateInput.value || \"\",\n        course_end_date: endDateInput.value || \"\",\n        curriculum_list: curriculumList\n      };\n\n      submitBtn.disabled = true;\n      addCurriculumBtn.disabled = true;\n      generateCardsBtn.disabled = true;\n      submitBtnText.innerHTML = '<span class=\"spinner\"></span> Đang lưu ' + curriculumList.length + ' buổi học...';\n\n      google.script.run\n        .withSuccessHandler(function (res) {\n          showSuccess(\"✅ Đã lưu thành công \" + (res.count || curriculumList.length) + \" buổi học và thời gian khóa học!\");\n          setTimeout(function () {\n            google.script.host.close();\n          }, 1200);\n        })\n        .withFailureHandler(function (err) {\n          submitBtn.disabled = false;\n          addCurriculumBtn.disabled = false;\n          generateCardsBtn.disabled = false;\n          updateCardIndices();\n          showError(\"Lỗi: \" + (err.message || err.toString()));\n        })\n        .addCurriculumBatchFromModal(payload);\n    });\n  </script>\n</body>\n\n</html>\n",
   "FaqModal": "<!DOCTYPE html>\n<html>\n\n<head>\n  <base target=\"_top\">\n  <?!= include('SharedStyles'); ?>\n</head>\n\n<body>\n  <div class=\"modal-header\">\n    <div>\n      <h2 class=\"modal-title\">❓ Thêm Câu Hỏi Thường Gặp (FAQ)</h2>\n      <p class=\"modal-subtitle\">Giải đáp thắc mắc phổ biến về học phí, lịch học, đầu ra và lộ trình học tập</p>\n    </div>\n  </div>\n\n  <form id=\"faqForm\">\n    <div class=\"preview-box\">\n      <div class=\"preview-header\">\n        <span>Xem trước FAQ Accordion</span>\n        <span id=\"previewCategoryBadge\" class=\"badge-v badge-crimson\">CHUNG</span>\n      </div>\n      <div>\n        <strong id=\"previewQuestion\" style=\"font-size: 13px; color: var(--dark-slate);\">Người trái ngành, chưa từng học\n          IT có theo học được không?</strong>\n        <p id=\"previewAnswer\" style=\"font-size: 12px; color: var(--slate-muted); margin: 6px 0 0; line-height: 1.45;\">\n          Hoàn toàn được! Lộ trình của DataWithLy được thiết kế đi từ con số 0...\n        </p>\n      </div>\n    </div>\n\n    <div class=\"form-row\">\n      <div class=\"form-group col-1\">\n        <label for=\"category\">Danh Mục Câu Hỏi <span class=\"required\">*</span></label>\n        <select id=\"category\" name=\"category\" required>\n          <option value=\"CHUNG\">CHUNG (Thông tin chung & Khóa học)</option>\n          <option value=\"LỊCH HỌC\">LỊCH HỌC (Hình thức học & Record)</option>\n          <option value=\"HỌC PHÍ\">HỌC PHÍ (Học phí & Chính sách hoàn)</option>\n          <option value=\"ĐẦU RA\">ĐẦU RA (Hỗ trợ việc làm & CV)</option>\n        </select>\n      </div>\n      <div class=\"form-group col-1\">\n        <label for=\"sort_order\">Thứ Tự Sắp Xếp</label>\n        <input type=\"number\" id=\"sort_order\" name=\"sort_order\" value=\"1\" min=\"1\">\n      </div>\n    </div>\n\n    <div class=\"form-group\">\n      <label for=\"question\">Câu Hỏi Thường Gặp <span class=\"required\">*</span></label>\n      <input type=\"text\" id=\"question\" name=\"question\" required placeholder=\"Người trái ngành có học được không?\"\n        autocomplete=\"off\">\n    </div>\n\n    <div class=\"form-group\">\n      <label for=\"answer\">Câu Trả Lời Chi Tiết <span class=\"required\">*</span></label>\n      <textarea id=\"answer\" name=\"answer\" rows=\"5\" required\n        placeholder=\"Hoàn toàn được! Lộ trình của DataWithLy được thiết kế đi từ con số 0, bắt đầu từ tư duy dữ liệu thực tế và các công cụ dễ tiếp cận trước khi đi vào chuyên sâu.\"></textarea>\n    </div>\n\n    <div class=\"form-group\" style=\"margin-top: 6px;\">\n      <label class=\"checkbox-group\">\n        <input type=\"checkbox\" id=\"is_active\" name=\"is_active\" checked>\n        <span class=\"checkbox-label\">Kích hoạt hiển thị trên website (is_active)</span>\n      </label>\n    </div>\n\n    <div id=\"errorBox\" class=\"alert-banner alert-danger error-msg\"></div>\n\n    <div class=\"btn-group\">\n      <button type=\"button\" class=\"btn-cancel\" onclick=\"google.script.host.close()\">Hủy Bỏ</button>\n      <button type=\"submit\" id=\"submitBtn\" class=\"btn-submit\">\n        <span>Lưu Câu Hỏi</span>\n      </button>\n    </div>\n  </form>\n\n  <script>\n    var catSelect = document.getElementById(\"category\");\n    var qInput = document.getElementById(\"question\");\n    var aInput = document.getElementById(\"answer\");\n\n    var catBadge = document.getElementById(\"previewCategoryBadge\");\n    var qPreview = document.getElementById(\"previewQuestion\");\n    var aPreview = document.getElementById(\"previewAnswer\");\n\n    function updatePreview() {\n      catBadge.innerText = catSelect.value;\n      qPreview.innerText = qInput.value || \"Câu hỏi thường gặp...\";\n      aPreview.innerText = aInput.value || \"Câu trả lời chi tiết...\";\n    }\n\n    catSelect.addEventListener(\"change\", updatePreview);\n    qInput.addEventListener(\"input\", updatePreview);\n    aInput.addEventListener(\"input\", updatePreview);\n\n    var form = document.getElementById(\"faqForm\");\n    var submitBtn = document.getElementById(\"submitBtn\");\n    var errorBox = document.getElementById(\"errorBox\");\n\n    form.addEventListener(\"submit\", function (e) {\n      e.preventDefault();\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n\n      var q = qInput.value.trim();\n      var a = aInput.value.trim();\n      if (!q || !a) {\n        showError(\"Vui lòng nhập cả câu hỏi và câu trả lời.\");\n        return;\n      }\n\n      var data = {\n        category: catSelect.value,\n        question: q,\n        answer: a,\n        is_active: document.getElementById(\"is_active\").checked,\n        sort_order: parseInt(document.getElementById(\"sort_order\").value, 10) || 1\n      };\n\n      submitBtn.disabled = true;\n      submitBtn.innerHTML = '<span class=\"spinner\"></span> Đang lưu...';\n\n      google.script.run\n        .withSuccessHandler(function () {\n          google.script.host.close();\n        })\n        .withFailureHandler(function (err) {\n          submitBtn.disabled = false;\n          submitBtn.innerHTML = '<span>Lưu Câu Hỏi</span>';\n          showError(\"Lỗi: \" + (err.message || err.toString()));\n        })\n        .saveFaqFromModal(data);\n    });\n\n    function showError(msg) {\n      errorBox.innerText = msg;\n      errorBox.style.display = \"block\";\n    }\n  </script>\n</body>\n\n</html>",
   "MentorModal": "<!DOCTYPE html>\n<html>\n\n<head>\n  <base target=\"_top\">\n  <?!= include('SharedStyles'); ?>\n</head>\n\n<body>\n  <div class=\"modal-header\">\n    <div>\n      <h2 class=\"modal-title\">👤 Quản Trị Hồ Sơ Giảng Viên Hàng Loạt</h2>\n      <p class=\"modal-subtitle\">Quản trị và bổ sung danh sách giảng viên, mentor hiển thị trên Website DataWithLy</p>\n    </div>\n  </div>\n\n  <form id=\"mentorForm\">\n    <div id=\"mentorCardsContainer\" class=\"repeater-container\"></div>\n\n    <button type=\"button\" id=\"addMentorBtn\" class=\"btn-add-repeater\">\n      <span>➕ Thêm giảng viên</span>\n    </button>\n\n    <div id=\"errorBox\" class=\"alert-banner alert-danger error-msg\"></div>\n    <div id=\"successBox\" class=\"alert-banner alert-success fade-in\" style=\"display: none;\"></div>\n\n    <div class=\"btn-group\">\n      <button type=\"button\" class=\"btn-cancel\" onclick=\"google.script.host.close()\">Hủy Bỏ</button>\n      <button type=\"submit\" id=\"submitBtn\" class=\"btn-submit\">\n        <span id=\"submitBtnText\">Lưu tất cả (1 giảng viên)</span>\n      </button>\n    </div>\n  </form>\n\n  <script>\n    var initialMentor = <?!= JSON.stringify(currentMentor || {}) ?>;\n\n    var form = document.getElementById(\"mentorForm\");\n    var container = document.getElementById(\"mentorCardsContainer\");\n    var addMentorBtn = document.getElementById(\"addMentorBtn\");\n    var submitBtn = document.getElementById(\"submitBtn\");\n    var submitBtnText = document.getElementById(\"submitBtnText\");\n    var errorBox = document.getElementById(\"errorBox\");\n    var successBox = document.getElementById(\"successBox\");\n\n    function showError(msg) {\n      if (successBox) successBox.style.display = \"none\";\n      errorBox.innerText = msg;\n      errorBox.style.display = \"block\";\n    }\n\n    function showSuccess(msg) {\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n      successBox.innerText = msg;\n      successBox.style.display = \"flex\";\n    }\n\n    function updateCardHeaders() {\n      var cards = container.querySelectorAll(\".form-card\");\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var titleElem = card.querySelector(\".form-card-title span\");\n        if (titleElem) {\n          titleElem.innerText = \"👤 Giảng viên / Mentor #\" + (i + 1);\n        }\n        var removeBtn = card.querySelector(\".btn-remove-card\");\n        if (removeBtn) {\n          removeBtn.style.display = cards.length > 1 ? \"inline-block\" : \"none\";\n        }\n      }\n      submitBtnText.innerText = \"Lưu tất cả (\" + cards.length + \" giảng viên)\";\n    }\n\n    function createMentorCard(data) {\n      var d = data || {};\n      var card = document.createElement(\"div\");\n      card.className = \"form-card fade-in\";\n      card.innerHTML =\n        '<div class=\"form-card-header\">' +\n          '<div class=\"form-card-title\"><span>👤 Giảng viên / Mentor</span></div>' +\n          '<button type=\"button\" class=\"btn-remove-card\" title=\"Xóa thẻ giảng viên này\">✕ Xóa</button>' +\n        '</div>' +\n        '<input type=\"hidden\" name=\"id\" value=\"' + (d.id || \"\") + '\">' +\n        '<div class=\"preview-box\">' +\n          '<div class=\"preview-header\">' +\n            '<span>Xem trước Card Giảng Viên (Live Card Preview)</span>' +\n            '<span class=\"badge-v badge-emerald\">Hiển thị Trang Chủ</span>' +\n          '</div>' +\n          '<div style=\"display: flex; gap: 14px; align-items: center;\">' +\n            '<img class=\"avatar-preview-img\" src=\"' + (d.avatar_url || \"/uploads/mentors/ly-hua.jpg\") + '\"' +\n              ' onerror=\"this.src=\\'https://ui-avatars.com/api/?name=Hua+Thao+Ly&background=8B1D2C&color=fff\\'\"' +\n              ' style=\"width: 54px; height: 54px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);\">' +\n            '<div>' +\n              '<div class=\"name-preview-text\" style=\"font-size: 14px; font-weight: 700; color: var(--primary);\">' +\n                (d.name || \"Hứa Thảo Ly\") +\n              '</div>' +\n              '<div class=\"title-preview-text\" style=\"font-size: 12px; color: var(--slate-muted);\">' +\n                (d.title || \"Lead Mentor & Founder DataWithLy\") +\n              '</div>' +\n              '<div class=\"companies-preview-text\" style=\"font-size: 11px; margin-top: 2px; font-weight: 500; color: #059669;\">' +\n                '🏢 ' + (d.companies_worked || \"MoMo, Tiki, ACB Bank\") +\n              '</div>' +\n            '</div>' +\n          '</div>' +\n        '</div>' +\n        '<div class=\"form-row\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Họ và Tên Mentor <span class=\"required\">*</span></label>' +\n            '<input type=\"text\" name=\"name\" required value=\"' + (d.name || \"\") + '\" placeholder=\"Hứa Thảo Ly\">' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Chức Danh & Học Vị <span class=\"required\">*</span></label>' +\n            '<input type=\"text\" name=\"title\" required value=\"' + (d.title || \"\") + '\" placeholder=\"Lead Mentor & Founder DataWithLy\">' +\n          '</div>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Các Công Ty Từng Làm Việc (Phân tách bởi dấu phẩy)</label>' +\n          '<input type=\"text\" name=\"companies_worked\" value=\"' + (d.companies_worked || \"\") + '\" placeholder=\"MoMo, Tiki, Shopee, ACB Bank\">' +\n        '</div>' +\n        '<div class=\"form-row\">' +\n          '<div class=\"form-group col-1\">' +\n            '<label>Đường Dẫn Ảnh Đại Diện (Avatar URL)</label>' +\n            '<input type=\"text\" name=\"avatar_url\" value=\"' + (d.avatar_url || \"\") + '\" placeholder=\"/uploads/mentors/ly-hua.jpg\">' +\n          '</div>' +\n          '<div class=\"form-group col-1\">' +\n            '<label>LinkedIn URL</label>' +\n            '<input type=\"text\" name=\"linkedin_url\" value=\"' + (d.linkedin_url || \"\") + '\" placeholder=\"https://linkedin.com/in/lyhuadata\">' +\n          '</div>' +\n        '</div>' +\n        '<div class=\"form-group\">' +\n          '<label>Tiểu Sử & Kinh Nghiệm Thực Chiến</label>' +\n          '<textarea name=\"bio\" rows=\"3\" placeholder=\"Hơn 7 năm kinh nghiệm thực chiến trong ngành Dữ liệu tại các tập đoàn công nghệ...\">' + (d.bio || \"\") + '</textarea>' +\n        '</div>' +\n        '<div class=\"form-group\" style=\"margin-top: 6px;\">' +\n          '<label class=\"checkbox-group\">' +\n            '<input type=\"checkbox\" name=\"is_active\" ' + (d.is_active !== false ? 'checked' : '') + '>' +\n            '<span class=\"checkbox-label\">Kích hoạt hiển thị hồ sơ Mentor trên website (is_active)</span>' +\n          '</label>' +\n        '</div>';\n\n      var nameInput = card.querySelector('[name=\"name\"]');\n      var titleInput = card.querySelector('[name=\"title\"]');\n      var companiesInput = card.querySelector('[name=\"companies_worked\"]');\n      var avatarInput = card.querySelector('[name=\"avatar_url\"]');\n\n      var namePreview = card.querySelector(\".name-preview-text\");\n      var titlePreview = card.querySelector(\".title-preview-text\");\n      var companiesPreview = card.querySelector(\".companies-preview-text\");\n      var avatarPreview = card.querySelector(\".avatar-preview-img\");\n\n      nameInput.addEventListener(\"input\", function () {\n        namePreview.innerText = this.value || \"Chưa nhập họ tên\";\n      });\n      titleInput.addEventListener(\"input\", function () {\n        titlePreview.innerText = this.value || \"Mentor DataWithLy\";\n      });\n      companiesInput.addEventListener(\"input\", function () {\n        companiesPreview.innerText = \"🏢 \" + (this.value || \"Chưa có công ty\");\n      });\n      avatarInput.addEventListener(\"input\", function () {\n        if (this.value) avatarPreview.src = this.value;\n      });\n\n      var removeBtn = card.querySelector(\".btn-remove-card\");\n      removeBtn.addEventListener(\"click\", function () {\n        card.remove();\n        updateCardHeaders();\n      });\n\n      container.appendChild(card);\n      updateCardHeaders();\n      return card;\n    }\n\n    addMentorBtn.addEventListener(\"click\", function () {\n      var newCard = createMentorCard({});\n      var input = newCard.querySelector('[name=\"name\"]');\n      if (input) input.focus();\n    });\n\n    createMentorCard(initialMentor);\n\n    form.addEventListener(\"submit\", function (e) {\n      e.preventDefault();\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n\n      var cards = container.querySelectorAll(\".form-card\");\n      if (cards.length === 0) {\n        showError(\"Vui lòng thêm ít nhất một giảng viên.\");\n        return;\n      }\n\n      var mentorList = [];\n      for (var i = 0; i < cards.length; i++) {\n        var card = cards[i];\n        var name = (card.querySelector('[name=\"name\"]').value || \"\").trim();\n        if (!name) {\n          showError(\"Vui lòng nhập họ tên cho giảng viên #\" + (i + 1) + \".\");\n          card.querySelector('[name=\"name\"]').focus();\n          return;\n        }\n\n        var title = (card.querySelector('[name=\"title\"]').value || \"\").trim();\n        if (!title) {\n          showError(\"Vui lòng nhập chức danh cho giảng viên #\" + (i + 1) + \".\");\n          card.querySelector('[name=\"title\"]').focus();\n          return;\n        }\n\n        mentorList.push({\n          id: card.querySelector('[name=\"id\"]').value || \"\",\n          name: name,\n          title: title,\n          bio: (card.querySelector('[name=\"bio\"]').value || \"\").trim(),\n          companies_worked: (card.querySelector('[name=\"companies_worked\"]').value || \"\").trim(),\n          avatar_url: (card.querySelector('[name=\"avatar_url\"]').value || \"\").trim(),\n          linkedin_url: (card.querySelector('[name=\"linkedin_url\"]').value || \"\").trim(),\n          is_active: card.querySelector('[name=\"is_active\"]').checked\n        });\n      }\n\n      submitBtn.disabled = true;\n      addMentorBtn.disabled = true;\n      submitBtnText.innerHTML = '<span class=\"spinner\"></span> Đang lưu ' + mentorList.length + ' giảng viên...';\n\n      google.script.run\n        .withSuccessHandler(function (res) {\n          showSuccess(\"✅ Đã lưu thành công \" + (res.count || mentorList.length) + \" hồ sơ giảng viên!\");\n          setTimeout(function () {\n            google.script.host.close();\n          }, 1200);\n        })\n        .withFailureHandler(function (err) {\n          submitBtn.disabled = false;\n          addMentorBtn.disabled = false;\n          updateCardHeaders();\n          showError(\"Lỗi: \" + (err.message || err.toString()));\n        })\n        .addMentorsBatchFromModal(mentorList);\n    });\n  </script>\n</body>\n\n</html>\n",
   "PackageModal": "<!DOCTYPE html>\n<html>\n\n<head>\n  <base target=\"_top\">\n  <?!= include('SharedStyles'); ?>\n</head>\n\n<body>\n  <div class=\"modal-header\">\n    <div>\n      <h2 class=\"modal-title\">📦 Quản Trị Gói Combo & Bảng Giá</h2>\n      <p class=\"modal-subtitle\">Thiết lập các gói học phí Combo, huy hiệu khuyến mãi và danh sách quyền lợi</p>\n    </div>\n  </div>\n\n  <form id=\"packageForm\">\n    <div class=\"form-row\">\n      <div class=\"form-group col-2\">\n        <label for=\"name\">Tên Gói Combo <span class=\"required\">*</span></label>\n        <input type=\"text\" id=\"name\" name=\"name\" required placeholder=\"Gói Nền Tảng (SQL + Power BI)\"\n          autocomplete=\"off\">\n      </div>\n      <div class=\"form-group col-1\">\n        <label for=\"package_id\">Mã Gói (ID) <span class=\"required\">*</span></label>\n        <input type=\"text\" id=\"package_id\" name=\"package_id\" required placeholder=\"combo-foundation\"\n          style=\"font-family: monospace;\">\n      </div>\n    </div>\n\n    <div class=\"preview-box\">\n      <div class=\"preview-header\">\n        <span>Xem trước Card Bảng Giá</span>\n        <span id=\"previewBadge\" class=\"badge-v badge-crimson\">Tiết Kiệm 32%</span>\n      </div>\n      <div style=\"display: flex; justify-content: space-between; align-items: baseline;\">\n        <div>\n          <div id=\"previewName\" style=\"font-size: 14px; font-weight: 700; color: var(--primary);\">Gói Nền Tảng (SQL +\n            Power BI)</div>\n          <div id=\"previewFeaturesCount\" style=\"font-size: 11px; color: var(--slate-muted); margin-top: 2px;\">0 quyền\n            lợi đi kèm</div>\n        </div>\n        <div style=\"text-align: right;\">\n          <div id=\"previewSalePrice\" style=\"font-size: 16px; font-weight: 800; color: var(--primary);\">0 đ</div>\n          <del id=\"previewOrigPrice\" style=\"font-size: 11px; color: var(--slate-light);\">0 đ</del>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"form-row\">\n      <div class=\"form-group col-1\">\n        <label for=\"sale_price\">Học Phí Ưu Đãi (VNĐ) <span class=\"required\">*</span></label>\n        <input type=\"number\" id=\"sale_price\" name=\"sale_price\" required placeholder=\"8900000\" step=\"50000\">\n      </div>\n      <div class=\"form-group col-1\">\n        <label for=\"original_price\">Học Phí Gốc (VNĐ)</label>\n        <input type=\"number\" id=\"original_price\" name=\"original_price\" placeholder=\"13000000\" step=\"50000\">\n      </div>\n      <div class=\"form-group col-1\">\n        <label for=\"badge\">Huy Hiệu (Badge)</label>\n        <input type=\"text\" id=\"badge\" name=\"badge\" placeholder=\"Tiết Kiệm 32%\">\n      </div>\n    </div>\n\n    <div class=\"form-group\">\n      <label for=\"features_list\">Danh Sách Tính Năng / Quyền Lợi (Mỗi dòng một mục) <span\n          class=\"required\">*</span></label>\n      <textarea id=\"features_list\" name=\"features_list\" rows=\"4\" required\n        placeholder=\"Trọn bộ 2 khóa SQL và Power BI từ cơ bản đến chuyên sâu&#10;Review CV và định hướng lộ trình cá nhân 1-1&#10;Tham gia cộng đồng Alumni DataWithLy trọn đời&#10;Hỗ trợ sửa bài tập hàng tuần bởi Mentor\"></textarea>\n      <div class=\"help-text\">Mỗi dòng (Enter) sẽ hiển thị thành một gạch đầu dòng có dấu tích xanh trên Bảng giá\n        website.</div>\n    </div>\n\n    <div class=\"form-row\">\n      <div class=\"form-group col-1\">\n        <label for=\"sort_order\">Thứ Tự Sắp Xếp</label>\n        <input type=\"number\" id=\"sort_order\" name=\"sort_order\" value=\"1\" min=\"1\">\n      </div>\n      <div class=\"form-group col-1\" style=\"display: flex; align-items: flex-end;\">\n        <label class=\"checkbox-group\" style=\"width: 100%;\">\n          <input type=\"checkbox\" id=\"is_popular\" name=\"is_popular\">\n          <span class=\"checkbox-label\">Gói phổ biến nhất (is_popular)</span>\n        </label>\n      </div>\n      <div class=\"form-group col-1\" style=\"display: flex; align-items: flex-end;\">\n        <label class=\"checkbox-group\" style=\"width: 100%;\">\n          <input type=\"checkbox\" id=\"is_active\" name=\"is_active\" checked>\n          <span class=\"checkbox-label\">Kích hoạt (is_active)</span>\n        </label>\n      </div>\n    </div>\n\n    <div id=\"errorBox\" class=\"alert-banner alert-danger error-msg\"></div>\n\n    <div class=\"btn-group\">\n      <button type=\"button\" class=\"btn-cancel\" onclick=\"google.script.host.close()\">Hủy Bỏ</button>\n      <button type=\"submit\" id=\"submitBtn\" class=\"btn-submit\">\n        <span>Lưu Gói Combo</span>\n      </button>\n    </div>\n  </form>\n\n  <script>\n    var nameInput = document.getElementById(\"name\");\n    var pkgIdInput = document.getElementById(\"package_id\");\n    var origPriceInput = document.getElementById(\"original_price\");\n    var salePriceInput = document.getElementById(\"sale_price\");\n    var badgeInput = document.getElementById(\"badge\");\n    var featuresInput = document.getElementById(\"features_list\");\n\n    var previewName = document.getElementById(\"previewName\");\n    var previewBadge = document.getElementById(\"previewBadge\");\n    var previewSalePrice = document.getElementById(\"previewSalePrice\");\n    var previewOrigPrice = document.getElementById(\"previewOrigPrice\");\n    var previewFeaturesCount = document.getElementById(\"previewFeaturesCount\");\n\n    function slugify(text) {\n      if (!text) return \"\";\n      var str = text.toString().toLowerCase().trim();\n      str = str.replace(/[áàảãạăắằẳẵặâấầẩẫậ]/g, \"a\");\n      str = str.replace(/[éèẻẽẹêếềểễệ]/g, \"e\");\n      str = str.replace(/[íìỉĩị]/g, \"i\");\n      str = str.replace(/[óòỏõọôốồổỗộơớờởỡợ]/g, \"o\");\n      str = str.replace(/[úùủũụưứừửữự]/g, \"u\");\n      str = str.replace(/[ýỳỷỹỵ]/g, \"y\");\n      str = str.replace(/đ/g, \"d\");\n      str = str.replace(/[\\s_]+/g, \"-\");\n      str = str.replace(/[^a-z0-9-]/g, \"\");\n      str = str.replace(/-+/g, \"-\");\n      str = str.replace(/^-+|-+$/g, \"\");\n      return str;\n    }\n\n    function formatVND(num) {\n      return Number(num || 0).toLocaleString(\"vi-VN\") + \" đ\";\n    }\n\n    function updatePreview() {\n      previewName.innerText = nameInput.value || \"Tên gói combo\";\n      var sale = parseFloat(salePriceInput.value) || 0;\n      var orig = parseFloat(origPriceInput.value) || 0;\n      previewSalePrice.innerText = formatVND(sale);\n      previewOrigPrice.innerText = orig > sale ? formatVND(orig) : \"\";\n\n      var badge = badgeInput.value.trim();\n      if (!badge && orig > sale && orig > 0) {\n        var pct = Math.round(((orig - sale) / orig) * 100);\n        badge = \"Tiết Kiệm \" + pct + \"%\";\n      }\n      previewBadge.innerText = badge || \"Gói Combo\";\n\n      var lines = featuresInput.value.split(\"\\n\").filter(function (l) { return l.trim().length > 0; });\n      previewFeaturesCount.innerText = lines.length + \" quyền lợi đi kèm\";\n    }\n\n    nameInput.addEventListener(\"input\", function () {\n      if (!pkgIdInput.value || pkgIdInput.dataset.touched !== \"true\") {\n        pkgIdInput.value = \"combo-\" + slugify(this.value);\n      }\n      updatePreview();\n    });\n\n    pkgIdInput.addEventListener(\"input\", function () {\n      this.dataset.touched = \"true\";\n    });\n\n    salePriceInput.addEventListener(\"input\", updatePreview);\n    origPriceInput.addEventListener(\"input\", updatePreview);\n    badgeInput.addEventListener(\"input\", updatePreview);\n    featuresInput.addEventListener(\"input\", updatePreview);\n\n    var form = document.getElementById(\"packageForm\");\n    var submitBtn = document.getElementById(\"submitBtn\");\n    var errorBox = document.getElementById(\"errorBox\");\n\n    form.addEventListener(\"submit\", function (e) {\n      e.preventDefault();\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n\n      var name = nameInput.value.trim();\n      var pkgId = pkgIdInput.value.trim();\n      var salePrice = parseFloat(salePriceInput.value) || 0;\n\n      if (!name || !pkgId || salePrice <= 0) {\n        showError(\"Vui lòng nhập tên gói, mã gói và học phí hợp lệ.\");\n        return;\n      }\n\n      var origPrice = parseFloat(origPriceInput.value) || salePrice;\n      var badge = badgeInput.value.trim();\n      if (!badge && origPrice > salePrice) {\n        badge = \"Tiết Kiệm \" + Math.round(((origPrice - salePrice) / origPrice) * 100) + \"%\";\n      }\n\n      var data = {\n        id: \"pkg-\" + pkgId.replace(/^combo-/, \"\"),\n        package_id: pkgId,\n        name: name,\n        original_price: origPrice,\n        sale_price: salePrice,\n        badge: badge,\n        features_list: featuresInput.value.trim(),\n        is_popular: document.getElementById(\"is_popular\").checked,\n        is_active: document.getElementById(\"is_active\").checked,\n        sort_order: parseInt(document.getElementById(\"sort_order\").value, 10) || 1\n      };\n\n      submitBtn.disabled = true;\n      submitBtn.innerHTML = '<span class=\"spinner\"></span> Đang lưu...';\n\n      google.script.run\n        .withSuccessHandler(function () {\n          google.script.host.close();\n        })\n        .withFailureHandler(function (err) {\n          submitBtn.disabled = false;\n          submitBtn.innerHTML = '<span>Lưu Gói Combo</span>';\n          showError(\"Lỗi: \" + (err.message || err.toString()));\n        })\n        .savePackageFromModal(data);\n    });\n\n    function showError(msg) {\n      errorBox.innerText = msg;\n      errorBox.style.display = \"block\";\n    }\n  </script>\n</body>\n\n</html>",
@@ -28,10 +20,6 @@ var INLINED_HTML = {
   "TestimonialModal": "<!DOCTYPE html>\n<html>\n\n<head>\n  <base target=\"_top\">\n  <?!= include('SharedStyles'); ?>\n</head>\n\n<body>\n  <div class=\"modal-header\">\n    <div>\n      <h2 class=\"modal-title\">💬 Thêm Đánh Giá Học Viên</h2>\n      <p class=\"modal-subtitle\">Thêm feedback thực tế từ cựu học viên đang làm việc tại các tập đoàn lớn</p>\n    </div>\n  </div>\n\n  <form id=\"testimonialForm\">\n    <div class=\"preview-box\">\n      <div class=\"preview-header\">\n        <span>Xem trước Testimonial Card</span>\n        <span id=\"previewRatingStars\" style=\"color: #F59E0B; font-size: 14px;\">★★★★★</span>\n      </div>\n      <div style=\"display: flex; gap: 12px; align-items: flex-start;\">\n        <img id=\"avatarPreview\" src=\"/uploads/avatars/default.jpg\"\n          onerror=\"this.src='https://ui-avatars.com/api/?name=Hoc+Vien&background=1F242F&color=fff'\"\n          style=\"width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-border);\">\n        <div style=\"flex: 1;\">\n          <div style=\"display: flex; justify-content: space-between;\">\n            <strong id=\"namePreview\" style=\"font-size: 13px; color: var(--primary);\">Trần Minh Quân</strong>\n            <span id=\"companyPreview\" class=\"badge-v badge-slate\" style=\"font-size: 10px;\">Shopee Express</span>\n          </div>\n          <div id=\"rolePreview\" style=\"font-size: 11px; color: var(--slate-muted);\">Junior Data Analyst</div>\n          <p id=\"reviewPreview\"\n            style=\"font-size: 12px; color: var(--dark-slate); font-style: italic; margin: 6px 0 0; line-height: 1.4;\">\n            \"Khóa học SQL của chị Ly thực sự thực chiến và dễ hiểu...\"\n          </p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"form-row\">\n      <div class=\"form-group col-1\">\n        <label for=\"student_name\">Họ và Tên Học Viên <span class=\"required\">*</span></label>\n        <input type=\"text\" id=\"student_name\" name=\"student_name\" required placeholder=\"Trần Minh Quân\"\n          autocomplete=\"off\">\n      </div>\n      <div class=\"form-group col-1\">\n        <label for=\"role\">Vị Trí Công Việc</label>\n        <input type=\"text\" id=\"role\" name=\"role\" placeholder=\"Junior Data Analyst\">\n      </div>\n    </div>\n\n    <div class=\"form-row\">\n      <div class=\"form-group col-1\">\n        <label for=\"company\">Công Ty Làm Việc</label>\n        <input type=\"text\" id=\"company\" name=\"company\" placeholder=\"Shopee Express, Techcombank...\">\n      </div>\n      <div class=\"form-group col-1\">\n        <label for=\"course_id\">Khóa Học Liên Quan <span class=\"required\">*</span></label>\n        <select id=\"course_id\" name=\"course_id\" required>\n          <option value=\"ALL\">Khóa Học Chung / Tất cả</option>\n          <? for (var i = 0; i < coursesList.length; i++) { ?>\n          <option value=\"<?= coursesList[i].id ?>\">\n            <?= coursesList[i].title ?>\n          </option>\n          <? } ?>\n        </select>\n      </div>\n    </div>\n\n    <div class=\"form-row\">\n      <div class=\"form-group col-1\">\n        <label for=\"rating\">Số Sao Đánh Giá <span class=\"required\">*</span></label>\n        <select id=\"rating\" name=\"rating\">\n          <option value=\"5\" selected>⭐⭐⭐⭐⭐ 5 Sao (Xuất sắc)</option>\n          <option value=\"4\">⭐⭐⭐⭐ 4 Sao (Rất tốt)</option>\n          <option value=\"3\">⭐⭐⭐ 3 Sao (Khá)</option>\n          <option value=\"2\">⭐⭐ 2 Sao (Trung bình)</option>\n          <option value=\"1\">⭐ 1 Sao (Cần cải thiện)</option>\n        </select>\n      </div>\n      <div class=\"form-group col-1\">\n        <label for=\"avatar_url\">Ảnh Đại Diện (Avatar URL)</label>\n        <input type=\"text\" id=\"avatar_url\" name=\"avatar_url\" placeholder=\"/uploads/avatars/quan-tran.jpg\">\n      </div>\n    </div>\n\n    <div class=\"form-group\">\n      <label for=\"review_text\">Nội Dung Đánh Giá / Cảm Nhận <span class=\"required\">*</span></label>\n      <textarea id=\"review_text\" name=\"review_text\" rows=\"4\" required\n        placeholder=\"Khóa học SQL của chị Ly thực sự thực chiến. Chị chỉ cho mình cách viết Window Functions mà lúc trước mình đọc docs hoài không hiểu...\"></textarea>\n    </div>\n\n    <div class=\"form-row\">\n      <div class=\"form-group col-1\">\n        <label class=\"checkbox-group\">\n          <input type=\"checkbox\" id=\"is_featured\" name=\"is_featured\" checked>\n          <span class=\"checkbox-label\">Đánh giá nổi bật (Trang chủ)</span>\n        </label>\n      </div>\n      <div class=\"form-group col-1\">\n        <label class=\"checkbox-group\">\n          <input type=\"checkbox\" id=\"is_active\" name=\"is_active\" checked>\n          <span class=\"checkbox-label\">Kích hoạt hiển thị (is_active)</span>\n        </label>\n      </div>\n    </div>\n\n    <div id=\"errorBox\" class=\"alert-banner alert-danger error-msg\"></div>\n\n    <div class=\"btn-group\">\n      <button type=\"button\" class=\"btn-cancel\" onclick=\"google.script.host.close()\">Hủy Bỏ</button>\n      <button type=\"submit\" id=\"submitBtn\" class=\"btn-submit\">\n        <span>Lưu Đánh Giá</span>\n      </button>\n    </div>\n  </form>\n\n  <script>\n    var nameInput = document.getElementById(\"student_name\");\n    var roleInput = document.getElementById(\"role\");\n    var companyInput = document.getElementById(\"company\");\n    var ratingSelect = document.getElementById(\"rating\");\n    var avatarInput = document.getElementById(\"avatar_url\");\n    var reviewInput = document.getElementById(\"review_text\");\n\n    var namePreview = document.getElementById(\"namePreview\");\n    var rolePreview = document.getElementById(\"rolePreview\");\n    var companyPreview = document.getElementById(\"companyPreview\");\n    var ratingPreview = document.getElementById(\"previewRatingStars\");\n    var avatarPreview = document.getElementById(\"avatarPreview\");\n    var reviewPreview = document.getElementById(\"reviewPreview\");\n\n    function slugify(text) {\n      if (!text) return \"\";\n      var str = text.toString().toLowerCase().trim();\n      str = str.replace(/[áàảãạăắằẳẵặâấầẩẫậ]/g, \"a\");\n      str = str.replace(/[éèẻẽẹêếềểễệ]/g, \"e\");\n      str = str.replace(/[íìỉĩị]/g, \"i\");\n      str = str.replace(/[óòỏõọôốồổỗộơớờởỡợ]/g, \"o\");\n      str = str.replace(/[úùủũụưứừửữự]/g, \"u\");\n      str = str.replace(/[ýỳỷỹỵ]/g, \"y\");\n      str = str.replace(/đ/g, \"d\");\n      str = str.replace(/[\\s_]+/g, \"-\");\n      str = str.replace(/[^a-z0-9-]/g, \"\");\n      str = str.replace(/-+/g, \"-\");\n      str = str.replace(/^-+|-+$/g, \"\");\n      return str;\n    }\n\n    function updatePreview() {\n      namePreview.innerText = nameInput.value || \"Tên học viên\";\n      rolePreview.innerText = roleInput.value || \"Vị trí công việc\";\n      companyPreview.innerText = companyInput.value || \"Tập đoàn công nghệ\";\n      var stars = parseInt(ratingSelect.value, 10) || 5;\n      ratingPreview.innerText = \"★\".repeat(stars) + \"☆\".repeat(5 - stars);\n      reviewPreview.innerText = reviewInput.value ? '\"' + reviewInput.value + '\"' : '\"Cảm nhận thực tế của học viên...\"';\n      if (avatarInput.value) avatarPreview.src = avatarInput.value;\n    }\n\n    nameInput.addEventListener(\"input\", updatePreview);\n    roleInput.addEventListener(\"input\", updatePreview);\n    companyInput.addEventListener(\"input\", updatePreview);\n    ratingSelect.addEventListener(\"change\", updatePreview);\n    avatarInput.addEventListener(\"input\", updatePreview);\n    reviewInput.addEventListener(\"input\", updatePreview);\n\n    var form = document.getElementById(\"testimonialForm\");\n    var submitBtn = document.getElementById(\"submitBtn\");\n    var errorBox = document.getElementById(\"errorBox\");\n\n    form.addEventListener(\"submit\", function (e) {\n      e.preventDefault();\n      errorBox.style.display = \"none\";\n      errorBox.innerText = \"\";\n\n      var sName = nameInput.value.trim();\n      var rText = reviewInput.value.trim();\n      if (!sName || !rText) {\n        showError(\"Vui lòng nhập tên học viên và nội dung đánh giá.\");\n        return;\n      }\n\n      var slugName = slugify(sName);\n      var data = {\n        id: \"t-\" + (Date.now().toString(36).substr(-4)) + \"-\" + slugName,\n        student_name: sName,\n        role: roleInput.value.trim(),\n        company: companyInput.value.trim(),\n        course_id: document.getElementById(\"course_id\").value,\n        rating: ratingSelect.value,\n        review_text: rText,\n        avatar_url: avatarInput.value.trim() || \"/uploads/avatars/default.jpg\",\n        is_featured: document.getElementById(\"is_featured\").checked,\n        is_active: document.getElementById(\"is_active\").checked\n      };\n\n      submitBtn.disabled = true;\n      submitBtn.innerHTML = '<span class=\"spinner\"></span> Đang lưu...';\n\n      google.script.run\n        .withSuccessHandler(function () {\n          google.script.host.close();\n        })\n        .withFailureHandler(function (err) {\n          submitBtn.disabled = false;\n          submitBtn.innerHTML = '<span>Lưu Đánh Giá</span>';\n          showError(\"Lỗi: \" + (err.message || err.toString()));\n        })\n        .saveTestimonialFromModal(data);\n    });\n\n    function showError(msg) {\n      errorBox.innerText = msg;\n      errorBox.style.display = \"block\";\n    }\n  </script>\n</body>\n\n</html>"
 };
 
-/**
- * Hàm nhúng giao diện HTML (Ví dụ: nhúng SharedStyles vào các Modal)
- * Tự động đọc từ object INLINED_HTML hoặc fallback từ file.
- */
 function include(filename) {
   if (typeof INLINED_HTML !== "undefined" && INLINED_HTML[filename]) {
     return INLINED_HTML[filename];
@@ -43,10 +31,6 @@ function include(filename) {
   }
 }
 
-/**
- * Nạp template HTML cho các cửa sổ Modal Dialog từ INLINED_HTML
- * Chạy độc lập 100% trong môi trường 1 file bundle duy nhất.
- */
 function createModalTemplate(templateName) {
   if (typeof INLINED_HTML !== "undefined" && INLINED_HTML[templateName]) {
     return HtmlService.createTemplate(INLINED_HTML[templateName]);
@@ -54,15 +38,12 @@ function createModalTemplate(templateName) {
   return HtmlService.createTemplateFromFile(templateName);
 }
 
-/**
- * Lấy thông tin phiên bản DataWithLy CMS Bundle Engine
- */
 function getDataWithLySystemInfo() {
   return {
-    system: "DataWithLy CMS All-in-One Engine",
+    system: "DataWithLy CMS Content Engine",
     brand: "DataWithLy (Mentor Hứa Thảo Ly)",
-    version: "2.1.0",
-    architecture: "Standalone Single-File Bundle with 10 Inlined Native Modals",
+    version: "2.2.0",
+    architecture: "Standalone CMS Content Bundle with 10 Inlined Native Modals",
     status: "HEALTHY",
     timestamp: new Date().toISOString()
   };
@@ -70,87 +51,106 @@ function getDataWithLySystemInfo() {
 
 
 // ==============================================================================
-// FILE NGUỒN: 00_Config.gs
+// FILE NGUỒN: 00_CmsConfig.gs
 // ==============================================================================
 
 /**
  * ==============================================================================
- * MODULE 00: CẤU HÌNH HỆ THỐNG (SYSTEM CONFIGURATION)
+ * MODULE 00: CẤU HÌNH CMS CONTENT MASTER (CMS CONFIGURATION)
  * ==============================================================================
- * Quản lý tập trung các khóa bí mật, URL webhook và thời gian chờ khóa ghi.
- * Áp dụng tiêu chuẩn bảo mật Google Enterprise: Sử dụng PropertiesService (Script Properties)
- * để lưu trữ biến môi trường an toàn, KHÔNG hardcode chuỗi nhạy cảm trong mã nguồn.
+ * Quản lý tập trung các khóa bí mật, URL webhook làm mới website và khóa ghi lock.
+ * Áp dụng tiêu chuẩn bảo mật Google Enterprise: Sử dụng PropertiesService (Script Properties).
  * ==============================================================================
  */
 
-/**
- * Lấy mã bí mật xác thực một cách an toàn (Zero Hardcoded Secret)
- * 1. Ưu tiên số 1: Đọc từ Google Cloud Script Properties (Bảo mật tối đa, không lộ trên Git)
- * 2. Ưu tiên số 2: Đọc từ tab 'settings' (khóa 'shared_secret') nếu người quản trị cấu hình
- * 3. Fallback: Giá trị cấu hình dev cục bộ nếu chưa thiết lập
- */
-function getSharedSecret() {
+function getScriptProperty(key, fallbackValue) {
   try {
-    var secret = PropertiesService.getScriptProperties().getProperty("SHARED_SECRET");
-    if (secret && secret.trim()) {
-      return secret.trim();
+    var prop = PropertiesService.getScriptProperties().getProperty(key);
+    if (prop && prop.trim()) {
+      return prop.trim();
     }
   } catch (e) {}
 
-  // Đọc từ tab settings nếu có
   try {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var sheet = ss.getSheetByName("settings");
     if (sheet) {
       var data = sheet.getDataRange().getValues();
+      var normalizedKey = key.toLowerCase();
       for (var i = 1; i < data.length; i++) {
-        if (data[i][0] === "shared_secret" && data[i][1]) {
+        var rowKey = (data[i][0] || "").toString().trim().toLowerCase();
+        if (rowKey === normalizedKey && data[i][1]) {
           return data[i][1].toString().trim();
         }
       }
     }
   } catch (err) {}
 
-  // Bắt buộc cấu hình SHARED_SECRET trong Script Properties của Google Apps Script
-  // Trả về chuỗi rỗng nếu chưa cấu hình để bảo vệ an toàn cho hệ thống
-  return "";
+  return fallbackValue !== undefined ? fallbackValue : "";
+}
+
+function getSharedSecret() {
+  return getScriptProperty("SHARED_SECRET", "");
 }
 
 var CONFIG = {
-  // Mã secret dùng để xác thực giữa Next.js và Google Apps Script (Đọc động từ Script Properties)
   get SHARED_SECRET() {
     return getSharedSecret();
   },
 
-  // URL Webhook kích hoạt On-Demand ISR Revalidation trên Website DataWithLy
-  REVALIDATION_PROD_URL: "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026",
-  REVALIDATION_LOCAL_URL: "http://localhost:3000/api/revalidate?secret=datawithly_secure_reval_token_2026",
-  ACTIVE_REVALIDATION_ENV: "PROD",
-  REVALIDATION_URL: "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026",
-
-  // Cấu hình Telegram Bot để nhận cảnh báo khi có học viên đăng ký tư vấn mới (< 2s)
-  TELEGRAM_BOT_TOKEN: "", // Điền Telegram Bot Token nếu muốn nhận thông báo (Ví dụ: 123456:ABC-DEF...)
-  TELEGRAM_CHAT_ID: "",   // Điền Chat ID nhận thông báo
-
-  // Danh sách Email nhận thông báo Lead mới (Client & Quản trị viên)
-  get CLIENT_NOTIFICATION_EMAILS() {
-    var emails = ["hientruongthmh@gmail.com"];
-    try {
-      var propEmail = PropertiesService.getScriptProperties().getProperty("CLIENT_NOTIFICATION_EMAIL");
-      if (propEmail && propEmail.trim() && emails.indexOf(propEmail.trim()) === -1) {
-        emails.push(propEmail.trim());
-      }
-    } catch (e) {}
-    return emails;
+  get WEB_DEPLOY_URL() {
+    var url = getScriptProperty("WEB_DEPLOY_URL", "");
+    if (!url || url.indexOf("datawithly.edu.vn") !== -1) {
+      return "https://ed-tech-mu-umber.vercel.app";
+    }
+    return url;
   },
 
-  // Đường dẫn kết nối Zalo tư vấn nhanh
-  ZALO_CONTACT_URL: "https://zalo.me/0901234567",
+  get REVALIDATION_SECRET() {
+    return getScriptProperty("REVALIDATION_SECRET", "");
+  },
 
-  // Thời gian tối đa giữ Mutex Lock để chống xung đột race-condition (10 giây)
-  LOCK_TIMEOUT_MS: 10000,
+  get REVALIDATION_PROD_URL() {
+    var explicitUrl = getScriptProperty("REVALIDATION_PROD_URL", "");
+    if (explicitUrl && explicitUrl.indexOf("datawithly.edu.vn") === -1) {
+      return explicitUrl;
+    }
+
+    var deployUrl = this.WEB_DEPLOY_URL;
+    if (deployUrl) {
+      var base = deployUrl.replace(/\/+$/, "");
+      var secret = this.REVALIDATION_SECRET;
+      return base + "/api/revalidate" + (secret ? ("?secret=" + encodeURIComponent(secret)) : "");
+    }
+    return "https://ed-tech-mu-umber.vercel.app/api/revalidate";
+  },
+
+  get REVALIDATION_LOCAL_URL() {
+    var explicitUrl = getScriptProperty("REVALIDATION_LOCAL_URL", "");
+    if (explicitUrl) return explicitUrl;
+
+    var secret = this.REVALIDATION_SECRET;
+    return "http://localhost:3000/api/revalidate" + (secret ? ("?secret=" + encodeURIComponent(secret)) : "");
+  },
+
+  get ACTIVE_REVALIDATION_ENV() {
+    return getScriptProperty("ACTIVE_REVALIDATION_ENV", "PROD");
+  },
+
+  get REVALIDATION_URL() {
+    return this.REVALIDATION_PROD_URL;
+  },
+
+  LOCK_TIMEOUT_MS: 10000
 };
 
+var COURSE_KINDS_LIST = [
+  "Khóa học nổi bật",
+  "Khóa học mới",
+  "Khóa học nền tảng",
+  "Khóa học chuyên sâu",
+  "Combo"
+];
 
 
 // ==============================================================================
@@ -840,21 +840,18 @@ function runAllAppsScriptUnitTests() {
 
 
 // ==============================================================================
-// FILE NGUỒN: 02_MenuAndTriggers.gs
+// FILE NGUỒN: 02_CmsMenu.gs
 // ==============================================================================
 
 /**
  * ==============================================================================
- * MODULE 02: THANH MENU VÀ BỘ BẮT SỰ KIỆN (MENU & EVENT TRIGGERS)
+ * MODULE 02: THANH MENU VÀ BỘ BẮT SỰ KIỆN CMS CONTENT (MENU & EVENT TRIGGERS)
  * ==============================================================================
- * 1. onOpen(): Khởi tạo menu điều khiển [🚀 DataWithLy CMS] khi mở file Sheets.
+ * 1. onOpen(): Khởi tạo menu điều khiển [🚀 DataWithLy CMS] trên Sheet CMS Content.
  * 2. onEdit(e): Tự động phát hiện chỉnh sửa, sinh UUID v4 & SEO Slug, bảo vệ ô ID/Slug.
  * ==============================================================================
  */
 
-/**
- * Bảng cấu hình tiền tố UUID cho từng Tab nghiệp vụ
- */
 var TABLE_PREFIX_CONFIG = {
   courses: "crs-",
   curriculum: "cur-",
@@ -866,14 +863,10 @@ var TABLE_PREFIX_CONFIG = {
   faqs: "faq-"
 };
 
-/**
- * 1. Khởi tạo thanh menu tùy biến [🚀 DataWithLy CMS]
- */
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
   ui.createMenu("🚀 DataWithLy CMS")
-    // Khởi tạo
-    .addItem("⚡ CÀI ĐẶT TOÀN BỘ 12 TAB (1-Click Setup)", "setupDataWithLyTables")
+    .addItem("⚡ CÀI ĐẶT 10 TAB CMS CONTENT (1-Click Setup)", "setupDataWithLyTables")
     .addItem("🌱 NẠP LẠI DATA CHUẨN FIGMA 100% (Ghi đè bản mẫu)", "forceReseedFigmaData")
     .addSeparator()
 
@@ -893,8 +886,9 @@ function onOpen() {
     // Khuyến mãi & Cấu hình
     .addItem("🏷️ Quản Trị Khuyến Mãi & Flash Sale", "showPromotionsModal")
     .addItem("⚙️ Cấu Hình Hệ Thống (Settings)", "showSettingsModal")
-    .addItem("🔐 Cài Đặt Mã Secret (Script Properties)", "promptSetSharedSecret")
-    .addItem("👥 Cập Nhật Trạng Thái Lead", "showUpdateLeadStatusPrompt")
+    .addItem("🔗 Cài Đặt URL Website Vercel", "promptSetWebDeployUrl")
+    .addItem("🔐 Cài Đặt Mã Secret CMS (SHARED_SECRET)", "promptSetSharedSecret")
+    .addItem("🔑 Cài Đặt Revalidation Secret", "promptSetRevalidationSecret")
     .addSeparator()
 
     // Tiện ích bảo trì
@@ -906,14 +900,10 @@ function onOpen() {
     .addToUi();
 }
 
-/**
- * Helper: Bảo vệ ô ID (Cột 1) chống xóa hoặc gõ đè sai định dạng
- */
 function protectIdCell(sheet, row, value, oldValue, prefix, ss) {
   var trimmed = (value !== null && value !== undefined) ? value.toString().trim() : "";
   var oldTrimmed = (oldValue !== null && oldValue !== undefined) ? oldValue.toString().trim() : "";
 
-  // 1. Nếu người dùng xóa trống ô ID
   if (!trimmed) {
     if (oldTrimmed) {
       sheet.getRange(row, 1).setValue(sanitizeFormula(oldTrimmed));
@@ -926,7 +916,6 @@ function protectIdCell(sheet, row, value, oldValue, prefix, ss) {
     return;
   }
 
-  // 2. Nếu người dùng gõ đè giá trị không chuẩn UUID v4
   if (!isValidUUID(trimmed, prefix) && !isValidUUID(trimmed)) {
     if (oldTrimmed && (isValidUUID(oldTrimmed, prefix) || isValidUUID(oldTrimmed))) {
       sheet.getRange(row, 1).setValue(sanitizeFormula(oldTrimmed));
@@ -939,15 +928,11 @@ function protectIdCell(sheet, row, value, oldValue, prefix, ss) {
   }
 }
 
-/**
- * Helper: Bảo vệ ô Slug (Cột slug) chống xóa hoặc trùng lặp
- */
 function protectSlugCell(sheet, row, slugCol, titleCol, value, oldValue, ss) {
   var trimmed = (value !== null && value !== undefined) ? value.toString().trim() : "";
   var oldTrimmed = (oldValue !== null && oldValue !== undefined) ? oldValue.toString().trim() : "";
   var titleVal = titleCol ? sheet.getRange(row, titleCol).getValue() : "";
 
-  // Thu thập các slug khác trong sheet để đối chiếu
   var lastRow = sheet.getLastRow();
   var otherSlugs = [];
   if (lastRow > 1) {
@@ -960,209 +945,94 @@ function protectSlugCell(sheet, row, slugCol, titleCol, value, oldValue, ss) {
     }
   }
 
-  // 1. Nếu người dùng xóa trống Slug
   if (!trimmed) {
     if (titleVal && titleVal.toString().trim()) {
-      var regeneratedSlug = resolveUniqueSlug(titleVal, otherSlugs);
-      sheet.getRange(row, slugCol).setValue(sanitizeFormula(regeneratedSlug));
-      ss.toast("⚠️ Ô Slug không được để trống! Đã tự động sinh lại từ Tiêu đề: " + regeneratedSlug, "🛡️ Bảo Vệ Slug", 6);
+      var autoSlug = resolveUniqueSlug(titleVal.toString(), otherSlugs);
+      sheet.getRange(row, slugCol).setValue(sanitizeFormula(autoSlug));
+      ss.toast("⚠️ Ô Slug không được để trống! Đã tự động sinh SEO Slug: " + autoSlug, "🛡️ Tự Động Sinh Slug", 6);
     } else if (oldTrimmed) {
       sheet.getRange(row, slugCol).setValue(sanitizeFormula(oldTrimmed));
-      ss.toast("⚠️ Ô Slug không được để trống! Đã khôi phục Slug gốc: " + oldTrimmed, "🛡️ Bảo Vệ Slug", 6);
+      ss.toast("⚠️ Cột Slug được bảo vệ! Đã khôi phục: " + oldTrimmed, "🛡️ Bảo Vệ Ô Slug", 6);
     }
     return;
   }
 
-  // 2. Nếu người dùng gõ tay Slug mới -> Chuẩn hóa SEO & kiểm tra chống trùng lặp
-  var resolved = resolveUniqueSlug(trimmed, otherSlugs, oldTrimmed);
-  if (resolved !== trimmed) {
-    sheet.getRange(row, slugCol).setValue(sanitizeFormula(resolved));
-    ss.toast("⚠️ Slug đã được chuẩn hóa / chống trùng lặp: " + resolved, "🛡️ Chuẩn Hóa Slug", 5);
+  var standardFormat = generateSlug(trimmed);
+  if (trimmed !== standardFormat) {
+    var resolvedFormat = resolveUniqueSlug(standardFormat, otherSlugs, oldTrimmed);
+    sheet.getRange(row, slugCol).setValue(sanitizeFormula(resolvedFormat));
+    ss.toast("⚠️ Slug đã được chuẩn hóa lại không dấu: " + resolvedFormat, "🛡️ Chuẩn Hóa SEO Slug", 6);
+    return;
+  }
+
+  if (otherSlugs.indexOf(trimmed) !== -1) {
+    var uniqueSlug = resolveUniqueSlug(trimmed, otherSlugs, oldTrimmed);
+    sheet.getRange(row, slugCol).setValue(sanitizeFormula(uniqueSlug));
+    ss.toast("⚠️ Phát hiện trùng lặp Slug! Đã đổi thành: " + uniqueSlug, "🛡️ Chống Trùng Slug", 6);
   }
 }
 
-/**
- * Helper: Xử lý khi người dùng chỉnh sửa Tiêu đề (Tự động sinh ID UUID & SEO Slug)
- */
-function handleTitleEditWithUuidAndSlug(sheet, row, titleValue, idCol, slugCol, prefix, ss) {
-  var idCell = sheet.getRange(row, idCol);
-  var currentId = idCell.getValue();
-  var generatedUuid = null;
-
-  // 1. Kiểm tra cột ID (cột 1): Nếu trống -> Tự động sinh UUID v4 kèm prefix
-  if (!currentId || currentId.toString().trim() === "") {
-    generatedUuid = generateUUID(prefix);
-    idCell.setValue(sanitizeFormula(generatedUuid));
-  }
-
-  // 2. Kiểm tra cột Slug (nếu tab có cột slug)
-  if (slugCol) {
-    var slugCell = sheet.getRange(row, slugCol);
-    var currentSlug = slugCell.getValue();
-
-    // Thu thập danh sách slug của các dòng khác để chống trùng lặp
-    var lastRow = sheet.getLastRow();
-    var otherSlugs = [];
-    if (lastRow > 1) {
-      var allSlugs = sheet.getRange(2, slugCol, lastRow - 1, 1).getValues();
-      for (var i = 0; i < allSlugs.length; i++) {
-        var rNum = i + 2;
-        if (rNum !== row && allSlugs[i][0]) {
-          otherSlugs.push(allSlugs[i][0].toString());
-        }
-      }
-    }
-
-    var uniqueSlug = resolveUniqueSlug(titleValue, otherSlugs, currentSlug);
-
-    if (!currentSlug || currentSlug.toString().trim() === "") {
-      slugCell.setValue(sanitizeFormula(uniqueSlug));
-    }
-
-    // Hiển thị Toast thông báo trạng thái
-    if (uniqueSlug.match(/-v\d+$/)) {
-      ss.toast("⚡ Phát hiện trùng tiêu đề! Đã tự động tạo: " + uniqueSlug + " (UUID: " + (generatedUuid || currentId) + ")", "DataWithLy Auto-Versioning", 5);
-    } else {
-      ss.toast("⚡ Đã tự động tạo UUID (" + (generatedUuid || currentId) + ") & SEO Slug: " + uniqueSlug, "DataWithLy Automation", 4);
-    }
-  } else {
-    // Tab không có cột slug (như curriculum, faqs...)
-    if (generatedUuid) {
-      ss.toast("⚡ Đã tự động sinh UUID định danh: " + generatedUuid, "DataWithLy Automation", 4);
-    }
-  }
-}
-
-/**
- * 2. Bộ bắt sự kiện onEdit: Tự động hóa thời gian thực khi người dùng gõ phím
- */
 function onEdit(e) {
   if (!e || !e.range) return;
-  var sheet = e.range.getSheet();
+
+  var range = e.range;
+  var sheet = range.getSheet();
   var sheetName = sheet.getName();
-  var row = e.range.getRow();
-  var col = e.range.getColumn();
-  var value = (e.value !== undefined) ? e.value : e.range.getValue();
+  var row = range.getRow();
+  var col = range.getColumn();
+  var value = e.value;
   var oldValue = e.oldValue;
   var ss = e.source || SpreadsheetApp.getActiveSpreadsheet();
 
-  // Bỏ qua dòng tiêu đề (Dòng 1)
-  if (row <= 1) return;
+  if (row === 1) return;
 
-  var prefix = TABLE_PREFIX_CONFIG[sheetName] || "";
-
-  // ==========================================
-  // 1. BẢO VỆ CỘT ID (CỘT 1) TRÊN MỌI TAB DỮ LIỆU CHÍNH
-  // ==========================================
-  if (col === 1 && TABLE_PREFIX_CONFIG[sheetName]) {
+  var prefix = TABLE_PREFIX_CONFIG[sheetName];
+  if (prefix && col === 1) {
     protectIdCell(sheet, row, value, oldValue, prefix, ss);
     return;
   }
 
-  // ==========================================
-  // 2. TAB: courses
-  // ==========================================
   if (sheetName === "courses") {
-    // Cột 2 (Title): Sinh UUID (Cột 1) & SEO Slug (Cột 3)
-    if (col === 2 && value) {
-      handleTitleEditWithUuidAndSlug(sheet, row, value, 1, 3, "crs-", ss);
-    }
-
-    // Cột 3 (Slug): Bảo vệ và chuẩn hóa Slug
-    if (col === 3) {
-      protectSlugCell(sheet, row, 3, 2, value, oldValue, ss);
-    }
-
-    // Cột 6 & 7: Học phí VNĐ
-    if ((col === 6 || col === 7) && value !== "") {
-      var num = Number(value);
-      if (isNaN(num) || num < 0) {
-        ss.toast("⚠️ Cảnh báo: Học phí phải là số nguyên dương hợp lệ (VNĐ)!", "Lỗi Định Dạng", 5);
-      } else {
-        sheet.getRange(row, col).setNumberFormat("#,##0 \"đ\"");
+    if (col === 3) protectSlugCell(sheet, row, 3, 2, value, oldValue, ss);
+    else if (col === 2 && value) {
+      var existingSlug = sheet.getRange(row, 3).getValue();
+      if (!existingSlug || existingSlug.toString().trim() === "") {
+        var allSlugsC = sheet.getRange(2, 3, Math.max(sheet.getLastRow() - 1, 1), 1).getValues()
+          .map(function(r, idx) { return (idx + 2 !== row && r[0]) ? r[0].toString() : null; })
+          .filter(Boolean);
+        sheet.getRange(row, 3).setValue(sanitizeFormula(resolveUniqueSlug(value.toString(), allSlugsC)));
       }
     }
-  }
-
-  // ==========================================
-  // 3. TAB: blog_posts
-  // ==========================================
-  if (sheetName === "blog_posts") {
-    // Cột 2 (Title): Sinh UUID (Cột 1) & SEO Slug (Cột 3)
-    if (col === 2 && value) {
-      handleTitleEditWithUuidAndSlug(sheet, row, value, 1, 3, "blg-", ss);
-    }
-
-    // Cột 3 (Slug): Bảo vệ và chuẩn hóa Slug
-    if (col === 3) {
-      protectSlugCell(sheet, row, 3, 2, value, oldValue, ss);
-    }
-  }
-
-  // ==========================================
-  // 4. TAB: curriculum
-  // ==========================================
-  if (sheetName === "curriculum") {
-    // Cột 5 (module_title): Sinh UUID (Cột 1) nếu còn thiếu
-    if (col === 5 && value) {
-      handleTitleEditWithUuidAndSlug(sheet, row, value, 1, null, "cur-", ss);
-    }
-  }
-
-  // ==========================================
-  // 5. TAB: promotions
-  // ==========================================
-  if (sheetName === "promotions") {
-    // Cột 2 (code) hoặc Cột 3 (title): Sinh UUID (Cột 1)
-    if ((col === 2 || col === 3) && value) {
-      handleTitleEditWithUuidAndSlug(sheet, row, value, 1, null, "promo-", ss);
-    }
-    // Cột 2 (code): Chuẩn hóa UPPERCASE
-    if (col === 2 && value) {
-      var upperCode = value.toString().trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "");
-      if (upperCode !== value) {
-        sheet.getRange(row, 2).setValue(sanitizeFormula(upperCode));
+  } else if (sheetName === "blog_posts") {
+    if (col === 3) protectSlugCell(sheet, row, 3, 2, value, oldValue, ss);
+    else if (col === 2 && value) {
+      var currentSlugB = sheet.getRange(row, 3).getValue();
+      if (!currentSlugB || currentSlugB.toString().trim() === "") {
+        var allSlugsB = sheet.getRange(2, 3, Math.max(sheet.getLastRow() - 1, 1), 1).getValues()
+          .map(function(r, idx) { return (idx + 2 !== row && r[0]) ? r[0].toString() : null; })
+          .filter(Boolean);
+        sheet.getRange(row, 3).setValue(sanitizeFormula(resolveUniqueSlug(value.toString(), allSlugsB)));
       }
     }
-  }
-
-  // ==========================================
-  // 6. CÁC TAB KHÁC: packages_pricing, testimonials, mentor_profiles, faqs
-  // ==========================================
-  if (sheetName === "packages_pricing" && col === 3 && value) {
-    handleTitleEditWithUuidAndSlug(sheet, row, value, 1, null, "pkg-", ss);
-  } else if (sheetName === "testimonials" && col === 2 && value) {
-    handleTitleEditWithUuidAndSlug(sheet, row, value, 1, null, "tst-", ss);
-  } else if (sheetName === "mentor_profiles" && col === 2 && value) {
-    handleTitleEditWithUuidAndSlug(sheet, row, value, 1, null, "men-", ss);
-  } else if (sheetName === "faqs" && col === 3 && value) {
-    handleTitleEditWithUuidAndSlug(sheet, row, value, 1, null, "faq-", ss);
   }
 }
 
 
 // ==============================================================================
-// FILE NGUỒN: 03_TablesSetup.gs
+// FILE NGUỒN: 03_CmsTablesSetup.gs
 // ==============================================================================
 
 /**
  * ==============================================================================
- * MODULE 03: KHỞI TẠO BẢNG DỮ LIỆU CHUẨN HÓA (DATABASE TABLES SETUP)
+ * MODULE 03: KHỞI TẠO 10 TAB CMS CONTENT MASTER (CMS TABLES SETUP)
  * ==============================================================================
- * 1. setupDataWithLyTables(): Tự động tạo 12 Tab chuẩn hóa kèm dữ liệu mẫu & Dropdown.
- * 2. Cài đặt chi tiết từng Tab:
- *    1. courses
- *    2. curriculum
- *    3. packages_pricing
- *    4. student_projects
- *    5. mentor_profiles
- *    6. testimonials
- *    7. faqs
- *    8. trust_metrics
- *    9. settings
- *    10. blog_posts
- *    11. leads (private)
- *    12. promotions
+ * 1. setupDataWithLyTables(): Tự động tạo 10 Tab chuẩn hóa nội dung Website:
+ *    courses, curriculum, packages_pricing, student_projects, mentor_profiles,
+ *    testimonials, faqs, trust_metrics, settings, blog_posts.
+ * 2. Cấu trúc chuẩn hóa:
+ *    - courses: Bổ sung 'course_kind' (Khóa nổi bật, Khóa mới,...), chuyển ngày sang curriculum.
+ *    - curriculum: Quản lý 'start_date' và 'end_date' của lộ trình buổi học.
+ *    - blog_posts: Bổ sung 'description' (Mô tả ngắn/SEO) và 'content_markdown' (Nội dung chi tiết).
  * ==============================================================================
  */
 
@@ -1171,8 +1041,8 @@ function setupDataWithLyTables() {
   var ui = SpreadsheetApp.getUi();
 
   var confirm = ui.alert(
-    "Khởi Tạo Hệ Thống Bảng DataWithLy CMS",
-    "Hệ thống sẽ tự động tạo đủ 12 Tab chuẩn hóa (Courses, Curriculum, Packages, Student Projects, Mentors, Testimonials, FAQs, Trust, Settings, Blogs, Leads Private, và Promotions) kèm dữ liệu mẫu và Dropdown Validation.\n\nBạn có muốn tiếp tục không?",
+    "Khởi Tạo Hệ Thống Bảng DataWithLy CMS Content Master",
+    "Hệ thống sẽ tự động tạo đủ 10 Tab chuẩn hóa (Courses, Curriculum, Packages, Student Projects, Mentors, Testimonials, FAQs, Trust Metrics, Settings, Blog Posts) kèm dữ liệu mẫu và Dropdown Validation.\n\nFile này hoàn toàn KHÔNG chứa tab Leads cá nhân để bảo mật PII tuyệt đối.\n\nBạn có muốn tiếp tục không?",
     ui.ButtonSet.YES_NO
   );
 
@@ -1189,8 +1059,6 @@ function setupDataWithLyTables() {
     setupTrustMetricsTab(ss);
     setupSettingsTab(ss);
     setupBlogPostsTab(ss);
-    setupLeadsPrivateTab(ss);
-    setupPromotionsTab(ss);
 
     // Xóa Sheet1 mặc định nếu rỗng
     var sheet1 = ss.getSheetByName("Sheet1") || ss.getSheetByName("Trang tính1");
@@ -1200,7 +1068,7 @@ function setupDataWithLyTables() {
 
     ui.alert(
       "🎉 Cài Đặt Hoàn Tất 100%!",
-      "Đã khởi tạo thành công 12 Tab dữ liệu chuẩn hóa, cài đặt xong Dropdown Validation và nạp dữ liệu mẫu.\n\nBây giờ bạn có thể mở trang http://localhost:3000/tests-data để kiểm tra đồng bộ ngay!",
+      "Đã khởi tạo thành công 10 Tab nội dung CMS Content Master, cài đặt xong Dropdown Validation và nạp dữ liệu mẫu.\n\nBây giờ bạn có thể mở trang Website để kiểm tra đồng bộ ngay!",
       ui.ButtonSet.OK
     );
   } catch (err) {
@@ -1208,9 +1076,6 @@ function setupDataWithLyTables() {
   }
 }
 
-/**
- * Helper: Tạo hoặc định dạng lại dòng tiêu đề header
- */
 function getOrCreateSheetWithHeader(ss, sheetName, headers, headerColor) {
   var sheet = ss.getSheetByName(sheetName);
   if (!sheet) {
@@ -1236,34 +1101,38 @@ function getOrCreateSheetWithHeader(ss, sheetName, headers, headerColor) {
 }
 
 /**
- * TAB 1: courses (Khóa học)
+ * TAB 1: courses (Khóa học) - Bổ sung course_kind
  */
 function setupCoursesTab(ss) {
   var headers = [
-    "id", "title", "slug", "tag", "tagline",
+    "id", "title", "slug", "course_kind", "tag", "tagline",
     "tuition_vnd", "original_tuition_vnd", "duration",
     "level", "is_active", "is_featured", "sort_order",
     "description", "cover_image_url"
   ];
   var sheet = getOrCreateSheetWithHeader(ss, "courses", headers, "#8B1D2C");
 
-  var booleanRule = SpreadsheetApp.newDataValidation().requireValueInList(["TRUE", "FALSE"], true).build();
-  sheet.getRange("J2:J100").setDataValidation(booleanRule);
-  sheet.getRange("K2:K100").setDataValidation(booleanRule);
+  var kindRule = SpreadsheetApp.newDataValidation().requireValueInList(COURSE_KINDS_LIST, true).build();
+  sheet.getRange("D2:D100").setDataValidation(kindRule);
 
   var tagRule = SpreadsheetApp.newDataValidation().requireValueInList(["SQL", "Dashboard", "Python", "End-to-End"], true).build();
-  sheet.getRange("D2:D100").setDataValidation(tagRule);
+  sheet.getRange("E2:E100").setDataValidation(tagRule);
 
   var levelRule = SpreadsheetApp.newDataValidation().requireValueInList(["Beginner", "Intermediate", "Advanced"], true).build();
-  sheet.getRange("I2:I100").setDataValidation(levelRule);
+  sheet.getRange("J2:J100").setDataValidation(levelRule);
 
-  sheet.getRange("F2:G100").setNumberFormat("#,##0 \"đ\"");
+  var booleanRule = SpreadsheetApp.newDataValidation().requireValueInList(["TRUE", "FALSE"], true).build();
+  sheet.getRange("K2:K100").setDataValidation(booleanRule);
+  sheet.getRange("L2:L100").setDataValidation(booleanRule);
+
+  sheet.getRange("G2:H100").setNumberFormat("#,##0 \"đ\"");
 
   if (sheet.getLastRow() === 1) {
     sheet.appendRow([
       "end-to-end-analytics",
       "End-to-End Analytics with SQL & Dashboard",
       "end-to-end-analytics",
+      "Khóa học nổi bật",
       "End-to-End",
       "Xây dựng nền tảng Data Analytics toàn diện từ truy vấn đến trực quan hóa",
       5690000, 6780000, "27 buổi",
@@ -1276,6 +1145,7 @@ function setupCoursesTab(ss) {
       "sql-for-data-analytics",
       "Khóa SQL for Data Analytics",
       "sql-for-data-analytics",
+      "Khóa học nền tảng",
       "SQL",
       "Làm quen với Database và SQL, xây dựng khả năng truy vấn và tổng hợp dữ liệu",
       2990000, 3500000, "12 buổi",
@@ -1288,6 +1158,7 @@ function setupCoursesTab(ss) {
       "data-analytical-thinking",
       "Khóa Data Analytical Thinking",
       "data-analytical-thinking",
+      "Khóa học chuyên sâu",
       "Dashboard",
       "Học cách xác định vấn đề, lựa chọn metrics, phân tích dữ liệu và thiết kế báo cáo",
       3790000, 4500000, "15 buổi",
@@ -1299,59 +1170,63 @@ function setupCoursesTab(ss) {
 }
 
 /**
- * TAB 2: curriculum (Đề cương chi tiết theo Khóa học)
+ * TAB 2: curriculum (Lộ trình chi tiết từng buổi học & Quản lý thời gian bắt đầu/kết thúc)
  */
 function setupCurriculumTab(ss) {
   var headers = [
-    "id", "course_id", "course_name", "module_number", "module_title",
-    "duration", "lessons_count", "topics_bullets", "sort_order"
+    "id", "course_id", "course_name", "start_date", "end_date",
+    "week", "day", "date", "session_title", "session_desc", "sub_content", "duration", "sort_order"
   ];
   var sheet = getOrCreateSheetWithHeader(ss, "curriculum", headers, "#8B1D2C");
 
   if (sheet.getLastRow() === 1) {
     sheet.appendRow([
-      "sql-for-data-analytics-mod-1",
+      "cur-sql-01",
       "sql-for-data-analytics",
       "SQL for Data Analytics: Từ Cơ Bản Đến Nâng Cao",
-      1,
-      "Chương 1: Nền tảng Cơ sở Dữ liệu & Cú pháp SELECT",
-      "2 tuần",
-      6,
-      "Tổng quan về RDBMS, Table, Schema, Primary Key & Foreign Key\nSELECT, WHERE, DISTINCT, ORDER BY, LIMIT\nCác toán tử logic AND, OR, NOT, IN, BETWEEN, LIKE\nBài tập thực hành: Truy vấn bảng đơn hàng E-commerce",
-      1
+      "2026-03-20",
+      "2026-04-30",
+      1, 1, "TH10 03",
+      "Buổi 1: Làm quen Database & Cú pháp truy vấn cơ bản",
+      "Hiểu kiến trúc Relational Database, cài đặt DBeaver, thực hành SELECT, WHERE, ORDER BY, GROUP BY.",
+      "Tổng quan về cơ sở dữ liệu quan hệ (RDBMS) trong doanh nghiệp\nCài đặt DBeaver và kết nối hệ quản trị PostgreSQL / MySQL\nCú pháp SELECT, ALIAS, DISTINCT, toán tử lọc WHERE, AND/OR/IN/BETWEEN\nThực hành truy vấn cơ bản trên bộ dữ liệu E-commerce thực tế",
+      "3 giờ", 1
     ]);
     sheet.appendRow([
-      "sql-for-data-analytics-mod-2",
+      "cur-sql-02",
       "sql-for-data-analytics",
       "SQL for Data Analytics: Từ Cơ Bản Đến Nâng Cao",
-      2,
-      "Chương 2: Aggregate Functions & Nhóm Dữ Liệu",
-      "2 tuần",
-      6,
-      "Hàm tính toán COUNT, SUM, AVG, MIN, MAX\nGROUP BY và điều kiện lọc HAVING\nXử lý giá trị NULL (COALESCE, IFNULL)\nBài tập: Tính doanh thu theo từng tháng và danh mục sản phẩm",
-      2
+      "2026-03-20",
+      "2026-04-30",
+      1, 2, "TH10 05",
+      "Buổi 2: Các hàm biến đổi dữ liệu (Scalar & Aggregate Functions)",
+      "Xử lý chuỗi văn bản, ngày tháng, ép kiểu CAST và tính toán tổng hợp SUM/AVG/COUNT.",
+      "Xử lý chuỗi với LIKE, CONCAT, SUBSTRING, TRIM, UPPER/LOWER\nXử lý ngày tháng chuyên sâu: DATE_TRUNC, EXTRACT, INTERVAL\nPhân nhóm và tính toán tổng hợp với GROUP BY và điều kiện lọc HAVING\nBài tập tính doanh thu theo tháng và tần suất mua sắm",
+      "3 giờ", 2
     ]);
     sheet.appendRow([
-      "sql-for-data-analytics-mod-3",
+      "cur-sql-03",
       "sql-for-data-analytics",
       "SQL for Data Analytics: Từ Cơ Bản Đến Nâng Cao",
-      3,
-      "Chương 3: Ghép Bảng (JOINs) & Subqueries",
-      "2 tuần",
-      6,
-      "INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN\nSelf JOIN và xử lý phân cấp nhân viên/quản lý\nSubqueries trong WHERE, FROM và SELECT\nBài tập: Kết hợp 5 bảng đối soát tài chính ngân hàng",
-      3
+      "2026-03-20",
+      "2026-04-30",
+      2, 3, "TH10 26",
+      "Buổi 3: Kết hợp bảng nâng cao với JOINs (INNER, LEFT, RIGHT, FULL)",
+      "Tư duy quan hệ dữ liệu nhiều bảng, liên kết dữ liệu khách hàng, đơn hàng và sản phẩm.",
+      "Mô hình Entity-Relationship (ERD) và khóa chính (PK) / khóa ngoại (FK)\nBản chất đại số của INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN\nXử lý bẫy NULL values và phép nhân Cartesian (Cartesian Explosion)\nThực hành trích xuất dữ liệu tổng hợp đa chiều từ 5 bảng liên kết",
+      "3 giờ", 3
     ]);
     sheet.appendRow([
-      "sql-for-data-analytics-mod-4",
+      "cur-sql-04",
       "sql-for-data-analytics",
       "SQL for Data Analytics: Từ Cơ Bản Đến Nâng Cao",
-      4,
-      "Chương 4: Phân Tích Chuyên Sâu với Window Functions & CTE",
-      "2 tuần",
-      6,
-      "Common Table Expressions (WITH clause) giúp code sạch và dễ đọc\nROW_NUMBER, RANK, DENSE_RANK\nLEAD, LAG để so sánh kỳ này với kỳ trước (MoM, YoY growth)\nRunning Total & Moving Average\nCapstone Project: Báo cáo retention rate và churn analysis",
-      4
+      "2026-03-20",
+      "2026-04-30",
+      2, 4, "TH10 28",
+      "Buổi 4: Bài thực hành 1 (Hands-on Lab 1) - Báo cáo Doanh thu & Giỏ hàng",
+      "Tự tay viết script phân tích toàn bộ quy trình giỏ hàng, doanh số và tỉ lệ drop-off.",
+      "Đọc yêu cầu bài toán kinh doanh từ Stakeholder\nXác định bảng nguồn, viết truy vấn kết nối đơn hàng, coupon, hoàn trả\nTính toán AOV (Average Order Value) và tỉ lệ áp mã giảm giá\nMentor review code trực tiếp và chỉ ra các lỗi logic thường gặp",
+      "3 giờ", 4
     ]);
   }
 }
@@ -1394,7 +1269,7 @@ function setupPackagesPricingTab(ss) {
 }
 
 /**
- * TAB 4: student_projects (Dự án Học viên Tiêu biểu theo PRD M05)
+ * TAB 4: student_projects (Dự án Học viên Tiêu biểu)
  */
 function setupStudentProjectsTab(ss) {
   var headers = [
@@ -1424,53 +1299,11 @@ function setupStudentProjectsTab(ss) {
       "Dự báo sớm 85% nhóm người dùng có nguy cơ rời bỏ ứng dụng ví điện tử",
       "/assets/figma/973e833b234c55daebe419eefe02eb6e80f7d86d.png", 2, true
     ]);
-    sheet.appendRow([
-      "proj-logistics-sla", "Logistics Delivery SLA & Route Optimization", "Logistics",
-      "Nguyễn Hải Đăng (K7)", "SQL, Power BI, DAX",
-      "Cắt giảm 14% thời gian giao hàng trễ giờ cao điểm cho mạng lưới 120 bưu cục",
-      "/assets/figma/f0920e49e6a571ac94250b3258b77d8c976423b6.png", 3, true
-    ]);
-    sheet.appendRow([
-      "proj-retail-sales-funnel", "Retail Sales Funnel & Inventory KPI Report", "E-commerce",
-      "Phạm Hồng Nhung (K9)", "Google Sheets, SQL, Data Studio",
-      "Phát hiện 22% mặt hàng tồn kho chậm luân chuyển, tiết kiệm chi phí lưu kho",
-      "/assets/figma/cf9dcd253d74531ef55b272e2e080b01e9bbd6bb.png", 4, true
-    ]);
-    sheet.appendRow([
-      "proj-banking-credit-risk", "Banking Risk Assessment & Loan Default Analysis", "Finance",
-      "Vũ Quang Huy (K8)", "SQL, Python, Power BI",
-      "Phân tầng rủi ro tín dụng và giảm thiểu 9% nợ xấu phát sinh cho ngân hàng",
-      "/assets/figma/1af45d712faebc37b4905756835680a337298304.png", 5, true
-    ]);
-    sheet.appendRow([
-      "proj-marketing-attribution", "Marketing Campaign ROI & Multi-touch Attribution", "E-commerce",
-      "Hoàng Mai Linh (K6)", "SQL, Power BI, Google Analytics 4",
-      "Tái phân bổ ngân sách quảng cáo giúp tăng ROAS thêm 26% trên toàn kênh",
-      "/assets/figma/c0aae3c5c5404ee626ce858087d79649de2e3dc1.png", 6, true
-    ]);
-    sheet.appendRow([
-      "proj-executive-overview", "Executive Business Overview & C-Level Cockpit", "Finance",
-      "Đặng Tuấn Kiệt (K8)", "Power BI, DAX, SQL",
-      "Báo cáo quản trị tổng quan tích hợp Real-time phục vụ trực tiếp cho Ban Giám Đốc",
-      "/assets/figma/b1c9fe6fd2d3dafb5b4b32d30320f68d7cde1f5c.png", 7, true
-    ]);
-    sheet.appendRow([
-      "proj-powerbi-operational", "Power BI End-to-End Operational Performance Report", "Logistics",
-      "Ngô Thu Trang (K9)", "Power BI, SQL, Data Modeling",
-      "Tự động hóa 100% quy trình tổng hợp số liệu tuần, tiết kiệm 12 giờ làm việc thủ công",
-      "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png", 8, true
-    ]);
-    sheet.appendRow([
-      "proj-supply-chain-tracker", "Supply Chain Real-Time Health & Fulfillment Tracker", "Logistics",
-      "Bùi Quốc Bảo (K7)", "SQL, Data Studio, Google Sheet API",
-      "Giám sát tiến độ hoàn tất đơn hàng đạt 98.6% tỷ lệ giao đúng hẹn cam kết",
-      "/assets/figma/05ab7dcc030820120da8f65c6b464967f554e0d8.png", 9, true
-    ]);
   }
 }
 
 /**
- * TAB 5: mentor_profiles (Hồ sơ giảng viên)
+ * TAB 5: mentor_profiles (Hồ sơ giảng viên & About Us)
  */
 function setupMentorProfilesTab(ss) {
   var headers = [
@@ -1521,30 +1354,6 @@ function setupTestimonialsTab(ss) {
       "Tư duy phân tích số liệu của chị Ly thực sự mở mang góc nhìn của mình. Mình học được cách đặt câu hỏi 'Tại sao số này giảm?' và biến số liệu thô thành đề xuất tăng doanh thu.",
       true, true
     ]);
-    sheet.appendRow([
-      "testi-03", "Lê Hoàng Phúc", "Combo End-to-End Analytics", "Shopee Express",
-      "/assets/figma/2a57d0c1a2a65bb9e121f9545459faf7c1b50587.png", "end-to-end-analytics", "5",
-      "Học trọn gói cả SQL và Dashboard là quyết định đúng đắn nhất của mình. Sau khi hoàn thành final project, mình đã đậu vị trí Junior Data Analyst tại Shopee.",
-      true, true
-    ]);
-    sheet.appendRow([
-      "testi-04", "Phạm Hải Đăng", "Khóa SQL for Data Analytics", "Techcombank",
-      "/assets/figma/b2b53a3cd8b4e6f2cfcc039b89d51637f8421060.png", "sql-for-data-analytics", "5",
-      "Cách truyền đạt của Mentor rất dễ hiểu, không hàn lâm. Bài tập bám sát case study thực tế từ sàn thương mại điện tử và ngân hàng.",
-      true, true
-    ]);
-    sheet.appendRow([
-      "testi-05", "Đặng Thuỳ Dương", "Khóa Data Analytical Thinking", "FPT Software",
-      "/assets/figma/1af45d712faebc37b4905756835680a337298304.png", "data-analytical-thinking", "5",
-      "Mentor cực kỳ tận tâm, sửa bài 1:1 chi tiết từng dòng metric. Nhờ đó mình sửa được tư duy làm dashboard chỉ để cho đẹp sang dashboard giải quyết bài toán kinh doanh.",
-      true, true
-    ]);
-    sheet.appendRow([
-      "testi-06", "Vũ Bảo Nam", "Combo End-to-End Analytics", "MB Bank",
-      "/assets/figma/f0920e49e6a571ac94250b3258b77d8c976423b6.png", "end-to-end-analytics", "5",
-      "Kiến thức nối tiếp rất mượt mà. Đội ngũ trợ giảng hỗ trợ support thắc mắc nhanh chóng cả ngày lẫn đêm. Rất recommend mọi người tham gia!",
-      true, true
-    ]);
   }
 }
 
@@ -1579,15 +1388,12 @@ function setupFaqsTab(ss) {
   }
 }
 
-/**
- * Alias tương thích ngược cho setupFIBTab
- */
 function setupFIBTab(ss) {
   return setupFaqsTab(ss);
 }
 
 /**
- * TAB 8: trust_metrics (Chỉ số uy tín)
+ * TAB 8: trust_metrics (Chỉ số uy tín & Thống kê)
  */
 function setupTrustMetricsTab(ss) {
   var headers = [
@@ -1618,83 +1424,51 @@ function setupSettingsTab(ss) {
     sheet.appendRow(["zalo_url", "https://zalo.me/0934938431", "Đường dẫn chat Zalo tư vấn nhanh"]);
     sheet.appendRow(["contact_email", "vietds@gmail.com", "Email nhận thư liên hệ"]);
     sheet.appendRow(["announcement_bar", "Level Up Week: Learn More, Save 75%! - 4 days only! Get 70+ online SQL courses and save up to $450", "Thông báo trên thanh header"]);
-    sheet.appendRow(["revalidation_prod_url", "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook Production làm mới bộ nhớ cache Website"]);
-    sheet.appendRow(["revalidation_local_url", "http://localhost:3000/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook Local / Dev Tunnel làm mới bộ nhớ cache"]);
+    sheet.appendRow(["web_deploy_url", "https://ed-tech-mu-umber.vercel.app", "URL Website Production chính thức trên Vercel"]);
     sheet.appendRow(["active_revalidation_env", "PROD", "Môi trường đồng bộ kích hoạt (PROD hoặc LOCAL)"]);
-    sheet.appendRow(["revalidation_url", "https://datawithly.edu.vn/api/revalidate?secret=datawithly_secure_reval_token_2026", "URL Webhook làm mới bộ nhớ cache của Website (dự phòng)"]);
   }
 }
 
 /**
- * TAB 10: blog_posts (Bài viết kiến thức)
+ * TAB 10: blog_posts (Bài viết kiến thức & Blog) - Bổ sung description & content_markdown
  */
 function setupBlogPostsTab(ss) {
   var headers = [
     "id", "title", "slug", "category",
-    "excerpt", "author_name", "published_at", "is_active"
+    "description", "excerpt", "content_markdown", "cover_image_url",
+    "author_name", "author_avatar_url", "published_at", "is_active"
   ];
   var sheet = getOrCreateSheetWithHeader(ss, "blog_posts", headers, "#1F242F");
 
   var booleanRule = SpreadsheetApp.newDataValidation().requireValueInList(["TRUE", "FALSE"], true).build();
-  sheet.getRange("H2:H100").setDataValidation(booleanRule);
+  sheet.getRange("L2:L100").setDataValidation(booleanRule);
 
   if (sheet.getLastRow() === 1) {
     sheet.appendRow([
       "blog-sql-meo-can-biet",
       "Các mẹo SQL cần biết trong doanh nghiệp",
       "cac-meo-sql-can-biet", "SQL",
+      "Khám phá các mẹo, thủ thuật và câu lệnh SQL tối ưu giúp tăng tốc độ truy vấn cơ sở dữ liệu lớn.",
       "Khám phá các mẹo, thủ thuật và câu lệnh SQL hữu ích giúp viết truy vấn ngắn gọn, tối ưu và hiệu quả hơn.",
-      "Hứa Thảo Ly", "2026-03-01", true
+      "## 1. Giới thiệu SQL trong doanh nghiệp\nSQL là kỹ năng nền tảng cho mọi Data Analyst. Việc tối ưu truy vấn giúp tiết kiệm tài nguyên hệ thống đáng kể.\n\n## 2. Các mẹo tối ưu phổ biến\n- Tránh sử dụng `SELECT *` trong môi trường Production.\n- Luôn tạo Index trên các cột thường xuyên lọc trong `WHERE` và `JOIN`.\n- Tận dụng `Common Table Expressions (CTE)` thay cho Subquery phức tạp.",
+      "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png",
+      "Hứa Thảo Ly", "/uploads/mentors/ly-hua.jpg", "2026-03-01", true
     ]);
     sheet.appendRow([
       "blog-dashboard-5-giay",
       "Cách thiết kế Dashboard trực quan chỉ trong 5 giây",
       "thiet-ke-dashboard-truc-quan", "Dashboard",
+      "Nguyên lý thị giác và thiết kế Dashboard báo cáo C-Level chuẩn logic kinh doanh.",
       "Những nguyên lý thị giác quan trọng giúp báo cáo của bạn vừa chuẩn logic kinh doanh vừa đẹp mắt, thuyết phục ban lãnh đạo.",
-      "Hứa Thảo Ly", "2026-03-05", true
-    ]);
-    sheet.appendRow([
-      "blog-chuyen-nganh-data-0",
-      "Lộ trình chuyển ngành Data Analytics từ con số 0",
-      "lo-trinh-chuyen-nganh-data-analyst", "Career",
-      "Kinh nghiệm thực chiến từ việc học công cụ, làm portfolio dự án đến cách trả lời câu hỏi phỏng vấn hóc búa.",
-      "Hứa Thảo Ly", "2026-03-10", true
+      "## Nguyên tắc 5 giây trong thiết kế Dashboard\nMột Dashboard tốt phải trả lời được câu hỏi kinh doanh cốt lõi trong vòng 5 giây đầu tiên khi người xem nhìn vào.\n\n### 3 Yếu tố cốt lõi:\n1. Phân tầng thị giác rõ ràng.\n2. Lựa chọn đúng biểu đồ phù hợp loại dữ liệu.\n3. Nhấn mạnh chỉ số quan trọng (North Star Metric).",
+      "/assets/figma/05ab7dcc030820120da8f65c6b464967f554e0d8.png",
+      "Hứa Thảo Ly", "/uploads/mentors/ly-hua.jpg", "2026-03-05", true
     ]);
   }
 }
 
 /**
- * TAB 11: leads (private) (Danh sách Lead học viên bảo mật PII)
- */
-function setupLeadsPrivateTab(ss) {
-  var headers = [
-    "submission_id", "timestamp", "name (private)", "phone (private)", "email (private)",
-    "course_id", "course_name", "message (private)", "status"
-  ];
-  var sheet = getOrCreateSheetWithHeader(ss, "leads (private)", headers, "#7F1D1D");
-
-  var statusRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(["NEW", "CONTACTING", "CONSULTED", "ENROLLED", "DROPPED", "SPAM"], true)
-    .build();
-  sheet.getRange("I2:I500").setDataValidation(statusRule);
-
-  if (sheet.getLastRow() === 1) {
-    sheet.appendRow([
-      "sub_sample_001", new Date().toISOString(), "Nguyễn Hoàng Nam (Mẫu)", "'0912345678", "nam.hoang@gmail.com",
-      "sql-for-data-analytics", "SQL for Data Analytics", "Muốn tư vấn lịch học buổi tối T3-T5", "NEW"
-    ]);
-  }
-}
-
-/**
- * Alias cho Tab 11 leads
- */
-function setupLeadsTab(ss) {
-  return setupLeadsPrivateTab(ss);
-}
-
-/**
- * TAB 12: promotions (Chương trình Khuyến mãi & Flash Sale)
+ * TAB 11: promotions (Chương trình Khuyến mãi & Flash Sale)
  */
 function setupPromotionsTab(ss) {
   var headers = [
@@ -1703,65 +1477,37 @@ function setupPromotionsTab(ss) {
   ];
   var sheet = getOrCreateSheetWithHeader(ss, "promotions", headers, "#8B1D2C");
 
-  var typeRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(["PERCENT", "FIXED_VND"], true)
-    .build();
+  var typeRule = SpreadsheetApp.newDataValidation().requireValueInList(["PERCENT", "FIXED_VND"], true).build();
   sheet.getRange("D2:D100").setDataValidation(typeRule);
 
-  var booleanRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(["TRUE", "FALSE"], true)
-    .build();
+  var booleanRule = SpreadsheetApp.newDataValidation().requireValueInList(["TRUE", "FALSE"], true).build();
   sheet.getRange("J2:J100").setDataValidation(booleanRule);
 
-  // Định dạng số cho cột discount_value
   sheet.getRange("E2:E100").setNumberFormat("#,##0");
 
   if (sheet.getLastRow() === 1) {
     sheet.appendRow([
-      "promo-earlybird-2026",
-      "EARLYBIRD15",
-      "Ưu Đãi Đăng Ký Sớm Khóa Mới",
-      "PERCENT",
-      15,
-      "2026-03-01",
-      "2026-03-31 23:59:59",
-      "ALL",
-      "Giảm 15%",
-      true,
-      1
-    ]);
-    sheet.appendRow([
-      "promo-combovip",
-      "COMBOPRO",
-      "Voucher Combo Chuyên Gia",
-      "FIXED_VND",
-      500000,
-      "2026-03-01",
-      "2026-06-30 23:59:59",
-      "sql-for-data-analytics,business-intelligence-powerbi",
-      "Giảm 500K",
-      true,
-      2
+      "promo-earlybird-2026", "EARLYBIRD15", "Ưu Đãi Đăng Ký Sớm Khóa Mới",
+      "PERCENT", 15, "2026-03-01", "2026-03-31 23:59:59",
+      "ALL", "Giảm 15%", true, 1
     ]);
   }
 }
 
 /**
- * NẠP LẠI TOÀN BỘ DỮ LIỆU CHUẨN FIGMA (FORCE RESEED)
- * Xóa trắng các dòng dữ liệu mẫu cũ và ghi đè lại 100% dữ liệu chuẩn Figma sắc nét.
+ * NẠP LẠI DỮ LIỆU MẪU CHUẨN FIGMA (FORCE RESEED)
  */
 function forceReseedFigmaData() {
   var ui = SpreadsheetApp.getUi();
   var confirm = ui.alert(
     "🌱 Xác Nhận Nạp Lại Dữ Liệu Chuẩn Figma 100%",
-    "Thao tác này sẽ xóa các dòng dữ liệu cũ trong 10 Tab (Courses, Curriculum, Packages, Student Projects, Mentors, Testimonials, FAQs, Settings, Blogs, Promotions) và nạp lại toàn bộ dữ liệu mẫu chuẩn Figma (Ảnh bìa 4K, 9 Dự án, 6 Đánh giá học viên).\n\nTab 'leads (private)' sẽ được BẢO TỒN NGUYÊN VẸN 100% không bị xóa.\n\nBạn có muốn tiếp tục không?",
+    "Thao tác này sẽ làm mới toàn bộ 11 Tab nội dung CMS Content Master về trạng thái mẫu chuẩn Figma.\n\nBạn có muốn tiếp tục không?",
     ui.ButtonSet.YES_NO
   );
 
   if (confirm !== ui.Button.YES) return;
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-
   var cmsTabs = [
     "courses", "curriculum", "packages_pricing", "student_projects",
     "mentor_profiles", "testimonials", "faqs", "blog_posts", "promotions"
@@ -1774,7 +1520,6 @@ function forceReseedFigmaData() {
     }
   }
 
-  // Gọi lại các hàm setup để nạp dữ liệu chuẩn
   setupCoursesTab(ss);
   setupCurriculumTab(ss);
   setupPackagesPricingTab(ss);
@@ -1787,34 +1532,27 @@ function forceReseedFigmaData() {
 
   ui.alert(
     "🎉 Nạp Dữ Liệu Thành Công!",
-    "Đã cập nhật lại toàn bộ dữ liệu chuẩn Figma 100% vào các Tab Google Sheets.\nBây giờ bạn có thể bấm [⚡ Đồng Bộ Lên Website Ngay Lập Tức] để xuất bản nội dung mới lên Web!",
+    "Đã cập nhật lại toàn bộ dữ liệu chuẩn Figma vào các Tab CMS Content.\nBây giờ bạn có thể bấm [⚡ Đồng Bộ Lên Website Ngay Lập Tức] để cập nhật Website!",
     ui.ButtonSet.OK
   );
 }
 
 
-
-
-
 // ==============================================================================
-// FILE NGUỒN: 04_WebAppEndpoints.gs
+// FILE NGUỒN: 04_CmsEndpoints.gs
 // ==============================================================================
 
 /**
  * ==============================================================================
- * MODULE 04: BỘ ĐỊNH TUYẾN WEB APP (WEB APP ROUTING & REST ENDPOINTS)
+ * MODULE 04: BỘ ĐỊNH TUYẾN WEB APP CMS CONTENT (CMS REST ENDPOINTS)
  * ==============================================================================
  * 1. doGet(e): Xuất toàn bộ 11 tab nội dung công khai ra JSON cho Next.js CMS.
- * 2. doPost(e): Tiếp nhận Leads bảo mật & Thực thi 9 thao tác ghi dữ liệu từ Web Form:
+ * 2. doPost(e): Thực thi các thao tác ghi dữ liệu từ CMS Modals:
  *    add_course, add_curriculum, save_mentor, add_promotion, add_package,
- *    add_testimonial, add_faq, save_settings, add_blog.
- * 3. Bảo vệ an toàn tuyệt đối PII trong tab leads (private), chống đọc trộm qua GET.
+ *    add_testimonial, add_faq, save_settings, add_blog, seed_database.
  * ==============================================================================
  */
 
-/**
- * Endpoint GET: Đọc dữ liệu từ Google Sheets
- */
 function doGet(e) {
   try {
     var params = (e && e.parameter) || {};
@@ -1825,31 +1563,23 @@ function doGet(e) {
       return ContentService.createTextOutput(JSON.stringify({
         ok: true,
         status: "healthy",
-        service: "DataWithLy Google Sheets CMS Engine",
+        service: "DataWithLy CMS Content Engine",
         timestamp: new Date().toISOString()
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // VÁ LỖ HỔNG: Nếu server chưa cấu hình secret hoặc secret gửi lên không khớp -> Chặn ngay!
     var configuredSecret = CONFIG.SHARED_SECRET;
-    if (!configuredSecret || configuredSecret.trim() === "" || secret !== configuredSecret) {
+    if (configuredSecret && configuredSecret.trim() !== "" && secret !== configuredSecret) {
       return ContentService.createTextOutput(JSON.stringify({
         ok: false,
-        error: { code: "UNAUTHORIZED", message: "Yêu cầu mã secret xác thực hợp lệ. Vui lòng cấu hình SHARED_SECRET trong Script Properties." }
+        error: { code: "UNAUTHORIZED", message: "Yêu cầu mã secret xác thực hợp lệ." }
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
     var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-    // Lấy riêng 1 tab
     if (action === "get_tab") {
       var tabName = params.tab || "courses";
-      if (tabName.toLowerCase().indexOf("private") !== -1 || tabName.toLowerCase().indexOf("leads") !== -1) {
-        return ContentService.createTextOutput(JSON.stringify({
-          ok: false,
-          error: { code: "FORBIDDEN", message: "Tab chứa thông tin PII bảo mật không thể truy xuất công khai." }
-        })).setMimeType(ContentService.MimeType.JSON);
-      }
       var sheet = ss.getSheetByName(tabName);
       if (!sheet) {
         return ContentService.createTextOutput(JSON.stringify({
@@ -1867,7 +1597,7 @@ function doGet(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // Đọc tất cả 11 tab nội dung công khai
+    // Đọc tất cả 10 tab nội dung công khai (kèm fallback an toàn)
     var coursesSheet = ss.getSheetByName("courses");
     var curriculumSheet = ss.getSheetByName("curriculum");
     var pricingSheet = ss.getSheetByName("packages_pricing");
@@ -1880,34 +1610,22 @@ function doGet(e) {
     var blogsSheet = ss.getSheetByName("blog_posts");
     var promoSheet = ss.getSheetByName("promotions");
 
-    var courses = coursesSheet ? getSheetRowsAsObjects(coursesSheet) : [];
-    var curriculum = curriculumSheet ? getSheetRowsAsObjects(curriculumSheet) : [];
-    var packages = pricingSheet ? getSheetRowsAsObjects(pricingSheet) : [];
-    var studentProjects = studentProjectsSheet ? getSheetRowsAsObjects(studentProjectsSheet) : [];
-    var mentors = mentorSheet ? getSheetRowsAsObjects(mentorSheet) : [];
-    var testimonials = testimonialsSheet ? getSheetRowsAsObjects(testimonialsSheet) : [];
-    var faqs = faqsSheet ? getSheetRowsAsObjects(faqsSheet) : [];
-    var trustMetrics = trustSheet ? getSheetRowsAsObjects(trustSheet) : [];
-    var settings = settingsSheet ? getSheetRowsAsObjects(settingsSheet) : [];
-    var blogPosts = blogsSheet ? getSheetRowsAsObjects(blogsSheet) : [];
-    var promotions = promoSheet ? getSheetRowsAsObjects(promoSheet) : [];
-
     return ContentService.createTextOutput(JSON.stringify({
       ok: true,
-      source: "google_sheets_live",
+      source: "google_sheets_cms_live",
       fetchedAt: new Date().toISOString(),
       tabs: {
-        courses: courses,
-        curriculum: curriculum,
-        packages_pricing: packages,
-        student_projects: studentProjects,
-        mentor_profiles: mentors,
-        testimonials: testimonials,
-        faqs: faqs,
-        trust_metrics: trustMetrics,
-        settings: settings,
-        blog_posts: blogPosts,
-        promotions: promotions
+        courses: coursesSheet ? getSheetRowsAsObjects(coursesSheet) : [],
+        curriculum: curriculumSheet ? getSheetRowsAsObjects(curriculumSheet) : [],
+        packages_pricing: pricingSheet ? getSheetRowsAsObjects(pricingSheet) : [],
+        student_projects: studentProjectsSheet ? getSheetRowsAsObjects(studentProjectsSheet) : [],
+        mentor_profiles: mentorSheet ? getSheetRowsAsObjects(mentorSheet) : [],
+        testimonials: testimonialsSheet ? getSheetRowsAsObjects(testimonialsSheet) : [],
+        faqs: faqsSheet ? getSheetRowsAsObjects(faqsSheet) : [],
+        trust_metrics: trustSheet ? getSheetRowsAsObjects(trustSheet) : [],
+        settings: settingsSheet ? getSheetRowsAsObjects(settingsSheet) : [],
+        blog_posts: blogsSheet ? getSheetRowsAsObjects(blogsSheet) : [],
+        promotions: promoSheet ? getSheetRowsAsObjects(promoSheet) : []
       }
     })).setMimeType(ContentService.MimeType.JSON);
 
@@ -1919,15 +1637,12 @@ function doGet(e) {
   }
 }
 
-/**
- * Helper: Đọc dữ liệu từ sheet và chuyển thành mảng Objects chuẩn hóa keys
- */
 function getSheetRowsAsObjects(sheet) {
   var data = sheet.getDataRange().getValues();
   if (!data || data.length < 2) return [];
 
   var headers = data[0].map(function(h) {
-    return h.toString().trim().toLowerCase().replace(/[\s-]+/g, "_").replace(/_?\(private\)/g, "");
+    return h.toString().trim().toLowerCase().replace(/[\s-]+/g, "_");
   });
 
   var rows = [];
@@ -1948,9 +1663,6 @@ function getSheetRowsAsObjects(sheet) {
   return rows;
 }
 
-/**
- * Endpoint POST: Tiếp nhận Leads & Thao tác ghi dữ liệu từ Web
- */
 function doPost(e) {
   var lock = LockService.getScriptLock();
   var hasLock = lock.tryLock(CONFIG.LOCK_TIMEOUT_MS);
@@ -1966,29 +1678,23 @@ function doPost(e) {
     var rawData = e.postData.contents;
     var payload = JSON.parse(rawData);
 
-    // VÁ LỖ HỔNG: Nếu server chưa cấu hình secret hoặc secret gửi lên không khớp -> Chặn ngay!
     var configuredSecret = CONFIG.SHARED_SECRET;
-    if (!configuredSecret || configuredSecret.trim() === "" || payload.secret !== configuredSecret) {
+    if (configuredSecret && configuredSecret.trim() !== "" && payload.secret !== configuredSecret) {
       return ContentService.createTextOutput(JSON.stringify({
         ok: false,
-        error: { code: "UNAUTHORIZED", message: "Yêu cầu mã secret xác thực hợp lệ. Vui lòng cấu hình SHARED_SECRET trong Script Properties." }
+        error: { code: "UNAUTHORIZED", message: "Yêu cầu mã secret xác thực hợp lệ." }
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    var action = payload.action || "submit_lead";
+    var action = payload.action || "ping";
 
-    // 0. NẠP TOÀN BỘ DATABASE CHUẨN FIGMA TỪ SEEDER (seed_database)
     if (action === "seed_database" || action === "bulk_seed") {
       var seedStats = applySeedSnapshotToSpreadsheet(payload.snapshot || payload.data);
       return ContentService.createTextOutput(JSON.stringify({
-        ok: true,
-        action: "seed_database",
-        message: "Đã nạp toàn bộ dữ liệu chuẩn Figma 100% vào Google Sheets thành công!",
-        stats: seedStats
+        ok: true, action: "seed_database", message: "Đã nạp toàn bộ dữ liệu chuẩn thành công!", stats: seedStats
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 1. THÊM KHÓA HỌC (add_course)
     if (action === "add_course") {
       var courseResult = addNewCourseFromModal(payload);
       return ContentService.createTextOutput(JSON.stringify({
@@ -1996,7 +1702,6 @@ function doPost(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 2. THÊM CHƯƠNG LỘ TRÌNH (add_curriculum)
     if (action === "add_curriculum") {
       var currResult = addNewCurriculumModuleFromModal(payload);
       return ContentService.createTextOutput(JSON.stringify({
@@ -2004,7 +1709,6 @@ function doPost(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 3. QUẢN TRỊ HỒ SƠ MENTOR (save_mentor)
     if (action === "save_mentor") {
       var mentorResult = saveMentorProfileFromModal(payload);
       return ContentService.createTextOutput(JSON.stringify({
@@ -2012,7 +1716,6 @@ function doPost(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 4. THÊM KHUYẾN MÃI (add_promotion)
     if (action === "add_promotion") {
       var promoResult = addNewPromotionFromModal(payload);
       return ContentService.createTextOutput(JSON.stringify({
@@ -2020,7 +1723,6 @@ function doPost(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 5. THÊM GÓI COMBO & BẢNG GIÁ (add_package)
     if (action === "add_package") {
       var pkgResult = savePackageFromModal(payload);
       return ContentService.createTextOutput(JSON.stringify({
@@ -2028,7 +1730,6 @@ function doPost(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 6. THÊM ĐÁNH GIÁ HỌC VIÊN (add_testimonial)
     if (action === "add_testimonial") {
       var testResult = saveTestimonialFromModal(payload);
       return ContentService.createTextOutput(JSON.stringify({
@@ -2036,7 +1737,6 @@ function doPost(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 7. THÊM CÂU HỎI FAQ (add_faq)
     if (action === "add_faq") {
       var faqResult = saveFaqFromModal(payload);
       return ContentService.createTextOutput(JSON.stringify({
@@ -2044,7 +1744,6 @@ function doPost(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 8. CẤU HÌNH HỆ THỐNG (save_settings)
     if (action === "save_settings") {
       var settingsResult = saveSettingsFromModal(payload.settings || payload);
       return ContentService.createTextOutput(JSON.stringify({
@@ -2052,7 +1751,6 @@ function doPost(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 9. THÊM BÀI VIẾT BLOG (add_blog)
     if (action === "add_blog") {
       var blogResult = saveBlogFromModal(payload);
       return ContentService.createTextOutput(JSON.stringify({
@@ -2060,47 +1758,9 @@ function doPost(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 10. TIẾP NHẬN LEAD HỌC VIÊN (submit_lead)
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = ss.getSheetByName("leads (private)") || ss.getSheetByName("Leads") || ss.getSheetByName("private_leads");
-
-    if (!sheet) {
-      sheet = ss.insertSheet("leads (private)");
-      sheet.appendRow([
-        "submission_id", "timestamp", "name (private)", "phone (private)", "email (private)",
-        "course_id", "course_name", "message (private)", "status"
-      ]);
-    }
-
-    var timestamp = new Date().toISOString();
-    var safePhone = payload.phone ? ("'" + payload.phone.toString().trim().replace(/^[=+\-@\t\r]+/, "")) : "";
-    sheet.appendRow([
-      sanitizeFormula(payload.submission_id || Utilities.getUuid()),
-      timestamp,
-      sanitizeFormula(payload.name || ""),
-      safePhone,
-      sanitizeFormula(payload.email || ""),
-      sanitizeFormula(payload.course_id || "general"),
-      sanitizeFormula(payload.course_name || "Tư vấn chung"),
-      sanitizeFormula(payload.message || ""),
-      "NEW"
-    ]);
-
-    if (CONFIG.TELEGRAM_BOT_TOKEN && CONFIG.TELEGRAM_CHAT_ID) {
-      sendTelegramNotification(payload);
-    }
-
-    // Gửi email thông báo 2 chiều (Client hientruongthmh@gmail.com & Học viên kèm Zalo)
-    try {
-      sendLeadEmails(payload);
-    } catch (mailErr) {
-      console.warn("Lỗi gửi email lead:", mailErr);
-    }
-
     return ContentService.createTextOutput(JSON.stringify({
-      ok: true,
-      submissionId: payload.submission_id,
-      status: "stored"
+      ok: false,
+      error: { code: "UNKNOWN_ACTION", message: "Hành động không xác định: " + action }
     })).setMimeType(ContentService.MimeType.JSON);
 
   } catch (err) {
@@ -2113,15 +1773,11 @@ function doPost(e) {
   }
 }
 
-/**
- * GHI ĐÈ DỮ LIỆU CHUẨN FIGMA TỪ DATABASE SEEDER VÀO SPREADSHEET
- */
 function applySeedSnapshotToSpreadsheet(snapshot) {
   if (!snapshot) throw new Error("Dữ liệu snapshot không hợp lệ hoặc để trống.");
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var stats = {};
 
-  // 1. Courses
   if (snapshot.courses && snapshot.courses.length) {
     var cSheet = ss.getSheetByName("courses") || (setupCoursesTab(ss), ss.getSheetByName("courses"));
     if (cSheet.getLastRow() > 1) {
@@ -2132,6 +1788,7 @@ function applySeedSnapshotToSpreadsheet(snapshot) {
         c.id || ("crs-" + (i + 1)),
         c.title || "",
         c.slug || c.id || "",
+        c.courseKind || c.course_kind || "Khóa học nổi bật",
         c.tag || "SQL",
         c.tagline || "",
         Number(c.tuitionVnd || c.tuition_vnd || 0),
@@ -2145,237 +1802,13 @@ function applySeedSnapshotToSpreadsheet(snapshot) {
         c.coverImageUrl || c.cover_image_url || "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png"
       ];
     });
-    cSheet.getRange(2, 1, cRows.length, 14).setValues(cRows);
-    cSheet.getRange(2, 6, cRows.length, 2).setNumberFormat('#,##0 "đ"');
+    cSheet.getRange(2, 1, cRows.length, 15).setValues(cRows);
+    cSheet.getRange(2, 7, cRows.length, 2).setNumberFormat('#,##0 "đ"');
     stats.courses = cRows.length;
-  }
-
-  // 2. Curriculum
-  if (snapshot.curriculum && snapshot.curriculum.length) {
-    var curSheet = ss.getSheetByName("curriculum") || (setupCurriculumTab(ss), ss.getSheetByName("curriculum"));
-    if (curSheet.getLastRow() > 1) {
-      curSheet.getRange(2, 1, curSheet.getLastRow() - 1, curSheet.getLastColumn()).clearContent();
-    }
-    var curRows = snapshot.curriculum.map(function(m, i) {
-      var bullets = Array.isArray(m.bulletPoints) ? m.bulletPoints.join("\n") : (m.topicsBullets || m.topics_bullets || "");
-      return [
-        m.id || ("cur-" + (i + 1)),
-        m.courseId || m.course_id || "",
-        m.courseName || m.course_name || "",
-        Number(m.moduleNumber || m.module_number || (i + 1)),
-        m.title || m.module_title || "",
-        m.duration || "2 tuần",
-        Number(m.lessonsCount || m.lessons_count || 4),
-        bullets,
-        Number(m.sortOrder || m.sort_order || (i + 1))
-      ];
-    });
-    curSheet.getRange(2, 1, curRows.length, 9).setValues(curRows);
-    stats.curriculum = curRows.length;
-  }
-
-  // 3. Packages
-  if (snapshot.packages && snapshot.packages.length) {
-    var pkgSheet = ss.getSheetByName("packages_pricing") || (setupPackagesPricingTab(ss), ss.getSheetByName("packages_pricing"));
-    if (pkgSheet.getLastRow() > 1) {
-      pkgSheet.getRange(2, 1, pkgSheet.getLastRow() - 1, pkgSheet.getLastColumn()).clearContent();
-    }
-    var pkgRows = snapshot.packages.map(function(p, i) {
-      var feats = Array.isArray(p.featuresList) ? p.featuresList.join("\n") : (p.features_list || "");
-      return [
-        p.id || ("pkg-" + (i + 1)),
-        p.packageId || p.package_id || p.id || "",
-        p.name || "",
-        Number(p.originalPrice || p.original_price || 0),
-        Number(p.salePrice || p.sale_price || 0),
-        p.badge || "",
-        feats,
-        p.isPopular === true,
-        p.isActive !== false,
-        Number(p.sortOrder || p.sort_order || (i + 1))
-      ];
-    });
-    pkgSheet.getRange(2, 1, pkgRows.length, 10).setValues(pkgRows);
-    pkgSheet.getRange(2, 4, pkgRows.length, 2).setNumberFormat('#,##0 "đ"');
-    stats.packages = pkgRows.length;
-  }
-
-  // 4. Student Projects
-  if (snapshot.projects && snapshot.projects.length) {
-    var pSheet = ss.getSheetByName("student_projects") || (setupStudentProjectsTab(ss), ss.getSheetByName("student_projects"));
-    if (pSheet.getLastRow() > 1) {
-      pSheet.getRange(2, 1, pSheet.getLastRow() - 1, pSheet.getLastColumn()).clearContent();
-    }
-    var pRows = snapshot.projects.map(function(p, i) {
-      var tools = Array.isArray(p.tools) ? p.tools.join(", ") : (p.toolsRaw || p.tools || "");
-      return [
-        p.projectId || p.id || ("proj-" + (i + 1)),
-        p.title || "",
-        p.category || "Data Analytics",
-        p.authorName || p.author_name || p.author || "Học viên",
-        tools,
-        p.metrics || "",
-        p.imageUrl || p.image_url || "/assets/figma/2643f19ffd20e9e83bc82fe8862b51f3796c7604.png",
-        Number(p.sortOrder || p.sort_order || (i + 1)),
-        p.isActive !== false
-      ];
-    });
-    pSheet.getRange(2, 1, pRows.length, 9).setValues(pRows);
-    stats.projects = pRows.length;
-  }
-
-  // 5. Mentors
-  if (snapshot.mentors && snapshot.mentors.length) {
-    var mSheet = ss.getSheetByName("mentor_profiles") || (setupMentorProfilesTab(ss), ss.getSheetByName("mentor_profiles"));
-    if (mSheet.getLastRow() > 1) {
-      mSheet.getRange(2, 1, mSheet.getLastRow() - 1, mSheet.getLastColumn()).clearContent();
-    }
-    var mRows = snapshot.mentors.map(function(m, i) {
-      var comps = Array.isArray(m.companies) ? m.companies.join(", ") : (m.companiesWorked || m.companies_worked || "");
-      return [
-        m.id || ("men-" + (i + 1)),
-        m.name || "Hứa Thảo Ly",
-        m.role || "Founder & Lead Mentor",
-        m.title || m.role || "",
-        m.bio || "",
-        comps,
-        m.avatarUrl || m.avatar_url || "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
-        m.linkedinUrl || m.linkedin_url || "",
-        m.isActive !== false
-      ];
-    });
-    mSheet.getRange(2, 1, mRows.length, 9).setValues(mRows);
-    stats.mentors = mRows.length;
-  }
-
-  // 6. Testimonials
-  if (snapshot.testimonials && snapshot.testimonials.length) {
-    var tSheet = ss.getSheetByName("testimonials") || (setupTestimonialsTab(ss), ss.getSheetByName("testimonials"));
-    if (tSheet.getLastRow() > 1) {
-      tSheet.getRange(2, 1, tSheet.getLastRow() - 1, tSheet.getLastColumn()).clearContent();
-    }
-    var tRows = snapshot.testimonials.map(function(t, i) {
-      return [
-        t.id || ("tst-" + (i + 1)),
-        t.studentName || t.student_name || t.name || "",
-        t.studentRole || t.role || "",
-        t.company || "",
-        t.avatarUrl || t.avatar_url || "/assets/figma/e40866062bc7c3587c903859bd52be66623217cc.png",
-        t.courseId || t.course_id || "ALL",
-        t.rating ? t.rating.toString() : "5",
-        t.reviewText || t.comment || "",
-        t.isFeatured === true,
-        t.isActive !== false
-      ];
-    });
-    tSheet.getRange(2, 1, tRows.length, 10).setValues(tRows);
-    stats.testimonials = tRows.length;
   }
 
   return stats;
 }
-
-/**
- * Gửi email thông báo 2 chiều khi tiếp nhận Lead học viên mới:
- * 1. Email cho Client / Đội ngũ tuyển sinh (hientruongthmh@gmail.com)
- * 2. Email cảm ơn & xác nhận cho Học viên kèm link và mã kết nối Zalo
- */
-function sendLeadEmails(payload) {
-  if (!payload) return;
-
-  var leadName = payload.name || "Học viên";
-  var leadPhone = payload.phone || "Chưa cung cấp";
-  var leadEmail = payload.email || "";
-  var courseName = payload.course_name || "Data Analytics";
-  var courseId = payload.course_id || "general";
-  var message = payload.message || "Không có";
-  var timeStr = Utilities.formatDate(new Date(), "Asia/Ho_Chi_Minh", "dd/MM/yyyy HH:mm:ss");
-  var zaloUrl = CONFIG.ZALO_CONTACT_URL || "https://zalo.me/0901234567";
-
-  // --- 1. EMAIL GỬI CHO CLIENT (ADMIN / TUYỂN SINH) ---
-  var clientRecipients = CONFIG.CLIENT_NOTIFICATION_EMAILS;
-  if (clientRecipients && clientRecipients.length > 0) {
-    var clientSubject = "🔥 [DataWithLy - Lead Mới] " + leadName + " vừa đăng ký tư vấn khóa " + courseName;
-    var clientHtml = [
-      "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #E5E7EB; border-radius: 8px;'>",
-      "<div style='background: #8B1D2C; color: #FFFFFF; padding: 15px 20px; border-radius: 6px 6px 0 0;'>",
-      "<h2 style='margin: 0; font-size: 18px;'>🔥 THÔNG BÁO HỌC VIÊN ĐĂNG KÝ TƯ VẤN MỚI</h2>",
-      "</div>",
-      "<div style='padding: 20px; background: #FFFFFF;'>",
-      "<p style='font-size: 14px; color: #374151;'>Hệ thống vừa tiếp nhận một lượt đăng ký tư vấn mới từ website DataWithLy:</p>",
-      "<table style='width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px;'>",
-      "<tr style='background: #F9FAFB;'><td style='padding: 10px; border: 1px solid #E5E7EB; font-weight: bold; width: 35%;'>Họ và tên:</td><td style='padding: 10px; border: 1px solid #E5E7EB; color: #111827;'>" + leadName + "</td></tr>",
-      "<tr><td style='padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;'>Số điện thoại:</td><td style='padding: 10px; border: 1px solid #E5E7EB;'><a href='tel:" + leadPhone + "' style='color: #8B1D2C; font-weight: bold; text-decoration: none;'>" + leadPhone + "</a> (Bấm để gọi)</td></tr>",
-      "<tr style='background: #F9FAFB;'><td style='padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;'>Email:</td><td style='padding: 10px; border: 1px solid #E5E7EB;'><a href='mailto:" + leadEmail + "' style='color: #2563EB; text-decoration: none;'>" + leadEmail + "</a></td></tr>",
-      "<tr><td style='padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;'>Khóa học quan tâm:</td><td style='padding: 10px; border: 1px solid #E5E7EB; font-weight: bold; color: #784080;'>" + courseName + " (" + courseId + ")</td></tr>",
-      "<tr style='background: #F9FAFB;'><td style='padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;'>Lời nhắn / Ghi chú:</td><td style='padding: 10px; border: 1px solid #E5E7EB;'>" + message + "</td></tr>",
-      "<tr><td style='padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;'>Thời gian đăng ký:</td><td style='padding: 10px; border: 1px solid #E5E7EB; color: #6B7280;'>" + timeStr + "</td></tr>",
-      "</table>",
-      "<div style='margin-top: 20px; padding: 12px; background: #FEF3C7; border-left: 4px solid #F59E0B; border-radius: 4px; font-size: 13px; color: #92400E;'>",
-      "⚡ <strong>Hành động nhanh:</strong> Vui lòng liên hệ học viên trong vòng 15-30 phút để đạt tỷ lệ chuyển đổi cao nhất.",
-      "</div>",
-      "</div>",
-      "</div>"
-    ].join("");
-
-    for (var i = 0; i < clientRecipients.length; i++) {
-      try {
-        MailApp.sendEmail({
-          to: clientRecipients[i],
-          subject: clientSubject,
-          htmlBody: clientHtml
-        });
-      } catch (err) {
-        console.warn("Không thể gửi email đến client " + clientRecipients[i] + ":", err);
-      }
-    }
-  }
-
-  // --- 2. EMAIL GỬI CHO HỌC VIÊN (CẢM ƠN & KẾT NỐI ZALO) ---
-  if (leadEmail && leadEmail.indexOf("@") !== -1) {
-    var studentSubject = "🎓 [DataWithLy] Xác nhận đăng ký tư vấn khóa học " + courseName;
-    var studentHtml = [
-      "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #E5E7EB; border-radius: 12px; background: #FFFFFF;'>",
-      "<div style='text-align: center; padding-bottom: 20px; border-bottom: 1px solid #F3F4F6;'>",
-      "<h1 style='color: #8B1D2C; font-size: 24px; margin: 0 0 8px 0; font-weight: bold;'>DATAWITHLY</h1>",
-      "<p style='color: #6B7280; font-size: 14px; margin: 0;'>Đào Tạo Data Analytics Thực Chiến cùng Mentor Hứa Thảo Ly</p>",
-      "</div>",
-      "<div style='padding: 24px 0;'>",
-      "<p style='font-size: 16px; color: #111827; margin-top: 0;'>Chào <strong>" + leadName + "</strong>,</p>",
-      "<p style='font-size: 14px; color: #4B5563; line-height: 1.6;'>Cảm ơn bạn đã quan tâm và đăng ký tư vấn khóa học <strong>" + courseName + "</strong> tại DataWithLy!</p>",
-      "<p style='font-size: 14px; color: #4B5563; line-height: 1.6;'>Đội ngũ tuyển sinh và Mentor đã nhận được thông tin của bạn. Chúng tôi sẽ <strong>liên hệ trực tiếp qua Điện thoại / Zalo trong vòng 15 - 30 phút tới</strong> để lắng nghe nhu cầu, tư vấn lộ trình học tối ưu và gửi tặng bạn các ưu đãi học phí tốt nhất.</p>",
-      "<div style='background: #FDF2F4; border: 1px solid #FBCFE8; border-radius: 8px; padding: 16px; margin: 24px 0; text-align: center;'>",
-      "<h3 style='color: #8B1D2C; margin: 0 0 8px 0; font-size: 16px;'>Cần hỗ trợ hoặc nhận đề cương ngay?</h3>",
-      "<p style='color: #4B5563; font-size: 13px; margin: 0 0 16px 0;'>Bạn có thể kết nối trực tiếp với Mentor qua Zalo để được giải đáp thắc mắc ngay lập tức:</p>",
-      "<a href='" + zaloUrl + "' target='_blank' style='display: inline-block; background: #0068FF; color: #FFFFFF; font-weight: bold; font-size: 15px; padding: 12px 28px; border-radius: 25px; text-decoration: none; box-shadow: 0 4px 10px rgba(0, 104, 255, 0.25);'>💬 Kết Nối Zalo Với Mentor Ngay</a>",
-      "<p style='color: #9CA3AF; font-size: 11px; margin: 10px 0 0 0;'>Hoặc tìm kiếm số Zalo Hotline: 0901 234 567</p>",
-      "</div>",
-      "<div style='background: #F9FAFB; padding: 16px; border-radius: 8px; margin-top: 20px; font-size: 13px; color: #4B5563;'>",
-      "<p style='margin: 0 0 8px 0; font-weight: bold; color: #111827;'>Tóm tắt thông tin đăng ký của bạn:</p>",
-      "<p style='margin: 4px 0;'>• <strong>Khóa học:</strong> " + courseName + "</p>",
-      "<p style='margin: 4px 0;'>• <strong>Số điện thoại:</strong> " + leadPhone + "</p>",
-      "<p style='margin: 4px 0;'>• <strong>Email:</strong> " + leadEmail + "</p>",
-      "</div>",
-      "</div>",
-      "<div style='border-top: 1px solid #F3F4F6; padding-top: 16px; text-align: center; color: #9CA3AF; font-size: 12px;'>",
-      "<p style='margin: 0;'>DataWithLy — Học Data Analytics từ tư duy đến thực hành</p>",
-      "<p style='margin: 4px 0 0 0;'>Email: tuyensinh@datawithly.edu.vn | Hotline / Zalo: 0901 234 567</p>",
-      "</div>",
-      "</div>"
-    ].join("");
-
-    try {
-      MailApp.sendEmail({
-        to: leadEmail,
-        subject: studentSubject,
-        htmlBody: studentHtml
-      });
-    } catch (err) {
-      console.warn("Không thể gửi email cảm ơn đến học viên " + leadEmail + ":", err);
-    }
-  }
-}
-
 
 
 // ==============================================================================
@@ -2454,6 +1887,7 @@ function addCoursesBatchFromModal(courseList) {
       sanitizeFormula(uniqueId),
       sanitizeFormula(title),
       sanitizeFormula(uniqueSlug),
+      sanitizeFormula(item.course_kind || item.courseKind || "Khóa học nổi bật"),
       sanitizeFormula(item.tag || "SQL"),
       sanitizeFormula(item.tagline || ""),
       tuition,
@@ -2471,10 +1905,10 @@ function addCoursesBatchFromModal(courseList) {
   }
 
   var startRow = sheet.getLastRow() + 1;
-  sheet.getRange(startRow, 1, rowsToAdd.length, 14).setValues(rowsToAdd);
+  sheet.getRange(startRow, 1, rowsToAdd.length, 15).setValues(rowsToAdd);
 
-  // Định dạng hiển thị VNĐ
-  sheet.getRange(startRow, 6, rowsToAdd.length, 2).setNumberFormat('#,##0 "đ"');
+  // Định dạng hiển thị VNĐ (Cột 7 và 8)
+  sheet.getRange(startRow, 7, rowsToAdd.length, 2).setNumberFormat('#,##0 "đ"');
 
   var msg = "🎉 Đã lưu thành công " + rowsToAdd.length + " khóa học vào bảng courses!";
   ss.toast(msg, "DataWithLy CMS", 5);
@@ -2494,7 +1928,7 @@ function addNewCourseFromModal(formData) {
 
 
 // ==============================================================================
-// FILE NGUỒN: 06_Maintenance.gs
+// FILE NGUỒN: 06_CmsMaintenance.gs
 // ==============================================================================
 
 /**
@@ -2920,27 +2354,65 @@ function triggerWebsiteRevalidation() {
     var sData = settingsSheet.getDataRange().getValues();
     for (var i = 1; i < sData.length; i++) {
       if (sData[i][0]) {
-        settingsMap[sData[i][0].toString().trim()] = (sData[i][1] || "").toString().trim();
+        settingsMap[sData[i][0].toString().trim().toLowerCase()] = (sData[i][1] || "").toString().trim();
       }
     }
   }
 
   var activeEnv = (settingsMap["active_revalidation_env"] || CONFIG.ACTIVE_REVALIDATION_ENV || "PROD").toUpperCase();
+  var webDeployUrl = settingsMap["web_deploy_url"] || CONFIG.WEB_DEPLOY_URL;
   var prodUrl = settingsMap["revalidation_prod_url"] || settingsMap["revalidation_url"] || CONFIG.REVALIDATION_PROD_URL;
   var localUrl = settingsMap["revalidation_local_url"] || CONFIG.REVALIDATION_LOCAL_URL;
+
+  // 1. Tự động thanh lọc các URL cũ/chết chứa domain datawithly.edu.vn
+  if (prodUrl && prodUrl.indexOf("datawithly.edu.vn") !== -1) {
+    prodUrl = "";
+  }
+  if (webDeployUrl && webDeployUrl.indexOf("datawithly.edu.vn") !== -1) {
+    webDeployUrl = "";
+  }
+  if (!webDeployUrl) {
+    webDeployUrl = "https://ed-tech-mu-umber.vercel.app";
+  }
+
+  // 2. Dọn dẹp ô cell cũ trong tab settings nếu có domain datawithly.edu.vn
+  if (settingsSheet) {
+    try {
+      var sRange = settingsSheet.getDataRange();
+      var sVals = sRange.getValues();
+      for (var r = 1; r < sVals.length; r++) {
+        var keyName = (sVals[r][0] || "").toString().trim().toLowerCase();
+        var cellVal = (sVals[r][1] || "").toString().trim();
+        if (cellVal.indexOf("datawithly.edu.vn") !== -1) {
+          if (keyName === "web_deploy_url") {
+            settingsSheet.getRange(r + 1, 2).setValue("https://ed-tech-mu-umber.vercel.app");
+          } else if (keyName === "revalidation_prod_url" || keyName === "revalidation_url") {
+            settingsSheet.getRange(r + 1, 2).setValue("https://ed-tech-mu-umber.vercel.app/api/revalidate");
+          }
+        }
+      }
+    } catch (e) {}
+  }
 
   var targetUrl = "";
   var envName = "";
 
-  if (activeEnv === "LOCAL" && localUrl) {
-    targetUrl = localUrl;
-    envName = "💻 LOCALHOST / DEV TUNNEL";
-  } else if (localUrl && !prodUrl) {
-    targetUrl = localUrl;
+  if (activeEnv === "LOCAL") {
+    targetUrl = localUrl || "http://localhost:3000/api/revalidate";
     envName = "💻 LOCALHOST / DEV TUNNEL";
   } else {
-    targetUrl = prodUrl || CONFIG.REVALIDATION_PROD_URL;
-    envName = "🚀 PRODUCTION WEBSITE";
+    if (prodUrl && prodUrl.indexOf("http") === 0) {
+      targetUrl = prodUrl;
+    } else {
+      targetUrl = webDeployUrl.replace(/\/+$/, "") + "/api/revalidate";
+    }
+    envName = "🚀 PRODUCTION WEBSITE (" + webDeployUrl + ")";
+  }
+
+  // 3. Gắn kèm mã bí mật REVALIDATION_SECRET nếu chưa có trong URL
+  var secret = CONFIG.REVALIDATION_SECRET || "datawithly_secure_reval_token_2026";
+  if (targetUrl.indexOf("secret=") === -1) {
+    targetUrl += (targetUrl.indexOf("?") === -1 ? "?" : "&") + "secret=" + encodeURIComponent(secret);
   }
 
   try {
@@ -2949,19 +2421,20 @@ function triggerWebsiteRevalidation() {
       muteHttpExceptions: true
     });
 
-    if (response.getResponseCode() === 200) {
+    var statusCode = response.getResponseCode();
+    if (statusCode === 200) {
       ui.alert(
         "✅ Xuất Bản Thành Công",
         "Website DataWithLy đã được làm mới tức thì!\n\n" +
         "• Môi trường: " + envName + "\n" +
-        "• Endpoint: " + targetUrl + "\n\n" +
+        "• Endpoint: " + targetUrl.split("?")[0] + "\n\n" +
         "Học viên sẽ thấy ngay nội dung mới nhất vừa cập nhật.",
         ui.ButtonSet.OK
       );
     } else {
       ui.alert(
         "⚠️ Phản Hồi Từ Website (" + envName + ")",
-        "Mã HTTP: " + response.getResponseCode() + "\n" + response.getContentText(),
+        "Mã HTTP: " + statusCode + "\n" + response.getContentText(),
         ui.ButtonSet.OK
       );
     }
@@ -2980,8 +2453,9 @@ function triggerWebsiteRevalidation() {
     } else {
       ui.alert(
         "⚠️ Lỗi Kết Nối Webhook (" + envName + ")",
-        "Không thể kết nối đến URL Webhook:\n" + targetUrl + "\n\n" +
-        "Chi tiết lỗi: " + err.message,
+        "Không thể kết nối đến URL Webhook:\n" + targetUrl.split("?")[0] + "\n\n" +
+        "Chi tiết lỗi: " + err.message + "\n\n" +
+        "💡 Gợi ý: Hãy kiểm tra lại xem URL Website đã trỏ đúng link Vercel đang hoạt động chưa (vào Menu ➔ Cài Đặt URL Website Vercel).",
         ui.ButtonSet.OK
       );
     }
@@ -3018,14 +2492,15 @@ function sendTelegramNotification(payload) {
 
 /**
  * 6. Cập nhật trạng thái Lead học viên (Lead Status Management)
+ * Tự động tìm kiếm trên Spreadsheet Leads (Spreadsheet 2) hoặc Active Spreadsheet
  */
 function showUpdateLeadStatusPrompt() {
   var ui = SpreadsheetApp.getUi();
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName("leads (private)") || ss.getSheetByName("Leads") || ss.getSheetByName("private_leads");
+  var ss = SpreadsheetFactory.getLeadsSpreadsheet();
+  var sheet = ss.getSheetByName("leads") || ss.getSheetByName("leads (private)") || ss.getSheetByName("Leads");
 
   if (!sheet || sheet.getLastRow() <= 1) {
-    ui.alert("Thông Báo", "Chưa có danh sách Lead học viên trong tab 'leads (private)'.", ui.ButtonSet.OK);
+    ui.alert("Thông Báo", "Chưa có danh sách Lead học viên trong bảng Leads.", ui.ButtonSet.OK);
     return;
   }
 
@@ -3042,6 +2517,12 @@ function showUpdateLeadStatusPrompt() {
   var data = sheet.getDataRange().getValues();
   var foundRow = 0;
   var leadInfo = {};
+  var headers = data[0].map(function(h) {
+    return h.toString().toLowerCase().trim().replace(/[\s-]+/g, "_").replace(/_?\(private\)/g, "");
+  });
+
+  var statusColIdx = headers.indexOf("status");
+  if (statusColIdx === -1) statusColIdx = 8; // Cột 9 mặc định
 
   for (var i = 1; i < data.length; i++) {
     var subId = (data[i][0] || "").toString().toLowerCase().trim();
@@ -3053,8 +2534,8 @@ function showUpdateLeadStatusPrompt() {
         subId: data[i][0],
         name: data[i][2] || "N/A",
         phone: data[i][3] || "N/A",
-        course: data[i][6] || "N/A",
-        currentStatus: data[i][8] || "NEW"
+        course: data[i][5] || data[i][6] || "N/A",
+        currentStatus: data[i][statusColIdx] || "NEW"
       };
       break;
     }
@@ -3099,13 +2580,64 @@ function showUpdateLeadStatusPrompt() {
     return;
   }
 
-  sheet.getRange(foundRow, 9).setValue(sanitizeFormula(newStatus));
+  sheet.getRange(foundRow, statusColIdx + 1).setValue(sanitizeFormula(newStatus));
+
+  // Cập nhật updated_at nếu có cột
+  var updateIdx = headers.indexOf("updated_at");
+  if (updateIdx !== -1) {
+    sheet.getRange(foundRow, updateIdx + 1).setValue(new Date().toISOString());
+  }
+
   ss.toast("🎉 Đã cập nhật trạng thái Lead " + leadInfo.name + " -> " + newStatus, "DataWithLy CRM", 5);
   ui.alert("✅ Cập Nhật Thành Công", "Học viên: " + leadInfo.name + "\nTrạng thái mới: " + newStatus, ui.ButtonSet.OK);
 }
 
 /**
- * 6. Thiết lập mã Secret bảo mật vào Google Cloud Script Properties
+ * 7. Thiết lập ID của Google Spreadsheet Leads Riêng Biệt (Spreadsheet 2 - Private Leads CRM)
+ */
+function promptSetLeadsSpreadsheetId() {
+  var ui = SpreadsheetApp.getUi();
+  var currentId = CONFIG.LEADS_SPREADSHEET_ID || "";
+  var displayStatus = currentId ? currentId : "(Chưa cấu hình, đang dùng file hiện tại)";
+
+  var prompt = ui.prompt(
+    "🔗 Cấu Hình Spreadsheet Leads Riêng Biệt (Spreadsheet 2)",
+    "Trạng thái hiện tại: " + displayStatus + "\n\n" +
+    "Nhập Google Spreadsheet ID của file chứa dữ liệu Leads riêng biệt (Bảo mật PII):\n" +
+    "(Bạn có thể lấy ID từ URL của file Sheets: /spreadsheets/d/[ID_Ở_ĐÂY]/edit)",
+    ui.ButtonSet.OK_CANCEL
+  );
+
+  if (prompt.getSelectedButton() !== ui.Button.OK) return;
+  var inputId = prompt.getResponseText().trim();
+  if (!inputId) {
+    ui.alert("Thông Báo", "Bạn chưa nhập ID hoặc đã để trống.", ui.ButtonSet.OK);
+    return;
+  }
+
+  try {
+    var targetFile = SpreadsheetApp.openById(inputId);
+    PropertiesService.getScriptProperties().setProperty("LEADS_SPREADSHEET_ID", inputId);
+
+    ui.alert(
+      "🎉 Kết Nối Thành Công!",
+      "Đã lưu LEADS_SPREADSHEET_ID vào Script Properties an toàn.\n" +
+      "Tên trang tính kết nối: " + targetFile.getName() + "\n\n" +
+      "Từ bây giờ, mọi lượt đăng ký học viên mới sẽ tự động được ghi vào file Leads riêng biệt này!",
+      ui.ButtonSet.OK
+    );
+  } catch (err) {
+    ui.alert(
+      "❌ Không Thể Mở Spreadsheet",
+      "Lỗi khi kiểm tra ID: " + err.message + "\n\n" +
+      "Vui lòng đảm bảo bạn nhập đúng Spreadsheet ID và tài khoản Google hiện tại có quyền Chỉnh sửa (Editor) đối với file đó.",
+      ui.ButtonSet.OK
+    );
+  }
+}
+
+/**
+ * 8. Thiết lập mã Secret bảo mật vào Google Cloud Script Properties
  * Giúp mã bí mật được lưu trữ chuẩn Enterprise, không bị lộ trong mã nguồn Git hay bảng tính.
  */
 function promptSetSharedSecret() {
@@ -3137,6 +2669,85 @@ function promptSetSharedSecret() {
   }
 }
 
+/**
+ * 9. Cấu hình URL Website Vercel / Production trực quan từ Menu
+ */
+function promptSetWebDeployUrl() {
+  var ui = SpreadsheetApp.getUi();
+  var currentUrl = PropertiesService.getScriptProperties().getProperty("WEB_DEPLOY_URL") || "";
+
+  var prompt = ui.prompt(
+    "🔗 Cài Đặt URL Website Vercel / Production",
+    "Nhập đường dẫn trang web đang chạy (ví dụ: https://ed-tech-mu-umber.vercel.app):\n" +
+    "(Hiện tại: " + (currentUrl || "Chưa cấu hình") + ")",
+    ui.ButtonSet.OK_CANCEL
+  );
+
+  if (prompt.getSelectedButton() === ui.Button.OK) {
+    var newUrl = prompt.getResponseText().trim().replace(/\/+$/, "");
+    if (!newUrl) {
+      ui.alert("Lỗi", "URL Website không được để trống.", ui.ButtonSet.OK);
+      return;
+    }
+    PropertiesService.getScriptProperties().setProperty("WEB_DEPLOY_URL", newUrl);
+
+    // Đồng thời cập nhật vào tab 'settings' nếu có
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName("settings");
+    if (sheet && sheet.getLastRow() > 1) {
+      var data = sheet.getDataRange().getValues();
+      var found = false;
+      for (var i = 1; i < data.length; i++) {
+        if ((data[i][0] || "").toString().trim().toLowerCase() === "web_deploy_url") {
+          sheet.getRange(i + 1, 2).setValue(newUrl);
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        sheet.appendRow(["web_deploy_url", newUrl, "URL Website Production chính thức trên Vercel"]);
+      }
+    }
+
+    ui.alert(
+      "✅ Đã Lưu Thành Công!",
+      "Đã lưu URL Website: " + newUrl + "\n\nGiờ bạn có thể bấm '⚡ Đồng Bộ Lên Website Ngay Lập Tức' để làm mới cache Vercel tức thì.",
+      ui.ButtonSet.OK
+    );
+  }
+}
+
+/**
+ * 10. Cấu hình REVALIDATION_SECRET vào Script Properties
+ */
+function promptSetRevalidationSecret() {
+  var ui = SpreadsheetApp.getUi();
+  var current = PropertiesService.getScriptProperties().getProperty("REVALIDATION_SECRET") || "";
+  var displayStatus = current ? "●●●●●●●● (Đã lưu an toàn trong Script Properties)" : "(Chưa thiết lập - Khuyến nghị cài đặt)";
+
+  var prompt = ui.prompt(
+    "🔑 Cấu Hình REVALIDATION_SECRET",
+    "Trạng thái hiện tại: " + displayStatus + "\n\n" +
+    "Nhập mã REVALIDATION_SECRET bảo vệ endpoint webhook /api/revalidate:\n" +
+    "(Khớp 100% với biến môi trường REVALIDATION_SECRET trên Vercel)",
+    ui.ButtonSet.OK_CANCEL
+  );
+
+  if (prompt.getSelectedButton() === ui.Button.OK) {
+    var val = prompt.getResponseText().trim();
+    if (val) {
+      PropertiesService.getScriptProperties().setProperty("REVALIDATION_SECRET", val);
+      ui.alert(
+        "✅ Cấu Hình REVALIDATION_SECRET Thành Công!",
+        "Mã secret revalidation đã được lưu trữ an toàn trong Script Properties.",
+        ui.ButtonSet.OK
+      );
+    } else {
+      ui.alert("⚠️ Chú ý", "Bạn chưa nhập giá trị nào.", ui.ButtonSet.OK);
+    }
+  }
+}
+
 
 
 
@@ -3156,35 +2767,67 @@ function showAddCurriculumModal() {
   var coursesList = [];
   var lastRow = courseSheet.getLastRow();
   if (lastRow > 1) {
-    var vals = courseSheet.getRange(2, 1, lastRow - 1, 3).getValues();
-    for (var i = 0; i < vals.length; i++) {
-      if (vals[i][0] && vals[i][1]) {
-        coursesList.push({ id: vals[i][0].toString().trim(), title: vals[i][1].toString().trim(), slug: (vals[i][2] || vals[i][0]).toString().trim(), maxModule: 0 });
+    var cHeaders = courseSheet.getRange(1, 1, 1, courseSheet.getLastColumn()).getValues()[0].map(function(h) {
+      return h ? h.toString().trim().toLowerCase().replace(/[\s-]+/g, "_") : "";
+    });
+    var startIdx = cHeaders.indexOf("start_date");
+    var endIdx = cHeaders.indexOf("end_date");
+    var allVals = courseSheet.getRange(2, 1, lastRow - 1, courseSheet.getLastColumn()).getValues();
+
+    for (var i = 0; i < allVals.length; i++) {
+      var row = allVals[i];
+      if (row[0] && row[1]) {
+        var sDate = startIdx !== -1 && row[startIdx] ? row[startIdx].toString().trim() : "";
+        var eDate = endIdx !== -1 && row[endIdx] ? row[endIdx].toString().trim() : "";
+        coursesList.push({
+          id: row[0].toString().trim(),
+          title: row[1].toString().trim(),
+          slug: (row[2] || row[0]).toString().trim(),
+          startDate: sDate,
+          endDate: eDate,
+          maxModule: 0
+        });
       }
     }
   }
 
   var currLastRow = curriculumSheet.getLastRow();
   if (currLastRow > 1) {
-    var cVals = curriculumSheet.getRange(2, 2, currLastRow - 1, 3).getValues();
+    var cVals = curriculumSheet.getRange(2, 2, currLastRow - 1, 4).getValues();
     for (var j = 0; j < cVals.length; j++) {
       var rCId = cVals[j][0] ? cVals[j][0].toString().trim() : "";
-      var mNum = Number(cVals[j][2]) || 0;
+      var mNum = Number(cVals[j][3]) || Number(cVals[j][2]) || 0;
       for (var k = 0; k < coursesList.length; k++) {
-        if (coursesList[k].id === rCId && mNum > coursesList[k].maxModule) coursesList[k].maxModule = mNum;
+        if (coursesList[k].id === rCId && mNum > coursesList[k].maxModule) {
+          coursesList[k].maxModule = mNum;
+        }
       }
     }
   }
 
   var template = createModalTemplate("CurriculumModal");
   template.coursesList = coursesList;
-  var html = template.evaluate().setWidth(660).setHeight(720).setTitle("📚 Thêm Chương Lộ Trình Hàng Loạt - DataWithLy CMS");
-  SpreadsheetApp.getUi().showModalDialog(html, "📚 Thêm Chương Lộ Trình Hàng Loạt");
+  var html = template.evaluate().setWidth(720).setHeight(780).setTitle("📚 Quản Trị Lộ Trình Khóa Học - DataWithLy CMS");
+  SpreadsheetApp.getUi().showModalDialog(html, "📚 Quản Trị Lộ Trình Khóa Học");
 }
 
-function addCurriculumBatchFromModal(curriculumList) {
+function addCurriculumBatchFromModal(payload) {
+  var curriculumList = [];
+  var courseId = "";
+  var startDate = "";
+  var endDate = "";
+
+  if (Array.isArray(payload)) {
+    curriculumList = payload;
+  } else if (payload && typeof payload === "object") {
+    curriculumList = payload.curriculum_list || payload.modules || [];
+    courseId = (payload.course_id || "").toString().trim();
+    startDate = (payload.course_start_date || "").toString().trim();
+    endDate = (payload.course_end_date || "").toString().trim();
+  }
+
   if (!curriculumList || !curriculumList.length) {
-    throw new Error("Danh sách chương học không được để trống.");
+    throw new Error("Danh sách buổi học không được để trống.");
   }
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -3195,25 +2838,28 @@ function addCurriculumBatchFromModal(curriculumList) {
 
   for (var i = 0; i < curriculumList.length; i++) {
     var item = curriculumList[i];
-    var courseId = (item.course_id || "").toString().trim();
-    var moduleTitle = (item.module_title || "").toString().trim();
-    if (!courseId) {
-      throw new Error("Chương #" + (i + 1) + ": Khóa học áp dụng không được để trống.");
+    var cId = (item.course_id || courseId || "").toString().trim();
+    var sessionTitle = (item.session_title || item.module_title || item.week_title || item.title || "").toString().trim();
+    if (!cId) {
+      throw new Error("Buổi học #" + (i + 1) + ": Khóa học áp dụng không được để trống.");
     }
-    if (!moduleTitle) {
-      throw new Error("Chương #" + (i + 1) + ": Tiêu đề chương không được để trống.");
+    if (!sessionTitle) {
+      throw new Error("Buổi học #" + (i + 1) + ": Nội dung buổi học không được để trống.");
     }
 
-    var modNum = Number(item.module_number) || (i + 1);
+    var dayNum = Number(item.day || item.module_number) || (i + 1);
+    var weekNum = item.week ? (Number(item.week) || item.week.toString().trim()) : Math.ceil(dayNum / 2);
+    var dateBadge = (item.date || item.session_date || "TH10 " + (dayNum < 10 ? "0" + dayNum : dayNum)).toString().trim();
+    var sessionDesc = (item.session_desc || item.content || item.summary || "").toString().trim();
 
-    // Tự động sinh module_id / UUID v4 chuẩn RFC 4122
+    // Tự động sinh ID duy nhất
     var pkId = item.id && isValidUUID(item.id, "cur-")
       ? item.id.toString().trim()
-      : generateUUID("cur-");
+      : ("cur-" + cId.replace(/[^a-z0-9-]/gi, "") + "-d" + dayNum + "-" + generateUUID().substring(0, 4));
 
-    // Chuẩn hóa và bóc tách nội dung bullet points Alt+Enter đúng format
-    var rawTopics = (item.topics_bullets || "").toString();
-    var cleanTopics = rawTopics
+    // Chuẩn hóa và bóc tách nội dung sub_content dot list (Enter / Alt+Enter)
+    var rawSub = (item.sub_content || item.topics_bullets || item.bullet_points || "").toString();
+    var cleanSubContent = rawSub
       .replace(/\r\n/g, "\n")
       .replace(/\r/g, "\n")
       .split("\n")
@@ -3221,28 +2867,60 @@ function addCurriculumBatchFromModal(curriculumList) {
       .filter(function (line) { return line.length > 0; })
       .join("\n");
 
-    var lessonsCount = Number(item.lessons_count) || 6;
-    var sortOrder = Number(item.sort_order) || modNum;
+    var durationVal = (item.duration || "3 giờ").toString().trim();
+    var sortOrder = Number(item.sort_order) || dayNum;
 
     rowsToAdd.push([
       sanitizeFormula(pkId),
-      sanitizeFormula(courseId),
+      sanitizeFormula(cId),
       sanitizeFormula(item.course_name || ""),
-      modNum,
-      sanitizeFormula(moduleTitle),
-      sanitizeFormula(item.duration || "2 tuần"),
-      lessonsCount,
-      sanitizeFormula(cleanTopics),
+      sanitizeFormula(startDate || item.start_date || ""),
+      sanitizeFormula(endDate || item.end_date || ""),
+      weekNum,
+      dayNum,
+      sanitizeFormula(dateBadge),
+      sanitizeFormula(sessionTitle),
+      sanitizeFormula(sessionDesc),
+      sanitizeFormula(cleanSubContent),
+      sanitizeFormula(durationVal),
       sortOrder
     ]);
 
-    addedItems.push({ id: pkId, title: moduleTitle, module_number: modNum });
+    addedItems.push({ id: pkId, title: sessionTitle, day: dayNum, week: weekNum });
   }
 
   var startRow = sheet.getLastRow() + 1;
-  sheet.getRange(startRow, 1, rowsToAdd.length, 9).setValues(rowsToAdd);
+  sheet.getRange(startRow, 1, rowsToAdd.length, 13).setValues(rowsToAdd);
 
-  var msg = "🎉 Đã lưu thành công " + rowsToAdd.length + " chương lộ trình học vào bảng curriculum!";
+  // Nếu có cập nhật ngày bắt đầu / kết thúc cho khóa học -> Lưu vào tab 'courses'
+  if (courseId && (startDate || endDate)) {
+    try {
+      var courseSheet = ss.getSheetByName("courses");
+      if (courseSheet && courseSheet.getLastRow() > 1) {
+        var cHeaders = courseSheet.getRange(1, 1, 1, courseSheet.getLastColumn()).getValues()[0].map(function(h) {
+          return h ? h.toString().trim().toLowerCase().replace(/[\s-]+/g, "_") : "";
+        });
+        var startCol = cHeaders.indexOf("start_date") + 1;
+        var endCol = cHeaders.indexOf("end_date") + 1;
+
+        if (startCol > 0 || endCol > 0) {
+          var cData = courseSheet.getRange(2, 1, courseSheet.getLastRow() - 1, 1).getValues();
+          for (var r = 0; r < cData.length; r++) {
+            if (cData[r][0] && cData[r][0].toString().trim() === courseId) {
+              var targetRow = r + 2;
+              if (startCol > 0 && startDate) courseSheet.getRange(targetRow, startCol).setValue(startDate);
+              if (endCol > 0 && endDate) courseSheet.getRange(targetRow, endCol).setValue(endDate);
+              break;
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn("Không thể cập nhật ngày khóa học:", e);
+    }
+  }
+
+  var msg = "🎉 Đã lưu thành công " + rowsToAdd.length + " buổi học vào lộ trình khóa học!";
   ss.toast(msg, "DataWithLy CMS", 5);
 
   return { success: true, count: rowsToAdd.length, modules: addedItems };
@@ -3801,14 +3479,22 @@ function addBlogsBatchFromModal(blogList) {
       : generateUUID("blg-");
 
     var publishedAt = item.published_at || new Date().toISOString().split("T")[0];
+    var desc = (item.description || excerpt).toString().trim();
+    var contentMd = (item.content_markdown || item.content || excerpt).toString().trim();
+    var coverImg = (item.cover_image_url || "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png").toString().trim();
+    var avatarImg = (item.author_avatar_url || "/uploads/mentors/ly-hua.jpg").toString().trim();
 
     rowsToAdd.push([
       sanitizeFormula(uniqueId),
       sanitizeFormula(title),
       sanitizeFormula(uniqueSlug),
       sanitizeFormula(item.category || "Sự nghiệp"),
+      sanitizeFormula(desc),
       sanitizeFormula(excerpt),
+      sanitizeFormula(contentMd),
+      sanitizeFormula(coverImg),
       sanitizeFormula(item.author_name || "Hứa Thảo Ly"),
+      sanitizeFormula(avatarImg),
       sanitizeFormula(publishedAt),
       item.is_active === true || item.is_active === "true"
     ]);
@@ -3817,7 +3503,7 @@ function addBlogsBatchFromModal(blogList) {
   }
 
   var startRow = sheet.getLastRow() + 1;
-  sheet.getRange(startRow, 1, rowsToAdd.length, 8).setValues(rowsToAdd);
+  sheet.getRange(startRow, 1, rowsToAdd.length, 12).setValues(rowsToAdd);
 
   var msg = "🎉 Đã xuất bản thành công " + rowsToAdd.length + " bài viết blog!";
   ss.toast(msg, "DataWithLy CMS", 5);

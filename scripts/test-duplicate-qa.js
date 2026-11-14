@@ -19,7 +19,8 @@ const fs = require("fs");
 const path = require("path");
 const acorn = require("acorn");
 
-const appsScriptDir = path.join(__dirname, "..", "apps-script");
+const cmsDir = path.join(__dirname, "..", "apps-script", "cms");
+const appsScriptDir = fs.existsSync(cmsDir) ? cmsDir : path.join(__dirname, "..", "apps-script");
 let totalPassed = 0;
 let totalFailed = 0;
 

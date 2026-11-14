@@ -27,9 +27,11 @@ var TABLE_PREFIX_CONFIG = {
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
   ui.createMenu("🚀 DataWithLy CMS")
-    // Khởi tạo
-    .addItem("⚡ CÀI ĐẶT TOÀN BỘ 12 TAB (1-Click Setup)", "setupDataWithLyTables")
-    .addItem("🌱 NẠP LẠI DATA CHUẨN FIGMA 100% (Ghi đè bản mẫu)", "forceReseedFigmaData")
+    // Khởi tạo & Thiết lập Spreadsheets
+    .addItem("⚡ Cài Đặt 11 Tab CMS Content (Trang Tính Nội Dung)", "setupCmsContentSpreadsheet")
+    .addItem("🔒 Cài Đặt Tab Leads CRM (Trang Tính Khách Hàng Riêng)", "setupDedicatedLeadsSpreadsheet")
+    .addItem("⚡ Cài Đặt Toàn Bộ 12 Tab (Tất Cả Trong 1 File)", "setupDataWithLyTables")
+    .addItem("🌱 Nạp Lại Data Chuẩn Figma 100% (Ghi đè bản mẫu)", "forceReseedFigmaData")
     .addSeparator()
 
     // Khóa học & Lộ trình
@@ -48,6 +50,7 @@ function onOpen() {
     // Khuyến mãi & Cấu hình
     .addItem("🏷️ Quản Trị Khuyến Mãi & Flash Sale", "showPromotionsModal")
     .addItem("⚙️ Cấu Hình Hệ Thống (Settings)", "showSettingsModal")
+    .addItem("🔗 Cài Đặt ID Spreadsheet Leads Riêng", "promptSetLeadsSpreadsheetId")
     .addItem("🔐 Cài Đặt Mã Secret (Script Properties)", "promptSetSharedSecret")
     .addItem("👥 Cập Nhật Trạng Thái Lead", "showUpdateLeadStatusPrompt")
     .addSeparator()

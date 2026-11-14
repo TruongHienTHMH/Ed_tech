@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <?!= include('SharedStyles'); ?>
+</head>
+
+<body>
+  <div class="modal-header">
+    <div>
+      <h2 class="modal-title">⚙️ Cấu Hình Hệ Thống (Settings)</h2>
+      <p class="modal-subtitle">Cấu hình hotline, Zalo chat, email, thanh thông báo Announcement Bar và Webhook</p>
+    </div>
+  </div>
+
+  <form id="settingsForm">
+    <div class="preview-box">
+      <div class="preview-header">
+        <span>Xem trước Thanh Thông Báo Header (Announcement Bar)</span>
+        <span class="badge-v badge-crimson">Live Header</span>
+      </div>
+      <div id="previewAnnouncement"
+        style="background: var(--primary); color: #FFFFFF; padding: 8px 12px; border-radius: 4px; font-size: 11px; text-align: center; font-weight: 500;">
+        <?= currentSettings.announcement_bar || 'Ưu đãi học phí 15% cho 10 học viên đăng ký sớm trong tuần này!' ?>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="hotline">Số Điện Thoại Hotline <span class="required">*</span></label>
+        <input type="text" id="hotline" name="hotline" required value="<?= currentSettings.hotline || '0901 234 567' ?>"
+          placeholder="0901 234 567">
+      </div>
+      <div class="form-group col-1">
+        <label for="contact_email">Email Tuyển Sinh / Hỗ Trợ</label>
+        <input type="text" id="contact_email" name="contact_email"
+          value="<?= currentSettings.contact_email || 'tuyensinh@datawithly.edu.vn' ?>"
+          placeholder="tuyensinh@datawithly.edu.vn">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="zalo_url">Đường Dẫn Chat Zalo Tư Vấn Nhanh</label>
+      <input type="text" id="zalo_url" name="zalo_url"
+        value="<?= currentSettings.zalo_url || 'https://zalo.me/0901234567' ?>"
+        placeholder="https://zalo.me/0901234567">
+    </div>
+
+    <div class="form-group">
+      <label for="announcement_bar">Nội Dung Thanh Thông Báo (Announcement Bar)</label>
+      <textarea id="announcement_bar" name="announcement_bar" rows="2"
+        placeholder="Ưu đãi học phí 15% cho 10 học viên đăng ký sớm trong tuần này!"><?= currentSettings.announcement_bar || '' ?></textarea>
+      <div class="help-text">Dòng thông báo này sẽ hiển thị trên cùng của toàn bộ website. Để trống nếu muốn ẩn.</div>
+    </div>
+
+    <div class="form-group">
+      <label for="revalidation_url">URL Webhook Đồng Bộ Tức Thì (ISR Revalidation)</label>
+      <input type="text" id="revalidation_url" name="revalidation_url"
+        value="<?= currentSettings.revalidation_url || '' ?>"
+        placeholder="https://datawithly.edu.vn/api/revalidate?secret=...">
+      <div class="help-text">Webhook được gọi tự động khi bạn bấm nút [⚡ Đồng Bộ Lên Website Ngay Lập Tức].</div>
+    </div>
+
+    <div id="errorBox" class="alert-banner alert-danger error-msg"></div>
+
+    <div class="btn-group">
+      <button type="button" class="btn-cancel" onclick="google.script.host.close()">Hủy Bỏ</button>
+      <button type="submit" id="submitBtn" class="btn-submit">
+        <span>Lưu Cấu Hình</span>
+      </button>
+    </div>
+  </form>
+
+  <script>
+    var announceInput = document.getElementById("announcement_bar");
+    var announcePreview = document.getElementById("previewAnnouncement");
+
+    announceInput.addEventListener("input", function () {
+      announcePreview.innerText = this.value || "Chưa có thông báo";
+    });
+
+    var form = document.getElementById("settingsForm");
+    var submitBtn = document.getElementById("submitBtn");
+    var errorBox = document.getElementById("errorBox");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      errorBox.style.display = "none";
+      errorBox.innerText = "";
+
+      var data = {
+        hotline: document.getElementById("hotline").value.trim(),
+        contact_email: document.getElementById("contact_email").value.trim(),
+        zalo_url: document.getElementById("zalo_url").value.trim(),
+        announcement_bar: announceInput.value.trim(),
+        revalidation_url: document.getElementById("revalidation_url").value.trim()
+      };
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> Đang lưu...';
+
+      google.script.run
+        .withSuccessHandler(function () {
+          google.script.host.close();
+        })
+        .withFailureHandler(function (err) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>Lưu Cấu Hình</span>';
+          showError("Lỗi: " + (err.message || err.toString()));
+        })
+        .saveSettingsFromModal(data);
+    });
+
+    function showError(msg) {
+      errorBox.innerText = msg;
+      errorBox.style.display = "block";
+    }
+  </script>
+</body>
+
+</html>
