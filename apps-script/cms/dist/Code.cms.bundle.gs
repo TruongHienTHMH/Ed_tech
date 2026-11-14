@@ -3,7 +3,7 @@
  * DATAWITHLY CMS CONTENT MASTER - GOOGLE APPS SCRIPT BUNDLE (ALL-IN-ONE)
  * ==============================================================================
  * Phiên bản: 2.2.0 (DataWithLy CMS Content Master)
- * Thời gian đóng gói: 2026-11-14T13:44:42.259Z
+ * Thời gian đóng gói: 2026-11-14T14:18:12.975Z
  * ==============================================================================
  */
 
@@ -90,7 +90,19 @@ function getScriptProperty(key, fallbackValue) {
 }
 
 function getSharedSecret() {
-  return getScriptProperty("SHARED_SECRET", "");
+  var candidateKeys = [
+    "SHARED_SECRET",
+    "GOOGLE_APPS_SCRIPT_CMS_SECRET",
+    "GOOGLE_APPS_SCRIPT_SECRET",
+    "CMS_SECRET"
+  ];
+  for (var i = 0; i < candidateKeys.length; i++) {
+    var val = getScriptProperty(candidateKeys[i], "");
+    if (val && val.trim()) {
+      return val.trim();
+    }
+  }
+  return "";
 }
 
 var CONFIG = {
@@ -1568,11 +1580,16 @@ function doGet(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    var configuredSecret = CONFIG.SHARED_SECRET;
-    if (configuredSecret && configuredSecret.trim() !== "" && secret !== configuredSecret) {
+    var configuredSecret = (CONFIG.SHARED_SECRET || "").toString().trim();
+    var requestSecret = (secret || "").toString().trim();
+
+    if (configuredSecret && configuredSecret !== "" && requestSecret !== configuredSecret) {
       return ContentService.createTextOutput(JSON.stringify({
         ok: false,
-        error: { code: "UNAUTHORIZED", message: "Yêu cầu mã secret xác thực hợp lệ." }
+        error: {
+          code: "UNAUTHORIZED",
+          message: "Yêu cầu mã secret xác thực hợp lệ. (Mã secret từ Website không khớp với SHARED_SECRET trong Google Apps Script)."
+        }
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
@@ -2642,14 +2659,16 @@ function promptSetLeadsSpreadsheetId() {
  */
 function promptSetSharedSecret() {
   var ui = SpreadsheetApp.getUi();
-  var current = PropertiesService.getScriptProperties().getProperty("SHARED_SECRET") || "";
-  var displayStatus = current ? "●●●●●●●● (Đã được mã hóa & lưu an toàn trên Google Cloud)" : "(Chưa thiết lập - Khuyến nghị cài đặt ngay)";
+  var current = (CONFIG.SHARED_SECRET || "").toString().trim();
+  var displayStatus = current
+    ? ("●●●●●●●● (" + current.substring(0, 4) + "..." + current.substring(current.length - 4) + ", độ dài: " + current.length + " ký tự)")
+    : "(Chưa thiết lập - Khuyến nghị cài đặt ngay)";
 
   var prompt = ui.prompt(
-    "🔐 Cấu Hình Mã Secret Bảo Mật (Script Properties)",
+    "🔐 Cấu Hình Mã Secret Bảo Mật (SHARED_SECRET)",
     "Trạng thái hiện tại: " + displayStatus + "\n\n" +
     "Nhập mã Secret xác thực giữa Website Next.js và Google Sheets CMS:\n" +
-    "(Khớp với biến GOOGLE_APPS_SCRIPT_SECRET trong file .env.local của Website)",
+    "(LƯU Ý: Giá trị này PHẢI TRÙNG KHỚP 100% với biến GOOGLE_APPS_SCRIPT_CMS_SECRET trên Vercel và file .env.local)",
     ui.ButtonSet.OK_CANCEL
   );
 
@@ -2657,10 +2676,12 @@ function promptSetSharedSecret() {
     var val = prompt.getResponseText().trim();
     if (val) {
       PropertiesService.getScriptProperties().setProperty("SHARED_SECRET", val);
+      PropertiesService.getScriptProperties().setProperty("GOOGLE_APPS_SCRIPT_CMS_SECRET", val);
       ui.alert(
         "✅ Cấu Hình Thành Công!",
-        "Mã Secret đã được lưu trữ vĩnh viễn trong Google Cloud Script Properties.\n\n" +
-        "🔒 Mã nguồn của bạn giờ đây hoàn toàn sạch và không còn chứa bất kỳ Secret nhạy cảm nào!",
+        "Mã Secret đã được lưu vĩnh viễn trong Google Cloud Script Properties.\n\n" +
+        "Mã Secret đã lưu: " + val.substring(0, 4) + "..." + val.substring(val.length - 4) + " (" + val.length + " ký tự).\n\n" +
+        "👉 Hãy đảm bảo trên Vercel (Settings > Environment Variables) biến GOOGLE_APPS_SCRIPT_CMS_SECRET có đúng giá trị này!",
         ui.ButtonSet.OK
       );
     } else {

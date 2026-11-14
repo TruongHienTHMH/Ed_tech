@@ -107,7 +107,7 @@ export class SheetsClient {
     // 2. Fetch live data from Apps Script Web App
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 6000);
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
 
       const requestUrl = `${appsScriptUrl}?action=get_all&secret=${encodeURIComponent(secret)}`;
       const res = await fetch(requestUrl, {
@@ -139,7 +139,10 @@ export class SheetsClient {
       throw new Error(json.error?.message || "Cấu trúc phản hồi từ Google Sheets không hợp lệ.");
     } catch (err: unknown) {
       const latencyMs = Date.now() - startTime;
-      console.warn("[SheetsClient] Lỗi kết nối Google Sheets, phục vụ Fallback Snapshot:", (err as Error)?.message);
+      const maskedSecret = secret
+        ? `${secret.slice(0, 4)}...${secret.slice(-4)} (len: ${secret.length})`
+        : "(chuỗi rỗng / undefined)";
+      console.warn(`[SheetsClient] Lỗi kết nối Google Sheets (Secret gửi từ Web: ${maskedSecret}), phục vụ Fallback Snapshot:`, (err as Error)?.message);
 
       const report = this.buildFallbackReport(
         latencyMs,
