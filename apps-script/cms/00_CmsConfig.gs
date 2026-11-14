@@ -34,7 +34,19 @@ function getScriptProperty(key, fallbackValue) {
 }
 
 function getSharedSecret() {
-  return getScriptProperty("SHARED_SECRET", "");
+  var candidateKeys = [
+    "SHARED_SECRET",
+    "GOOGLE_APPS_SCRIPT_CMS_SECRET",
+    "GOOGLE_APPS_SCRIPT_SECRET",
+    "CMS_SECRET"
+  ];
+  for (var i = 0; i < candidateKeys.length; i++) {
+    var val = getScriptProperty(candidateKeys[i], "");
+    if (val && val.trim()) {
+      return val.trim();
+    }
+  }
+  return "";
 }
 
 var CONFIG = {

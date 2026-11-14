@@ -24,11 +24,16 @@ function doGet(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    var configuredSecret = CONFIG.SHARED_SECRET;
-    if (configuredSecret && configuredSecret.trim() !== "" && secret !== configuredSecret) {
+    var configuredSecret = (CONFIG.SHARED_SECRET || "").toString().trim();
+    var requestSecret = (secret || "").toString().trim();
+
+    if (configuredSecret && configuredSecret !== "" && requestSecret !== configuredSecret) {
       return ContentService.createTextOutput(JSON.stringify({
         ok: false,
-        error: { code: "UNAUTHORIZED", message: "Yêu cầu mã secret xác thực hợp lệ." }
+        error: {
+          code: "UNAUTHORIZED",
+          message: "Yêu cầu mã secret xác thực hợp lệ. (Mã secret từ Website không khớp với SHARED_SECRET trong Google Apps Script)."
+        }
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
