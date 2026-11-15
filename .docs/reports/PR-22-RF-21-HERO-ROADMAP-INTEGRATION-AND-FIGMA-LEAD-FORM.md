@@ -12,15 +12,17 @@
 
 Pull Request này bao gồm các cải tiến giao diện người dùng (UI/UX) trọng tâm theo thiết kế Figma mới nhất cùng các củng cố an toàn hệ thống:
 
-1. **Tích hợp RoadMap 4 giai đoạn vào HeroSection ([HeroSection.tsx](file:///Users/hientruongthmh/Documents/Web_Jobs/ed_da_tech/components/home/HeroSection.tsx)):**
+1. **Tích hợp RoadMap 4 giai đoạn & Hiệu ứng Chuyển động (Transitions & Aura):**
    - Giữ nguyên cấu trúc layout căn giữa hiện tại của trang chủ.
    - Thay thế form nhập email tĩnh bằng khối **RoadMap 4 Giai Đoạn** (`Data Foundation`, `Data Analysis & Visualization`, `Analytical Thinking`, `Case Study & Project`) chuẩn theo bản vẽ Figma Node `157:903` và tài liệu hình ảnh người dùng cung cấp.
+   - **Hiệu ứng Transition & Primary Aura:** Thanh tiến trình (Line) chạy mượt qua 4 giai đoạn; mỗi Node và Card khi kích hoạt sẽ phát sáng hiệu ứng hào quang (**Primary Aura Glow**) theo dải màu `#784080` &rarr; `#AF445A`. Hỗ trợ chuyển đổi tự động lẫn tương tác di chuột/click trực tiếp.
    - Nút hành động gradient: `Khám phá lộ trình chi tiết →` mở trực tiếp popup tư vấn `LeadModal`.
    - Giữ nguyên dải Social Proof 5 avatar học viên, 5 sao ⭐⭐⭐⭐⭐ (`200+ học viên đã tham gia`) và hàng logo công nghệ (SQL, Google Sheet, Data Studio, Power BI, Python).
 
-2. **Căn chỉnh 2 Component Tranh minh họa không nền ([Iconic_left](https://www.figma.com/design/epfQwa5s3iMO6toM4Fmmpu/Hien-Ed_TECH?node-id=157-835) & [Iconic_right](https://www.figma.com/design/epfQwa5s3iMO6toM4Fmmpu/Hien-Ed_TECH?node-id=157-904)):**
-   - Trích xuất 2 asset PNG 100% trong suốt từ Figma Desktop MCP ([hero-clean-left.png](file:///Users/hientruongthmh/Documents/Web_Jobs/ed_da_tech/public/assets/decorations/hero-clean-left.png) và [hero-clean-right.png](file:///Users/hientruongthmh/Documents/Web_Jobs/ed_da_tech/public/assets/decorations/hero-clean-right.png)), loại bỏ triệt để các khung hộp xám và viền chữ nhật dư thừa.
-   - Đặt trực tiếp vào hai khoảng trống hai bên cánh tiêu đề (`top-1/2 -translate-y-1/2`), hiển thị hài hòa từ màn hình laptop (`lg:block` >= 1024px), khắc phục hoàn toàn tình trạng bị cắt hình ở mép trình duyệt.
+2. **Căn chỉnh & Phóng to 2 Component Tranh minh họa không nền ([Iconic_left](https://www.figma.com/design/epfQwa5s3iMO6toM4Fmmpu/Hien-Ed_TECH?node-id=157-835) & [Iconic_right](https://www.figma.com/design/epfQwa5s3iMO6toM4Fmmpu/Hien-Ed_TECH?node-id=157-904)):**
+   - Trích xuất 2 asset PNG 100% trong suốt Retina-ready (`hero-clean-left.png` và `hero-clean-right.png`), loại bỏ triệt để các khung hộp xám và viền chữ nhật dư thừa.
+   - **Phóng to kích thước:** Tăng chiều rộng lên `w-[270px] - w-[360px]` (Trái) và `w-[280px] - w-[370px]` (Phải).
+   - **Căn giữa đối xứng theo chiều dọc (`top-1/2 -translate-y-1/2`):** Căn theo trục đối xứng giữa khối tiêu đề Hero, lấp đầy 2 khoảng trống tự nhiên, không bị đè chữ và không bị cắt cụt ở mép màn hình.
 
 3. **Form Tư vấn chuẩn 100% Figma Node 12:3320 ([LeadForm.tsx](file:///Users/hientruongthmh/Documents/Web_Jobs/ed_da_tech/components/forms/LeadForm.tsx)):**
    - Header & Subtitle: `Đăng Kí Tư Vấn Ngay` / `Chúng tôi sẽ ngưng nhận tư vấn khi đủ số lượng đăng ký!`.

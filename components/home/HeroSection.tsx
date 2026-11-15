@@ -1,61 +1,144 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { openLeadModal } from "@/components/forms/LeadModalManager";
 
+interface RoadmapStage {
+  id: string;
+  step: string;
+  title: string;
+  desc: string;
+  tags: string[];
+  icon: (active: boolean) => React.ReactNode;
+}
+
+const ROADMAP_STAGES: RoadmapStage[] = [
+  {
+    id: "stage-1",
+    step: "01",
+    title: "Data Foundation",
+    desc: "Nắm vững nền tảng dữ liệu và SQL.",
+    tags: ["SQL cơ bản", "Database", "Xử lý dữ liệu"],
+    icon: (active: boolean) => (
+      <svg className={`w-5 h-5 ${active ? "text-white" : "text-neutral-500"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <ellipse cx="12" cy="5" rx="9" ry="3" />
+        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+      </svg>
+    ),
+  },
+  {
+    id: "stage-2",
+    step: "02",
+    title: "Data Analysis & Visualization",
+    desc: "Phân tích, trực quan hóa và khám phá insight.",
+    tags: ["SQL nâng cao", "Phân tích dữ liệu", "Dashboard"],
+    icon: (active: boolean) => (
+      <svg className={`w-6 h-6 ${active ? "text-white" : "text-neutral-500"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+      </svg>
+    ),
+  },
+  {
+    id: "stage-3",
+    step: "03",
+    title: "Analytical Thinking",
+    desc: "Rèn luyện tư duy phân tích và giải quyết vấn đề.",
+    tags: ["Business problem", "Metrics", "Storytelling"],
+    icon: (active: boolean) => (
+      <svg className={`w-5 h-5 ${active ? "text-white" : "text-neutral-500"}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04z" />
+        <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04z" />
+      </svg>
+    ),
+  },
+  {
+    id: "stage-4",
+    step: "04",
+    title: "Case Study & Project",
+    desc: "Vận dụng tổng hợp qua bài tập lớn.",
+    tags: ["Case study", "Capstone", "Portfolio"],
+    icon: (active: boolean) => (
+      <svg className={`w-5 h-5 ${active ? "text-white" : "text-neutral-500"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m0 0L21 3" />
+      </svg>
+    ),
+  },
+];
+
 export default function HeroSection() {
+  const [activeStage, setActiveStage] = useState<number>(1); // Mặc định giai đoạn 2 như ảnh thiết kế
+  const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true);
+
+  // Auto-cycle through the 4 stages every 3.8s for a lively, premium transition
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    const interval = setInterval(() => {
+      setActiveStage((prev) => (prev + 1) % ROADMAP_STAGES.length);
+    }, 3800);
+    return () => clearInterval(interval);
+  }, [isAutoPlaying]);
+
+  // Dynamic progress line percentage calculation (from Node 0 to Node 3)
+  const linePercentage = `${(activeStage / (ROADMAP_STAGES.length - 1)) * 100}%`;
+
   return (
     <section className="relative w-full bg-white pt-10 pb-12 sm:pt-16 sm:pb-16 lg:pt-20 lg:pb-20 overflow-hidden">
+      {/* Left Artwork Component (Figma Node 157:835 - Shifted down, positioned symmetrically on the left, zero text overlap) */}
+      <div className="hidden lg:block absolute left-2 xl:left-8 2xl:left-14 top-36 xl:top-32 2xl:top-36 w-[250px] xl:w-[300px] 2xl:w-[340px] pointer-events-none select-none z-10 transition-all duration-300">
+        <Image
+          src="/assets/decorations/hero-clean-left.png"
+          alt="Iconic Left - Data Analytics Team"
+          width={478}
+          height={444}
+          className="w-full h-auto object-contain drop-shadow-sm"
+          priority
+        />
+      </div>
+
+      {/* Right Artwork Component (Figma Node 157:904 - Shifted down, positioned symmetrically on the right, zero text overlap) */}
+      <div className="hidden lg:block absolute right-2 xl:right-8 2xl:right-14 top-36 xl:top-32 2xl:top-36 w-[260px] xl:w-[310px] 2xl:w-[350px] pointer-events-none select-none z-10 transition-all duration-300">
+        <Image
+          src="/assets/decorations/hero-clean-right.png"
+          alt="Iconic Right - Data Analytics 3D Dashboard"
+          width={498}
+          height={424}
+          className="w-full h-auto object-contain drop-shadow-sm"
+          priority
+        />
+      </div>
+
       {/* Central Content Area - Perfectly Centered & Spaced */}
       <div className="max-w-[1140px] mx-auto px-4 sm:px-6 flex flex-col items-center text-center relative z-20">
-        {/* Top Hero Headline Block with Flanking Left & Right Components (Figma Node 157:903) */}
+        {/* Top Hero Headline Block */}
         <div className="relative w-full flex flex-col items-center text-center mb-10 sm:mb-12">
-          {/* Left Artwork Component (Figma Node 157:835 & 157:832 - Clean transparent component in flanking space) */}
-          <div className="hidden lg:block absolute left-0 xl:left-2 2xl:left-4 top-1/2 -translate-y-1/2 w-[210px] xl:w-[240px] 2xl:w-[250px] pointer-events-none select-none z-10 transition-all">
-            <Image
-              src="/assets/decorations/hero-clean-left.png"
-              alt="Iconic Left - Data Analytics Team"
-              width={478}
-              height={444}
-              className="w-full h-auto object-contain"
-              priority
-            />
-          </div>
-
-          {/* Right Artwork Component (Figma Node 157:904 - Clean transparent component in flanking space) */}
-          <div className="hidden lg:block absolute right-0 xl:right-2 2xl:right-4 top-1/2 -translate-y-1/2 w-[220px] xl:w-[250px] 2xl:w-[260px] pointer-events-none select-none z-10 transition-all">
-            <Image
-              src="/assets/decorations/hero-clean-right.png"
-              alt="Iconic Right - Data Analytics 3D Dashboard"
-              width={498}
-              height={424}
-              className="w-full h-auto object-contain"
-              priority
-            />
-          </div>
-
           {/* Eyebrow text */}
           <p className="text-[#676767] tracking-[1.5px] text-xs sm:text-sm uppercase font-medium mb-3">
             ONLINE DATA ANALYTICS COURSE
           </p>
 
-          {/* Main Headline - Balanced typography */}
-          <h1 className="font-heading font-bold text-3xl sm:text-4xl md:text-5xl xl:text-[54px] 2xl:text-[58px] leading-tight xl:leading-[64px] text-[#252525] max-w-[620px] xl:max-w-[660px] mb-4">
-            Học Data Analytics từ tư duy đến thực hành.
+          {/* Main Headline - Balanced 2-line typography with zero overlap */}
+          <h1 className="font-heading font-bold text-3xl sm:text-4xl md:text-5xl xl:text-[52px] 2xl:text-[56px] leading-tight xl:leading-[62px] text-[#252525] max-w-[620px] mb-4">
+            Học Data Analytics từ <br className="hidden sm:inline" />
+            tư duy đến thực hành.
           </h1>
 
           {/* Subtitle */}
-          <p className="text-[#676767] text-base sm:text-lg max-w-[560px] xl:max-w-[600px] font-normal leading-relaxed">
+          <p className="text-[#676767] text-base sm:text-lg max-w-[540px] xl:max-w-[580px] font-normal leading-relaxed">
             Đồng hành cùng mentor có hơn 5 năm kinh nghiệm tại MoMo, Tiki, từ kiến thức nền tảng đến thực hành giải quyết bài toán dữ liệu
           </p>
         </div>
 
-        {/* 4-Stage RoadMap Component (Replaces Email Form - Figma Node 157:903 / Image Design) */}
-        <div className="w-full max-w-[1060px] mb-12 sm:mb-14">
+        {/* 4-Stage RoadMap Component with Running Line & Primary Aura Glow */}
+        <div
+          className="w-full max-w-[1060px] mb-12 sm:mb-14"
+          onMouseEnter={() => setIsAutoPlaying(false)}
+          onMouseLeave={() => setIsAutoPlaying(true)}
+        >
           {/* RoadMap Header */}
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FDF2F4] text-[#AF445A] text-xs font-bold uppercase tracking-wider mb-2.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#AF445A]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#AF445A] animate-pulse" />
             LỘ TRÌNH HỌC DATA ANALYTICS
           </div>
           <h2 className="font-heading font-bold text-2xl sm:text-3xl text-[#252525] tracking-tight mb-2">
@@ -65,121 +148,97 @@ export default function HeroSection() {
             Lộ trình 4 giai đoạn, xây dựng đầy đủ kiến thức và kỹ năng để làm Data Analyst.
           </p>
 
-          {/* Connected Timeline Bar */}
+          {/* Connected Timeline Bar with Transition Line & Aura Nodes */}
           <div className="relative w-full max-w-[880px] mx-auto mb-7 px-4 sm:px-8">
             {/* Background Track Line */}
-            <div className="absolute top-1/2 left-[12%] right-[12%] h-[3px] -translate-y-1/2 bg-[#F3D8DF]" />
-            {/* Active Colored Line (Phase 1 to Phase 2) */}
-            <div className="absolute top-1/2 left-[12%] w-[28%] h-[3px] -translate-y-1/2 bg-gradient-to-r from-[#8B1D2C] to-[#AF445A]" />
+            <div className="absolute top-1/2 left-[12%] right-[12%] h-[3px] -translate-y-1/2 bg-[#F3D8DF] rounded-full" />
+            
+            {/* Active Colored Running Progress Line with Primary Gradient */}
+            <div className="absolute top-1/2 left-[12%] right-[12%] h-[3px] -translate-y-1/2 pointer-events-none overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-[#784080] via-[#AF445A] to-[#AF445A] rounded-full transition-all duration-700 ease-in-out shadow-[0_0_8px_rgba(175,68,90,0.6)]"
+                style={{ width: linePercentage }}
+              />
+            </div>
 
             {/* 4 Stage Icon Nodes */}
             <div className="relative flex items-center justify-between">
-              {/* Node 1: Database */}
-              <div className="flex flex-col items-center">
-                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#8B1D2C] text-white flex items-center justify-center shadow-md ring-4 ring-white">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <ellipse cx="12" cy="5" rx="9" ry="3" />
-                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-                  </svg>
-                </div>
-              </div>
+              {ROADMAP_STAGES.map((stage, idx) => {
+                const isActive = activeStage === idx;
+                const isPassed = idx < activeStage;
 
-              {/* Node 2: Bar Chart (Active / Highlighted) */}
-              <div className="flex flex-col items-center">
-                <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#8B1D2C] to-[#AF445A] text-white flex items-center justify-center shadow-lg ring-4 ring-[#FAD2DA] scale-105">
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Node 3: Brain / Analytical Thinking */}
-              <div className="flex flex-col items-center">
-                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white border-2 border-[#E5E7EB] text-neutral-400 flex items-center justify-center shadow-xs ring-4 ring-white">
-                  <svg className="w-5 h-5 text-neutral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04z" />
-                    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04z" />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Node 4: Rocket / Project */}
-              <div className="flex flex-col items-center">
-                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white border-2 border-[#E5E7EB] text-neutral-400 flex items-center justify-center shadow-xs ring-4 ring-white">
-                  <svg className="w-5 h-5 text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m0 0L21 3" />
-                  </svg>
-                </div>
-              </div>
+                return (
+                  <button
+                    key={stage.id}
+                    type="button"
+                    onClick={() => setActiveStage(idx)}
+                    className="flex flex-col items-center focus:outline-none cursor-pointer group"
+                    aria-label={`Chuyển sang giai đoạn ${stage.step}: ${stage.title}`}
+                  >
+                    <div
+                      className={`w-11 h-11 sm:w-13 sm:h-13 rounded-full flex items-center justify-center transition-all duration-500 ${
+                        isActive
+                          ? "bg-gradient-to-tr from-[#784080] to-[#AF445A] text-white shadow-[0_0_24px_6px_rgba(175,68,90,0.55)] ring-4 ring-[#FAD2DA] scale-110 z-20"
+                          : isPassed
+                          ? "bg-[#8B1D2C] text-white shadow-md ring-4 ring-white z-10 hover:scale-105"
+                          : "bg-white border-2 border-neutral-300 text-neutral-400 shadow-xs ring-4 ring-white z-10 group-hover:border-[#AF445A]/60 hover:scale-105"
+                      }`}
+                    >
+                      {stage.icon(isActive || isPassed)}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* 4 Stage Cards Grid */}
+          {/* 4 Stage Cards Grid with Primary Aura Glow */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 w-full text-left">
-            {/* Stage 1 */}
-            <div className="bg-white border border-neutral-200/90 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
-              <div>
-                <span className="text-xs font-bold tracking-wider text-neutral-400 uppercase">01</span>
-                <h3 className="font-heading font-bold text-base text-neutral-900 mt-1">Data Foundation</h3>
-                <p className="text-xs text-neutral-500 mt-1.5 mb-4 leading-relaxed">
-                  Nắm vững nền tảng dữ liệu và SQL.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-1.5 pt-2">
-                <span className="px-2.5 py-1 bg-neutral-100 text-neutral-600 rounded-md text-[11px] font-medium">SQL cơ bản</span>
-                <span className="px-2.5 py-1 bg-neutral-100 text-neutral-600 rounded-md text-[11px] font-medium">Database</span>
-                <span className="px-2.5 py-1 bg-neutral-100 text-neutral-600 rounded-md text-[11px] font-medium">Xử lý dữ liệu</span>
-              </div>
-            </div>
+            {ROADMAP_STAGES.map((stage, idx) => {
+              const isActive = activeStage === idx;
 
-            {/* Stage 2 (Active Highlighted) */}
-            <div className="bg-white border-2 border-[#AF445A] rounded-2xl p-5 shadow-lg shadow-[#AF445A]/10 relative flex flex-col justify-between transform lg:-translate-y-1">
-              <div>
-                <span className="text-xs font-bold tracking-wider text-[#AF445A] uppercase">02</span>
-                <h3 className="font-heading font-bold text-base text-neutral-900 mt-1">Data Analysis &amp; Visualization</h3>
-                <p className="text-xs text-neutral-500 mt-1.5 mb-4 leading-relaxed">
-                  Phân tích, trực quan hóa và khám phá insight.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-1.5 pt-2">
-                <span className="px-2.5 py-1 bg-[#FDF2F4] text-[#AF445A] rounded-md text-[11px] font-semibold">SQL nâng cao</span>
-                <span className="px-2.5 py-1 bg-[#FDF2F4] text-[#AF445A] rounded-md text-[11px] font-semibold">Phân tích dữ liệu</span>
-                <span className="px-2.5 py-1 bg-[#FDF2F4] text-[#AF445A] rounded-md text-[11px] font-semibold">Dashboard</span>
-              </div>
-            </div>
-
-            {/* Stage 3 */}
-            <div className="bg-white border border-neutral-200/90 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
-              <div>
-                <span className="text-xs font-bold tracking-wider text-neutral-400 uppercase">03</span>
-                <h3 className="font-heading font-bold text-base text-neutral-900 mt-1">Analytical Thinking</h3>
-                <p className="text-xs text-neutral-500 mt-1.5 mb-4 leading-relaxed">
-                  Rèn luyện tư duy phân tích và giải quyết vấn đề.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-1.5 pt-2">
-                <span className="px-2.5 py-1 bg-neutral-100 text-neutral-600 rounded-md text-[11px] font-medium">Business problem</span>
-                <span className="px-2.5 py-1 bg-neutral-100 text-neutral-600 rounded-md text-[11px] font-medium">Metrics</span>
-                <span className="px-2.5 py-1 bg-neutral-100 text-neutral-600 rounded-md text-[11px] font-medium">Storytelling</span>
-              </div>
-            </div>
-
-            {/* Stage 4 */}
-            <div className="bg-white border border-neutral-200/90 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
-              <div>
-                <span className="text-xs font-bold tracking-wider text-neutral-400 uppercase">04</span>
-                <h3 className="font-heading font-bold text-base text-neutral-900 mt-1">Case Study &amp; Project</h3>
-                <p className="text-xs text-neutral-500 mt-1.5 mb-4 leading-relaxed">
-                  Vận dụng tổng hợp qua bài tập lớn.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-1.5 pt-2">
-                <span className="px-2.5 py-1 bg-neutral-100 text-neutral-600 rounded-md text-[11px] font-medium">Case study</span>
-                <span className="px-2.5 py-1 bg-neutral-100 text-neutral-600 rounded-md text-[11px] font-medium">Capstone</span>
-                <span className="px-2.5 py-1 bg-neutral-100 text-neutral-600 rounded-md text-[11px] font-medium">Portfolio</span>
-              </div>
-            </div>
+              return (
+                <div
+                  key={stage.id}
+                  onClick={() => setActiveStage(idx)}
+                  className={`rounded-2xl p-5 transition-all duration-500 cursor-pointer flex flex-col justify-between ${
+                    isActive
+                      ? "bg-white border-2 border-[#AF445A] shadow-[0_0_35px_-5px_rgba(175,68,90,0.32),0_12px_24px_-8px_rgba(120,64,128,0.18)] ring-2 ring-[#AF445A]/25 -translate-y-2 relative z-20"
+                      : "bg-white border border-neutral-200/90 hover:border-[#AF445A]/40 shadow-xs hover:shadow-md hover:-translate-y-0.5 relative z-10"
+                  }`}
+                >
+                  <div>
+                    <span
+                      className={`text-xs font-bold tracking-wider uppercase transition-colors duration-300 ${
+                        isActive ? "text-[#AF445A]" : "text-neutral-400"
+                      }`}
+                    >
+                      {stage.step}
+                    </span>
+                    <h3 className="font-heading font-bold text-base text-neutral-900 mt-1 leading-snug">
+                      {stage.title}
+                    </h3>
+                    <p className="text-xs text-neutral-500 mt-1.5 mb-4 leading-relaxed font-normal">
+                      {stage.desc}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 pt-2">
+                    {stage.tags.map((tag, tIdx) => (
+                      <span
+                        key={tIdx}
+                        className={`px-2.5 py-1 rounded-md text-[11px] transition-colors duration-300 ${
+                          isActive
+                            ? "bg-[#FDF2F4] text-[#AF445A] font-semibold border border-[#AF445A]/20"
+                            : "bg-neutral-100 text-neutral-600 font-medium"
+                        }`}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           {/* RoadMap CTA Button */}
@@ -187,7 +246,7 @@ export default function HeroSection() {
             <button
               type="button"
               onClick={() => openLeadModal({ ctaLocation: "hero_roadmap" })}
-              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-[12px] font-bold text-white shadow-md hover:shadow-lg transition-all duration-200 text-sm sm:text-base cursor-pointer bg-gradient-to-r from-[#784080] to-[#AF445A] hover:opacity-95 active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-[12px] font-bold text-white shadow-md hover:shadow-xl transition-all duration-200 text-sm sm:text-base cursor-pointer bg-gradient-to-r from-[#784080] to-[#AF445A] hover:opacity-95 active:scale-[0.98]"
             >
               Khám phá lộ trình chi tiết &rarr;
             </button>
