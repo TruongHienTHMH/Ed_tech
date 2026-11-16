@@ -211,15 +211,15 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
         <div className="mt-12 pt-8 border-t border-neutral-100 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs sm:text-sm text-neutral-600 font-medium">
           <div className="flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[#AF445A]" />
-            <span>12 - 15 buổi thực chiến / khóa</span>
+            <span>Học qua Case Study thực tế</span>
           </div>
           <div className="flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[#FFC934]" />
-            <span>Mentor 1:1 kèm trực tiếp cùng Founder</span>
+            <span>Học trực tiếp &amp; nhận Feedback</span>
           </div>
           <div className="flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-            <span>Review CV & Hỗ trợ việc làm trọn đời</span>
+            <span>Định hướng nghề nghiệp &amp; Review CV.</span>
           </div>
         </div>
       </div>

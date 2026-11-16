@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 135 38" fill="none">
+  <!-- Shopee Shopping Bag Icon -->
+  <g transform="translate(2, 4)">
+    <!-- Bag Handle -->
+    <path d="M10 10 C10 4, 20 4, 20 10" stroke="#EE4D2D" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- Bag Body -->
+    <path d="M4 10 L26 10 L24 28 C23.8 29.2 22.8 30 21.6 30 L8.4 30 C7.2 30 6.2 29.2 6 28 Z" fill="#EE4D2D"/>
+    <!-- S in bag -->
+    <path d="M17.5 15.5 C16.5 14.5 13.5 14.5 13 16 C12.5 17.5 17.5 18 17 20 C16.5 21.5 13 21.5 12 20" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="38" y="26" fill="white" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="21" letter-spacing="-0.5">Shopee</text>
+</svg>
