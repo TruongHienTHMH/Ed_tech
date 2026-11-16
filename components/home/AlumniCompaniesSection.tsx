@@ -4,14 +4,11 @@ import React from "react";
 import Image from "next/image";
 
 const COMPANY_LOGOS = [
-  { name: "Tokopedia", src: "/assets/figma/b748b0ab9014b6a1cbd85bf1b193c9df632e3a0e.svg", width: 150, height: 42 },
-  { name: "Partner Tech", src: "/assets/figma/3205cfb73b9637bd76f7bc3def62832768ee22f2.svg", width: 130, height: 38 },
-  { name: "Enterprise Co", src: "/assets/figma/75956f03862fa0debc17f2d607e9b960a43b1a28.svg", width: 140, height: 38 },
-  { name: "Finance Group", src: "/assets/figma/075eba8302418813840095c4bf8c181d5f6b1dd2.svg", width: 44, height: 44 },
-  { name: "Global Systems", src: "/assets/figma/87684c46342ae29eb4c1281729f85f5cfc562efc.svg", width: 44, height: 44 },
-  { name: "Analytics Inc", src: "/assets/figma/480d74d474dae2a29b22a63a3d76ce3805a2b88c.svg", width: 44, height: 44 },
-  { name: "Retail Hub", src: "/assets/figma/e6061a5a605064b9a3a73cce0f922e71fc6af1fe.svg", width: 44, height: 44 },
-  { name: "Tech Corporation", src: "/assets/figma/15a7d65e2db97a2b937dc4548b1d089b55920fae.svg", width: 140, height: 38 },
+  { name: "MoMo", src: "/assets/companies/momo.svg", width: 120, height: 38 },
+  { name: "Shopee", src: "/assets/companies/shopee.svg", width: 135, height: 38 },
+  { name: "GHN", src: "/assets/companies/ghn.svg", width: 130, height: 38 },
+  { name: "ACB", src: "/assets/companies/acb.svg", width: 110, height: 38 },
+  { name: "IRTech", src: "/assets/companies/irtech.svg", width: 130, height: 38 },
 ];
 
 export default function AlumniCompaniesSection() {
@@ -23,7 +20,7 @@ export default function AlumniCompaniesSection() {
       <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 flex flex-col items-center">
         {/* Title */}
         <h2 className="font-heading font-bold text-2xl sm:text-3xl lg:text-[38px] leading-snug text-center text-white mb-10 sm:mb-12 max-w-[680px]">
-          Học viên đã trúng tuyển tại các công ty hàng đầu
+          Mentees đã trúng tuyển tại các công ty lớn
         </h2>
 
         {/* Infinite Horizontal Auto-Marquee Slider (Figma Node 12:782) */}

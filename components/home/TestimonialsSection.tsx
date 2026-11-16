@@ -1,12 +1,9 @@
 "use client";
 
 import React from "react";
-import { User } from "@/components/common/Icons";
 import { Badge } from "@/components/common/Badge";
 import { Testimonial } from "@/lib/cms/types";
 import { seedTestimonials } from "@/data/seed-data";
-import { SafeImage } from "@/components/common/SafeImage";
-import { resolveImageUrl, getFigmaFallback } from "@/lib/constants/image-fallbacks";
 
 interface TestimonialsSectionProps {
   testimonials?: Testimonial[];
@@ -20,7 +17,6 @@ export default function TestimonialsSection({ testimonials = seedTestimonials }:
     role: t.studentRole || "Học viên DataWithLy",
     quote: t.comment || t.reviewText || "Khóa học rất thực chiến.",
     rating: t.rating || 5,
-    avatarUrl: resolveImageUrl(t.avatarUrl, "avatar", idx),
   }));
 
   return (
@@ -62,28 +58,18 @@ export default function TestimonialsSection({ testimonials = seedTestimonials }:
                 </p>
               </div>
 
-              {/* Student Info */}
-              <div className="flex items-center gap-3 pt-4 border-t border-neutral-100">
-                {item.avatarUrl ? (
-                  <div className="relative w-11 h-11 rounded-full overflow-hidden shrink-0 border border-[#AF445A]/20">
-                    <SafeImage
-                      src={item.avatarUrl}
-                      fallbackSrc={getFigmaFallback("avatar", item.id)}
-                      alt={item.name}
-                      fill
-                      className="object-cover"
-                      sizes="44px"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#AF445A]/15 to-[#784080]/15 flex items-center justify-center shrink-0 border border-[#AF445A]/20">
-                    <User className="w-5 h-5 text-[#AF445A]" />
-                  </div>
-                )}
+              {/* Student Info - Clean typography without avatar as requested */}
+              <div className="flex items-center justify-between pt-4 border-t border-neutral-100">
                 <div>
                   <h3 className="font-bold text-sm text-[#252525]">{item.name}</h3>
-                  <p className="text-xs text-[#784080] font-medium">{item.role}</p>
+                  <p className="text-xs text-[#784080] font-medium mt-0.5">{item.role}</p>
                 </div>
+                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/60">
+                  <svg className="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  Học viên xác thực
+                </span>
               </div>
             </div>
           ))}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 38" fill="none">
+  <!-- IRTech Tech Geometric Icon -->
+  <g transform="translate(4, 5)">
+    <!-- Circuit / Cube Node Shape -->
+    <path d="M12 2 L22 8 L22 20 L12 26 L2 20 L2 8 Z" stroke="#00C49F" stroke-width="2" fill="none"/>
+    <path d="M12 2 L12 14 M22 8 L12 14 M2 8 L12 14" stroke="#00C49F" stroke-width="1.5"/>
+    <circle cx="12" cy="14" r="3" fill="#00C49F"/>
+  </g>
+  <!-- Wordmark IRTech -->
+  <text x="36" y="25" fill="white" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="20" letter-spacing="-0.5">IR<tspan fill="#00C49F">Tech</tspan></text>
+</svg>
