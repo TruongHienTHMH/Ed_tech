@@ -2,9 +2,8 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Check, X, ArrowRight } from "@/components/common/Icons";
+import { Check, X } from "@/components/common/Icons";
 import { Button } from "@/components/common/Button";
-import { Badge } from "@/components/common/Badge";
 import { PackagePricing } from "@/lib/cms/types";
 import { seedPackages } from "@/data/seed-data";
 
@@ -31,7 +30,6 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
   const savingsAmount = comboPackage && comboPackage.originalPrice && comboPackage.salePrice
     ? comboPackage.originalPrice - comboPackage.salePrice
     : 1080000;
-  const savingsStr = `Tiết kiệm ${savingsAmount.toLocaleString("vi-VN")}vnđ`;
 
   const handleOpenRegister = (planName: string) => {
     setSelectedPlan(planName);
@@ -93,193 +91,189 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-14 lg:mb-16">
-          <div className="mb-3">
-            <Badge variant="tag" size="md">
-              BẢNG GIÁ & ƯU ĐÃI
-            </Badge>
-          </div>
+
           <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-[42px] leading-tight lg:leading-[46px] text-[#2E2E2E] mb-3 max-w-[800px]">
             Đầu tư thông minh cho sự nghiệp
           </h2>
           <p className="font-medium text-base sm:text-lg text-[#676767] max-w-[680px] leading-relaxed">
-            Kết hợp SQL và Analytical Thinking &amp; Dashboard trong một lộ trình xuyên suốt, giúp bạn xây dựng nền tảng Data Analytics có hệ thống và tiết kiệm hơn so với đăng ký từng khóa riêng lẻ.
+            Học trọn bộ 2 kỹ năng quan trọng nhất của một Data Analyst với mức chi phí tiết kiệm hơn so với đăng kí riêng lẻ từng kỹ năng.
           </p>
         </div>
 
-        {/* 2-Column Comparison Grid (Figma Node 12:1175) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch max-w-[1100px] mx-auto">
-          {/* Column 1: Đăng kí riêng lẻ (Unbundled Card: 5 columns) */}
-          <div className="lg:col-span-5 bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+        {/* 2-Column Comparison Grid (Figma Node 12:1180 & 12:1230 - 1:1 Ratio) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch max-w-[1240px] mx-auto">
+          {/* Card 1: Đăng kí riêng lẻ (Figma Node 12:1180) */}
+          <div className="bg-white border-2 border-[#E9E9EC] rounded-[20px] p-6 sm:p-8 lg:p-9 shadow-sm flex flex-col justify-between h-full">
             <div>
-              {/* Pill Header */}
-              <div className="mb-6">
-                <Badge variant="level" size="md" className="bg-neutral-100 text-neutral-700 border-neutral-200">
-                  Đăng kí riêng lẻ
-                </Badge>
+              {/* Pill Header (Button 6) */}
+              <div className="mb-5 sm:mb-6">
+                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-gradient-to-r from-[#784080] to-[#AF445A] text-white shadow-xs">
+                  <span className="font-semibold text-base sm:text-[18px]">
+                    Đăng kí riêng lẻ
+                  </span>
+                </div>
               </div>
 
-              {/* 2 Separate Course Cards */}
-              <div className="flex flex-col gap-3.5 mb-6">
-                {/* Course 1 */}
-                <div className="border border-neutral-200/80 rounded-2xl p-4 flex flex-col justify-between bg-neutral-50/70">
+              {/* 2 Separate Course Cards in 1 Row (Figma Frame 1000007460 / Node 12:1184 - 504 Fill x 217 Hug) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
+                {/* Course 1: SQL for Data Analytics */}
+                <div className="border border-[#784080]/40 rounded-[12px] p-3.5 sm:p-4 lg:p-[18px] flex flex-col justify-between bg-white shadow-xs">
                   <div>
-                    <h3 className="font-bold text-base text-[#2E2E2E] mb-1">
+                    <h3 className="font-bold text-base sm:text-[18px] lg:text-[19px] text-[#2E2E2E] leading-snug mb-1">
                       Khóa SQL for Data Analytics
                     </h3>
-                    <p className="text-xs text-neutral-500 mb-2.5 line-clamp-2">
-                      Làm quen với Database và SQL, xây dựng khả năng truy vấn dữ liệu thực tế.
+                    <p className="text-xs sm:text-[13px] text-[#969696] font-medium leading-relaxed mb-3">
+                      Làm quen với Database và SQL, xây dựng khả năng truy vấn, tổng hợp.
                     </p>
                   </div>
-                  <p className="font-bold text-base sm:text-lg text-[#AF445A]">
+                  <p className="font-bold text-base sm:text-lg lg:text-[20px] bg-gradient-to-r from-[#784080] to-[#AF445A] bg-clip-text text-transparent">
                     2,990,000VNĐ
                   </p>
                 </div>
 
-                {/* Course 2 */}
-                <div className="border border-neutral-200/80 rounded-2xl p-4 flex flex-col justify-between bg-neutral-50/70">
+                {/* Course 2: Data Analytical Thinking */}
+                <div className="border border-[#784080]/40 rounded-[12px] p-3.5 sm:p-4 lg:p-[18px] flex flex-col justify-between bg-white shadow-xs">
                   <div>
-                    <h3 className="font-bold text-base text-[#2E2E2E] mb-1">
-                      Analytical Thinking & Dashboard
+                    <h3 className="font-bold text-base sm:text-[18px] lg:text-[19px] text-[#2E2E2E] leading-snug mb-1">
+                      Khóa Data Analytical Thinking
                     </h3>
-                    <p className="text-xs text-neutral-500 mb-2.5 line-clamp-2">
-                      Tư duy xác định vấn đề, lựa chọn metrics, thiết kế Dashboard ra quyết định.
+                    <p className="text-xs sm:text-[13px] text-[#969696] font-medium leading-relaxed mb-3">
+                      Học cách xác định vấn đề, lựa chọn metrics, phân tích dữ liệu.
                     </p>
                   </div>
-                  <p className="font-bold text-base sm:text-lg text-[#AF445A]">
+                  <p className="font-bold text-base sm:text-lg lg:text-[20px] bg-gradient-to-r from-[#784080] to-[#AF445A] bg-clip-text text-transparent">
                     3,790,000VNĐ
                   </p>
                 </div>
               </div>
 
-              {/* Divider */}
-              <div className="h-px bg-neutral-200 my-6" />
-
-              {/* Features / Fit */}
-              <div className="space-y-4 mb-8">
-                <div className="flex items-start gap-3 text-sm text-[#34343C]">
-                  <div className="w-2 h-2 rounded-full bg-[#AF445A]/70 mt-1.5 shrink-0" />
-                  <span className="leading-relaxed">
-                    Phù hợp nếu bạn muốn tập trung vào một nhóm kỹ năng hoặc đã có nền tảng trước đó.
-                  </span>
-                </div>
-                <div className="flex items-start gap-3 text-sm text-[#34343C]">
-                  <div className="w-2 h-2 rounded-full bg-[#AF445A]/70 mt-1.5 shrink-0" />
-                  <span className="leading-relaxed font-semibold text-[#AF445A]">
-                    Chi phí cao hơn (Tổng 6.780.000VNĐ)
-                  </span>
-                </div>
-              </div>
+              {/* Divider Line phân chia giữa 2 khóa học và 4 điểm Pain Points */}
+              <div className="h-px bg-[#E9E9EC] my-5 sm:my-6" />
             </div>
 
-            <Button
-              variant="secondary"
-              size="md"
-              fullWidth
-              onClick={() => handleOpenRegister("Đăng kí riêng lẻ")}
-              className="border-neutral-300 text-neutral-700 bg-white hover:bg-neutral-100 font-semibold text-sm"
-            >
-              Chọn đăng kí riêng lẻ
-            </Button>
+            {/* 4 Pain Points / Cons List (Figma Frame 1000007538) - Scaled vertically */}
+            <div className="space-y-4 pb-2">
+              {[
+                "Tự tìm lộ trình phù hợp",
+                "Kiến thức thiếu liên kết",
+                "Chi phí cao hơn",
+                "Mất thời gian tìm hiểu",
+              ].map((text, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shrink-0">
+                    <Image
+                      src="/assets/figma/427717fb616f6e486ff78a45ffe62b030a5012e7.svg"
+                      alt="icon"
+                      width={26}
+                      height={26}
+                      className="object-contain"
+                    />
+                  </div>
+                  <span className="text-[#34343C] text-sm sm:text-base font-medium">
+                    {text}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Column 2: COMBO END-TO-END ANALYTICS (Featured Pro Card: 7 columns) */}
-          <div className="lg:col-span-7 relative bg-brand-gradient p-1 rounded-3xl shadow-2xl flex flex-col justify-between transform hover:-translate-y-1 transition-all duration-300">
-            {/* Top Savings Badge Floating */}
-            <div className="absolute -top-4 -right-2 sm:-right-4 z-20 flex items-center justify-center">
-              <div className="relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24">
+          {/* Card 2: COMBO END-TO-END ANALYTICS (Figma Node 12:1230 & 12:1179) */}
+          <div className="relative bg-gradient-to-r from-[#784080] to-[#AF445A] p-2 sm:p-2.5 rounded-[20px] shadow-2xl flex flex-col justify-between transform hover:-translate-y-1 transition-all duration-300 h-full">
+            {/* Floating Sale Star Badge (Figma Node 12:1179 / 12:1268) */}
+            <div className="absolute -top-5 -right-3 sm:-top-6 sm:-right-4 z-20 pointer-events-none select-none">
+              <div className="relative w-[82px] h-[86px] sm:w-[92px] sm:h-[96px] flex items-center justify-center">
                 <Image
                   src="/assets/figma/9f1a96eecae4b4f084d165577ecbd536619faec6.svg"
-                  alt="Savings Star"
+                  alt="Sale Star"
                   fill
                   sizes="96px"
-                  className="object-contain drop-shadow-lg"
+                  className="object-contain drop-shadow-md"
                 />
-                <div className="relative text-center font-bold text-[#2E2E2E] leading-tight rotate-12">
-                  <span className="block text-[10px] sm:text-[11px] uppercase tracking-wider">TIẾT KIỆM</span>
-                  <span className="block text-sm sm:text-base font-extrabold text-[#784080]">~16%</span>
+                <div className="relative z-10 flex flex-col items-center justify-center text-center font-heading font-extrabold text-[#2E2E2E] rotate-[10deg] leading-none pt-0.5">
+                  <span className="text-[9px] sm:text-[10px] tracking-wider uppercase font-bold text-[#2E2E2E]">
+                    TIẾT KIỆM
+                  </span>
+                  <span className="text-xs sm:text-[13px] font-black text-[#2E2E2E] mt-0.5">
+                    ~16%
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* Inner Content Box */}
-            <div className="flex flex-col h-full bg-transparent p-6 sm:p-8 text-white">
+            <div className="p-4 sm:p-6 pb-2 text-white">
               {/* Header inside gradient */}
-              <div className="flex items-center gap-2 mb-4">
-                <Badge variant="gold" size="sm" className="bg-white/95 text-[#AF445A] font-bold uppercase shadow-sm">
-                  Combo Nổi Bật
-                </Badge>
-                <Badge variant="discount" size="sm">
-                  Tiết kiệm 1,080,000VNĐ
-                </Badge>
+              <div className="mb-4">
+                <div className="inline-flex items-center gap-2 bg-white rounded-full pl-3.5 pr-4 py-1.5 shadow-sm">
+                  <Image
+                    src="/assets/figma/ae7139e451fb9f873198b04a809e63e17fd7844b.png"
+                    alt="Fire"
+                    width={22}
+                    height={22}
+                    className="object-contain"
+                  />
+                  <span className="font-semibold text-base sm:text-[18px] bg-gradient-to-r from-[#784080] to-[#AF445A] bg-clip-text text-transparent">
+                    Combo
+                  </span>
+                </div>
               </div>
 
-              <div className="mb-6">
-                <h3 className="font-heading font-bold text-xl sm:text-2xl text-white mb-1.5">
-                  End-to-End Analytics with SQL & Dashboard
-                </h3>
-                <p className="text-white/85 text-sm sm:text-base">2 khóa học hoàn chỉnh trong 1 lộ trình đào tạo khép kín</p>
-              </div>
-
-              {/* Price Row */}
-              <div className="bg-white/15 backdrop-blur-md border border-white/25 rounded-2xl p-4 sm:p-5 flex items-baseline justify-between gap-4 mb-6">
+              {/* Course Title and Price Box Row */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
-                  <span className="text-xs text-white/75 block">Giá gốc 2 khóa:</span>
-                  <span className="line-through text-white/70 text-sm font-medium">{originalPriceStr}</span>
+                  <h3 className="font-heading font-bold text-2xl sm:text-[28px] leading-tight text-white mb-1.5">
+                    End-to-End Analytics with SQL & Dashboard
+                  </h3>
+                  <p className="text-white/80 text-base sm:text-lg font-medium">
+                    2 khóa học hoàn chỉnh
+                  </p>
                 </div>
-                <div className="text-right">
-                  <span className="text-xs text-[#FFC934] font-semibold block uppercase">Ưu đãi trọn gói:</span>
-                  <span className="text-2xl sm:text-3xl font-extrabold text-white">{finalPriceStr}</span>
+
+                {/* Price Box */}
+                <div className="bg-white/16 border-[1.5px] border-white/20 rounded-[12px] px-4 py-2.5 flex flex-col items-start sm:items-end backdrop-blur-xs shrink-0">
+                  <span className="line-through text-white/80 text-sm sm:text-base font-medium">
+                    {originalPriceStr}
+                  </span>
+                  <span className="text-white font-bold text-xl sm:text-2xl tracking-tight">
+                    {finalPriceStr}
+                  </span>
                 </div>
               </div>
+            </div>
 
-              {/* White Section with Benefits */}
-              <div className="bg-white rounded-2xl p-5 sm:p-6 text-[#34343C] flex-1 flex flex-col justify-between">
-                <div className="space-y-3.5 mb-6">
-                  <div className="flex items-center gap-3 text-sm font-semibold">
+            {/* Inner White Body (Figma Frame 1000007453) */}
+            <div className="bg-white rounded-[14px] p-6 sm:p-8 flex flex-col justify-between flex-1">
+              <div className="space-y-3.5 mb-6">
+                {[
+                  "Lộ trình được thiết kế sẵn",
+                  "Nội dung nối tiếp mạch lạc",
+                  `Tiết kiệm lên đến ${savingsAmount.toLocaleString("vi-VN")}vnđ`,
+                  "Community với hơn 1,200+ members",
+                  "Update nội dung miễn phí",
+                ].map((benefit, i) => (
+                  <div key={i} className="flex items-center gap-3">
                     <Image
                       src="/assets/figma/bb89cec2b7cc67e662e0f2532b951f267ce166fe.svg"
                       alt="check"
-                      width={22}
-                      height={22}
+                      width={24}
+                      height={24}
                       className="shrink-0"
                     />
-                    <span>Lộ trình được thiết kế sẵn từ A-Z</span>
+                    <span className="text-[#34343C] text-sm sm:text-base font-semibold">
+                      {benefit}
+                    </span>
                   </div>
-
-                  <div className="flex items-center gap-3 text-sm font-semibold">
-                    <Image
-                      src="/assets/figma/bb89cec2b7cc67e662e0f2532b951f267ce166fe.svg"
-                      alt="check"
-                      width={22}
-                      height={22}
-                      className="shrink-0"
-                    />
-                    <span>Nội dung nối tiếp mạch lạc thực chiến</span>
-                  </div>
-
-                  <div className="flex items-center gap-3 text-sm font-semibold text-[#AF445A]">
-                    <Image
-                      src="/assets/figma/bb89cec2b7cc67e662e0f2532b951f267ce166fe.svg"
-                      alt="check"
-                      width={22}
-                      height={22}
-                      className="shrink-0"
-                    />
-                    <span>{savingsStr}</span>
-                  </div>
-                </div>
-
-                <Button
-                  variant="primary"
-                  size="lg"
-                  fullWidth
-                  iconRight={<ArrowRight className="w-5 h-5" />}
-                  onClick={() => handleOpenRegister("Combo End-to-End Analytics")}
-                  className="font-bold text-base py-4 rounded-xl shadow-lg hover:shadow-xl"
-                >
-                  Đăng kí combo ngay
-                </Button>
+                ))}
               </div>
+
+              <Button
+                variant="primary"
+                size="lg"
+                fullWidth
+                onClick={() => handleOpenRegister("Combo End-to-End Analytics")}
+                className="font-bold text-base sm:text-[18px] py-4 rounded-[8px] bg-gradient-to-r from-[#AF445A] to-[#784080] text-white shadow-md hover:opacity-95 active:scale-[0.99] transition-all cursor-pointer"
+              >
+                Đăng kí combo ngay
+              </Button>
             </div>
           </div>
         </div>
