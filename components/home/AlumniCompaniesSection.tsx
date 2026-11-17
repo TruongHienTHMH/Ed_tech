@@ -13,11 +13,22 @@ const COMPANY_LOGOS = [
 
 export default function AlumniCompaniesSection() {
   return (
-    <section className="relative w-full bg-[#1F242F] py-16 lg:py-20 overflow-hidden text-white border-y border-white/5">
+    <section className="relative w-full bg-[#1F242F] overflow-hidden text-white border-y border-white/5">
+      {/* Upper Transition Wave Banner (Figma Node 12:781 / Rectangle 1574) */}
+      <div className="w-full overflow-hidden leading-none select-none pointer-events-none">
+        <Image
+          src="/assets/decorations/banner-upper.png"
+          alt="Transition Upper Wave Banner"
+          width={3840}
+          height={100}
+          className="w-full h-auto max-h-[40px] sm:max-h-[50px] object-cover"
+        />
+      </div>
+
       {/* Decorative Gradient Background Glow */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#AF445A]/10 via-[#784080]/15 to-[#AF445A]/10 pointer-events-none" />
 
-      <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 flex flex-col items-center">
+      <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16 flex flex-col items-center">
         {/* Title */}
         <h2 className="font-heading font-bold text-2xl sm:text-3xl lg:text-[38px] leading-snug text-center text-white mb-10 sm:mb-12 max-w-[680px]">
           Mentees đã trúng tuyển tại các công ty lớn
@@ -65,6 +76,17 @@ export default function AlumniCompaniesSection() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Lower Transition Wave Banner (Figma Node 12:783 / Rectangle 1575) */}
+      <div className="w-full overflow-hidden leading-none select-none pointer-events-none">
+        <Image
+          src="/assets/decorations/banner-lower.png"
+          alt="Transition Lower Wave Banner"
+          width={3840}
+          height={100}
+          className="w-full h-auto max-h-[40px] sm:max-h-[50px] object-cover"
+        />
       </div>
     </section>
   );

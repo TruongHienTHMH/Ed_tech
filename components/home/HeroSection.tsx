@@ -3,15 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { openLeadModal } from "@/components/forms/LeadModalManager";
-
-interface RoadmapStage {
-  id: string;
-  step: string;
-  title: string;
-  desc: string;
-  tags: string[];
-  icon: (active: boolean) => React.ReactNode;
-}
+import RoadmapCard, { RoadmapStage } from "@/components/home/RoadmapCard";
 
 const ROADMAP_STAGES: RoadmapStage[] = [
   {
@@ -184,7 +176,7 @@ export default function HeroSection() {
                           : "bg-white border-2 border-neutral-300 text-neutral-400 shadow-xs ring-4 ring-white z-10 group-hover:border-[#AF445A]/60 hover:scale-105"
                       }`}
                     >
-                      {stage.icon(isActive || isPassed)}
+                      {stage.icon && stage.icon(isActive || isPassed)}
                     </div>
                   </button>
                 );
@@ -194,51 +186,14 @@ export default function HeroSection() {
 
           {/* 4 Stage Cards Grid with Primary Aura Glow */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 w-full text-left">
-            {ROADMAP_STAGES.map((stage, idx) => {
-              const isActive = activeStage === idx;
-
-              return (
-                <div
-                  key={stage.id}
-                  onClick={() => setActiveStage(idx)}
-                  className={`rounded-2xl p-5 transition-all duration-500 cursor-pointer flex flex-col justify-between ${
-                    isActive
-                      ? "bg-white border-2 border-[#AF445A] shadow-[0_0_35px_-5px_rgba(175,68,90,0.32),0_12px_24px_-8px_rgba(120,64,128,0.18)] ring-2 ring-[#AF445A]/25 -translate-y-2 relative z-20"
-                      : "bg-white border border-neutral-200/90 hover:border-[#AF445A]/40 shadow-xs hover:shadow-md hover:-translate-y-0.5 relative z-10"
-                  }`}
-                >
-                  <div>
-                    <span
-                      className={`text-xs font-bold tracking-wider uppercase transition-colors duration-300 ${
-                        isActive ? "text-[#AF445A]" : "text-neutral-400"
-                      }`}
-                    >
-                      {stage.step}
-                    </span>
-                    <h3 className="font-heading font-bold text-base text-neutral-900 mt-1 leading-snug">
-                      {stage.title}
-                    </h3>
-                    <p className="text-xs text-neutral-500 mt-1.5 mb-4 leading-relaxed font-normal">
-                      {stage.desc}
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5 pt-2">
-                    {stage.tags.map((tag, tIdx) => (
-                      <span
-                        key={tIdx}
-                        className={`px-2.5 py-1 rounded-md text-[11px] transition-colors duration-300 ${
-                          isActive
-                            ? "bg-[#FDF2F4] text-[#AF445A] font-semibold border border-[#AF445A]/20"
-                            : "bg-neutral-100 text-neutral-600 font-medium"
-                        }`}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
+            {ROADMAP_STAGES.map((stage, idx) => (
+              <RoadmapCard
+                key={stage.id}
+                stage={stage}
+                isActive={activeStage === idx}
+                onClick={() => setActiveStage(idx)}
+              />
+            ))}
           </div>
 
           {/* RoadMap CTA Button */}

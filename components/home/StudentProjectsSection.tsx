@@ -9,6 +9,7 @@ import { StudentProject } from "@/lib/cms/types";
 import { seedStudentProjects } from "@/data/seed-data";
 import { SafeImage } from "@/components/common/SafeImage";
 import { resolveImageUrl, getFigmaFallback } from "@/lib/constants/image-fallbacks";
+import { STUDENT_PROJECT_IMAGES } from "@/lib/constants/section-images";
 
 interface StudentProjectsSectionProps {
   projects?: StudentProject[];
@@ -18,13 +19,16 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const activeProjects = (projects && projects.length >= 6 ? projects : seedStudentProjects).slice(0, 9);
-  const displayProjects = activeProjects.map((p, idx) => ({
-    id: p.id || `p-${idx}`,
-    title: p.title,
-    studentName: p.authorName,
-    image: resolveImageUrl(p.imageUrl, "project", idx),
-    aspect: idx >= 6 ? "tall" : "normal",
-  }));
+  const displayProjects = activeProjects.map((p, idx) => {
+    const registryItem = STUDENT_PROJECT_IMAGES[idx];
+    return {
+      id: p.id || registryItem?.id || `p-${idx}`,
+      title: p.title || registryItem?.title || `Dự án phân tích dữ liệu #${idx + 1}`,
+      studentName: p.authorName || registryItem?.authorName || "Học viên Lydata",
+      image: resolveImageUrl(p.imageUrl || registryItem?.filePath, "project", idx),
+      aspect: registryItem?.aspect || (idx >= 6 ? "tall" : "normal"),
+    };
+  });
 
   return (
     <section id="projects" className="relative w-full bg-[#1F242F] py-16 lg:py-24 text-white overflow-hidden border-t border-white/5">
