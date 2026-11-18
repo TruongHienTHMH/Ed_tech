@@ -37,15 +37,6 @@ function generateSlug(text) {
 }
 
 /**
- * Tự động tạo ID dựa trên tiền tố và tiêu đề
- */
-function generateId(prefix, text) {
-  var slug = generateSlug(text);
-  if (!prefix) return slug;
-  return prefix + "-" + slug;
-}
-
-/**
  * Tự động tạo UUID v4 chuẩn RFC 4122 sử dụng Google Apps Script Utilities.getUuid()
  * Hỗ trợ gắn tiền tố theo thực thể (entity prefix) hoặc trả về pure UUID v4.
  * 

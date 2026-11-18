@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { ExternalLink, X } from "@/components/common/Icons";
 import { Button } from "@/components/common/Button";
-import { Badge } from "@/components/common/Badge";
 import { StudentProject } from "@/lib/cms/types";
 import { seedStudentProjects } from "@/data/seed-data";
 import { SafeImage } from "@/components/common/SafeImage";
@@ -36,13 +35,6 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-[#AF445A]/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 flex flex-col items-center">
-        {/* Eyebrow Pill (Figma Node 12:873) */}
-        <div className="mb-4">
-          <Badge variant="tag" size="md">
-            PROJECT HỌC VIÊN
-          </Badge>
-        </div>
-
         {/* Title */}
         <h2 className="font-heading font-bold text-2xl sm:text-3xl lg:text-[40px] leading-tight text-center text-white mb-12 max-w-[700px]">
           Dự án của học viên qua các khóa học tại Lydata
@@ -56,9 +48,8 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
               <div
                 key={project.id}
                 onClick={() => setSelectedImage(project.image)}
-                className={`group relative rounded-2xl overflow-hidden border-2 border-white/20 shadow-lg bg-neutral-900 cursor-pointer transform hover:-translate-y-1.5 transition-all duration-300 ${
-                  isTall ? "h-[290px] sm:h-[320px]" : "h-[200px] sm:h-[216px]"
-                }`}
+                className={`group relative rounded-2xl overflow-hidden border-2 border-white/20 shadow-lg bg-neutral-900 cursor-pointer transform hover:-translate-y-1.5 transition-all duration-300 ${isTall ? "h-[290px] sm:h-[320px]" : "h-[200px] sm:h-[216px]"
+                  }`}
               >
                 <SafeImage
                   src={project.image}

@@ -63,7 +63,9 @@ var CONFIG = {
   },
 
   get REVALIDATION_SECRET() {
-    return getScriptProperty("REVALIDATION_SECRET", "");
+    var sec = getScriptProperty("REVALIDATION_SECRET", "");
+    if (sec && sec.trim()) return sec.trim();
+    return getSharedSecret();
   },
 
   get REVALIDATION_PROD_URL() {

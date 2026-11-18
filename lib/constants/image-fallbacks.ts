@@ -24,15 +24,15 @@ export const FIGMA_IMAGE_FALLBACKS = {
     "/assets/figma/74b9c4a05863014e829874effcdb4e101a4bfaea.png",
   ],
   projects: [
-    "/assets/figma/2643f19ffd20e9e83bc82fe8862b51f3796c7604.png",
-    "/assets/figma/973e833b234c55daebe419eefe02eb6e80f7d86d.png",
-    "/assets/figma/71218f0038c8a9ce02ba0e6f6b102fbf63b6953b.png",
-    "/assets/figma/cf9dcd253d74531ef55b272e2e080b01e9bbd6bb.png",
-    "/assets/figma/1af45d712faebc37b4905756835680a337298304.png",
-    "/assets/figma/b5e37fb98f29c6fe09b28906ad379fd1e22d5abf.png",
-    "/assets/figma/5b4b011e79a58bd7bf7adc73dcbec0c01705d59d.png",
-    "/assets/figma/5d3dc012b6a90ac35f204a321ac874ed53b35e81.png",
-    "/assets/figma/ae7139e451fb9f873198b04a809e63e17fd7844b.png",
+    "/assets/student-project/stu-project-1.png",
+    "/assets/student-project/stu-project-2.png",
+    "/assets/student-project/stu-project-3.png",
+    "/assets/student-project/stu-project-4.png",
+    "/assets/student-project/stu-project-5.png",
+    "/assets/student-project/stu-project-6.png",
+    "/assets/student-project/stu-project-7.png",
+    "/assets/student-project/stu-project-8.png",
+    "/assets/student-project/stu-project-9.png",
   ],
   blogs: {
     default: "/assets/figma/c0aae3c5c5404ee626ce858087d79649de2e3dc1.png",
@@ -133,6 +133,23 @@ export function isInvalidOrPhantomPath(src?: string | null): boolean {
 }
 
 /**
+ * Normalizes Google Drive preview/view URLs into direct image stream links
+ */
+export function normalizeGoogleDriveUrl(url: string): string {
+  if (!url || typeof url !== "string") return url;
+  const trimmed = url.trim();
+  if (trimmed.includes("drive.google.com")) {
+    const fileIdMatch =
+      trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) ||
+      trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if (fileIdMatch && fileIdMatch[1]) {
+      return `https://lh3.googleusercontent.com/d/${fileIdMatch[1]}`;
+    }
+  }
+  return trimmed;
+}
+
+/**
  * Resolves an image URL: if valid external or local path, returns it;
  * otherwise automatically returns the standardized 4K Figma fallback.
  */
@@ -145,7 +162,7 @@ export function resolveImageUrl(
     return getFigmaFallback(type, identifier);
   }
 
-  const clean = (src as string).trim();
+  const clean = normalizeGoogleDriveUrl((src as string).trim());
   // Valid http/https URL, valid data URI, or valid asset path
   return clean;
 }

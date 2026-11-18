@@ -351,7 +351,7 @@ export class SheetsClient {
         toolsRaw,
         metrics: String(p.metrics || ""),
         imageUrl: resolveImageUrl(
-          (p.image_url || p.cover_image || p.image || p.thumbnail || p["ảnh_dự_án"] || p["anh_du_an"]) as string | undefined,
+          (p.image_url || p.cover_image || p.image || p.thumbnail) as string | undefined,
           "project",
           idx
         ),
