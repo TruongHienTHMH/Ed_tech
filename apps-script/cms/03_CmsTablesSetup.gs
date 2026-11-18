@@ -364,10 +364,6 @@ function setupFaqsTab(ss) {
   }
 }
 
-function setupFIBTab(ss) {
-  return setupFaqsTab(ss);
-}
-
 /**
  * TAB 8: trust_metrics (Chỉ số uy tín & Thống kê)
  */

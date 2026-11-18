@@ -34,7 +34,7 @@ function bundleCmsPackage() {
   });
 
   const gsFiles = fs.readdirSync(targetDir)
-    .filter((f) => f.endsWith(".gs") && !f.endsWith(".bundle.gs"))
+    .filter((f) => f.endsWith(".gs") && !f.endsWith(".bundle.gs") && f !== "Code.gs")
     .sort((a, b) => {
       const numA = parseInt(a.split("_")[0], 10);
       const numB = parseInt(b.split("_")[0], 10);

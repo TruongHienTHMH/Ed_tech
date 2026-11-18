@@ -1,7 +1,0 @@
-**/**
-!*.gs
-!*.html
-!appsscript.json
-dist/**
-README.md
-
