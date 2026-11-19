@@ -4,14 +4,52 @@ import React from "react";
 import Image from "next/image";
 
 const COMPANY_LOGOS = [
-  { name: "MoMo", src: "/assets/companies/momo.svg", width: 120, height: 38 },
-  { name: "Shopee", src: "/assets/companies/shopee.svg", width: 135, height: 38 },
-  { name: "GHN", src: "/assets/companies/ghn.svg", width: 130, height: 38 },
-  { name: "ACB", src: "/assets/companies/acb.svg", width: 110, height: 38 },
-  { name: "IRTech", src: "/assets/companies/irtech.svg", width: 130, height: 38 },
+  {
+    name: "MoMo",
+    src: "/assets/companies/momo.svg",
+    width: 120,
+    height: 40,
+    imgClassName: "h-9 sm:h-10",
+  },
+  {
+    name: "Shopee",
+    src: "/assets/companies/shopee.svg",
+    width: 120,
+    height: 40,
+    imgClassName: "h-9 sm:h-10",
+  },
+  {
+    name: "GHN",
+    src: "/assets/companies/ghn.jpeg",
+    width: 120,
+    height: 40,
+    imgClassName: "h-9 sm:h-10 rounded-lg shadow-xs",
+  },
+  {
+    name: "ACB",
+    src: "/assets/companies/acb.svg",
+    width: 130,
+    height: 40,
+    imgClassName: "h-7 sm:h-8",
+  },
+  {
+    name: "IRTech",
+    src: "/assets/companies/irtech.webp",
+    width: 120,
+    height: 40,
+    imgClassName: "h-9 sm:h-10",
+  },
 ];
 
 export default function AlumniCompaniesSection() {
+  // Nhân bản danh sách 4 lần để dải logo luôn trải dài vượt màn hình, nối đuôi nhau liên tục (seamless infinite loop)
+  const marqueeLogos = [
+    ...COMPANY_LOGOS,
+    ...COMPANY_LOGOS,
+    ...COMPANY_LOGOS,
+    ...COMPANY_LOGOS,
+  ];
+
   return (
     <section className="relative w-full bg-[#1F242F] overflow-hidden text-white border-y border-white/5">
       {/* Upper Transition Wave Banner (Figma Node 12:781 / Rectangle 1574) */}
@@ -35,21 +73,23 @@ export default function AlumniCompaniesSection() {
         </h2>
 
         {/* Infinite Horizontal Auto-Marquee Slider (Figma Node 12:782) */}
-        <div className="w-full overflow-hidden mask-marquee-edges group">
-          <div className="animate-marquee group-hover:[animation-play-state:paused] flex items-center gap-12 sm:gap-16 py-3">
+        <div className="w-full overflow-hidden mask-marquee-edges group py-2">
+          <div className="animate-marquee group-hover:[animation-play-state:paused] flex items-center gap-16 sm:gap-20 lg:gap-24 py-3">
             {/* Track 1 */}
-            <div className="flex items-center gap-12 sm:gap-16 shrink-0">
-              {COMPANY_LOGOS.map((company, index) => (
+            <div className="flex items-center gap-16 sm:gap-20 lg:gap-24 shrink-0">
+              {marqueeLogos.map((company, index) => (
                 <div
                   key={`c1-${index}`}
-                  className="h-10 sm:h-12 w-auto flex items-center justify-center opacity-75 hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+                  className="h-12 sm:h-14 w-auto flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer"
                 >
                   <Image
                     src={company.src}
                     alt={company.name}
                     width={company.width}
                     height={company.height}
-                    className="h-7 sm:h-9 w-auto object-contain"
+                    className={`${
+                      company.imgClassName || "h-8 sm:h-10"
+                    } w-auto object-contain filter brightness-125 contrast-105 hover:brightness-140 transition-all duration-300`}
                     style={{ width: "auto" }}
                   />
                 </div>
@@ -57,18 +97,20 @@ export default function AlumniCompaniesSection() {
             </div>
 
             {/* Track 2 (Duplicate for Seamless Infinite Marquee Loop) */}
-            <div className="flex items-center gap-12 sm:gap-16 shrink-0" aria-hidden="true">
-              {COMPANY_LOGOS.map((company, index) => (
+            <div className="flex items-center gap-16 sm:gap-20 lg:gap-24 shrink-0" aria-hidden="true">
+              {marqueeLogos.map((company, index) => (
                 <div
                   key={`c2-${index}`}
-                  className="h-10 sm:h-12 w-auto flex items-center justify-center opacity-75 hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+                  className="h-12 sm:h-14 w-auto flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer"
                 >
                   <Image
                     src={company.src}
                     alt={company.name}
                     width={company.width}
                     height={company.height}
-                    className="h-7 sm:h-9 w-auto object-contain"
+                    className={`${
+                      company.imgClassName || "h-8 sm:h-10"
+                    } w-auto object-contain filter brightness-125 contrast-105 hover:brightness-140 transition-all duration-300`}
                     style={{ width: "auto" }}
                   />
                 </div>

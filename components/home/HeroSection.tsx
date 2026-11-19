@@ -144,7 +144,7 @@ export default function HeroSection() {
           <div className="relative w-full max-w-[880px] mx-auto mb-7 px-4 sm:px-8">
             {/* Background Track Line */}
             <div className="absolute top-1/2 left-[12%] right-[12%] h-[3px] -translate-y-1/2 bg-[#F3D8DF] rounded-full" />
-            
+
             {/* Active Colored Running Progress Line with Primary Gradient */}
             <div className="absolute top-1/2 left-[12%] right-[12%] h-[3px] -translate-y-1/2 pointer-events-none overflow-hidden">
               <div
@@ -168,13 +168,12 @@ export default function HeroSection() {
                     aria-label={`Chuyển sang giai đoạn ${stage.step}: ${stage.title}`}
                   >
                     <div
-                      className={`w-11 h-11 sm:w-13 sm:h-13 rounded-full flex items-center justify-center transition-all duration-500 ${
-                        isActive
-                          ? "bg-gradient-to-tr from-[#784080] to-[#AF445A] text-white shadow-[0_0_24px_6px_rgba(175,68,90,0.55)] ring-4 ring-[#FAD2DA] scale-110 z-20"
-                          : isPassed
+                      className={`w-11 h-11 sm:w-13 sm:h-13 rounded-full flex items-center justify-center transition-all duration-500 ${isActive
+                        ? "bg-gradient-to-tr from-[#784080] to-[#AF445A] text-white shadow-[0_0_24px_6px_rgba(175,68,90,0.55)] ring-4 ring-[#FAD2DA] scale-110 z-20"
+                        : isPassed
                           ? "bg-[#8B1D2C] text-white shadow-md ring-4 ring-white z-10 hover:scale-105"
                           : "bg-white border-2 border-neutral-300 text-neutral-400 shadow-xs ring-4 ring-white z-10 group-hover:border-[#AF445A]/60 hover:scale-105"
-                      }`}
+                        }`}
                     >
                       {stage.icon && stage.icon(isActive || isPassed)}
                     </div>
@@ -185,7 +184,7 @@ export default function HeroSection() {
           </div>
 
           {/* 4 Stage Cards Grid with Primary Aura Glow */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 w-full text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 w-full items-stretch justify-center">
             {ROADMAP_STAGES.map((stage, idx) => (
               <RoadmapCard
                 key={stage.id}

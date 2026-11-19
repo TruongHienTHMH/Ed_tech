@@ -3,31 +3,85 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from "@/components/common/Icons";
 import { Button } from "@/components/common/Button";
 import { openLeadModal } from "@/components/forms/LeadModalManager";
+import { seedCourses } from "@/data/seed-data";
+import { Course } from "@/lib/cms/types";
 
 export interface NavbarProps {
   variant?: "dark" | "light";
   onRegisterClick?: () => void;
+  courses?: Course[];
 }
+
+interface NavItem {
+  label: string;
+  href: string;
+  exact?: boolean;
+  hasDropdown?: boolean;
+}
+
+const NAV_ITEMS: NavItem[] = [
+  { label: "Trang chủ", href: "/", exact: true },
+  { label: "Khóa học", href: "/courses", hasDropdown: true },
+  { label: "Dự án học viên", href: "/#projects", exact: false },
+  { label: "Đánh giá", href: "/#testimonials", exact: false },
+  { label: "Blog", href: "/blog", exact: false },
+];
 
 export default function Navbar({
   variant = "dark",
   onRegisterClick,
+  courses = seedCourses,
 }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [courseDropdownOpen, setCourseDropdownOpen] = useState(false);
+  const pathname = usePathname();
 
   const isLight = variant === "light";
 
+  // Danh sách khóa học thường và khóa combo từ Database
+  const regularCourses = courses.filter(
+    (c) => !c.isFeatured && c.slug !== "end-to-end-analytics"
+  );
+  const comboCourses = courses.filter(
+    (c) => c.isFeatured || c.slug === "end-to-end-analytics"
+  );
+
+  // Helper hàm xác định class linh hoạt, chống giật layout (CLS)
+  const getLinkClass = (href: string, exact = false) => {
+    const isAnchor = href.includes("#");
+    const isActive = isAnchor
+      ? false
+      : exact
+        ? pathname === href
+        : href !== "/" && pathname.startsWith(href);
+
+    const baseClass = "pb-1 border-b-2 transition-all duration-200 cursor-pointer";
+
+    if (isLight) {
+      return `${baseClass} ${
+        isActive
+          ? "text-[#AF445A] font-bold border-[#AF445A]"
+          : "text-[#252525] font-medium border-transparent hover:text-[#AF445A] hover:border-[#AF445A]/40"
+      }`;
+    }
+
+    return `${baseClass} ${
+      isActive
+        ? "text-[#AF445A] font-bold border-[#AF445A]"
+        : "text-white/85 font-medium border-transparent hover:text-[#AF445A] hover:border-[#AF445A]/40"
+    }`;
+  };
+
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-colors duration-200 ${
-        isLight
-          ? "bg-white border-b border-neutral-200/80 text-[#252525] shadow-sm"
-          : "bg-[#2E2E2E] border-b border-white/10 text-white shadow-md"
-      }`}
+      className={`sticky top-0 z-40 w-full transition-colors duration-200 ${isLight
+        ? "bg-white border-b border-neutral-200/80 text-[#252525] shadow-sm"
+        : "bg-[#2E2E2E] border-b border-white/10 text-white shadow-md"
+        }`}
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-[76px] sm:h-[82px] flex items-center justify-between">
         {/* Brand Logo */}
@@ -37,132 +91,111 @@ export default function Navbar({
             alt="DataWithLy Logo"
             width={140}
             height={46}
-            className={`h-9 sm:h-11 w-auto object-contain transition-all ${
-              isLight ? "brightness-0" : ""
-            }`}
+            className={`h-9 sm:h-11 w-auto object-contain transition-all ${isLight ? "brightness-0" : ""
+              }`}
             style={{ width: "auto" }}
             priority
           />
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav
-          className={`hidden md:flex items-center gap-8 text-[15px] font-medium ${
-            isLight ? "text-[#252525]" : "text-white/90"
-          }`}
-        >
-          <Link
-            href="/"
-            className={`font-semibold transition-colors ${
-              isLight ? "text-[#AF445A]" : "text-white hover:text-[#AF445A]"
-            }`}
-          >
-            Trang chủ
-          </Link>
-
-          <div
-            className="relative"
-            onMouseEnter={() => setCourseDropdownOpen(true)}
-            onMouseLeave={() => setCourseDropdownOpen(false)}
-          >
-            <button
-              type="button"
-              onClick={() => setCourseDropdownOpen((prev) => !prev)}
-              className={`flex items-center gap-1.5 py-2 transition-colors focus:outline-none cursor-pointer ${
-                isLight ? "hover:text-[#AF445A]" : "hover:text-white"
-              }`}
-            >
-              <span>Khóa học</span>
-              <ChevronDown className="w-4 h-4 opacity-80" />
-            </button>
-
-            {courseDropdownOpen && (
-              <div className="absolute top-full left-0 pt-1.5 z-50">
+        <nav className="hidden md:flex items-center gap-8 text-[15px]">
+          {NAV_ITEMS.map((item) => {
+            if (item.hasDropdown) {
+              return (
                 <div
-                  className={`w-72 rounded-xl shadow-xl py-2 animate-in fade-in slide-in-from-top-1 ${
-                    isLight
-                      ? "bg-white border border-neutral-200 text-[#252525]"
-                      : "bg-[#252525] border border-white/10 text-white shadow-2xl"
-                  }`}
+                  key={item.label}
+                  className="relative"
+                  onMouseEnter={() => setCourseDropdownOpen(true)}
+                  onMouseLeave={() => setCourseDropdownOpen(false)}
                 >
-                  <Link
-                    href="/courses/sql-for-data-analytics"
-                    onClick={() => setCourseDropdownOpen(false)}
-                    className={`block px-4 py-2.5 text-sm transition-colors ${
-                      isLight ? "hover:bg-neutral-50" : "hover:bg-white/10"
-                    }`}
+                  <button
+                    type="button"
+                    onClick={() => setCourseDropdownOpen((prev) => !prev)}
+                    className={`flex items-center gap-1.5 focus:outline-none ${getLinkClass(
+                      item.href,
+                      item.exact
+                    )}`}
                   >
-                    <p className={`font-semibold ${isLight ? "text-[#252525]" : "text-white"}`}>
-                      Khóa SQL for Data Analytics
-                    </p>
-                    <p className={`text-xs ${isLight ? "text-neutral-500" : "text-white/60"}`}>
-                      Truy vấn & xử lý dữ liệu thực chiến (12 buổi)
-                    </p>
-                  </Link>
-                  <Link
-                    href="/courses/analytical-thinking-dashboard-design"
-                    onClick={() => setCourseDropdownOpen(false)}
-                    className={`block px-4 py-2.5 text-sm transition-colors ${
-                      isLight ? "hover:bg-neutral-50" : "hover:bg-white/10"
-                    }`}
-                  >
-                    <p className={`font-semibold ${isLight ? "text-[#252525]" : "text-white"}`}>
-                      Analytical Thinking & Dashboard
-                    </p>
-                    <p className={`text-xs ${isLight ? "text-neutral-500" : "text-white/60"}`}>
-                      Tư duy phân tích số liệu & BI (15 buổi)
-                    </p>
-                  </Link>
-                  <div
-                    className={`h-px my-1 ${
-                      isLight ? "bg-neutral-200/80" : "bg-white/10"
-                    }`}
-                  />
-                  <Link
-                    href="/courses/end-to-end-analytics"
-                    onClick={() => setCourseDropdownOpen(false)}
-                    className={`block px-4 py-2.5 text-sm font-semibold transition-colors ${
-                      isLight
-                        ? "text-[#AF445A] hover:bg-neutral-50"
-                        : "text-[#FFC934] hover:bg-white/10"
-                    }`}
-                  >
-                    <p className="font-semibold">Combo End-to-End Analytics</p>
-                    <p className={`text-xs ${isLight ? "text-neutral-500" : "text-white/70"}`}>
-                      Trọn gói 27 buổi - Tiết kiệm 16% →
-                    </p>
-                  </Link>
+                    <span>{item.label}</span>
+                    <ChevronDown className="w-4 h-4 opacity-80" />
+                  </button>
+
+                  {courseDropdownOpen && (
+                    <div className="absolute top-full left-0 pt-2 z-50">
+                      <div
+                        className={`w-80 rounded-xl shadow-xl py-2 animate-in fade-in slide-in-from-top-1 ${isLight
+                          ? "bg-white border border-neutral-200 text-[#252525]"
+                          : "bg-[#252525] border border-white/10 text-white shadow-2xl"
+                          }`}
+                      >
+                        {regularCourses.map((course) => (
+                          <Link
+                            key={course.id || course.slug}
+                            href={`/courses/${course.slug}`}
+                            onClick={() => setCourseDropdownOpen(false)}
+                            className={`block px-4 py-2.5 text-sm transition-colors ${isLight ? "hover:bg-neutral-50" : "hover:bg-white/10"
+                              }`}
+                          >
+                            <p
+                              className={`font-semibold ${isLight ? "text-[#252525]" : "text-white"
+                                }`}
+                            >
+                              {course.title}
+                            </p>
+                            <p
+                              className={`text-xs ${isLight ? "text-neutral-500" : "text-white/60"
+                                }`}
+                            >
+                              {course.duration || "Khóa học thực chiến"}
+                            </p>
+                          </Link>
+                        ))}
+
+                        {comboCourses.length > 0 && (
+                          <>
+                            <div
+                              className={`h-px my-1 ${isLight ? "bg-neutral-200/80" : "bg-white/10"
+                                }`}
+                            />
+                            {comboCourses.map((combo) => (
+                              <Link
+                                key={combo.id || combo.slug}
+                                href={`/courses/${combo.slug}`}
+                                onClick={() => setCourseDropdownOpen(false)}
+                                className={`block px-4 py-2.5 text-sm font-semibold transition-colors ${isLight
+                                  ? "text-[#AF445A] hover:bg-neutral-50"
+                                  : "text-[#AF445A] hover:bg-white/10"
+                                  }`}
+                              >
+                                <p className="font-semibold">{combo.title}</p>
+                                <p
+                                  className={`text-xs ${isLight ? "text-neutral-500" : "text-white/70"
+                                    }`}
+                                >
+                                  {combo.duration} — Trọn gói tiết kiệm &rarr;
+                                </p>
+                              </Link>
+                            ))}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
-          </div>
+              );
+            }
 
-          <Link
-            href="/#projects"
-            className={`transition-colors ${
-              isLight ? "hover:text-[#AF445A]" : "hover:text-white"
-            }`}
-          >
-            Dự án học viên
-          </Link>
-
-          <Link
-            href="/#testimonials"
-            className={`transition-colors ${
-              isLight ? "hover:text-[#AF445A]" : "hover:text-white"
-            }`}
-          >
-            Đánh giá
-          </Link>
-
-          <Link
-            href="/blog"
-            className={`transition-colors ${
-              isLight ? "hover:text-[#AF445A]" : "hover:text-white"
-            }`}
-          >
-            Blog
-          </Link>
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={getLinkClass(item.href, item.exact)}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Right CTA Button */}
@@ -186,7 +219,7 @@ export default function Navbar({
           className={`md:hidden p-2 focus:outline-none ${
             isLight
               ? "text-neutral-800 hover:text-[#AF445A]"
-              : "text-white/90 hover:text-white"
+              : "text-white/90 hover:text-[#AF445A]"
           }`}
           aria-label="Toggle menu"
         >
@@ -203,82 +236,77 @@ export default function Navbar({
               : "bg-[#252525] border-t border-white/10"
           }`}
         >
-          <Link
-            href="/"
-            onClick={() => setMobileMenuOpen(false)}
-            className={`block py-2 text-base font-semibold ${
-              isLight ? "text-[#AF445A]" : "text-white"
-            }`}
-          >
-            Trang chủ
-          </Link>
-          <div
-            className={`py-2 space-y-2 border-y ${
-              isLight ? "border-neutral-200" : "border-white/10"
-            }`}
-          >
-            <p
-              className={`text-xs font-bold uppercase tracking-wider ${
-                isLight ? "text-neutral-400" : "text-white/50"
-              }`}
-            >
-              Khóa học
-            </p>
-            <Link
-              href="/courses/sql-for-data-analytics"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`block pl-2 text-sm ${
-                isLight ? "text-neutral-700 hover:text-[#AF445A]" : "text-white/80 hover:text-white"
-              }`}
-            >
-              • SQL for Data Analytics (12 buổi)
-            </Link>
-            <Link
-              href="/courses/analytical-thinking-dashboard-design"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`block pl-2 text-sm ${
-                isLight ? "text-neutral-700 hover:text-[#AF445A]" : "text-white/80 hover:text-white"
-              }`}
-            >
-              • Analytical Thinking & Dashboard (15 buổi)
-            </Link>
-            <Link
-              href="/courses/end-to-end-analytics"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`block pl-2 text-sm font-semibold ${
-                isLight ? "text-[#AF445A]" : "text-[#FFC934]"
-              }`}
-            >
-              • Combo End-to-End Analytics (27 buổi)
-            </Link>
-          </div>
-          <Link
-            href="/#projects"
-            onClick={() => setMobileMenuOpen(false)}
-            className={`block py-2 text-base ${
-              isLight ? "text-neutral-700 hover:text-[#AF445A]" : "text-white/80 hover:text-white"
-            }`}
-          >
-            Dự án học viên
-          </Link>
-          <Link
-            href="/#testimonials"
-            onClick={() => setMobileMenuOpen(false)}
-            className={`block py-2 text-base ${
-              isLight ? "text-neutral-700 hover:text-[#AF445A]" : "text-white/80 hover:text-white"
-            }`}
-          >
-            Đánh giá
-          </Link>
-          <Link
-            href="/blog"
-            onClick={() => setMobileMenuOpen(false)}
-            className={`block py-2 text-base ${
-              isLight ? "text-neutral-700 hover:text-[#AF445A]" : "text-white/80 hover:text-white"
-            }`}
-          >
-            Blog
-          </Link>
+          {NAV_ITEMS.map((item) => {
+            if (item.hasDropdown) {
+              return (
+                <div
+                  key={item.label}
+                  className={`py-2 space-y-2 border-y ${
+                    isLight ? "border-neutral-200" : "border-white/10"
+                  }`}
+                >
+                  <p
+                    className={`text-xs font-bold uppercase tracking-wider ${
+                      isLight ? "text-neutral-400" : "text-white/50"
+                    }`}
+                  >
+                    {item.label}
+                  </p>
+                  {regularCourses.map((c) => (
+                    <Link
+                      key={c.id || c.slug}
+                      href={`/courses/${c.slug}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`block pl-2 text-sm ${
+                        isLight
+                          ? "text-neutral-700 hover:text-[#AF445A]"
+                          : "text-white/80 hover:text-[#AF445A]"
+                      }`}
+                    >
+                      • {c.title} ({c.duration})
+                    </Link>
+                  ))}
+                  {comboCourses.map((c) => (
+                    <Link
+                      key={c.id || c.slug}
+                      href={`/courses/${c.slug}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block pl-2 text-sm font-semibold text-[#AF445A]"
+                    >
+                      • {c.title} ({c.duration})
+                    </Link>
+                  ))}
+                </div>
+              );
+            }
+
+            const isAnchor = item.href.includes("#");
+            const isActive = isAnchor
+              ? false
+              : item.exact
+              ? pathname === item.href
+              : item.href !== "/" && pathname.startsWith(item.href);
+
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block py-2 text-base transition-colors ${
+                  isLight
+                    ? isActive
+                      ? "text-[#AF445A] font-bold"
+                      : "text-neutral-700 hover:text-[#AF445A]"
+                    : isActive
+                    ? "text-[#AF445A] font-bold"
+                    : "text-white/80 hover:text-[#AF445A]"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+
           <div className="pt-2">
             <Button
               variant="primary"

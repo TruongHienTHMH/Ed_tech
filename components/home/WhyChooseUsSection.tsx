@@ -32,7 +32,7 @@ const WHY_CHOOSE_US_ITEMS: WhyChooseUsItem[] = [
 ];
 
 export default function WhyChooseUsSection() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(0); // Mặc định card 1 active như Figma Node 12:795
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
     <section className="relative w-full bg-white py-16 lg:py-24">
@@ -47,7 +47,7 @@ export default function WhyChooseUsSection() {
         {/* 3 Value Cards Grid with Dynamic Hover Gradient */}
         <div
           className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch"
-          onMouseLeave={() => setHoveredIndex(0)}
+          onMouseLeave={() => setHoveredIndex(null)}
         >
           {WHY_CHOOSE_US_ITEMS.map((item, index) => {
             const isActive = hoveredIndex === index;
