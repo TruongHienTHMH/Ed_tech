@@ -1,7 +1,14 @@
 import React from "react";
 
-export type BadgeVariant = "tag" | "level" | "liveClass" | "discount" | "gold";
-export type BadgeSize = "sm" | "md";
+export type BadgeVariant =
+  | "primary"
+  | "tag"
+  | "level"
+  | "liveClass"
+  | "discount"
+  | "gold";
+
+export type BadgeSize = "sm" | "md" | "lg";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant;
@@ -12,7 +19,11 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  tag: "border border-[#AF445A]/50 bg-[#AF445A]/15 text-[#FFC934] font-bold tracking-wide uppercase",
+  // Primary Badge (Figma Node 12:894 - Button 6): Gradient #AF445A -> #784080 with bold white uppercase text
+  primary:
+    "bg-gradient-to-r from-[#AF445A] to-[#784080] text-white font-bold tracking-[0.96px] uppercase shadow-xs",
+  tag:
+    "bg-gradient-to-r from-[#AF445A] to-[#784080] text-white font-bold tracking-[0.96px] uppercase shadow-xs",
   level: "border border-white/10 bg-white/10 text-white/90 font-medium",
   liveClass: "border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 font-semibold",
   discount: "border border-rose-500/40 bg-rose-500/20 text-rose-300 font-bold tracking-wide",
@@ -20,19 +31,20 @@ const variantStyles: Record<BadgeVariant, string> = {
 };
 
 const sizeStyles: Record<BadgeSize, string> = {
-  sm: "px-2.5 py-0.5 text-xs rounded-full gap-1.5",
-  md: "px-3.5 py-1 text-xs sm:text-sm rounded-full gap-2",
+  sm: "px-3.5 py-1 text-xs rounded-full gap-1.5",
+  md: "px-5 py-2 text-sm sm:text-base rounded-[35px] gap-2 leading-tight",
+  lg: "px-6 py-2.5 text-base sm:text-lg rounded-[35px] gap-2.5 leading-tight",
 };
 
 export function Badge({
-  variant = "tag",
+  variant = "primary",
   size = "md",
   icon,
   className = "",
   children,
   ...props
 }: BadgeProps) {
-  const baseClasses = "inline-flex items-center select-none";
+  const baseClasses = "inline-flex items-center justify-center select-none text-center whitespace-nowrap";
 
   const computedClasses = [
     baseClasses,
@@ -58,4 +70,3 @@ export function Badge({
 }
 
 export default Badge;
-

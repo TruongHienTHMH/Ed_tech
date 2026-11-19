@@ -40,7 +40,7 @@ export default function TestimonialsSection({
         {/* Header (Figma Node 12:892) */}
         <div className="flex flex-col items-center sm:items-start text-center sm:text-left mb-12">
           <div className="mb-3">
-            <Badge variant="tag" size="md">
+            <Badge variant="primary" size="md">
               ĐÁNH GIÁ THỰC TẾ
             </Badge>
           </div>
