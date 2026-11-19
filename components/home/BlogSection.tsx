@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "@/components/common/Icons";
@@ -12,6 +12,8 @@ interface BlogSectionProps {
 }
 
 export default function BlogSection({ blogs = seedBlogPosts }: BlogSectionProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   const activeBlogs = (blogs && blogs.length >= 3 ? blogs : seedBlogPosts).slice(0, 3);
   const displayBlogs = activeBlogs.map((b, idx) => ({
     id: b.id || `b-${idx}`,
@@ -19,7 +21,6 @@ export default function BlogSection({ blogs = seedBlogPosts }: BlogSectionProps)
     slug: b.slug || `post-${idx}`,
     excerpt: b.excerpt || b.title,
     coverImage: b.coverImageUrl || "/assets/figma/71218f0038c8a9ce02ba0e6f6b102fbf63b6953b.png",
-    featured: idx === 0,
   }));
 
   return (
@@ -35,52 +36,23 @@ export default function BlogSection({ blogs = seedBlogPosts }: BlogSectionProps)
           </p>
         </div>
 
-        {/* 3 Blog Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* 3 Blog Cards with Dynamic Hover Activation */}
+        <div
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          onMouseLeave={() => setHoveredIndex(null)}
+        >
           {displayBlogs.map((blog, idx) => {
-            const isFeatured = idx === 0;
-
-            if (isFeatured) {
-              return (
-                <article
-                  key={blog.id}
-                  className="bg-card-gradient rounded-2xl overflow-hidden shadow-2xl text-white flex flex-col justify-between transform hover:-translate-y-1.5 transition-all duration-300"
-                >
-                  <Link href={`/blog/${blog.slug}`} className="block flex-1 flex flex-col justify-between">
-                    <div className="relative w-full h-[220px] overflow-hidden">
-                      <Image
-                        src={blog.coverImage}
-                        alt={blog.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-
-                    <div className="p-6 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="font-heading font-semibold text-xl leading-snug mb-3 text-white">
-                          {blog.title}
-                        </h3>
-                        <p className="text-white/85 text-sm leading-relaxed mb-6">
-                          {blog.excerpt}
-                        </p>
-                      </div>
-
-                      <div className="flex items-center gap-2 text-white font-semibold text-sm">
-                        <span>Đọc tiếp</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </div>
-                    </div>
-                  </Link>
-                </article>
-              );
-            }
+            const isHovered = hoveredIndex === idx;
 
             return (
               <article
                 key={blog.id}
-                className="bg-white border border-neutral-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg text-[#2E2E2E] flex flex-col justify-between transform hover:-translate-y-1.5 transition-all duration-300"
+                onMouseEnter={() => setHoveredIndex(idx)}
+                className={`rounded-2xl overflow-hidden cursor-pointer flex flex-col justify-between transform transition-all duration-300 ${
+                  isHovered
+                    ? "bg-card-gradient text-white shadow-2xl -translate-y-2 border-transparent"
+                    : "bg-white border border-neutral-200 text-[#2E2E2E] shadow-sm hover:shadow-lg hover:-translate-y-1"
+                }`}
               >
                 <Link href={`/blog/${blog.slug}`} className="block flex-1 flex flex-col justify-between">
                   <div className="relative w-full h-[220px] overflow-hidden">
@@ -95,17 +67,29 @@ export default function BlogSection({ blogs = seedBlogPosts }: BlogSectionProps)
 
                   <div className="p-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <h3 className="font-heading font-semibold text-xl leading-snug mb-3 text-[#252525]">
+                      <h3
+                        className={`font-heading font-semibold text-xl leading-snug mb-3 transition-colors duration-300 ${
+                          isHovered ? "text-white" : "text-[#252525]"
+                        }`}
+                      >
                         {blog.title}
                       </h3>
-                      <p className="text-[#646473] text-sm leading-relaxed mb-6">
+                      <p
+                        className={`text-sm leading-relaxed mb-6 transition-colors duration-300 ${
+                          isHovered ? "text-white/85" : "text-[#646473]"
+                        }`}
+                      >
                         {blog.excerpt}
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-2 text-brand-gradient font-semibold text-sm">
+                    <div
+                      className={`flex items-center gap-2 font-semibold text-sm transition-colors duration-300 ${
+                        isHovered ? "text-white" : "text-brand-gradient"
+                      }`}
+                    >
                       <span>Đọc tiếp</span>
-                      <ArrowRight className="w-4 h-4 text-[#AF445A]" />
+                      <ArrowRight className={`w-4 h-4 ${isHovered ? "text-white" : "text-[#AF445A]"}`} />
                     </div>
                   </div>
                 </Link>
