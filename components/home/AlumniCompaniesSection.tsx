@@ -6,9 +6,9 @@ import Image from "next/image";
 const COMPANY_LOGOS = [
   { name: "MoMo", src: "/assets/companies/momo.svg", width: 120, height: 38 },
   { name: "Shopee", src: "/assets/companies/shopee.svg", width: 135, height: 38 },
-  { name: "GHN", src: "/assets/companies/ghn.svg", width: 130, height: 38 },
+  { name: "GHN", src: "/assets/companies/ghn.jpeg", width: 130, height: 38 },
   { name: "ACB", src: "/assets/companies/acb.svg", width: 110, height: 38 },
-  { name: "IRTech", src: "/assets/companies/irtech.svg", width: 130, height: 38 },
+  { name: "IRTech", src: "/assets/companies/irtech.webp", width: 130, height: 38 },
 ];
 
 export default function AlumniCompaniesSection() {
