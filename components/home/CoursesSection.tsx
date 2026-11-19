@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Clock, Video } from "@/components/common/Icons";
 import { Button } from "@/components/common/Button";
@@ -15,6 +15,7 @@ interface CoursesSectionProps {
 
 export default function CoursesSection({ courses = seedCourses }: CoursesSectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   const activeCourses = (courses && courses.length > 0 ? courses : seedCourses).map((c, i) => ({
     id: c.id || `course-${i}`,
@@ -35,7 +36,14 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
     thumbnail: resolveImageUrl(c.coverImageUrl, "course", c.slug || c.id),
   }));
 
-  const currentCourse = activeCourses[currentIndex] || activeCourses[0];
+  // Auto-play interval chuyển khóa học tự động từ phải sang trái (4.5s)
+  useEffect(() => {
+    if (isPaused || activeCourses.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev < activeCourses.length - 1 ? prev + 1 : 0));
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [isPaused, activeCourses.length]);
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : activeCourses.length - 1));
@@ -61,78 +69,99 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
 
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 pt-8 sm:pt-12 pb-12 sm:pb-16 relative">
         {/* Course Card Showcase with Navigation Controls (Figma Node 157:847 / 157:858) */}
-        <div className="relative">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mx-8 sm:mx-12 lg:mx-16">
-            {/* Left Column: Course Details (Figma Frame 1000005346) */}
-            <div className="lg:col-span-7 flex flex-col gap-6">
-              {/* Badge Status (Figma Button 6) */}
-              <div className="flex items-center">
-                <div className="inline-flex items-center justify-center bg-white border-[1.5px] border-[#AF445A] rounded-[35px] px-5 py-2 shrink-0 shadow-xs">
-                  <span className="font-bold text-sm sm:text-base bg-gradient-to-r from-[#AF445A] to-[#784080] bg-clip-text text-transparent tracking-tight">
-                    {currentCourse.courseKind || "Khóa học mới"}
-                  </span>
-                </div>
-              </div>
+        <div
+          className="relative"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {/* Smooth Carousel Track (Trượt mượt từ phải sang trái) */}
+          <div className="overflow-hidden w-full">
+            <div
+              className="flex transition-transform duration-700 ease-in-out w-full"
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            >
+              {activeCourses.map((course, idx) => (
+                <div key={course.id || idx} className="w-full shrink-0">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mx-8 sm:mx-12 lg:mx-16">
+                    {/* Left Column: Course Details (Figma Frame 1000005346) */}
+                    <div className="lg:col-span-7 flex flex-col gap-6">
+                      {/* Badge Status (Figma Button 6) */}
+                      <div className="flex items-center">
+                        <div className="inline-flex items-center justify-center bg-white border-[1.5px] border-[#AF445A] rounded-[35px] px-5 py-2 shrink-0 shadow-xs">
+                          <span className="font-bold text-sm sm:text-base bg-gradient-to-r from-[#AF445A] to-[#784080] bg-clip-text text-transparent tracking-tight">
+                            {course.courseKind || "Khóa học mới"}
+                          </span>
+                        </div>
+                      </div>
 
-              {/* Title (Figma 1590:5038) */}
-              <h3 className="font-heading font-bold text-2xl sm:text-3xl lg:text-[34px] leading-tight lg:leading-[42px] tracking-tight text-white">
-                {currentCourse.title}
-              </h3>
+                      {/* Title (Figma 1590:5038) */}
+                      <h3 className="font-heading font-bold text-2xl sm:text-3xl lg:text-[34px] leading-tight lg:leading-[42px] tracking-tight text-white">
+                        {course.title}
+                      </h3>
 
-              {/* Description (Figma 1590:5039) */}
-              <p className="text-white/85 text-base sm:text-[18px] leading-[26px] font-normal max-w-[580px]">
-                {currentCourse.description}
-              </p>
+                      {/* Description (Figma 1590:5039) */}
+                      <p className="text-white/85 text-base sm:text-[18px] leading-[26px] font-normal max-w-[580px]">
+                        {course.description}
+                      </p>
 
-              {/* Badges: Sessions & Format (Figma Frame 8) */}
-              <div className="flex items-center gap-6 text-sm sm:text-base font-normal text-white">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-white/90" />
-                  <span>{currentCourse.duration}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Video className="w-5 h-5 text-white/90" />
-                  <span>{currentCourse.level}</span>
-                </div>
-              </div>
+                      {/* Badges: Sessions & Format (Figma Frame 8) */}
+                      <div className="flex items-center gap-6 text-sm sm:text-base font-normal text-white">
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-5 h-5 text-white/90" />
+                          <span>{course.duration}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Video className="w-5 h-5 text-white/90" />
+                          <span>{course.level}</span>
+                        </div>
+                      </div>
 
-              {/* CTA & Review Row (Figma Frame 1000007429) */}
-              <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6">
-                <Button
-                  href={`/courses/${currentCourse.slug}`}
-                  variant="primary"
-                  size="md"
-                  className="font-medium text-sm sm:text-base px-8 py-3.5 rounded-[8px] bg-gradient-to-r from-[#AF445A] to-[#784080] text-white hover:opacity-95 shadow-md"
-                >
-                  Chi tiết khóa học
-                </Button>
+                      {/* CTA & Review Row (Figma Frame 1000007429) */}
+                      <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6">
+                        <Button
+                          href={`/courses/${course.slug}`}
+                          variant="primary"
+                          size="md"
+                          className="font-medium text-sm sm:text-base px-8 py-3.5 rounded-[8px] bg-gradient-to-r from-[#AF445A] to-[#784080] text-white hover:opacity-95 shadow-md"
+                        >
+                          Chi tiết khóa học
+                        </Button>
 
-                <div className="flex flex-col gap-1 justify-center">
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center text-[#FFC934] text-base tracking-wider" aria-label="5 sao">
-                      {"★".repeat(5)}
+                        <div className="flex flex-col gap-1 justify-center">
+                          <div className="flex items-center gap-2">
+                            <div
+                              className="flex items-center text-[#FFC934] text-base tracking-wider"
+                              aria-label="5 sao"
+                            >
+                              {"★".repeat(5)}
+                            </div>
+                            <span className="text-white text-sm sm:text-base font-normal">
+                              ({course.rating})
+                            </span>
+                          </div>
+                          <span className="text-white/75 text-xs sm:text-sm font-normal">
+                            {course.studentsCount}+ học viên đã tham gia
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-white text-sm sm:text-base font-normal">({currentCourse.rating})</span>
-                  </div>
-                  <span className="text-white/75 text-xs sm:text-sm font-normal">
-                    {currentCourse.studentsCount}+ học viên đã tham gia
-                  </span>
-                </div>
-              </div>
-            </div>
 
-            {/* Right Column: Thumbnail Showcase (Figma Node 157:858) */}
-            <div className="lg:col-span-5 relative w-full h-[260px] sm:h-[320px] lg:h-[389px] rounded-[26px] overflow-hidden shadow-2xl border border-white/10 bg-[#151922]">
-              <SafeImage
-                src={currentCourse.thumbnail}
-                fallbackSrc={getFigmaFallback("course", currentCourse.slug || currentCourse.id)}
-                alt={currentCourse.title}
-                fill
-                containerClassName="w-full h-full"
-                sizes="(max-width: 1024px) 100vw, 570px"
-                className="object-cover"
-                priority
-              />
+                    {/* Right Column: Thumbnail Showcase (Figma Node 157:858) */}
+                    <div className="lg:col-span-5 relative w-full h-[260px] sm:h-[320px] lg:h-[389px] rounded-[26px] overflow-hidden shadow-2xl border border-white/10 bg-[#151922]">
+                      <SafeImage
+                        src={course.thumbnail}
+                        fallbackSrc={getFigmaFallback("course", course.slug || course.id)}
+                        alt={course.title}
+                        fill
+                        containerClassName="w-full h-full"
+                        sizes="(max-width: 1024px) 100vw, 570px"
+                        className="object-cover"
+                        priority={idx === 0}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
