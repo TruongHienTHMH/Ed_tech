@@ -29,37 +29,44 @@ export default function RoadmapCard({ stage, isActive, onClick }: RoadmapCardPro
           onClick();
         }
       }}
-      className={`rounded-[22px] p-5 sm:p-6 transition-all duration-400 cursor-pointer flex flex-col justify-between text-left ${
+      className={`rounded-[36px] sm:rounded-[42px] px-5 py-7 sm:py-8 sm:px-6 transition-all duration-300 cursor-pointer flex flex-col justify-between items-center text-center w-full min-h-[300px] ${
         isActive
-          ? "bg-white border-[1.8px] border-[#784080] shadow-[0_6px_28px_rgba(120,64,128,0.16)] ring-2 ring-[#784080]/15 -translate-y-1.5 relative z-20"
-          : "bg-white border border-neutral-200/90 hover:border-[#784080]/40 shadow-xs hover:shadow-md hover:-translate-y-0.5 relative z-10"
+          ? "bg-gradient-to-b from-[#FFF5F7] via-white to-[#FDF0F3] border-[2px] border-[#AF445A] shadow-[0_12px_36px_rgba(175,68,90,0.22)] ring-4 ring-[#AF445A]/15 -translate-y-2 relative z-20"
+          : "bg-white border border-neutral-200/90 hover:border-[#AF445A]/50 shadow-sm hover:shadow-xl hover:-translate-y-1 relative z-10"
       }`}
     >
-      <div>
-        {/* Step Pill */}
-        <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FAF3F5] text-[#AF445A] mb-3">
-          {stage.step}
+      {/* Top Header & Content - Căn Giữa */}
+      <div className="flex flex-col items-center text-center w-full">
+        {/* Step Capsule Badge */}
+        <span
+          className={`inline-flex items-center justify-center px-3.5 py-1 rounded-full text-xs font-bold mb-4 transition-colors ${
+            isActive
+              ? "bg-[#AF445A] text-white shadow-xs"
+              : "bg-[#FAF3F5] text-[#AF445A]"
+          }`}
+        >
+          Giai đoạn {stage.step}
         </span>
 
         {/* Title */}
-        <h3 className="font-heading font-bold text-[17px] sm:text-[18px] text-[#1E1E1E] leading-snug mb-1.5">
+        <h3 className="font-heading font-bold text-[17px] sm:text-[18px] text-[#1E1E1E] leading-snug mb-2 text-center">
           {stage.title}
         </h3>
 
         {/* Description */}
-        <p className="text-xs sm:text-[13px] text-[#555555] leading-relaxed mb-4 font-normal">
+        <p className="text-xs sm:text-[13px] text-[#555555] leading-relaxed mb-4 font-normal text-center max-w-[220px]">
           {stage.desc}
         </p>
       </div>
 
-      {/* Skill Tags */}
-      <div className="flex flex-wrap gap-1.5 pt-1">
+      {/* Skill Tags - Căn Giữa */}
+      <div className="flex flex-wrap justify-center gap-1.5 pt-3 border-t border-neutral-100/90 w-full">
         {stage.tags.map((tag, tIdx) => (
           <span
             key={tIdx}
             className={`px-3 py-1 rounded-full text-xs transition-colors duration-300 ${
               isActive
-                ? "bg-[#FAF3F5] text-[#784080] font-semibold border border-[#AF445A]/20"
+                ? "bg-[#AF445A]/10 text-[#AF445A] font-semibold border border-[#AF445A]/25"
                 : "bg-[#FAF4F6] text-[#4A4A4A] font-medium"
             }`}
           >
