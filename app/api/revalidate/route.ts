@@ -61,12 +61,39 @@ export async function POST(request: NextRequest) {
       ContentFetcher.invalidateCache();
     }
 
+    // Tự động kéo dữ liệu mới nhất và log ra terminal ở local
+    let freshData = null;
+    try {
+      const report = await ContentFetcher.getLiveSyncReport(true);
+      freshData = report.rawTabs || {
+        courses: report.courses,
+        packages: report.packages,
+        projects: report.studentProjects,
+        testimonials: report.testimonials,
+        blogs: report.blogPosts,
+      };
+
+      console.log("Script update new:", {
+        source: "webhook_revalidate",
+        timestamp: new Date().toISOString(),
+        summary: {
+          totalCourses: report.totalCourses,
+          totalPackages: report.totalPackages,
+          totalProjects: report.totalStudentProjects,
+        },
+        data: freshData,
+      });
+    } catch {
+      // Bỏ qua lỗi kéo nền nếu có, không chặn response revalidate
+    }
+
     return NextResponse.json({
       revalidated: true,
       tag: tag || null,
       path: path || null,
       now: Date.now(),
       message: "Làm mới bộ nhớ đệm (On-Demand ISR Revalidation) thành công.",
+      data: freshData,
     });
   } catch (err: unknown) {
     console.error("[Route Error /api/revalidate]:", (err as Error)?.message);

@@ -90,7 +90,10 @@ export class SheetsClient {
    * Fetch Live Data from Google Sheets or serve Fallback Snapshot
    */
   public static async getLiveSyncReport(forceRefresh = false): Promise<GoogleSheetsSyncReport> {
-    if (!forceRefresh) {
+    const isDev = process.env.NODE_ENV === "development";
+
+    // 0. Bỏ qua hoàn toàn in-memory cache nếu đang ở local dev hoặc forceRefresh
+    if (!forceRefresh && !isDev) {
       const cached = LRUCacheManager.get<GoogleSheetsSyncReport>(this.CACHE_KEY);
       if (cached) return cached;
     }
@@ -109,15 +112,17 @@ export class SheetsClient {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-      const requestUrl = `${appsScriptUrl}?action=get_all&secret=${encodeURIComponent(secret)}`;
+      // Khi ở môi trường dev hoặc có cờ forceRefresh, gửi force_refresh=true để Apps Script quét bảng tính trực tiếp không qua CacheService
+      const shouldBypass = forceRefresh || isDev;
+      const requestUrl = `${appsScriptUrl}?action=get_all&secret=${encodeURIComponent(secret)}${shouldBypass ? "&force_refresh=true" : ""}`;
+
       const res = await fetch(requestUrl, {
         method: "GET",
         signal: controller.signal,
         redirect: "follow",
-        next: {
-          tags: ["cms", "sheets"],
-          revalidate: 300,
-        },
+        ...(shouldBypass
+          ? { cache: "no-store" }
+          : { next: { tags: ["cms", "sheets"], revalidate: 300 } }),
       });
 
       clearTimeout(timeoutId);
@@ -133,17 +138,59 @@ export class SheetsClient {
         const report = this.parseRawTabs(json.tabs, latencyMs);
         const ttlMs = process.env.NODE_ENV === "development" ? 5 * 1000 : undefined;
         LRUCacheManager.set(this.CACHE_KEY, report, ttlMs);
+
+        // Debug tay ở môi trường local: console.log dữ liệu nhận được với tiền tố "Script update new"
+        console.log("Script update new:", {
+          fetchedAt: json.fetchedAt || new Date().toISOString(),
+          fromCache: Boolean(json.fromCache),
+          latencyMs,
+          summary: {
+            courses: report.courses.length,
+            packages: report.packages?.length || 0,
+            projects: report.studentProjects?.length || 0,
+            blogs: report.blogPosts?.length || 0,
+            testimonials: report.testimonials?.length || 0,
+            faqs: report.faqs?.length || 0,
+          },
+          data: json.tabs,
+        });
+
+        if (process.env.NODE_ENV === "development") {
+          console.info(
+            `[SheetsClient] ✅ Đã nạp Google Sheets CMS (${latencyMs}ms${json.fromCache ? ", fromCache" : ""}): ` +
+            `${report.courses.length} khóa học, ${report.packages?.length || 0} gói, ${report.studentProjects?.length || 0} dự án, ${report.blogPosts?.length || 0} bài viết`
+          );
+        }
         return report;
       }
 
       throw new Error(json.error?.message || "Cấu trúc phản hồi từ Google Sheets không hợp lệ.");
     } catch (err: unknown) {
       const latencyMs = Date.now() - startTime;
-      console.warn("[SheetsClient] Lỗi kết nối Google Sheets, phục vụ Fallback Snapshot:", (err as Error)?.message);
+      const errorObj = err as Record<string, unknown>;
+      const cause = errorObj?.cause as Record<string, unknown> | undefined;
+      const causeCode = (cause?.code as string) || "";
+      const causeMessage = (cause?.message as string) || "";
+
+      let diagnosticDetail = (errorObj?.message as string) || "Lỗi fetch không xác định";
+      if (causeCode) {
+        diagnosticDetail += ` [Nguyên nhân: ${causeCode}${causeMessage ? " - " + causeMessage : ""}]`;
+      }
+      if (latencyMs >= 14500) {
+        diagnosticDetail += " (Quá hạn 15s - Có thể Google Apps Script đang gặp Cold Start)";
+      }
+
+      console.warn(`[SheetsClient] ⚠️ Không thể kết nối Google Sheets sau ${latencyMs}ms:`, {
+        url: appsScriptUrl ? `${appsScriptUrl.substring(0, 60)}...` : "Chưa cấu hình URL",
+        error: errorObj?.message,
+        causeCode: causeCode || undefined,
+        causeMessage: causeMessage || undefined,
+        diagnostic: diagnosticDetail,
+      });
 
       const report = this.buildFallbackReport(
         latencyMs,
-        `Không thể kết nối Google Sheets: ${(err as Error)?.message}. Đang hiển thị bản dự phòng cục bộ (Zero White Screen).`,
+        `Không thể kết nối Google Sheets: ${diagnosticDetail}. Đang phục vụ dữ liệu dự phòng cục bộ (Zero White Screen).`,
         "fallback_snapshot"
       );
 
@@ -556,6 +603,147 @@ export class SheetsClient {
       rawPromotions: seedPromotions.map((p) => ({ ...p })),
       rawStudentProjects: seedStudentProjects.map((p) => ({ ...p })),
       message,
+    };
+  }
+
+  /**
+   * Diagnostic test suite for 5-stage health check and latency profiling
+   */
+  public static async diagnoseConnection() {
+    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_CMS_URL || process.env.GOOGLE_APPS_SCRIPT_URL;
+    const secret = process.env.GOOGLE_APPS_SCRIPT_CMS_SECRET || process.env.GOOGLE_APPS_SCRIPT_SECRET || "";
+    const recommendations: string[] = [];
+
+    const envCheck = {
+      appsScriptUrlConfigured: Boolean(appsScriptUrl),
+      appsScriptUrlPreview: appsScriptUrl ? `${appsScriptUrl.substring(0, 50)}...` : "CHƯA CẤU HÌNH",
+      secretConfigured: Boolean(secret),
+      nodeEnv: process.env.NODE_ENV || "development",
+    };
+
+    if (!envCheck.appsScriptUrlConfigured) {
+      recommendations.push("Chưa cài đặt GOOGLE_APPS_SCRIPT_CMS_URL trong file .env.local.");
+    }
+    if (!envCheck.secretConfigured) {
+      recommendations.push("Chưa cài đặt GOOGLE_APPS_SCRIPT_CMS_SECRET trong file .env.local.");
+    }
+
+    // Stage 1: Ping (Network & Cold Start check)
+    const pingStep: { ok: boolean; status?: number; latencyMs: number; response?: unknown; error?: string } = {
+      ok: false,
+      latencyMs: 0,
+    };
+
+    if (appsScriptUrl) {
+      const pingStart = Date.now();
+      try {
+        const pingCtrl = new AbortController();
+        const pTimeout = setTimeout(() => pingCtrl.abort(), 10000);
+        const pRes = await fetch(`${appsScriptUrl}?action=ping`, {
+          method: "GET",
+          signal: pingCtrl.signal,
+          redirect: "follow",
+          cache: "no-store",
+        });
+        clearTimeout(pTimeout);
+        pingStep.latencyMs = Date.now() - pingStart;
+        pingStep.status = pRes.status;
+        pingStep.ok = pRes.ok;
+        pingStep.response = await pRes.json();
+      } catch (e) {
+        pingStep.latencyMs = Date.now() - pingStart;
+        const err = e as Record<string, unknown>;
+        const cause = err?.cause as Record<string, unknown> | undefined;
+        pingStep.error = `${(err?.message as string) || "Ping thất bại"}${cause?.code ? ` (${cause.code})` : ""}`;
+        if (pingStep.latencyMs >= 9500) {
+          recommendations.push("Ping timeout sau 10s. Google Apps Script có thể đang khởi động nguội (Cold Start) hoặc URL bị chặn.");
+        }
+      }
+    }
+
+    // Stage 2: Auth Handshake Check
+    const authStep: { ok: boolean; status?: number; latencyMs: number; error?: string } = {
+      ok: false,
+      latencyMs: 0,
+    };
+
+    if (appsScriptUrl && secret) {
+      const authStart = Date.now();
+      try {
+        const authCtrl = new AbortController();
+        const aTimeout = setTimeout(() => authCtrl.abort(), 10000);
+        const aRes = await fetch(`${appsScriptUrl}?action=get_all&secret=${encodeURIComponent(secret)}`, {
+          method: "GET",
+          signal: authCtrl.signal,
+          redirect: "follow",
+          cache: "no-store",
+        });
+        clearTimeout(aTimeout);
+        authStep.latencyMs = Date.now() - authStart;
+        authStep.status = aRes.status;
+        authStep.ok = aRes.ok;
+
+        const aJson = await aRes.json();
+        if (!aJson.ok && aJson.error?.code === "UNAUTHORIZED") {
+          authStep.ok = false;
+          authStep.error = "Secret không khớp với SHARED_SECRET trong Google Apps Script (Lỗi 401 Unauthorized).";
+          recommendations.push("Mã GOOGLE_APPS_SCRIPT_CMS_SECRET trong .env.local không khớp với SHARED_SECRET trong Script Properties.");
+        }
+      } catch (e) {
+        authStep.latencyMs = Date.now() - authStart;
+        const err = e as Record<string, unknown>;
+        const cause = err?.cause as Record<string, unknown> | undefined;
+        authStep.error = `${(err?.message as string) || "Auth thất bại"}${cause?.code ? ` (${cause.code})` : ""}`;
+      }
+    }
+
+    // Stage 3: Full Data Report
+    const dataFetchStep: {
+      ok: boolean;
+      latencyMs: number;
+      fromCache?: boolean;
+      tabCounts?: Record<string, number>;
+      error?: string;
+    } = { ok: false, latencyMs: 0 };
+
+    try {
+      const dataStart = Date.now();
+      const report = await this.getLiveSyncReport(true);
+      dataFetchStep.latencyMs = Date.now() - dataStart;
+      dataFetchStep.ok = report.ok;
+      dataFetchStep.fromCache = report.source === "fallback_snapshot" || report.source === "mock";
+      dataFetchStep.tabCounts = {
+        courses: report.totalCourses || 0,
+        packages: report.totalPackages || 0,
+        projects: report.totalStudentProjects || 0,
+        testimonials: report.totalTestimonials || 0,
+        blogs: report.totalBlogPosts || 0,
+        faqs: report.totalFaqs || 0,
+      };
+      if (!report.ok) {
+        dataFetchStep.error = report.message;
+      }
+    } catch (e) {
+      dataFetchStep.error = (e as Error)?.message;
+    }
+
+    let overallHealth: "healthy" | "degraded" | "down" = "healthy";
+    if (!dataFetchStep.ok || !pingStep.ok) {
+      overallHealth = dataFetchStep.tabCounts?.courses ? "degraded" : "down";
+    }
+
+    if (overallHealth === "healthy") {
+      recommendations.push("Kết nối Google Sheets CMS hoàn toàn thông suốt!");
+    }
+
+    return {
+      timestamp: new Date().toISOString(),
+      overallHealth,
+      environment: envCheck,
+      pingStep,
+      authStep,
+      dataFetchStep,
+      recommendations,
     };
   }
 }

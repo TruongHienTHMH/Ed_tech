@@ -9,6 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "bundle:gas": "node scripts/bundle-apps-script.js",
+    "test:sheets": "node scripts/test-sheets-connection.js",
     "push:cms": "node scripts/push-gas.js cms",
     "push:content": "node scripts/push-gas.js content",
     "push:leads": "node scripts/push-gas.js leads",
