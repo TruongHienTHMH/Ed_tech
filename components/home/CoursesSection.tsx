@@ -58,11 +58,11 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
       {/* Upper Transition Banner (Figma Node 12:779) */}
       <div className="w-full overflow-hidden leading-none select-none pointer-events-none">
         <Image
-          src="/assets/decorations/banner-upper.png"
+          src="/assets/decorations/banner-upper.svg"
           alt="Transition Upper Banner"
-          width={3840}
-          height={100}
-          className="w-full h-auto max-h-[40px] sm:max-h-[60px] object-cover"
+          width={1920}
+          height={50}
+          className="w-full h-auto object-cover"
           priority
         />
       </div>
@@ -220,11 +220,11 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
       {/* Lower Transition Banner (Figma Node 12:781 / 157:849) */}
       <div className="w-full overflow-hidden leading-none select-none pointer-events-none">
         <Image
-          src="/assets/decorations/banner-lower.png"
+          src="/assets/decorations/banner-lower.svg"
           alt="Transition Lower Banner"
-          width={3840}
-          height={100}
-          className="w-full h-auto max-h-[40px] sm:max-h-[60px] object-cover"
+          width={1920}
+          height={40}
+          className="w-full h-auto object-cover"
         />
       </div>
     </section>

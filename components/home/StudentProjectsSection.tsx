@@ -30,11 +30,23 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
   });
 
   return (
-    <section id="projects" className="relative w-full bg-[#1F242F] py-16 lg:py-24 text-white overflow-hidden border-t border-white/5">
+    <section id="projects" className="relative w-full bg-[#1F242F] text-white overflow-hidden">
+      {/* Upper Transition Wave Banner (Figma Node 12:835 / Rectangle 1574) */}
+      <div className="w-full overflow-hidden leading-none select-none pointer-events-none">
+        <Image
+          src="/assets/decorations/banner-upper.svg"
+          alt="Transition Upper Wave Banner"
+          width={1920}
+          height={50}
+          className="w-full h-auto object-cover"
+          priority
+        />
+      </div>
+
       {/* Background ambient lighting */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-[#AF445A]/10 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 flex flex-col items-center">
+      <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-20 flex flex-col items-center">
         {/* Title */}
         <h2 className="font-heading font-bold text-2xl sm:text-3xl lg:text-[40px] leading-tight text-center text-white mb-12 max-w-[700px]">
           Dự án của học viên qua các khóa học tại Lydata
@@ -114,6 +126,16 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
           </div>
         </div>
       )}
+      {/* Lower Transition Wave Banner (Figma Node 12:837 & 12:890 / Rectangle 1575 & 1578) */}
+      <div className="w-full overflow-hidden leading-none select-none pointer-events-none">
+        <Image
+          src="/assets/decorations/banner-lower.svg"
+          alt="Transition Lower Wave Banner"
+          width={1920}
+          height={40}
+          className="w-full h-auto object-cover"
+        />
+      </div>
     </section>
   );
 }

@@ -87,8 +87,8 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
   };
 
   return (
-    <section id="combo-pricing" className="relative w-full bg-neutral-50/50 py-16 lg:py-24 overflow-hidden">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
+    <section id="combo-pricing" className="relative w-full bg-neutral-50/50 pt-16 lg:pt-24 pb-0 overflow-hidden">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 pb-16 lg:pb-20">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-14 lg:mb-16">
 
@@ -277,6 +277,17 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Separation Banner into BlogSection (Figma Node 12:891 / Rectangle 1577) */}
+      <div className="w-full overflow-hidden leading-none select-none pointer-events-none">
+        <Image
+          src="/assets/decorations/banner-upper.svg"
+          alt="Section Separation Banner"
+          width={1920}
+          height={50}
+          className="w-full h-auto object-cover"
+        />
       </div>
 
       {/* Registration Modal Dialog */}
