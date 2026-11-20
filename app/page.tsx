@@ -50,14 +50,14 @@ export default async function Home() {
         {/* 5. Đầu tư thông minh cho sự nghiệp (Combo vs Đăng ký riêng lẻ) */}
         <ComboPricingSection packages={packages} />
 
-        {/* 6. Dự án của học viên qua các khóa học tại Lydata */}
+        {/* 6. Blogs về Data Analytics - Chia sẻ miễn phí (Figma Node 12:838) */}
+        <BlogSection blogs={blogPosts} />
+
+        {/* 7. Dự án của học viên qua các khóa học tại Lydata (Figma Node 12:873) */}
         <StudentProjectsSection projects={studentProjects} />
 
-        {/* 7. Đánh giá của học viên */}
+        {/* 8. Đánh giá của học viên (Figma Node 12:892) */}
         <TestimonialsSection testimonials={testimonials} />
-
-        {/* 8. Blogs về Data Analytics - Chia sẻ miễn phí */}
-        <BlogSection blogs={blogPosts} />
       </main>
 
       {/* Modern 4-Column Footer */}
