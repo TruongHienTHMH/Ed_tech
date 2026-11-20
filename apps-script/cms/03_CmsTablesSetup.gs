@@ -83,7 +83,7 @@ function setupCoursesTab(ss) {
   var headers = [
     "id", "title", "slug", "course_kind", "tag", "tagline",
     "tuition_vnd", "original_tuition_vnd", "duration",
-    "level", "is_active", "is_featured", "sort_order",
+    "level", "study-style", "student_enrollment", "is_active", "is_featured", "sort_order",
     "description", "cover_image_url"
   ];
   var sheet = getOrCreateSheetWithHeader(ss, "courses", headers, "#8B1D2C");
@@ -97,9 +97,12 @@ function setupCoursesTab(ss) {
   var levelRule = SpreadsheetApp.newDataValidation().requireValueInList(["Beginner", "Intermediate", "Advanced"], true).build();
   sheet.getRange("J2:J100").setDataValidation(levelRule);
 
+  var studyStyleRule = SpreadsheetApp.newDataValidation().requireValueInList(["Live Class", "Video", "Kèm 1:1", "Hybrid"], true).build();
+  sheet.getRange("K2:K100").setDataValidation(studyStyleRule);
+
   var booleanRule = SpreadsheetApp.newDataValidation().requireValueInList(["TRUE", "FALSE"], true).build();
-  sheet.getRange("K2:K100").setDataValidation(booleanRule);
-  sheet.getRange("L2:L100").setDataValidation(booleanRule);
+  sheet.getRange("M2:M100").setDataValidation(booleanRule);
+  sheet.getRange("N2:N100").setDataValidation(booleanRule);
 
   sheet.getRange("G2:H100").setNumberFormat("#,##0 \"đ\"");
 
@@ -112,7 +115,7 @@ function setupCoursesTab(ss) {
       "End-to-End",
       "Xây dựng nền tảng Data Analytics toàn diện từ truy vấn đến trực quan hóa",
       5690000, 6780000, "27 buổi",
-      "Beginner", true, true, 1,
+      "Beginner", "Live Class", 350, true, true, 1,
       "Xây dựng nền tảng Data Analytics toàn diện, từ truy vấn và xử lý dữ liệu với SQL đến tư duy phân tích, trực quan hóa và thiết kế Dashboard hoàn chỉnh cho doanh nghiệp.",
       "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png"
     ]);
@@ -125,7 +128,7 @@ function setupCoursesTab(ss) {
       "SQL",
       "Làm quen với Database và SQL, xây dựng khả năng truy vấn và tổng hợp dữ liệu",
       2990000, 3500000, "12 buổi",
-      "Beginner", true, true, 2,
+      "Beginner", "Live Class", 280, true, true, 2,
       "Làm quen với Database và SQL, xây dựng khả năng truy vấn, lọc, biến đổi và tối ưu dữ liệu từ các hệ thống cơ sở dữ liệu lớn trong thực tế doanh nghiệp.",
       "/assets/figma/05ab7dcc030820120da8f65c6b464967f554e0d8.png"
     ]);
@@ -138,7 +141,7 @@ function setupCoursesTab(ss) {
       "Dashboard",
       "Học cách xác định vấn đề, lựa chọn metrics, phân tích dữ liệu và thiết kế báo cáo",
       3790000, 4500000, "15 buổi",
-      "Intermediate", true, true, 3,
+      "Intermediate", "Live Class", 250, true, true, 3,
       "Học cách xác định vấn đề kinh doanh, phân rã chỉ số (Metrics Tree), phân tích dữ liệu chuyên sâu và trực quan hóa Dashboard phục vụ quyết định quản trị.",
       "/assets/figma/b1c9fe6fd2d3dafb5b4b32d30320f68d7cde1f5c.png"
     ]);

@@ -65,6 +65,8 @@ function addCoursesBatchFromModal(courseList) {
       : generateUUID("crs-");
 
     var sortOrder = Number(item.sort_order) || (lastRow + k);
+    var studyStyle = (item["study-style"] || item.study_style || item.studyStyle || "Live Class").toString().trim();
+    var studentEnrollment = Number(item.student_enrollment || item.studentEnrollment) || 250;
 
     rowsToAdd.push([
       sanitizeFormula(uniqueId),
@@ -77,6 +79,8 @@ function addCoursesBatchFromModal(courseList) {
       originalTuition,
       sanitizeFormula(item.duration || "8 tuần (24 buổi)"),
       sanitizeFormula(item.level || "Beginner"),
+      sanitizeFormula(studyStyle),
+      studentEnrollment,
       item.is_active === true || item.is_active === "true",
       item.is_featured === true || item.is_featured === "true",
       sortOrder,
@@ -88,7 +92,7 @@ function addCoursesBatchFromModal(courseList) {
   }
 
   var startRow = sheet.getLastRow() + 1;
-  sheet.getRange(startRow, 1, rowsToAdd.length, 15).setValues(rowsToAdd);
+  sheet.getRange(startRow, 1, rowsToAdd.length, 17).setValues(rowsToAdd);
 
   // Định dạng hiển thị VNĐ (Cột 7 và 8)
   sheet.getRange(startRow, 7, rowsToAdd.length, 2).setNumberFormat('#,##0 "đ"');

@@ -23,9 +23,9 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
     slug: c.slug || `course-${i}`,
     description: c.description || c.title,
     duration: c.duration || "27 buổi",
-    level: c.level || "Live Class",
+    level: c.studyStyle || c.level || "Live Class",
     rating: "5.0",
-    studentsCount: 250 + i * 50,
+    studentsCount: c.studentEnrollment || (250 + i * 50),
     courseKind:
       c.courseKind ||
       (c.slug === "end-to-end-analytics" || c.id === "end-to-end-analytics"

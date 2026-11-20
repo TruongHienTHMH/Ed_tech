@@ -202,6 +202,12 @@ export class SheetsClient {
             ? "Khóa học nền tảng"
             : "Khóa học chuyên sâu");
 
+      // Parse 'study-style' (e.g. "Live Class", "Video", "Kèm 1:1")
+      const studyStyle = String(row["study-style"] || row.study_style || "Live Class").trim();
+
+      // Parse 'student_enrollment' (e.g. 250, 320)
+      const studentEnrollment = Number(row["student_enrollment"] || row.student_enrollment) || (250 + idx * 50);
+
       // Find matching curriculum modules directly from Google Sheets
       const courseCurriculum: CurriculumModule[] = rawCurriculum
         .filter((m) => {
@@ -304,6 +310,8 @@ export class SheetsClient {
         isFeatured,
         sortOrder,
         courseKind,
+        studyStyle,
+        studentEnrollment,
         curriculumModules: courseCurriculum,
       };
     });
