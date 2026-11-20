@@ -20,16 +20,53 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const activePackages = packages && packages.length > 0 ? packages : seedPackages;
-  const comboPackage = activePackages.find((p) => p.isPopular) || activePackages[0];
+
+  // 1. Lọc các gói lẻ từ Google Sheets theo package_id chứa "single"
+  const singlePackages = activePackages.filter((p) =>
+    (p.packageId || p.id || "").toLowerCase().includes("single")
+  );
+
+  // 2. Lọc gói combo từ Google Sheets theo package_id chứa "combo" (hoặc isPopular)
+  const comboPackage =
+    activePackages.find((p) => (p.packageId || p.id || "").toLowerCase().includes("combo")) ||
+    activePackages.find((p) => p.isPopular) ||
+    activePackages[0];
+
+  // Dữ liệu fallback hiển thị cho 2 thẻ đăng ký riêng lẻ nếu sheet chưa đủ gói single
+  const displaySinglePackages =
+    singlePackages.length >= 2
+      ? singlePackages.slice(0, 2)
+      : [
+          singlePackages[0] || {
+            id: "pkg-sql",
+            packageId: "single-sql",
+            name: "Khóa SQL for Data Analytics",
+            featuresList: ["Làm quen với Database và SQL, xây dựng khả năng truy vấn, tổng hợp."],
+            salePrice: 2990000,
+          },
+          singlePackages[1] || {
+            id: "pkg-thinking",
+            packageId: "single-thinking",
+            name: "Khóa Data Analytical Thinking",
+            featuresList: ["Học cách xác định vấn đề, lựa chọn metrics, phân tích dữ liệu."],
+            salePrice: 3790000,
+          },
+        ];
+
   const originalPriceStr = comboPackage?.originalPrice
     ? `${comboPackage.originalPrice.toLocaleString("vi-VN")}VNĐ`
     : "6,780,000VNĐ";
   const finalPriceStr = comboPackage?.salePrice
     ? `${comboPackage.salePrice.toLocaleString("vi-VN")}VNĐ`
     : "5,690,000VNĐ";
-  const savingsAmount = comboPackage && comboPackage.originalPrice && comboPackage.salePrice
-    ? comboPackage.originalPrice - comboPackage.salePrice
-    : 1080000;
+  const savingsAmount =
+    comboPackage && comboPackage.originalPrice && comboPackage.salePrice
+      ? comboPackage.originalPrice - comboPackage.salePrice
+      : 1080000;
+  const savingsPercent =
+    comboPackage && comboPackage.originalPrice && comboPackage.salePrice && comboPackage.originalPrice > comboPackage.salePrice
+      ? Math.round((savingsAmount / comboPackage.originalPrice) * 100)
+      : 16;
 
   const handleOpenRegister = (planName: string) => {
     setSelectedPlan(planName);
@@ -114,37 +151,27 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
                 </div>
               </div>
 
-              {/* 2 Separate Course Cards in 1 Row (Figma Frame 1000007460 / Node 12:1184 - 504 Fill x 217 Hug) */}
+              {/* 2 Separate Course Cards in 1 Row (Figma Frame 1000007460 / Node 12:1184 - Package ID: single-*) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
-                {/* Course 1: SQL for Data Analytics */}
-                <div className="border border-[#784080]/40 rounded-[12px] p-3.5 sm:p-4 lg:p-[18px] flex flex-col justify-between bg-white shadow-xs">
-                  <div>
-                    <h3 className="font-bold text-base sm:text-[18px] lg:text-[19px] text-[#2E2E2E] leading-snug mb-1">
-                      Khóa SQL for Data Analytics
-                    </h3>
-                    <p className="text-xs sm:text-[13px] text-[#969696] font-medium leading-relaxed mb-3">
-                      Làm quen với Database và SQL, xây dựng khả năng truy vấn, tổng hợp.
+                {displaySinglePackages.map((pkg, idx) => (
+                  <div
+                    key={pkg.id || idx}
+                    className="border border-[#784080]/40 rounded-[12px] p-3.5 sm:p-4 lg:p-[18px] flex flex-col justify-between bg-white shadow-xs cursor-pointer hover:border-[#784080] transition-colors"
+                    onClick={() => handleOpenRegister(pkg.name)}
+                  >
+                    <div>
+                      <h3 className="font-bold text-base sm:text-[18px] lg:text-[19px] text-[#2E2E2E] leading-snug mb-1">
+                        {pkg.name}
+                      </h3>
+                      <p className="text-xs sm:text-[13px] text-[#969696] font-medium leading-relaxed mb-3">
+                        {pkg.featuresList?.[0] || "Làm quen và xây dựng năng lực phân tích dữ liệu thực chiến."}
+                      </p>
+                    </div>
+                    <p className="font-bold text-base sm:text-lg lg:text-[20px] bg-gradient-to-r from-[#784080] to-[#AF445A] bg-clip-text text-transparent">
+                      {pkg.salePrice ? `${pkg.salePrice.toLocaleString("vi-VN")}VNĐ` : "2,990,000VNĐ"}
                     </p>
                   </div>
-                  <p className="font-bold text-base sm:text-lg lg:text-[20px] bg-gradient-to-r from-[#784080] to-[#AF445A] bg-clip-text text-transparent">
-                    2,990,000VNĐ
-                  </p>
-                </div>
-
-                {/* Course 2: Data Analytical Thinking */}
-                <div className="border border-[#784080]/40 rounded-[12px] p-3.5 sm:p-4 lg:p-[18px] flex flex-col justify-between bg-white shadow-xs">
-                  <div>
-                    <h3 className="font-bold text-base sm:text-[18px] lg:text-[19px] text-[#2E2E2E] leading-snug mb-1">
-                      Khóa Data Analytical Thinking
-                    </h3>
-                    <p className="text-xs sm:text-[13px] text-[#969696] font-medium leading-relaxed mb-3">
-                      Học cách xác định vấn đề, lựa chọn metrics, phân tích dữ liệu.
-                    </p>
-                  </div>
-                  <p className="font-bold text-base sm:text-lg lg:text-[20px] bg-gradient-to-r from-[#784080] to-[#AF445A] bg-clip-text text-transparent">
-                    3,790,000VNĐ
-                  </p>
-                </div>
+                ))}
               </div>
 
               {/* Divider Line phân chia giữa 2 khóa học và 4 điểm Pain Points */}
@@ -194,7 +221,7 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
                     TIẾT KIỆM
                   </span>
                   <span className="text-xs sm:text-[13px] font-black text-[#2E2E2E] mt-0.5">
-                    ~16%
+                    {comboPackage?.badge?.includes("%") ? comboPackage.badge : `~${savingsPercent}%`}
                   </span>
                 </div>
               </div>
@@ -217,14 +244,16 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
                 </div>
               </div>
 
-              {/* Course Title and Price Box Row */}
+              {/* Course Title and Price Box Row (Package ID: combo-*) */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
                   <h3 className="font-heading font-bold text-2xl sm:text-[28px] leading-tight text-white mb-1.5">
-                    End-to-End Analytics with SQL & Dashboard
+                    {comboPackage?.name || "End-to-End Analytics with SQL & Dashboard"}
                   </h3>
                   <p className="text-white/80 text-base sm:text-lg font-medium">
-                    2 khóa học hoàn chỉnh
+                    {comboPackage?.badge && !comboPackage.badge.includes("%")
+                      ? comboPackage.badge
+                      : "2 khóa học hoàn chỉnh"}
                   </p>
                 </div>
 
@@ -243,13 +272,16 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
             {/* Inner White Body (Figma Frame 1000007453) */}
             <div className="bg-white rounded-[14px] p-6 sm:p-8 flex flex-col justify-between flex-1">
               <div className="space-y-3.5 mb-6">
-                {[
-                  "Lộ trình được thiết kế sẵn",
-                  "Nội dung nối tiếp mạch lạc",
-                  `Tiết kiệm lên đến ${savingsAmount.toLocaleString("vi-VN")}vnđ`,
-                  "Community với hơn 1,200+ members",
-                  "Update nội dung miễn phí",
-                ].map((benefit, i) => (
+                {(comboPackage?.featuresList && comboPackage.featuresList.length > 0
+                  ? comboPackage.featuresList
+                  : [
+                      "Lộ trình được thiết kế sẵn",
+                      "Nội dung nối tiếp mạch lạc",
+                      `Tiết kiệm lên đến ${savingsAmount.toLocaleString("vi-VN")}vnđ`,
+                      "Community với hơn 1,200+ members",
+                      "Update nội dung miễn phí",
+                    ]
+                ).map((benefit, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <Image
                       src="/assets/figma/bb89cec2b7cc67e662e0f2532b951f267ce166fe.svg"

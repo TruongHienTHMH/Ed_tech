@@ -21,6 +21,8 @@ export class CourseSeeder implements Seeder<Course> {
         isFeatured: true,
         sortOrder: 1,
         courseKind: "Khóa học nổi bật",
+        studyStyle: "Live Class",
+        studentEnrollment: 350,
       },
       {
         id: "sql-for-data-analytics",
@@ -39,6 +41,8 @@ export class CourseSeeder implements Seeder<Course> {
         isFeatured: false,
         sortOrder: 2,
         courseKind: "Khóa học nền tảng",
+        studyStyle: "Live Class",
+        studentEnrollment: 280,
       },
       {
         id: "data-analytical-thinking",
@@ -57,6 +61,8 @@ export class CourseSeeder implements Seeder<Course> {
         isFeatured: false,
         sortOrder: 3,
         courseKind: "Khóa học chuyên sâu",
+        studyStyle: "Live Class",
+        studentEnrollment: 250,
       },
     ];
   }

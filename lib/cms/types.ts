@@ -19,6 +19,8 @@ export interface Course {
   isFeatured: boolean;
   sortOrder: number;
   courseKind?: string;                // e.g. "Khóa học nổi bật", "Khóa học nền tảng", "Khóa học chuyên sâu"
+  studyStyle?: string;                // Cột 'study-style' từ Google Sheets (e.g. "Live Class", "Video", "Kèm 1:1")
+  studentEnrollment?: number;         // Cột 'student_enrollment' từ Google Sheets (e.g. 250, 320)
   curriculumModules?: CurriculumModule[];
 }
 

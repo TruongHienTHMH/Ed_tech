@@ -2,6 +2,7 @@ import React from "react";
 
 export type BadgeVariant =
   | "primary"
+  | "outlinePrimary"
   | "tag"
   | "level"
   | "liveClass"
@@ -22,6 +23,9 @@ const variantStyles: Record<BadgeVariant, string> = {
   // Primary Badge (Figma Node 12:894 - Button 6): Gradient #AF445A -> #784080 with bold white uppercase text
   primary:
     "bg-gradient-to-r from-[#AF445A] to-[#784080] text-white font-bold tracking-[0.96px] uppercase shadow-xs",
+  // Outline Primary Badge (Figma Node 12:875): White pill with pink border and gradient text
+  outlinePrimary:
+    "bg-white border-[1.5px] border-[#AF445A] font-bold tracking-[0.96px] uppercase shadow-xs",
   tag:
     "bg-gradient-to-r from-[#AF445A] to-[#784080] text-white font-bold tracking-[0.96px] uppercase shadow-xs",
   level: "border border-white/10 bg-white/10 text-white/90 font-medium",
@@ -64,7 +68,13 @@ export function Badge({
         </span>
       )}
       {icon && <span className="inline-flex shrink-0">{icon}</span>}
-      <span>{children}</span>
+      {variant === "outlinePrimary" ? (
+        <span className="bg-gradient-to-r from-[#AF445A] to-[#784080] bg-clip-text text-transparent">
+          {children}
+        </span>
+      ) : (
+        <span>{children}</span>
+      )}
     </span>
   );
 }

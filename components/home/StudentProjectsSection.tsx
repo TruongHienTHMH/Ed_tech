@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { ExternalLink, X } from "@/components/common/Icons";
-import { Button } from "@/components/common/Button";
+import { Badge } from "@/components/common/Badge";
 import { StudentProject } from "@/lib/cms/types";
 import { seedStudentProjects } from "@/data/seed-data";
 import { SafeImage } from "@/components/common/SafeImage";
@@ -30,38 +30,47 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
   });
 
   return (
-    <section id="projects" className="relative w-full bg-[#1F242F] text-white overflow-hidden">
-      {/* Upper Transition Wave Banner (Figma Node 12:835 / Rectangle 1574) */}
-      <div className="w-full overflow-hidden leading-none select-none pointer-events-none">
+    <section id="projects" className="relative w-full bg-white overflow-hidden">
+      {/* Absolute Background SVG (Figma Group 472 / 12:834):
+          Contains top wave (y=0..50), dark zone (y=50..532), and middle wave (y=532..582) */}
+      <div className="absolute -top-[0] left-1/2 -translate-x-1/2  min-w-[1920px] w-full h-[582px] pointer-events-none select-none z-0">
         <Image
-          src="/assets/decorations/banner-upper.svg"
-          alt="Transition Upper Wave Banner"
+          src="/assets/decorations/stu-project-background.svg"
+          alt="Student Projects Background"
           width={1920}
-          height={50}
-          className="w-full h-auto object-cover"
+          height={582}
+          className="w-full h-full object-cover object-top"
           priority
         />
       </div>
 
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-[#AF445A]/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 pt-22 sm:pt-26 pb-12 sm:pb-16 flex flex-col items-center">
+        {/* Badge (Figma Node 12:875) */}
+        <div className="mb-3.5">
+          <Badge variant="outlinePrimary" size="md">
+            PROJECT HỌC VIÊN
+          </Badge>
+        </div>
 
-      <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-20 flex flex-col items-center">
-        {/* Title */}
-        <h2 className="font-heading font-bold text-2xl sm:text-3xl lg:text-[40px] leading-tight text-center text-white mb-12 max-w-[700px]">
+        {/* Section Title */}
+        <h2 className="font-heading font-bold text-2xl sm:text-3xl lg:text-[40px] leading-tight text-center text-white mb-8 sm:mb-10 max-w-[680px]">
           Dự án của học viên qua các khóa học tại Lydata
         </h2>
 
-        {/* 3x3 Showcase Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full mb-12">
+        {/* 3x3 Showcase Grid:
+            Row 1 sits inside the dark zone (#2E2E2E) of the background SVG.
+            Middle wave ribbon runs through the gap between Row 1 and Row 2.
+            Row 2 & Row 3 sit on the crisp white background below. */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full mb-10 sm:mb-12">
           {displayProjects.map((project, idx) => {
             const isTall = idx >= 6;
             return (
               <div
                 key={project.id}
                 onClick={() => setSelectedImage(project.image)}
-                className={`group relative rounded-2xl overflow-hidden border-2 border-white/20 shadow-lg bg-neutral-900 cursor-pointer transform hover:-translate-y-1.5 transition-all duration-300 ${isTall ? "h-[290px] sm:h-[320px]" : "h-[200px] sm:h-[216px]"
-                  }`}
+                className={`group relative rounded-2xl overflow-hidden border-4 border-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] bg-neutral-900 cursor-pointer transform hover:-translate-y-1.5 transition-all duration-300 ${
+                  isTall ? "h-[300px] sm:h-[330px]" : "h-[200px] sm:h-[216px]"
+                }`}
               >
                 <SafeImage
                   src={project.image}
@@ -87,18 +96,18 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
           })}
         </div>
 
-        {/* "Xem thêm" Button */}
+        {/* "Xem thêm" Button (Figma Node 12:888) */}
         <div>
-          <Button
+          <a
             href="https://facebook.com"
             target="_blank"
             rel="noopener noreferrer"
-            variant="outline"
-            size="lg"
-            className="border-2 border-[#AF445A] text-white hover:bg-white/10 font-bold px-10 shadow-md transition-all hover:scale-105"
+            className="inline-flex items-center justify-center border-2 border-[#AF445A] bg-white rounded-[8px] px-10 py-3 hover:bg-neutral-50 active:scale-[0.99] transition-all cursor-pointer shadow-xs"
           >
-            Xem thêm dự án trên Cộng đồng
-          </Button>
+            <span className="font-bold text-base sm:text-[18px] bg-gradient-to-r from-[#AF445A] to-[#784080] bg-clip-text text-transparent">
+              Xem thêm
+            </span>
+          </a>
         </div>
       </div>
 

@@ -109,6 +109,8 @@ export default function BlogSection({ blogs = seedBlogPosts }: BlogSectionProps)
           </Link>
         </div>
       </div>
+      
     </section>
+    
   );
 }
