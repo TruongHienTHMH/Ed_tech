@@ -78,7 +78,7 @@ export default function HeroSection() {
   return (
     <section className="relative w-full bg-white pt-10 pb-12 sm:pt-16 sm:pb-16 lg:pt-20 lg:pb-20 overflow-hidden">
       {/* Left Artwork Component (Figma Node 157:835 - Shifted down below headline, positioned symmetrically on the left, zero text overlap) */}
-      <div className="hidden xl:block absolute left-2 xl:left-4 2xl:left-12 top-[220px] xl:top-[210px] 2xl:top-[220px] w-[260px] xl:w-[290px] 2xl:w-[340px] pointer-events-none select-none z-10 transition-all duration-300">
+      <div className="hidden xl:block absolute xl:left-20 2xl:left-24 xl:top-[165px] 2xl:top-[170px] w-[260px] xl:w-[290px] 2xl:w-[340px] pointer-events-none select-none z-10 transition-all duration-300">
         <Image
           src="/assets/decorations/hero-left.svg"
           alt="Iconic Left - Data Analytics Team"
@@ -90,7 +90,7 @@ export default function HeroSection() {
       </div>
 
       {/* Right Artwork Component (Figma Node 157:904 - Shifted down below headline, positioned symmetrically on the right, zero text overlap) */}
-      <div className="hidden xl:block absolute right-2 xl:right-4 2xl:right-12 top-[220px] xl:top-[210px] 2xl:top-[220px] w-[270px] xl:w-[300px] 2xl:w-[350px] pointer-events-none select-none z-10 transition-all duration-300">
+      <div className="hidden xl:block absolute xl:right-20 2xl:right-24 xl:top-[165px] 2xl:top-[170px] w-[270px] xl:w-[300px] 2xl:w-[350px] pointer-events-none select-none z-10 transition-all duration-300">
         <Image
           src="/assets/decorations/hero-right.svg"
           alt="Iconic Right - Data Analytics 3D Dashboard"
