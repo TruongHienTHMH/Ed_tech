@@ -14,7 +14,7 @@ export default function Footer() {
           <div className="lg:col-span-5 flex flex-col gap-4">
             <Link href="/" className="inline-block">
               <Image
-                src="/assets/figma/14feb7923d10e1372397793711962f265e88f9a9.svg"
+                src="/assets/mentor/logo-lydata-red.svg"
                 alt="DataWithLy Logo"
                 width={140}
                 height={46}

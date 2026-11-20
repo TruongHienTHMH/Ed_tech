@@ -51,15 +51,15 @@ export default function AlumniCompaniesSection() {
   ];
 
   return (
-    <section className="relative w-full bg-[#1F242F] overflow-hidden text-white border-y border-white/5">
+    <section className="relative w-full bg-[#1F242F] overflow-hidden text-white">
       {/* Upper Transition Wave Banner (Figma Node 12:781 / Rectangle 1574) */}
       <div className="w-full overflow-hidden leading-none select-none pointer-events-none">
         <Image
-          src="/assets/decorations/banner-upper.png"
+          src="/assets/decorations/banner-upper.svg"
           alt="Transition Upper Wave Banner"
-          width={3840}
-          height={100}
-          className="w-full h-auto max-h-[40px] sm:max-h-[50px] object-cover"
+          width={1920}
+          height={50}
+          className="w-full h-auto object-cover"
         />
       </div>
 
@@ -123,11 +123,11 @@ export default function AlumniCompaniesSection() {
       {/* Lower Transition Wave Banner (Figma Node 12:783 / Rectangle 1575) */}
       <div className="w-full overflow-hidden leading-none select-none pointer-events-none">
         <Image
-          src="/assets/decorations/banner-lower.png"
+          src="/assets/decorations/banner-lower.svg"
           alt="Transition Lower Wave Banner"
-          width={3840}
-          height={100}
-          className="w-full h-auto max-h-[40px] sm:max-h-[50px] object-cover"
+          width={1920}
+          height={40}
+          className="w-full h-auto object-cover"
         />
       </div>
     </section>
