@@ -130,6 +130,13 @@ function protectSlugCell(sheet, row, slugCol, titleCol, value, oldValue, ss) {
 function onEdit(e) {
   if (!e || !e.range) return;
 
+  // ⚡ Tự động dọn sạch CacheService khi người dùng sửa bất kỳ ô tính nào trên Google Sheets
+  try {
+    if (typeof clearCmsCache === "function") {
+      clearCmsCache();
+    }
+  } catch (err) {}
+
   var range = e.range;
   var sheet = range.getSheet();
   var sheetName = sheet.getName();

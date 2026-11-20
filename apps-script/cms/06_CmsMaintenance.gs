@@ -415,6 +415,14 @@ function triggerWebsiteRevalidation() {
   var ui = SpreadsheetApp.getUi();
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
+  // ⚡ Xóa sạch CacheService của Apps Script trước khi yêu cầu Website làm mới
+  // Điều này đảm bảo khi Website gửi request kéo dữ liệu mới, Apps Script luôn quét bảng tính thật thay vì trả cache cũ.
+  try {
+    if (typeof clearCmsCache === "function") {
+      clearCmsCache();
+    }
+  } catch (e) {}
+
   var settingsMap = {};
   var settingsSheet = ss.getSheetByName("settings");
   if (settingsSheet) {
