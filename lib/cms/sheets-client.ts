@@ -72,6 +72,13 @@ export class SheetsClient {
   private static readonly CACHE_KEY = "cms:sheets:sync_report";
 
   /**
+   * ⚡ Single-Flight Pattern: Giữ Promise đang thực thi trên đường truyền.
+   * Khi nhiều component/service gọi getLiveSyncReport() đồng thời (ví dụ Promise.all ở trang chủ),
+   * tất cả sẽ dùng chung 1 kết nối HTTP duy nhất, triệt tiêu 100% việc gọi trùng lặp lên Google Apps Script.
+   */
+  private static inFlightPromise: Promise<GoogleSheetsSyncReport> | null = null;
+
+  /**
    * Helper: Parse multiline text (Alt+Enter in Google Sheets) into clean bullet points
    */
   public static parseMultilineText(rawText: unknown): string[] {
@@ -98,6 +105,26 @@ export class SheetsClient {
       if (cached) return cached;
     }
 
+    // 1. Tái sử dụng request đang chạy trên đường truyền nếu có
+    if (this.inFlightPromise) {
+      return this.inFlightPromise;
+    }
+
+    // 2. Khởi tạo Promise thực thi mạng duy nhất
+    this.inFlightPromise = this.fetchFromAppsScript(forceRefresh, isDev).finally(() => {
+      this.inFlightPromise = null;
+    });
+
+    return this.inFlightPromise;
+  }
+
+  /**
+   * Thực hiện gọi HTTP tới Google Apps Script Web App và bóc tách dữ liệu
+   */
+  private static async fetchFromAppsScript(
+    forceRefresh: boolean,
+    isDev: boolean
+  ): Promise<GoogleSheetsSyncReport> {
     const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_CMS_URL || process.env.GOOGLE_APPS_SCRIPT_URL;
     const secret = process.env.GOOGLE_APPS_SCRIPT_CMS_SECRET || process.env.GOOGLE_APPS_SCRIPT_SECRET || "";
     const startTime = Date.now();
@@ -231,7 +258,17 @@ export class SheetsClient {
       const description = String(row.description || "");
       const tuitionVnd = Number(row.tuition_vnd || row.price_discounted || row.price || 3800000);
       const originalTuitionVnd = Number(row.original_tuition_vnd || row.price_original || 4500000);
-      const duration = String(row.duration || "8 tuần");
+
+      // Parse total_sessions với fallback thông minh
+      const rawTotal = row.total_sessions || row.totalsessions || row.so_buoi_hoc || row.so_buoi;
+      let totalSessions = rawTotal ? Number(rawTotal) : 0;
+      if (!totalSessions || isNaN(totalSessions)) {
+        const matched = String(row.duration || "").match(/\d+/);
+        totalSessions = matched ? parseInt(matched[0], 10) : (slug === "end-to-end-analytics" || id === "end-to-end-analytics" ? 25 : slug === "sql-for-data-analytics" ? 12 : 16);
+      }
+      const practiceCount = Number(row.practice_count || row.practicecount || (slug === "sql-for-data-analytics" ? 4 : slug === "data-analytical-thinking" ? 3 : 6));
+      const capstoneCount = Number(row.capstone_count || row.capstonecount || (slug === "sql-for-data-analytics" ? 1 : 2));
+
       const level = (String(row.level || "Beginner") as Course["level"]);
       const rawCover = (row.cover_image_url || row.cover_image || row.image_url || row.thumbnail || row["ảnh_bìa"] || row["anh_bia"]) as string | undefined;
       const coverImageUrl = resolveImageUrl(rawCover, "course", slug || id);
@@ -254,6 +291,17 @@ export class SheetsClient {
 
       // Parse 'student_enrollment' (e.g. 250, 320)
       const studentEnrollment = Number(row["student_enrollment"] || row.student_enrollment) || (250 + idx * 50);
+
+      // Parse 3 trường nội dung chi tiết khóa học
+      const whoIsFor = this.parseMultilineText(
+        row.who_is_for || row.whoisfor || row.danh_cho || ""
+      );
+      const outcomes = this.parseMultilineText(
+        row.outcomes || row.outcome || row.ket_qua || ""
+      );
+      const inputRequirement = row.input_requirement
+        ? String(row.input_requirement).trim()
+        : undefined;
 
       // Find matching curriculum modules directly from Google Sheets
       const courseCurriculum: CurriculumModule[] = rawCurriculum
@@ -350,7 +398,9 @@ export class SheetsClient {
         description,
         tuitionVnd,
         originalTuitionVnd,
-        duration,
+        totalSessions: (courseCurriculum.length > 0 && totalSessions === 0) ? courseCurriculum.length : totalSessions,
+        practiceCount,
+        capstoneCount,
         level,
         coverImageUrl,
         isActive,
@@ -359,6 +409,9 @@ export class SheetsClient {
         courseKind,
         studyStyle,
         studentEnrollment,
+        whoIsFor: whoIsFor.length > 0 ? whoIsFor : undefined,
+        outcomes: outcomes.length > 0 ? outcomes : undefined,
+        inputRequirement: inputRequirement || undefined,
         curriculumModules: courseCurriculum,
       };
     });

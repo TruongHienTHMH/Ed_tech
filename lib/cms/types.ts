@@ -12,7 +12,9 @@ export interface Course {
   description: string;
   tuitionVnd: number;                 // e.g. 4500000
   originalTuitionVnd?: number;        // e.g. 6000000
-  duration: string;                   // e.g. "8 tuần (24 buổi)"
+  totalSessions: number;              // Chuẩn hóa: Số lượng buổi học (e.g. 12, 16, 25)
+  practiceCount?: number;             // Số bài thực hành lớn
+  capstoneCount?: number;             // Số dự án cuối khóa
   level: "Beginner" | "Intermediate" | "Advanced";
   coverImageUrl: string;
   isActive: boolean;                  // Soft delete flag
@@ -21,6 +23,9 @@ export interface Course {
   courseKind?: string;                // e.g. "Khóa học nổi bật", "Khóa học nền tảng", "Khóa học chuyên sâu"
   studyStyle?: string;                // Cột 'study-style' từ Google Sheets (e.g. "Live Class", "Video", "Kèm 1:1")
   studentEnrollment?: number;         // Cột 'student_enrollment' từ Google Sheets (e.g. 250, 320)
+  whoIsFor?: string[];                // "Khóa học này dành cho ai" - mỗi phần tử = 1 bullet point
+  outcomes?: string[];                // "Sau khóa học làm được gì" - mỗi phần tử = 1 bullet point
+  inputRequirement?: string;          // "Yêu cầu đầu vào" - đoạn văn bản hoặc tiêu chí
   curriculumModules?: CurriculumModule[];
 }
 

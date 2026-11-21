@@ -245,17 +245,42 @@
         '</div>' +
         '<div class="form-row">' +
           '<div class="form-group col-1">' +
-            '<label>Thời Lượng</label>' +
-            '<input type="text" name="duration" value="8 tuần (24 buổi)">' +
-          '</div>' +
-          '<div class="form-group col-1">' +
             '<label>Thứ Tự Sắp Xếp</label>' +
             '<input type="number" name="sort_order" min="1" data-auto="true">' +
+          '</div>' +
+        '</div>' +
+        '<div class="form-row" style="background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 8px; padding: 10px 12px; margin-bottom: 14px;">' +
+          '<div class="form-group col-1" style="margin-bottom: 0;">' +
+            '<label style="color: #8B1D2C; font-weight: 700;">Tổng Số Buổi Học (total_sessions) <span class="required">*</span></label>' +
+            '<input type="number" name="total_sessions" placeholder="12" value="12" min="1" required>' +
+          '</div>' +
+          '<div class="form-group col-1" style="margin-bottom: 0;">' +
+            '<label style="color: #8B1D2C; font-weight: 700;">Số Bài Thực Hành (practice_count)</label>' +
+            '<input type="number" name="practice_count" placeholder="4" value="4" min="0">' +
+          '</div>' +
+          '<div class="form-group col-1" style="margin-bottom: 0;">' +
+            '<label style="color: #8B1D2C; font-weight: 700;">Số Dự Án Cuối Khóa (capstone_count)</label>' +
+            '<input type="number" name="capstone_count" placeholder="1" value="1" min="0">' +
           '</div>' +
         '</div>' +
         '<div class="form-group">' +
           '<label>Mô Tả Tổng Quan Khóa Học</label>' +
           '<textarea name="description" rows="2" placeholder="Mô tả giá trị thực chiến, mục tiêu đầu ra và đối tượng phù hợp..."></textarea>' +
+        '</div>' +
+        '<div style="background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 8px; padding: 12px; margin-bottom: 14px;">' +
+          '<label style="color: #8B1D2C; font-weight: 700; display: block; margin-bottom: 8px;">📋 Nội Dung Quản Trị Chi Tiết</label>' +
+          '<div class="form-group">' +
+            '<label>Khóa Học Này Dành Cho Ai? (who_is_for) <span style="color: #64748B; font-weight: normal; font-size: 11px;">(Mỗi dòng = 1 gạch đầu dòng)</span></label>' +
+            '<textarea name="who_is_for" rows="2" placeholder="Người mới bắt đầu chưa có kiến thức về lập trình...&#10;Nhân sự Marketing, Vận hành, Tài chính..."></textarea>' +
+          '</div>' +
+          '<div class="form-group">' +
+            '<label>Sau Khóa Học Làm Được Gì? (outcomes) <span style="color: #64748B; font-weight: normal; font-size: 11px;">(Mỗi dòng = 1 gạch đầu dòng)</span></label>' +
+            '<textarea name="outcomes" rows="2" placeholder="Tự tin viết câu lệnh SQL phức tạp (JOINs, Window Functions)...&#10;Sở hữu Portfolio đồ án Capstone thực chiến..."></textarea>' +
+          '</div>' +
+          '<div class="form-group" style="margin-bottom: 0;">' +
+            '<label>Yêu Cầu Đầu Vào (input_requirement)</label>' +
+            '<textarea name="input_requirement" rows="2" placeholder="Không yêu cầu kiến thức lập trình hay toán cao cấp từ trước. Chỉ cần chuẩn bị máy tính cá nhân..."></textarea>' +
+          '</div>' +
         '</div>' +
         '<div class="form-group">' +
           '<label>Ảnh Bìa (URL)</label>' +
@@ -346,9 +371,14 @@
           tagline: (card.querySelector('[name="tagline"]').value || "").trim(),
           tuition_vnd: tuitionVnd,
           original_tuition_vnd: origTuition || tuitionVnd,
-          duration: (card.querySelector('[name="duration"]').value || "").trim(),
           sort_order: sortVal || (i + 1),
+          total_sessions: Number(card.querySelector('[name="total_sessions"]').value) || 12,
+          practice_count: Number(card.querySelector('[name="practice_count"]').value) || 4,
+          capstone_count: Number(card.querySelector('[name="capstone_count"]').value) || 1,
           description: (card.querySelector('[name="description"]').value || "").trim(),
+          who_is_for: (card.querySelector('[name="who_is_for"]').value || "").trim(),
+          outcomes: (card.querySelector('[name="outcomes"]').value || "").trim(),
+          input_requirement: (card.querySelector('[name="input_requirement"]').value || "").trim(),
           cover_image_url: (card.querySelector('[name="cover_image_url"]').value || "").trim(),
           is_active: card.querySelector('[name="is_active"]').checked,
           is_featured: card.querySelector('[name="is_featured"]').checked

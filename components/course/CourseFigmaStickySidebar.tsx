@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { Course } from "@/lib/cms/types";
 import { openLeadModal } from "@/components/forms/LeadModalManager";
 import { Button } from "@/components/common/Button";
-import { ArrowRight } from "@/components/common/Icons";
 import { SafeImage } from "@/components/common/SafeImage";
 import { resolveImageUrl, getFigmaFallback } from "@/lib/constants/image-fallbacks";
 
@@ -15,21 +15,54 @@ interface CourseFigmaStickySidebarProps {
 export default function CourseFigmaStickySidebar({ course }: CourseFigmaStickySidebarProps) {
   // Format VND currency
   const formatVnd = (amount?: number) => {
-    if (!amount) return "5.699.000";
+    if (!amount) return "5.690.000";
     return new Intl.NumberFormat("vi-VN").format(amount);
+  };
+
+  // Format ngày tháng năm tiếng Việt chuẩn (Ví dụ: "2026-10-26" -> "26 tháng 10, 2026")
+  const formatVietnameseDate = (rawDate?: string) => {
+    if (!rawDate) return "Liên hệ để có thêm thông tin nhé";
+
+    if (rawDate.includes("tháng")) return rawDate;
+
+    // Xử lý định dạng YYYY-MM-DD
+    const isoParts = rawDate.trim().split("-");
+    if (isoParts.length === 3 && isoParts[0].length === 4) {
+      const year = isoParts[0];
+      const month = parseInt(isoParts[1], 10);
+      const day = parseInt(isoParts[2], 10);
+      if (!isNaN(day) && !isNaN(month)) {
+        return `${day} tháng ${month}, ${year}`;
+      }
+    }
+
+    // Xử lý định dạng DD/MM/YYYY
+    const slashParts = rawDate.trim().split("/");
+    if (slashParts.length === 3) {
+      const day = parseInt(slashParts[0], 10);
+      const month = parseInt(slashParts[1], 10);
+      const year = slashParts[2];
+      if (!isNaN(day) && !isNaN(month)) {
+        return `${day} tháng ${month}, ${year}`;
+      }
+    }
+
+    try {
+      const d = new Date(rawDate);
+      if (!isNaN(d.getTime())) {
+        return `${d.getDate()} tháng ${d.getMonth() + 1}, ${d.getFullYear()}`;
+      }
+    } catch {
+      // Fallback
+    }
+
+    return rawDate;
   };
 
   const handleRegisterClick = () => {
     openLeadModal({
       courseId: course.id,
       ctaLocation: "sticky_sidebar_cta",
-    });
-  };
-
-  const handleConsultClick = () => {
-    openLeadModal({
-      courseId: course.id,
-      ctaLocation: "sticky_sidebar_consult",
     });
   };
 
@@ -77,24 +110,15 @@ export default function CourseFigmaStickySidebar({ course }: CourseFigmaStickySi
         </div>
 
         {/* Primary CTA Buttons */}
-        <div className="space-y-3 mb-6">
+        <div className="space-y-2.5 mb-6">
           <Button
             variant="primary"
             size="lg"
             fullWidth
             onClick={handleRegisterClick}
-            iconRight={<ArrowRight className="w-4 h-4" />}
+            className="bg-gradient-to-r from-[#AF445A] to-[#784080] hover:opacity-95 text-white font-bold py-3.5 rounded-xl shadow-md transition-all cursor-pointer text-sm sm:text-base"
           >
-            Đăng ký ngay
-          </Button>
-
-          <Button
-            variant="outline"
-            size="md"
-            fullWidth
-            onClick={handleConsultClick}
-          >
-            Nhận tư vấn 1:1
+            Nhận tự vấn 1 : 1
           </Button>
         </div>
 
@@ -102,23 +126,32 @@ export default function CourseFigmaStickySidebar({ course }: CourseFigmaStickySi
         <div className="border-t border-gray-100 pt-5 space-y-4 text-sm">
           <div className="flex items-center justify-between text-gray-700">
             <span className="flex items-center gap-2 text-gray-500">
-              <span>📅</span> Ngày bắt đầu:
+              <span>📅</span> Khai giảng:
             </span>
-            <span className="font-bold text-gray-900">26 tháng 10, 2026</span>
+            <span className="font-bold text-gray-900">
+              {formatVietnameseDate(course.curriculumModules?.[0]?.startDate)}
+            </span>
           </div>
 
           <div className="flex items-center justify-between text-gray-700">
             <span className="flex items-center gap-2 text-gray-500">
               <span>⏱️</span> Thời lượng:
             </span>
-            <span className="font-bold text-gray-900">{course.duration || "12 buổi (6 tuần)"}</span>
+            <span className="font-bold text-gray-900">{course.totalSessions || 12} buổi học</span>
           </div>
 
           <div className="flex items-center justify-between text-gray-700">
             <span className="flex items-center gap-2 text-gray-500">
               <span>👥</span> Hình thức:
             </span>
-            <span className="font-bold text-gray-900">Zoom Meeting</span>
+            <span className="font-bold text-gray-900">{course.studyStyle || "Live Class"}</span>
+          </div>
+
+          <div className="flex items-center justify-between text-gray-700">
+            <span className="flex items-center gap-2 text-gray-500">
+              <span>🎯</span> Trình độ:
+            </span>
+            <span className="font-bold text-gray-900">{course.level || "Beginner"}</span>
           </div>
 
           {/* Inclusions List */}
@@ -126,35 +159,59 @@ export default function CourseFigmaStickySidebar({ course }: CourseFigmaStickySi
             <p className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-2.5">
               Khóa học bao gồm:
             </p>
-            <ul className="space-y-2 text-xs text-gray-600">
-              <li className="flex items-start gap-2">
-                <span className="text-emerald-500 font-bold">✓</span>
-                <span>12 Buổi học Live tương tác trực tiếp cùng Mentor</span>
+            <ul className="space-y-2.5 text-xs text-gray-600">
+              <li className="flex items-center gap-2.5">
+                <Image
+                  src="/assets/decorations/verify.svg"
+                  alt="✓"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4 shrink-0"
+                />
+                <span>{course.totalSessions || 12} Buổi học Live tương tác trực tiếp cùng Mentor</span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="text-emerald-500 font-bold">✓</span>
-                <span>2 Bài thực hành lớn (Hands-on Labs) có chấm điểm</span>
+              <li className="flex items-center gap-2.5">
+                <Image
+                  src="/assets/decorations/verify.svg"
+                  alt="✓"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4 shrink-0"
+                />
+                <span>{course.practiceCount || 4} Bài thực hành lớn (Hands-on Labs) có chấm điểm</span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="text-emerald-500 font-bold">✓</span>
-                <span>1 Dự án tốt nghiệp Capstone đa chiều cho Portfolio</span>
+              <li className="flex items-center gap-2.5">
+                <Image
+                  src="/assets/decorations/verify.svg"
+                  alt="✓"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4 shrink-0"
+                />
+                <span>{course.capstoneCount || 1} Dự án tốt nghiệp Capstone đa chiều cho Portfolio</span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="text-emerald-500 font-bold">✓</span>
+              <li className="flex items-center gap-2.5">
+                <Image
+                  src="/assets/decorations/verify.svg"
+                  alt="✓"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4 shrink-0"
+                />
                 <span>Mentor trực tiếp sửa code & tư vấn CV 1-on-1</span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="text-emerald-500 font-bold">✓</span>
+              <li className="flex items-center gap-2.5">
+                <Image
+                  src="/assets/decorations/verify.svg"
+                  alt="✓"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4 shrink-0"
+                />
                 <span>Xem lại video record chất lượng cao trọn đời</span>
               </li>
             </ul>
           </div>
-        </div>
-
-        {/* Safe Guarantee Note */}
-        <div className="mt-6 pt-4 border-t border-gray-100 flex items-center gap-2 text-[11px] text-gray-500">
-          <span>🛡️</span>
-          <span>Bảo lưu tối đa 6 tháng • Hoàn tiền 100% nếu không hài lòng sau 2 buổi</span>
         </div>
       </div>
     </aside>

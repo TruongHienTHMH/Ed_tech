@@ -87,6 +87,7 @@ export default function Navbar({
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-3 shrink-0 focus:outline-none">
           <Image
+            // src="/assets/mentor/logo-lydata-red.svg"
             src="/assets/figma/14feb7923d10e1372397793711962f265e88f9a9.svg"
             alt="DataWithLy Logo"
             width={140}
@@ -147,7 +148,7 @@ export default function Navbar({
                               className={`text-xs ${isLight ? "text-neutral-500" : "text-white/60"
                                 }`}
                             >
-                              {course.duration || "Khóa học thực chiến"}
+                              {course.totalSessions ? `${course.totalSessions} buổi` : "Khóa học thực chiến"}
                             </p>
                           </Link>
                         ))}
@@ -173,7 +174,7 @@ export default function Navbar({
                                   className={`text-xs ${isLight ? "text-neutral-500" : "text-white/70"
                                     }`}
                                 >
-                                  {combo.duration} — Trọn gói tiết kiệm &rarr;
+                                  {combo.totalSessions ? `${combo.totalSessions} buổi` : "25 buổi"} — Trọn gói tiết kiệm &rarr;
                                 </p>
                               </Link>
                             ))}
@@ -263,7 +264,7 @@ export default function Navbar({
                           : "text-white/80 hover:text-[#AF445A]"
                       }`}
                     >
-                      • {c.title} ({c.duration})
+                      • {c.title} ({c.totalSessions || 12} buổi)
                     </Link>
                   ))}
                   {comboCourses.map((c) => (
@@ -273,7 +274,7 @@ export default function Navbar({
                       onClick={() => setMobileMenuOpen(false)}
                       className="block pl-2 text-sm font-semibold text-[#AF445A]"
                     >
-                      • {c.title} ({c.duration})
+                      • {c.title} ({c.totalSessions || 25} buổi)
                     </Link>
                   ))}
                 </div>

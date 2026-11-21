@@ -84,9 +84,35 @@ function setupCoursesTab(ss) {
     "id", "title", "slug", "course_kind", "tag", "tagline",
     "tuition_vnd", "original_tuition_vnd", "duration",
     "level", "study-style", "student_enrollment", "is_active", "is_featured", "sort_order",
-    "description", "cover_image_url"
+    "description", "cover_image_url",
+    "total_sessions", "practice_count", "capstone_count",
+    "who_is_for", "outcomes", "input_requirement"
   ];
   var sheet = getOrCreateSheetWithHeader(ss, "courses", headers, "#8B1D2C");
+
+  // Migration: Tự động bổ sung các cột mới nếu sheet courses cũ thiếu cột
+  if (sheet.getLastRow() >= 1) {
+    var curHeaders = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    var curHeadersClean = curHeaders.map(function(h) { return h ? h.toString().trim().toLowerCase() : ""; });
+    var missingHeaders = [];
+    for (var h = 0; h < headers.length; h++) {
+      if (curHeadersClean.indexOf(headers[h].toLowerCase()) === -1) {
+        missingHeaders.push(headers[h]);
+      }
+    }
+    if (missingHeaders.length > 0) {
+      var startCol = sheet.getLastColumn() + 1;
+      var newHeaderRange = sheet.getRange(1, startCol, 1, missingHeaders.length);
+      newHeaderRange.setValues([missingHeaders]);
+      newHeaderRange
+        .setBackground("#8B1D2C")
+        .setFontColor("#FFFFFF")
+        .setFontWeight("bold")
+        .setFontSize(10)
+        .setHorizontalAlignment("center")
+        .setVerticalAlignment("middle");
+    }
+  }
 
   var kindRule = SpreadsheetApp.newDataValidation().requireValueInList(COURSE_KINDS_LIST, true).build();
   sheet.getRange("D2:D100").setDataValidation(kindRule);
@@ -117,7 +143,11 @@ function setupCoursesTab(ss) {
       5690000, 6780000, "27 buổi",
       "Beginner", "Live Class", 350, true, true, 1,
       "Xây dựng nền tảng Data Analytics toàn diện, từ truy vấn và xử lý dữ liệu với SQL đến tư duy phân tích, trực quan hóa và thiết kế Dashboard hoàn chỉnh cho doanh nghiệp.",
-      "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png"
+      "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png",
+      25, 6, 2,
+      "Người mới bắt đầu chưa có kiến thức về lập trình hay cơ sở dữ liệu.\nNhân sự Marketing, Vận hành, Tài chính muốn tự động hóa việc làm báo cáo.\nSinh viên hoặc người đi làm muốn chuyển ngành sang vị trí Data Analyst.",
+      "Tự tin viết câu lệnh SQL phức tạp (JOINs, Window Functions, CTE).\nThiết kế Dashboard chuyên nghiệp bằng Power BI cho báo cáo doanh nghiệp.\nSở hữu Portfolio đồ án Capstone thực chiến để gây ấn tượng với nhà tuyển dụng.",
+      "Không yêu cầu kiến thức lập trình hay toán cao cấp từ trước. Bạn chỉ cần chuẩn bị máy tính cá nhân (Windows hoặc macOS) và tinh thần học hỏi nghiêm túc."
     ]);
 
     sheet.appendRow([
@@ -130,7 +160,11 @@ function setupCoursesTab(ss) {
       2990000, 3500000, "12 buổi",
       "Beginner", "Live Class", 280, true, true, 2,
       "Làm quen với Database và SQL, xây dựng khả năng truy vấn, lọc, biến đổi và tối ưu dữ liệu từ các hệ thống cơ sở dữ liệu lớn trong thực tế doanh nghiệp.",
-      "/assets/figma/05ab7dcc030820120da8f65c6b464967f554e0d8.png"
+      "/assets/figma/05ab7dcc030820120da8f65c6b464967f554e0d8.png",
+      12, 4, 1,
+      "Người mới bắt đầu chưa có kiến thức về lập trình hay cơ sở dữ liệu.\nNhân sự muốn học SQL để tự truy xuất dữ liệu và làm báo cáo tự động.\nSinh viên hoặc người đi làm muốn ứng tuyển vị trí Data / Business Analyst.",
+      "Tự tin viết câu lệnh SQL phức tạp (JOINs, Window Functions, CTE).\nTối ưu hóa tốc độ truy vấn trên hệ thống dữ liệu lớn của doanh nghiệp.\nSở hữu Portfolio đồ án Capstone thực chiến để gây ấn tượng với nhà tuyển dụng.",
+      "Không yêu cầu kiến thức lập trình hay toán cao cấp từ trước. Bạn chỉ cần chuẩn bị máy tính cá nhân (Windows hoặc macOS) và tinh thần học hỏi nghiêm túc."
     ]);
 
     sheet.appendRow([
@@ -143,7 +177,11 @@ function setupCoursesTab(ss) {
       3790000, 4500000, "15 buổi",
       "Intermediate", "Live Class", 250, true, true, 3,
       "Học cách xác định vấn đề kinh doanh, phân rã chỉ số (Metrics Tree), phân tích dữ liệu chuyên sâu và trực quan hóa Dashboard phục vụ quyết định quản trị.",
-      "/assets/figma/b1c9fe6fd2d3dafb5b4b32d30320f68d7cde1f5c.png"
+      "/assets/figma/b1c9fe6fd2d3dafb5b4b32d30320f68d7cde1f5c.png",
+      16, 3, 2,
+      "Data Analyst muốn nâng cao tư duy phân tích và kỹ năng thiết kế Dashboard.\nNhân sự cấp trung muốn đọc hiểu và trình bày dữ liệu thuyết phục hơn.\nNgười đã có kiến thức SQL cơ bản muốn hoàn thiện kỹ năng phân tích chuyên sâu.",
+      "Phân tích dữ liệu với tư duy phản biện, xác định đúng vấn đề kinh doanh.\nThiết kế Metrics Tree và Dashboard phục vụ quyết định quản trị.\nTrình bày insight bằng ngôn ngữ dữ liệu thuyết phục cho stakeholder.",
+      "Học viên cần có kiến thức SQL cơ bản, bao gồm truy vấn, lọc, tổng hợp và kết hợp dữ liệu."
     ]);
   }
 }
