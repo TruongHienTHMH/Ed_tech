@@ -72,6 +72,13 @@ export class SheetsClient {
   private static readonly CACHE_KEY = "cms:sheets:sync_report";
 
   /**
+   * ⚡ Single-Flight Pattern: Giữ Promise đang thực thi trên đường truyền.
+   * Khi nhiều component/service gọi getLiveSyncReport() đồng thời (ví dụ Promise.all ở trang chủ),
+   * tất cả sẽ dùng chung 1 kết nối HTTP duy nhất, triệt tiêu 100% việc gọi trùng lặp lên Google Apps Script.
+   */
+  private static inFlightPromise: Promise<GoogleSheetsSyncReport> | null = null;
+
+  /**
    * Helper: Parse multiline text (Alt+Enter in Google Sheets) into clean bullet points
    */
   public static parseMultilineText(rawText: unknown): string[] {
@@ -98,6 +105,26 @@ export class SheetsClient {
       if (cached) return cached;
     }
 
+    // 1. Tái sử dụng request đang chạy trên đường truyền nếu có
+    if (this.inFlightPromise) {
+      return this.inFlightPromise;
+    }
+
+    // 2. Khởi tạo Promise thực thi mạng duy nhất
+    this.inFlightPromise = this.fetchFromAppsScript(forceRefresh, isDev).finally(() => {
+      this.inFlightPromise = null;
+    });
+
+    return this.inFlightPromise;
+  }
+
+  /**
+   * Thực hiện gọi HTTP tới Google Apps Script Web App và bóc tách dữ liệu
+   */
+  private static async fetchFromAppsScript(
+    forceRefresh: boolean,
+    isDev: boolean
+  ): Promise<GoogleSheetsSyncReport> {
     const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_CMS_URL || process.env.GOOGLE_APPS_SCRIPT_URL;
     const secret = process.env.GOOGLE_APPS_SCRIPT_CMS_SECRET || process.env.GOOGLE_APPS_SCRIPT_SECRET || "";
     const startTime = Date.now();

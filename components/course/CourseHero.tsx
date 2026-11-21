@@ -57,14 +57,8 @@ export default function CourseHero({ course }: CourseHeroProps) {
           <div className="lg:col-span-7 flex flex-col gap-6">
             {/* Badges (Figma Node 12:1427) */}
             <div className="flex flex-wrap items-center gap-2.5">
-              <Badge variant="tag">
-                {course.tag || "Data Analytics"}
-              </Badge>
-              <Badge variant="level">
-                {course.level || "Người mới bắt đầu"}
-              </Badge>
-              <Badge variant="liveClass">
-                Live Class
+              <Badge variant="outlinePrimary">
+                {course.courseKind || "Data Analytics"}
               </Badge>
             </div>
 
@@ -85,21 +79,13 @@ export default function CourseHero({ course }: CourseHeroProps) {
                 <span>{course.duration || "12 buổi học (24 giờ)"}</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3.5 py-2.5 rounded-xl border border-white/10">
-                <Calendar className="w-4 h-4 text-[#FFC934] shrink-0" />
-                <span>Tối Thứ 3 & Thứ 5 (19:30 - 21:30)</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3.5 py-2.5 rounded-xl border border-white/10">
-                <Calendar className="w-4 h-4 text-[#AF445A] shrink-0" />
-                <span>Khai giảng: 15 hàng tháng</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3.5 py-2.5 rounded-xl border border-white/10">
                 <Video className="w-4 h-4 text-[#AF445A] shrink-0" />
-                <span>Live Class Zoom 100%</span>
+                <span>Live Class</span>
               </div>
             </div>
 
             {/* Tuition Price Display */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
+            {/* <div className="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
               <div className="flex items-baseline gap-3">
                 <span className="text-xs uppercase font-semibold text-white/60 tracking-wider">
                   Học phí ưu đãi:
@@ -120,7 +106,7 @@ export default function CourseHero({ course }: CourseHeroProps) {
                   )}
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* Dual CTAs */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1">
@@ -137,14 +123,6 @@ export default function CourseHero({ course }: CourseHeroProps) {
                 Đăng ký tư vấn ngay
               </Button>
 
-              <Button
-                variant="outline"
-                size="lg"
-                href="#curriculum"
-                className="border-white/20 text-white hover:bg-white/10 hover:text-white hover:border-white/40"
-              >
-                Xem đề cương chi tiết
-              </Button>
             </div>
           </div>
 

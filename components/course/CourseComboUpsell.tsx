@@ -154,7 +154,7 @@ export default function CourseComboUpsell({ course }: CourseComboUpsellProps) {
                 </div>
 
                 <h3 className="font-heading font-bold text-xl sm:text-2xl text-white mb-2">
-                  Combo End-to-End Analytics with SQL & Dashboard
+                  Khóa End-to-End Analytics with SQL & Dashboard Design 
                 </h3>
                 <p className="text-xs sm:text-sm text-white/80 mb-6 font-normal">
                   Trọn bộ từ truy vấn trích xuất dữ liệu nâng cao (SQL) đến tư duy phân rã bài toán và trực quan hóa Dashboard hoàn chỉnh cho C-Level.

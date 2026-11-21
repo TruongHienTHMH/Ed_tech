@@ -79,16 +79,6 @@ export default function CourseFigmaStickySidebar({ course }: CourseFigmaStickySi
         {/* Primary CTA Buttons */}
         <div className="space-y-3 mb-6">
           <Button
-            variant="primary"
-            size="lg"
-            fullWidth
-            onClick={handleRegisterClick}
-            iconRight={<ArrowRight className="w-4 h-4" />}
-          >
-            Đăng ký ngay
-          </Button>
-
-          <Button
             variant="outline"
             size="md"
             fullWidth
