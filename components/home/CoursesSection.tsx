@@ -22,7 +22,7 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
     title: c.title,
     slug: c.slug || `course-${i}`,
     description: c.description || c.title,
-    duration: c.duration || "27 buổi",
+    totalSessions: c.totalSessions || (c.slug === "sql-for-data-analytics" ? 12 : c.slug === "data-analytical-thinking" ? 16 : 25),
     level: c.studyStyle || c.level || "Live Class",
     rating: "5.0",
     studentsCount: c.studentEnrollment || (250 + i * 50),
@@ -108,7 +108,7 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
                       <div className="flex items-center gap-6 text-sm sm:text-base font-normal text-white">
                         <div className="flex items-center gap-2">
                           <Clock className="w-5 h-5 text-white/90" />
-                          <span>{course.duration}</span>
+                          <span>{course.totalSessions} buổi</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Video className="w-5 h-5 text-white/90" />

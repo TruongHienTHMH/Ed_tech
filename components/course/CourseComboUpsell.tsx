@@ -52,7 +52,7 @@ export default function CourseComboUpsell({ course }: CourseComboUpsellProps) {
                   {isCombo ? "Gói Đào Tạo Trọn Gói" : "Khóa Lẻ Hiện Tại"}
                 </span>
                 <span className="text-xs font-semibold text-neutral-500">
-                  {course.duration || "12 buổi"}
+                  {course.totalSessions || 12} buổi
                 </span>
               </div>
 

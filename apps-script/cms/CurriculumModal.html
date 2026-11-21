@@ -4,70 +4,130 @@
 <head>
   <base target="_top">
   <?!= include('SharedStyles'); ?>
+  <style>
+    .day-pill-container {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .day-pill {
+      border: 1px solid #D1D5DB;
+      background: #FFFFFF;
+      color: #374151;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .day-pill.active {
+      background: #8B1D2C;
+      color: #FFFFFF;
+      border-color: #8B1D2C;
+      box-shadow: 0 1px 3px rgba(139, 29, 44, 0.3);
+    }
+    .day-pill:hover:not(.active) {
+      background: #F3F4F6;
+      border-color: #9CA3AF;
+    }
+    .engine-summary-bar {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #4B5563;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .engine-summary-badge {
+      font-weight: 700;
+      color: #8B1D2C;
+    }
+  </style>
 </head>
 
 <body>
   <div class="modal-header">
     <div>
       <h2 class="modal-title">📚 Quản Trị Lộ Trình Khóa Học (Curriculum Modules)</h2>
-      <p class="modal-subtitle">Khởi tạo số lượng buổi học linh hoạt (1, 2, 3, 4 buổi/tuần), thiết lập ngày bắt đầu/kết thúc và nội dung chi tiết</p>
+      <p class="modal-subtitle">Liên kết Khóa ngoại với Khóa học, Date Engine tự động sinh ngày theo các thứ trong tuần</p>
     </div>
   </div>
 
   <form id="curriculumForm">
-    <!-- KHỐI 1: CHỌN KHÓA HỌC & THỜI GIAN KHÓA HỌC -->
+    <!-- KHỐI 1: CHỌN KHÓA HỌC (FOREIGN KEY LINK) -->
     <div class="form-group">
-      <label for="course_select">Khóa Học Áp Dụng <span class="required">*</span></label>
+      <label for="course_select">Khóa Học Áp Dụng (Khóa Ngoại) <span class="required">*</span></label>
       <select id="course_select" name="course_select" required>
-        <? for (var i = 0; i < coursesList.length; i++) { ?>
-        <option value="<?= coursesList[i].id ?>" data-title="<?= coursesList[i].title ?>"
-          data-start="<?= coursesList[i].startDate || '' ?>"
-          data-end="<?= coursesList[i].endDate || '' ?>"
-          data-max="<?= coursesList[i].maxModule ?>">
-          <?= coursesList[i].title ?> (Hiện có: <?= coursesList[i].maxModule ?> buổi học)
+        <? for (var i = 0; i < coursesList.length; i++) { 
+             var c = coursesList[i];
+             var sCount = c.totalSessions || c.maxModule || 12;
+        ?>
+        <option value="<?= c.id ?>" 
+          data-title="<?= c.title ?>"
+          data-start="<?= c.startDate || '' ?>"
+          data-end="<?= c.endDate || '' ?>"
+          data-totalsessions="<?= sCount ?>"
+          data-practice="<?= c.practiceCount || 0 ?>"
+          data-capstone="<?= c.capstoneCount || 0 ?>">
+          <?= c.title ?> (<?= sCount ?> buổi | <?= c.practiceCount || 0 ?> thực hành | <?= c.capstoneCount || 0 ?> capstone)
         </option>
         <? } ?>
       </select>
     </div>
 
-    <div class="form-row">
-      <div class="form-group col-1">
-        <label for="course_start_date">Ngày Bắt Đầu Khóa Học (Khai Giảng)</label>
-        <input type="date" id="course_start_date" name="course_start_date">
-      </div>
-      <div class="form-group col-1">
-        <label for="course_end_date">Ngày Kết Thúc Khóa Học (Bế Giảng)</label>
-        <input type="date" id="course_end_date" name="course_end_date">
-      </div>
-    </div>
-
-    <!-- KHỐI 2: CẤU HÌNH SINH BUỔI HỌC TỰ ĐỘNG THEO TUẦN -->
+    <!-- KHỐI 2: THIẾT LẬP DATE ENGINE & LỊCH HỌC -->
     <div style="background: #F8F9FA; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 16px; margin-bottom: 20px;">
-      <div style="font-weight: 700; font-size: 13px; color: #1F242F; margin-bottom: 8px;">
-        ⚙️ Thiết Lập Sinh Form Buổi Học Nhanh
+      <div style="font-weight: 700; font-size: 13px; color: #1F242F; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+        <span>⚙️ Thiết Lập Lịch Học & Date Engine Tự Động</span>
+        <span style="font-size: 11px; font-weight: normal; color: #6B7280;">Tự động tính ngày bế giảng & date badge</span>
       </div>
-      <div class="form-row" style="margin-bottom: 0; align-items: flex-end;">
-        <div class="form-group col-1" style="margin-bottom: 0;">
-          <label for="sessions_per_week">Số Buổi Mỗi Tuần</label>
-          <select id="sessions_per_week" name="sessions_per_week">
-            <option value="1">1 buổi / tuần</option>
-            <option value="2">2 buổi / tuần</option>
-            <option value="3" selected>3 buổi / tuần</option>
-            <option value="4">4 buổi / tuần</option>
-          </select>
+
+      <div class="form-row">
+        <div class="form-group col-1">
+          <label for="course_start_date">Ngày Bắt Đầu (Khai Giảng) <span class="required">*</span></label>
+          <input type="date" id="course_start_date" name="course_start_date" required>
         </div>
-        <div class="form-group col-1" style="margin-bottom: 0;">
-          <label for="total_sessions">Tổng Số Buổi Cần Tạo</label>
-          <input type="number" id="total_sessions" name="total_sessions" min="1" max="60" value="12">
+        <div class="form-group col-1">
+          <label for="total_sessions">Tổng Số Buổi (total_sessions)</label>
+          <input type="number" id="total_sessions" name="total_sessions" min="1" max="100" value="12">
         </div>
-        <div style="padding-bottom: 2px;">
-          <button type="button" id="generateCardsBtn" class="btn-submit" style="padding: 10px 18px; font-size: 13px; background: #8B1D2C;">
-            ⚡ Khởi Tạo Form
-          </button>
+        <div class="form-group col-1">
+          <label for="course_end_date">Ngày Kết Thúc (Tự Tính Toán)</label>
+          <input type="date" id="course_end_date" name="course_end_date">
         </div>
       </div>
-      <div style="font-size: 11px; color: #6B7280; margin-top: 8px;">
-        💡 Chọn số buổi/tuần (ví dụ 3 buổi/tuần) và bấm <strong>Khởi Tạo Form</strong>, hệ thống sẽ tự động tạo đúng số buổi học và chia tuần chuẩn xác.
+
+      <!-- CHỌN CÁC THỨ TRONG TUẦN -->
+      <div class="form-group" style="margin-bottom: 8px;">
+        <label>Chọn Các Buổi Học Trong Tuần (Thứ 2 đến Chủ Nhật):</label>
+        <div class="day-pill-container" id="weekdayPicker">
+          <button type="button" class="day-pill" data-day="1">Thứ 2</button>
+          <button type="button" class="day-pill active" data-day="2">Thứ 3</button>
+          <button type="button" class="day-pill" data-day="3">Thứ 4</button>
+          <button type="button" class="day-pill active" data-day="4">Thứ 5</button>
+          <button type="button" class="day-pill" data-day="5">Thứ 6</button>
+          <button type="button" class="day-pill" data-day="6">Thứ 7</button>
+          <button type="button" class="day-pill" data-day="0">Chủ Nhật</button>
+        </div>
+      </div>
+
+      <div class="engine-summary-bar">
+        <div>
+          Lịch học: <span id="scheduleText" class="engine-summary-badge">Thứ 3 & Thứ 5 (2 buổi/tuần)</span>
+        </div>
+        <button type="button" id="generateCardsBtn" class="btn-submit" style="padding: 7px 16px; font-size: 12px; background: #8B1D2C;">
+          ⚡ Khởi Tạo Form (Date Engine)
+        </button>
       </div>
     </div>
 
@@ -84,7 +144,7 @@
     <div class="btn-group">
       <button type="button" class="btn-cancel" onclick="google.script.host.close()">Hủy Bỏ</button>
       <button type="submit" id="submitBtn" class="btn-submit">
-        <span id="submitBtnText">Lưu tất cả (12 buổi học)</span>
+        <span id="submitBtnText">Lưu tất cả vào Sheet curriculum</span>
       </button>
     </div>
   </form>
@@ -93,8 +153,9 @@
     var courseSelect = document.getElementById("course_select");
     var startDateInput = document.getElementById("course_start_date");
     var endDateInput = document.getElementById("course_end_date");
-    var sessionsPerWeekSelect = document.getElementById("sessions_per_week");
     var totalSessionsInput = document.getElementById("total_sessions");
+    var weekdayPicker = document.getElementById("weekdayPicker");
+    var scheduleText = document.getElementById("scheduleText");
     var generateCardsBtn = document.getElementById("generateCardsBtn");
     var container = document.getElementById("curriculumCardsContainer");
     var addCurriculumBtn = document.getElementById("addCurriculumBtn");
@@ -104,52 +165,141 @@
     var successBox = document.getElementById("successBox");
     var form = document.getElementById("curriculumForm");
 
+    var dayLabels = {
+      1: "Thứ 2",
+      2: "Thứ 3",
+      3: "Thứ 4",
+      4: "Thứ 5",
+      5: "Thứ 6",
+      6: "Thứ 7",
+      0: "Chủ Nhật"
+    };
+
     function getSelectedCourseOption() {
       return courseSelect.options[courseSelect.selectedIndex];
     }
 
-    function syncCourseDates() {
+    function syncCourseData() {
       var opt = getSelectedCourseOption();
       if (opt) {
         if (opt.getAttribute("data-start")) {
           startDateInput.value = opt.getAttribute("data-start");
+        } else if (!startDateInput.value) {
+          // Gợi ý ngày hôm nay hoặc đầu tuần tới
+          var today = new Date();
+          var y = today.getFullYear();
+          var m = today.getMonth() + 1;
+          var d = today.getDate();
+          startDateInput.value = y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d);
         }
+
         if (opt.getAttribute("data-end")) {
           endDateInput.value = opt.getAttribute("data-end");
+        }
+
+        var tSessions = parseInt(opt.getAttribute("data-totalsessions"), 10);
+        if (tSessions && tSessions > 0) {
+          totalSessionsInput.value = tSessions;
         }
       }
     }
 
-    syncCourseDates();
-    courseSelect.addEventListener("change", syncCourseDates);
+    // Xử lý chọn Thứ trong tuần
+    function getSelectedWeekdays() {
+      var activePills = weekdayPicker.querySelectorAll(".day-pill.active");
+      var days = [];
+      activePills.forEach(function(pill) {
+        days.push(parseInt(pill.getAttribute("data-day"), 10));
+      });
+      return days;
+    }
 
-    // Tính toán ngày badge gợi ý (ví dụ TH10 26) dựa trên start_date
-    function calculateSuggestedDate(sessionIndex, perWeek) {
-      var startVal = startDateInput.value;
-      if (!startVal) {
-        var dayNum = sessionIndex + 1;
-        return "TH10 " + (dayNum < 10 ? "0" + dayNum : dayNum);
+    function updateScheduleText() {
+      var days = getSelectedWeekdays();
+      if (days.length === 0) {
+        scheduleText.innerText = "Chưa chọn thứ nào (Mặc định cách 2 ngày/buổi)";
+        return;
       }
-      try {
-        var baseDate = new Date(startVal);
-        var weekIndex = Math.floor(sessionIndex / perWeek);
-        var dayInWeek = sessionIndex % perWeek;
-        // Mỗi tuần cách nhau 7 ngày, mỗi buổi trong tuần cách nhau 2-3 ngày
-        var offsetDays = weekIndex * 7 + dayInWeek * 2;
-        var sDate = new Date(baseDate.getTime() + offsetDays * 24 * 60 * 60 * 1000);
-        var m = sDate.getMonth() + 1;
-        var d = sDate.getDate();
-        var mStr = m < 10 ? "0" + m : "" + m;
-        var dStr = d < 10 ? "0" + d : "" + d;
-        return "TH" + mStr + " " + dStr;
-      } catch (e) {
-        return "TH10 01";
+      var names = days.map(function(d) { return dayLabels[d]; });
+      scheduleText.innerText = names.join(" & ") + " (" + days.length + " buổi/tuần)";
+    }
+
+    weekdayPicker.addEventListener("click", function(e) {
+      if (e.target && e.target.classList.contains("day-pill")) {
+        e.target.classList.toggle("active");
+        updateScheduleText();
       }
+    });
+
+    syncCourseData();
+    updateScheduleText();
+    courseSelect.addEventListener("change", function() {
+      syncCourseData();
+      generateBatchCards();
+    });
+
+    /**
+     * DATE ENGINE: Tính toán danh sách ngày tháng chính xác
+     */
+    function calculateEngineDates(startVal, total, selectedDays) {
+      if (!startVal) return [];
+      var parts = startVal.split("-");
+      var startYear = parseInt(parts[0], 10);
+      var startMonth = parseInt(parts[1], 10) - 1;
+      var startDay = parseInt(parts[2], 10);
+
+      var curDate = new Date(startYear, startMonth, startDay, 12, 0, 0);
+      var results = [];
+
+      if (!selectedDays || selectedDays.length === 0) {
+        for (var i = 0; i < total; i++) {
+          var d = new Date(curDate.getTime() + i * 2 * 24 * 60 * 60 * 1000);
+          var mNum = d.getMonth() + 1;
+          var dn = d.getDate();
+          var ms = mNum < 10 ? "0" + mNum : "" + mNum;
+          var ds = dn < 10 ? "0" + dn : "" + dn;
+          var ys = d.getFullYear();
+          results.push({
+            dateObj: d,
+            badge: "TH" + ms + " " + ds,
+            formatted: ds + "/" + ms + "/" + ys,
+            iso: ys + "-" + ms + "-" + ds
+          });
+        }
+        return results;
+      }
+
+      // Tìm ngày đầu tiên >= startVal trùng với một trong các thứ đã chọn
+      var guard = 0;
+      while (selectedDays.indexOf(curDate.getDay()) === -1 && guard < 14) {
+        curDate.setDate(curDate.getDate() + 1);
+        guard++;
+      }
+
+      while (results.length < total) {
+        if (selectedDays.indexOf(curDate.getDay()) !== -1) {
+          var m = curDate.getMonth() + 1;
+          var dayNum = curDate.getDate();
+          var mStr = m < 10 ? "0" + m : "" + m;
+          var dStr = dayNum < 10 ? "0" + dayNum : "" + dayNum;
+          var yStr = curDate.getFullYear();
+          results.push({
+            dateObj: new Date(curDate.getTime()),
+            badge: "TH" + mStr + " " + dStr,
+            formatted: dStr + "/" + mStr + "/" + yStr,
+            iso: yStr + "-" + mStr + "-" + dStr
+          });
+        }
+        curDate.setDate(curDate.getDate() + 1);
+      }
+
+      return results;
     }
 
     function updateCardIndices() {
       var cards = container.querySelectorAll(".form-card");
-      var perWeek = parseInt(sessionsPerWeekSelect.value, 10) || 2;
+      var selectedDays = getSelectedWeekdays();
+      var perWeek = selectedDays.length || 2;
 
       for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
@@ -165,15 +315,9 @@
         var weekInput = card.querySelector('[name="week"]');
         var sortInput = card.querySelector('[name="sort_order"]');
 
-        if (dayInput && dayInput.getAttribute("data-auto") === "true") {
-          dayInput.value = dayNum;
-        }
-        if (weekInput && weekInput.getAttribute("data-auto") === "true") {
-          weekInput.value = weekNum;
-        }
-        if (sortInput && sortInput.getAttribute("data-auto") === "true") {
-          sortInput.value = dayNum;
-        }
+        if (dayInput && dayInput.getAttribute("data-auto") === "true") dayInput.value = dayNum;
+        if (weekInput && weekInput.getAttribute("data-auto") === "true") weekInput.value = weekNum;
+        if (sortInput && sortInput.getAttribute("data-auto") === "true") sortInput.value = dayNum;
 
         var removeBtn = card.querySelector(".btn-remove-card");
         if (removeBtn) {
@@ -202,7 +346,7 @@
             '<input type="number" name="day" required min="1" data-auto="true">' +
           '</div>' +
           '<div class="form-group col-1">' +
-            '<label>Ngày học (Date)</label>' +
+            '<label>Ngày học (Date Badge / Lịch)</label>' +
             '<input type="text" name="date" placeholder="Ví dụ: TH10 03">' +
           '</div>' +
           '<div class="form-group col-1">' +
@@ -215,13 +359,13 @@
           '<input type="text" name="session_title" required placeholder="Ví dụ: Buổi 1: Làm quen Database & Cú pháp SELECT cơ bản">' +
         '</div>' +
         '<div class="form-group">' +
-          '<label>Miêu Tả Nội Dung Buổi Học (Session Description)</label>' +
+          '<label>Miêu Tả Tóm Tắt (Session Description)</label>' +
           '<textarea name="session_desc" rows="2" placeholder="Ví dụ: Hiểu kiến trúc Relational Database, cài đặt DBeaver, thực hành SELECT, WHERE, ORDER BY, GROUP BY."></textarea>' +
         '</div>' +
         '<div class="form-group">' +
-          '<label>Sub Content - Chi Tiết Điểm Kiến Thức (Mỗi dòng là một dot list khi mở dropdown) <span class="required">*</span></label>' +
+          '<label>Sub Content - Chi Tiết Kiến Thức (Mỗi dòng là một dot list khi mở dropdown) <span class="required">*</span></label>' +
           '<textarea name="sub_content" rows="4" required placeholder="Tổng quan về cơ sở dữ liệu quan hệ (RDBMS) trong doanh nghiệp&#10;Cài đặt DBeaver và kết nối hệ quản trị PostgreSQL / MySQL&#10;Cú pháp SELECT, ALIAS, DISTINCT, toán tử lọc WHERE, AND/OR/IN/BETWEEN&#10;Thực hành truy vấn cơ bản trên bộ dữ liệu E-commerce thực tế"></textarea>' +
-          '<div class="help-text">💡 Mẹo: Nhấn Enter để tách từng gạch đầu dòng (dot list). Khi học viên bấm mở dropdown trên web sẽ thấy danh sách này.</div>' +
+          '<div class="help-text">💡 Mẹo: Nhấn Enter để tách từng gạch đầu dòng (dot list).</div>' +
         '</div>' +
         '<div class="form-group">' +
           '<label>Thứ Tự Hiển Thị</label>' +
@@ -238,19 +382,11 @@
       }
 
       var dayInput = card.querySelector('[name="day"]');
-      dayInput.addEventListener("input", function () {
-        this.setAttribute("data-auto", "false");
-      });
-
+      dayInput.addEventListener("input", function () { this.setAttribute("data-auto", "false"); });
       var weekInput = card.querySelector('[name="week"]');
-      weekInput.addEventListener("input", function () {
-        this.setAttribute("data-auto", "false");
-      });
-
+      weekInput.addEventListener("input", function () { this.setAttribute("data-auto", "false"); });
       var sortInput = card.querySelector('[name="sort_order"]');
-      sortInput.addEventListener("input", function () {
-        this.setAttribute("data-auto", "false");
-      });
+      sortInput.addEventListener("input", function () { this.setAttribute("data-auto", "false"); });
 
       var removeBtn = card.querySelector(".btn-remove-card");
       removeBtn.addEventListener("click", function () {
@@ -262,18 +398,21 @@
       return card;
     }
 
-    // Khởi tạo hàng loạt cards theo cấu hình
     function generateBatchCards() {
       var total = parseInt(totalSessionsInput.value, 10) || 12;
-      var perWeek = parseInt(sessionsPerWeekSelect.value, 10) || 3;
+      var startVal = startDateInput.value;
+      var selectedDays = getSelectedWeekdays();
+      var perWeek = selectedDays.length || 2;
       if (total < 1) total = 1;
+
+      var calculatedDates = calculateEngineDates(startVal, total, selectedDays);
 
       container.innerHTML = "";
 
       for (var i = 0; i < total; i++) {
         var dayNum = i + 1;
         var weekNum = Math.ceil(dayNum / perWeek);
-        var dateSuggested = calculateSuggestedDate(i, perWeek);
+        var dateSuggested = calculatedDates[i] ? calculatedDates[i].badge : ("TH10 " + (dayNum < 10 ? "0" + dayNum : dayNum));
 
         createCurriculumCard({
           week: weekNum,
@@ -285,6 +424,11 @@
         });
       }
 
+      // Tự động gán ngày của buổi cuối cùng vào Ngày Kết Thúc (course_end_date)
+      if (calculatedDates.length > 0 && calculatedDates[calculatedDates.length - 1].iso) {
+        endDateInput.value = calculatedDates[calculatedDates.length - 1].iso;
+      }
+
       updateCardIndices();
     }
 
@@ -292,10 +436,14 @@
 
     addCurriculumBtn.addEventListener("click", function () {
       var cards = container.querySelectorAll(".form-card");
-      var perWeek = parseInt(sessionsPerWeekSelect.value, 10) || 3;
+      var selectedDays = getSelectedWeekdays();
+      var perWeek = selectedDays.length || 2;
       var nextDay = cards.length + 1;
       var nextWeek = Math.ceil(nextDay / perWeek);
-      var dateSuggested = calculateSuggestedDate(cards.length, perWeek);
+
+      // Tính ngày cho buổi học mới thêm
+      var calculatedDates = calculateEngineDates(startDateInput.value, nextDay, selectedDays);
+      var dateSuggested = calculatedDates[nextDay - 1] ? calculatedDates[nextDay - 1].badge : ("TH10 " + (nextDay < 10 ? "0" + nextDay : nextDay));
 
       var newCard = createCurriculumCard({
         week: nextWeek,
@@ -306,9 +454,13 @@
       updateCardIndices();
       var input = newCard.querySelector('[name="session_title"]');
       if (input) input.focus();
+
+      if (calculatedDates.length > 0 && calculatedDates[calculatedDates.length - 1].iso) {
+        endDateInput.value = calculatedDates[calculatedDates.length - 1].iso;
+      }
     });
 
-    // Mặc định sinh sẵn form theo cấu hình ban đầu
+    // Tự khởi tạo khi mở modal
     generateBatchCards();
 
     function showError(msg) {
@@ -379,7 +531,6 @@
           sub_content: subContent,
           duration: durationVal || "3 giờ",
           sort_order: sortVal,
-          // Aliases tương thích ngược:
           module_number: dayVal,
           module_title: sessionTitle,
           topics_bullets: subContent,
@@ -392,6 +543,7 @@
         course_name: courseName,
         course_start_date: startDateInput.value || "",
         course_end_date: endDateInput.value || "",
+        total_sessions: curriculumList.length,
         curriculum_list: curriculumList
       };
 
@@ -402,7 +554,7 @@
 
       google.script.run
         .withSuccessHandler(function (res) {
-          showSuccess("✅ Đã lưu thành công " + (res.count || curriculumList.length) + " buổi học và thời gian khóa học!");
+          showSuccess("✅ Đã lưu thành công " + (res.count || curriculumList.length) + " buổi học vào hệ thống Sheets!");
           setTimeout(function () {
             google.script.host.close();
           }, 1200);

@@ -6,10 +6,16 @@ import { CurriculumModule } from "@/lib/cms/types";
 interface CourseFigmaWeekAccordionProps {
   modules: CurriculumModule[];
   courseTitle?: string;
+  totalSessions?: number;
+  practiceCount?: number;
+  capstoneCount?: number;
 }
 
 export default function CourseFigmaWeekAccordion({
   modules,
+  totalSessions,
+  practiceCount,
+  capstoneCount,
 }: CourseFigmaWeekAccordionProps) {
   // Group modules by week
   const groupedWeeks = React.useMemo(() => {
@@ -104,11 +110,11 @@ export default function CourseFigmaWeekAccordion({
             </h2>
           </div>
           <p className="text-sm font-medium text-gray-600 flex items-center gap-2">
-            <span>{modules.length || 12} Buổi học</span>
+            <span>{totalSessions || modules.length || 12} Buổi học</span>
             <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-            <span>2 Bài thực hành lớn</span>
+            <span>{practiceCount !== undefined ? practiceCount : Math.max(1, Math.floor((totalSessions || modules.length || 12) / 4))} Bài thực hành lớn</span>
             <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-            <span>1 Dự án Capstone</span>
+            <span>{capstoneCount !== undefined ? capstoneCount : ((totalSessions || modules.length || 12) > 15 ? 2 : 1)} Dự án Capstone</span>
           </p>
         </div>
 

@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Course } from "@/lib/cms/types";
-import { Clock, Video, ChevronRight, Calendar } from "@/components/common/Icons";
+import { Clock, Video, ChevronRight } from "@/components/common/Icons";
 import { Badge } from "@/components/common/Badge";
 import { Button } from "@/components/common/Button";
 import { openLeadModal } from "@/components/forms/LeadModalManager";
@@ -15,20 +15,6 @@ interface CourseHeroProps {
 }
 
 export default function CourseHero({ course }: CourseHeroProps) {
-  // Format currency in Vietnamese format (VND)
-  const formatPrice = (val: number) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-      maximumFractionDigits: 0,
-    }).format(val);
-  };
-
-  const discountPercent =
-    course.originalTuitionVnd && course.originalTuitionVnd > course.tuitionVnd
-      ? Math.round(((course.originalTuitionVnd - course.tuitionVnd) / course.originalTuitionVnd) * 100)
-      : null;
-
   return (
     <section className="relative w-full bg-[#1F242F] text-white pt-8 pb-14 lg:pt-10 lg:pb-20 overflow-hidden">
       {/* Decorative Background Glow */}
@@ -57,9 +43,14 @@ export default function CourseHero({ course }: CourseHeroProps) {
           <div className="lg:col-span-7 flex flex-col gap-6">
             {/* Badges (Figma Node 12:1427) */}
             <div className="flex flex-wrap items-center gap-2.5">
-              <Badge variant="outlinePrimary">
-                {course.courseKind || "Data Analytics"}
+              <Badge variant="primary" size="sm">
+                {course.courseKind || "Khóa học nổi bật"}
               </Badge>
+              {course.tag && (
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/10 text-white/90 border border-white/10">
+                  {course.tag}
+                </span>
+              )}
             </div>
 
             {/* H1 Heading */}
@@ -73,43 +64,19 @@ export default function CourseHero({ course }: CourseHeroProps) {
             </p>
 
             {/* Course Specifications (Figma Node 12:1430) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-medium text-white/90">
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3.5 py-2.5 rounded-xl border border-white/10">
-                <Clock className="w-4 h-4 text-[#FFC934] shrink-0" />
-                <span>{course.duration || "12 buổi học (24 giờ)"}</span>
+            <div className="flex flex-wrap items-center gap-6 text-sm sm:text-base font-normal text-white">
+              <div className="flex items-center gap-2">
+                <Clock className="w-5 h-5 text-white/90 shrink-0" />
+                <span>{course.totalSessions || 12} buổi học</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3.5 py-2.5 rounded-xl border border-white/10">
-                <Video className="w-4 h-4 text-[#AF445A] shrink-0" />
-                <span>Live Class</span>
+              <div className="flex items-center gap-2">
+                <Video className="w-5 h-5 text-white/90 shrink-0" />
+                <span>{course.studyStyle || "Live Class"}</span>
               </div>
             </div>
 
-            {/* Tuition Price Display */}
-            {/* <div className="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
-              <div className="flex items-baseline gap-3">
-                <span className="text-xs uppercase font-semibold text-white/60 tracking-wider">
-                  Học phí ưu đãi:
-                </span>
-                <span className="text-3xl sm:text-4xl font-heading font-extrabold text-[#AF445A] drop-shadow-sm">
-                  {formatPrice(course.tuitionVnd)}
-                </span>
-              </div>
-              {course.originalTuitionVnd && course.originalTuitionVnd > course.tuitionVnd && (
-                <div className="flex items-center gap-2 text-sm sm:text-base">
-                  <span className="line-through text-slate-400 font-normal">
-                    {formatPrice(course.originalTuitionVnd)}
-                  </span>
-                  {discountPercent && (
-                    <span className="bg-[#AF445A] text-white text-xs font-bold px-2 py-0.5 rounded-md">
-                      Tiết kiệm {discountPercent}%
-                    </span>
-                  )}
-                </div>
-              )}
-            </div> */}
-
-            {/* Dual CTAs */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1">
+            {/* Single CTA & Student Enrollment Badge (Figma Node 12:1427) */}
+            <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6">
               <Button
                 variant="primary"
                 size="lg"
@@ -119,10 +86,27 @@ export default function CourseHero({ course }: CourseHeroProps) {
                     ctaLocation: "course_hero_primary",
                   })
                 }
+                className="font-medium text-sm sm:text-base px-8 py-3.5 rounded-[8px] bg-gradient-to-r from-[#AF445A] to-[#784080] text-white hover:opacity-95 shadow-md cursor-pointer"
               >
                 Đăng ký tư vấn ngay
               </Button>
 
+              <div className="flex flex-col gap-1 justify-center">
+                <div className="flex items-center gap-2">
+                  <div
+                    className="flex items-center text-[#FFC934] text-base tracking-wider"
+                    aria-label="5 sao"
+                  >
+                    {"★".repeat(5)}
+                  </div>
+                  <span className="text-white text-sm sm:text-base font-normal">
+                    (5.0)
+                  </span>
+                </div>
+                <span className="text-white/75 text-xs sm:text-sm font-normal">
+                  {course.studentEnrollment || 250}+ học viên đã đăng ký
+                </span>
+              </div>
             </div>
           </div>
 

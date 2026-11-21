@@ -68,6 +68,10 @@ function addCoursesBatchFromModal(courseList) {
     var studyStyle = (item["study-style"] || item.study_style || item.studyStyle || "Live Class").toString().trim();
     var studentEnrollment = Number(item.student_enrollment || item.studentEnrollment) || 250;
 
+    var totalSessions = Number(item.total_sessions || item.totalSessions) || 12;
+    var practiceCount = Number(item.practice_count || item.practiceCount) || 4;
+    var capstoneCount = Number(item.capstone_count || item.capstoneCount) || 1;
+
     rowsToAdd.push([
       sanitizeFormula(uniqueId),
       sanitizeFormula(title),
@@ -77,7 +81,7 @@ function addCoursesBatchFromModal(courseList) {
       sanitizeFormula(item.tagline || ""),
       tuition,
       originalTuition,
-      sanitizeFormula(item.duration || "8 tuần (24 buổi)"),
+      sanitizeFormula(totalSessions + " buổi"),
       sanitizeFormula(item.level || "Beginner"),
       sanitizeFormula(studyStyle),
       studentEnrollment,
@@ -85,14 +89,17 @@ function addCoursesBatchFromModal(courseList) {
       item.is_featured === true || item.is_featured === "true",
       sortOrder,
       sanitizeFormula(item.description || ""),
-      sanitizeFormula(item.cover_image_url || "")
+      sanitizeFormula(item.cover_image_url || ""),
+      totalSessions,
+      practiceCount,
+      capstoneCount
     ]);
 
     addedCourses.push({ id: uniqueId, title: title, slug: uniqueSlug });
   }
 
   var startRow = sheet.getLastRow() + 1;
-  sheet.getRange(startRow, 1, rowsToAdd.length, 17).setValues(rowsToAdd);
+  sheet.getRange(startRow, 1, rowsToAdd.length, 20).setValues(rowsToAdd);
 
   // Định dạng hiển thị VNĐ (Cột 7 và 8)
   sheet.getRange(startRow, 7, rowsToAdd.length, 2).setNumberFormat('#,##0 "đ"');

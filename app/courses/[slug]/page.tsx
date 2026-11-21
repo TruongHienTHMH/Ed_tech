@@ -111,7 +111,13 @@ export default async function CourseDetailPage({ params }: PageProps) {
               <CourseFigmaHighlights />
 
               {/* 3. Chương trình giảng dạy theo tuần (Date badges TH10 03) */}
-              <CourseFigmaWeekAccordion modules={modules} courseTitle={course.title} />
+              <CourseFigmaWeekAccordion
+                modules={modules}
+                courseTitle={course.title}
+                totalSessions={course.totalSessions}
+                practiceCount={course.practiceCount}
+                capstoneCount={course.capstoneCount}
+              />
 
               {/* 4. Giảng viên của bạn (Hứa Thảo Ly, MoMo, Tiki, ACB) */}
               <CourseFigmaInstructor />

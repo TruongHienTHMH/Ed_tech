@@ -14,6 +14,9 @@ function showAddCurriculumModal() {
     });
     var startIdx = cHeaders.indexOf("start_date");
     var endIdx = cHeaders.indexOf("end_date");
+    var totalSessionsIdx = cHeaders.indexOf("total_sessions");
+    var practiceCountIdx = cHeaders.indexOf("practice_count");
+    var capstoneCountIdx = cHeaders.indexOf("capstone_count");
     var allVals = courseSheet.getRange(2, 1, lastRow - 1, courseSheet.getLastColumn()).getValues();
 
     for (var i = 0; i < allVals.length; i++) {
@@ -21,12 +24,18 @@ function showAddCurriculumModal() {
       if (row[0] && row[1]) {
         var sDate = startIdx !== -1 && row[startIdx] ? row[startIdx].toString().trim() : "";
         var eDate = endIdx !== -1 && row[endIdx] ? row[endIdx].toString().trim() : "";
+        var tSessions = totalSessionsIdx !== -1 && row[totalSessionsIdx] ? Number(row[totalSessionsIdx]) : 0;
+        var pCount = practiceCountIdx !== -1 && row[practiceCountIdx] ? Number(row[practiceCountIdx]) : 0;
+        var cCount = capstoneCountIdx !== -1 && row[capstoneCountIdx] ? Number(row[capstoneCountIdx]) : 0;
         coursesList.push({
           id: row[0].toString().trim(),
           title: row[1].toString().trim(),
           slug: (row[2] || row[0]).toString().trim(),
           startDate: sDate,
           endDate: eDate,
+          totalSessions: tSessions,
+          practiceCount: pCount,
+          capstoneCount: cCount,
           maxModule: 0
         });
       }
@@ -144,14 +153,16 @@ function addCurriculumBatchFromModal(payload) {
         });
         var startCol = cHeaders.indexOf("start_date") + 1;
         var endCol = cHeaders.indexOf("end_date") + 1;
+        var totalSessionsCol = cHeaders.indexOf("total_sessions") + 1;
 
-        if (startCol > 0 || endCol > 0) {
+        if (startCol > 0 || endCol > 0 || totalSessionsCol > 0) {
           var cData = courseSheet.getRange(2, 1, courseSheet.getLastRow() - 1, 1).getValues();
           for (var r = 0; r < cData.length; r++) {
             if (cData[r][0] && cData[r][0].toString().trim() === courseId) {
               var targetRow = r + 2;
               if (startCol > 0 && startDate) courseSheet.getRange(targetRow, startCol).setValue(startDate);
               if (endCol > 0 && endDate) courseSheet.getRange(targetRow, endCol).setValue(endDate);
+              if (totalSessionsCol > 0 && rowsToAdd.length > 0) courseSheet.getRange(targetRow, totalSessionsCol).setValue(rowsToAdd.length);
               break;
             }
           }
