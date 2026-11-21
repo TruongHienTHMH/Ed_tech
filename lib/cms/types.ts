@@ -12,7 +12,9 @@ export interface Course {
   description: string;
   tuitionVnd: number;                 // e.g. 4500000
   originalTuitionVnd?: number;        // e.g. 6000000
-  duration: string;                   // e.g. "8 tuần (24 buổi)"
+  totalSessions: number;              // Chuẩn hóa: Số lượng buổi học (e.g. 12, 16, 25)
+  practiceCount?: number;             // Số bài thực hành lớn
+  capstoneCount?: number;             // Số dự án cuối khóa
   level: "Beginner" | "Intermediate" | "Advanced";
   coverImageUrl: string;
   isActive: boolean;                  // Soft delete flag

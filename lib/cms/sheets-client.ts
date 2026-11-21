@@ -258,7 +258,17 @@ export class SheetsClient {
       const description = String(row.description || "");
       const tuitionVnd = Number(row.tuition_vnd || row.price_discounted || row.price || 3800000);
       const originalTuitionVnd = Number(row.original_tuition_vnd || row.price_original || 4500000);
-      const duration = String(row.duration || "8 tuần");
+
+      // Parse total_sessions với fallback thông minh
+      const rawTotal = row.total_sessions || row.totalsessions || row.so_buoi_hoc || row.so_buoi;
+      let totalSessions = rawTotal ? Number(rawTotal) : 0;
+      if (!totalSessions || isNaN(totalSessions)) {
+        const matched = String(row.duration || "").match(/\d+/);
+        totalSessions = matched ? parseInt(matched[0], 10) : (slug === "end-to-end-analytics" || id === "end-to-end-analytics" ? 25 : slug === "sql-for-data-analytics" ? 12 : 16);
+      }
+      const practiceCount = Number(row.practice_count || row.practicecount || (slug === "sql-for-data-analytics" ? 4 : slug === "data-analytical-thinking" ? 3 : 6));
+      const capstoneCount = Number(row.capstone_count || row.capstonecount || (slug === "sql-for-data-analytics" ? 1 : 2));
+
       const level = (String(row.level || "Beginner") as Course["level"]);
       const rawCover = (row.cover_image_url || row.cover_image || row.image_url || row.thumbnail || row["ảnh_bìa"] || row["anh_bia"]) as string | undefined;
       const coverImageUrl = resolveImageUrl(rawCover, "course", slug || id);
@@ -377,7 +387,9 @@ export class SheetsClient {
         description,
         tuitionVnd,
         originalTuitionVnd,
-        duration,
+        totalSessions: (courseCurriculum.length > 0 && totalSessions === 0) ? courseCurriculum.length : totalSessions,
+        practiceCount,
+        capstoneCount,
         level,
         coverImageUrl,
         isActive,
