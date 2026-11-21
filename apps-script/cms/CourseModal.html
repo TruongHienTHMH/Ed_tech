@@ -267,6 +267,21 @@
           '<label>Mô Tả Tổng Quan Khóa Học</label>' +
           '<textarea name="description" rows="2" placeholder="Mô tả giá trị thực chiến, mục tiêu đầu ra và đối tượng phù hợp..."></textarea>' +
         '</div>' +
+        '<div style="background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 8px; padding: 12px; margin-bottom: 14px;">' +
+          '<label style="color: #8B1D2C; font-weight: 700; display: block; margin-bottom: 8px;">📋 Nội Dung Quản Trị Chi Tiết</label>' +
+          '<div class="form-group">' +
+            '<label>Khóa Học Này Dành Cho Ai? (who_is_for) <span style="color: #64748B; font-weight: normal; font-size: 11px;">(Mỗi dòng = 1 gạch đầu dòng)</span></label>' +
+            '<textarea name="who_is_for" rows="2" placeholder="Người mới bắt đầu chưa có kiến thức về lập trình...&#10;Nhân sự Marketing, Vận hành, Tài chính..."></textarea>' +
+          '</div>' +
+          '<div class="form-group">' +
+            '<label>Sau Khóa Học Làm Được Gì? (outcomes) <span style="color: #64748B; font-weight: normal; font-size: 11px;">(Mỗi dòng = 1 gạch đầu dòng)</span></label>' +
+            '<textarea name="outcomes" rows="2" placeholder="Tự tin viết câu lệnh SQL phức tạp (JOINs, Window Functions)...&#10;Sở hữu Portfolio đồ án Capstone thực chiến..."></textarea>' +
+          '</div>' +
+          '<div class="form-group" style="margin-bottom: 0;">' +
+            '<label>Yêu Cầu Đầu Vào (input_requirement)</label>' +
+            '<textarea name="input_requirement" rows="2" placeholder="Không yêu cầu kiến thức lập trình hay toán cao cấp từ trước. Chỉ cần chuẩn bị máy tính cá nhân..."></textarea>' +
+          '</div>' +
+        '</div>' +
         '<div class="form-group">' +
           '<label>Ảnh Bìa (URL)</label>' +
           '<input type="text" name="cover_image_url" placeholder="/uploads/courses/sql-course.jpg">' +
@@ -361,6 +376,9 @@
           practice_count: Number(card.querySelector('[name="practice_count"]').value) || 4,
           capstone_count: Number(card.querySelector('[name="capstone_count"]').value) || 1,
           description: (card.querySelector('[name="description"]').value || "").trim(),
+          who_is_for: (card.querySelector('[name="who_is_for"]').value || "").trim(),
+          outcomes: (card.querySelector('[name="outcomes"]').value || "").trim(),
+          input_requirement: (card.querySelector('[name="input_requirement"]').value || "").trim(),
           cover_image_url: (card.querySelector('[name="cover_image_url"]').value || "").trim(),
           is_active: card.querySelector('[name="is_active"]').checked,
           is_featured: card.querySelector('[name="is_featured"]').checked

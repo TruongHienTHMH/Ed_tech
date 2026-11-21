@@ -73,6 +73,9 @@ export async function POST(request: NextRequest) {
       is_featured: body.is_featured !== undefined ? body.is_featured : false,
       sort_order: Number(body.sort_order) || 99,
       description: sanitizeSpreadsheetValue(body.description || ""),
+      who_is_for: sanitizeSpreadsheetValue(body.who_is_for || body.whoIsFor || ""),
+      outcomes: sanitizeSpreadsheetValue(body.outcomes || ""),
+      input_requirement: sanitizeSpreadsheetValue(body.input_requirement || body.inputRequirement || ""),
       cover_image_url: sanitizeSpreadsheetValue(body.cover_image_url || "/uploads/courses/default-course.jpg"),
     };
 

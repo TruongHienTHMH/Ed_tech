@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { Course } from "@/lib/cms/types";
 import { openLeadModal } from "@/components/forms/LeadModalManager";
 import { Button } from "@/components/common/Button";
@@ -65,13 +66,6 @@ export default function CourseFigmaStickySidebar({ course }: CourseFigmaStickySi
     });
   };
 
-  const handleConsultClick = () => {
-    openLeadModal({
-      courseId: course.id,
-      ctaLocation: "sticky_sidebar_consult",
-    });
-  };
-
   return (
     <aside className="w-full lg:w-[384px] shrink-0">
       <div className="sticky top-24 bg-white border border-[#EFE5E7] rounded-3xl p-6 shadow-lg shadow-gray-200/50 overflow-hidden">
@@ -119,12 +113,12 @@ export default function CourseFigmaStickySidebar({ course }: CourseFigmaStickySi
         <div className="space-y-2.5 mb-6">
           <Button
             variant="primary"
-            size="md"
+            size="lg"
             fullWidth
             onClick={handleRegisterClick}
-            className="bg-[#8B1D2C] hover:bg-[#701622] text-white font-bold py-3 rounded-xl shadow-md transition-all cursor-pointer"
+            className="bg-gradient-to-r from-[#AF445A] to-[#784080] hover:opacity-95 text-white font-bold py-3.5 rounded-xl shadow-md transition-all cursor-pointer text-sm sm:text-base"
           >
-            Nhận tư vấn 1:1
+            Nhận tự vấn 1 : 1
           </Button>
         </div>
 
@@ -153,40 +147,71 @@ export default function CourseFigmaStickySidebar({ course }: CourseFigmaStickySi
             <span className="font-bold text-gray-900">{course.studyStyle || "Live Class"}</span>
           </div>
 
+          <div className="flex items-center justify-between text-gray-700">
+            <span className="flex items-center gap-2 text-gray-500">
+              <span>🎯</span> Trình độ:
+            </span>
+            <span className="font-bold text-gray-900">{course.level || "Beginner"}</span>
+          </div>
+
           {/* Inclusions List */}
           <div className="pt-2">
             <p className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-2.5">
               Khóa học bao gồm:
             </p>
-            <ul className="space-y-2 text-xs text-gray-600">
-              <li className="flex items-start gap-2">
-                <span className="text-emerald-500 font-bold">✓</span>
+            <ul className="space-y-2.5 text-xs text-gray-600">
+              <li className="flex items-center gap-2.5">
+                <Image
+                  src="/assets/decorations/verify.svg"
+                  alt="✓"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4 shrink-0"
+                />
                 <span>{course.totalSessions || 12} Buổi học Live tương tác trực tiếp cùng Mentor</span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="text-emerald-500 font-bold">✓</span>
+              <li className="flex items-center gap-2.5">
+                <Image
+                  src="/assets/decorations/verify.svg"
+                  alt="✓"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4 shrink-0"
+                />
                 <span>{course.practiceCount || 4} Bài thực hành lớn (Hands-on Labs) có chấm điểm</span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="text-emerald-500 font-bold">✓</span>
+              <li className="flex items-center gap-2.5">
+                <Image
+                  src="/assets/decorations/verify.svg"
+                  alt="✓"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4 shrink-0"
+                />
                 <span>{course.capstoneCount || 1} Dự án tốt nghiệp Capstone đa chiều cho Portfolio</span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="text-emerald-500 font-bold">✓</span>
+              <li className="flex items-center gap-2.5">
+                <Image
+                  src="/assets/decorations/verify.svg"
+                  alt="✓"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4 shrink-0"
+                />
                 <span>Mentor trực tiếp sửa code & tư vấn CV 1-on-1</span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="text-emerald-500 font-bold">✓</span>
+              <li className="flex items-center gap-2.5">
+                <Image
+                  src="/assets/decorations/verify.svg"
+                  alt="✓"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4 shrink-0"
+                />
                 <span>Xem lại video record chất lượng cao trọn đời</span>
               </li>
             </ul>
           </div>
-        </div>
-
-        {/* Safe Guarantee Note */}
-        <div className="mt-6 pt-4 border-t border-gray-100 flex items-center gap-2 text-[11px] text-gray-500">
-          <span>🛡️</span>
-          <span>Bảo lưu tối đa 6 tháng • Hoàn tiền 100% nếu không hài lòng sau 2 buổi</span>
         </div>
       </div>
     </aside>

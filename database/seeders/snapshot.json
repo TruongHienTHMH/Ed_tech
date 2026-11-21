@@ -17,7 +17,20 @@
       "isActive": true,
       "isFeatured": true,
       "sortOrder": 1,
-      "courseKind": "Khóa học nổi bật"
+      "courseKind": "Khóa học nổi bật",
+      "studyStyle": "Live Class",
+      "studentEnrollment": 350,
+      "whoIsFor": [
+        "Người mới bắt đầu chưa có kiến thức về lập trình hay cơ sở dữ liệu.",
+        "Nhân sự Marketing, Vận hành, Tài chính muốn tự động hóa việc làm báo cáo.",
+        "Sinh viên hoặc người đi làm muốn chuyển ngành sang vị trí Data Analyst."
+      ],
+      "outcomes": [
+        "Tự tin viết câu lệnh SQL phức tạp (JOINs, Window Functions, CTE).",
+        "Thiết kế Dashboard chuyên nghiệp bằng Power BI cho báo cáo doanh nghiệp.",
+        "Sở hữu Portfolio đồ án Capstone thực chiến để gây ấn tượng với nhà tuyển dụng."
+      ],
+      "inputRequirement": "Không yêu cầu kiến thức lập trình hay toán cao cấp từ trước. Bạn chỉ cần chuẩn bị máy tính cá nhân (Windows hoặc macOS) và tinh thần học hỏi nghiêm túc."
     },
     {
       "id": "sql-for-data-analytics",
@@ -36,7 +49,20 @@
       "isActive": true,
       "isFeatured": false,
       "sortOrder": 2,
-      "courseKind": "Khóa học nền tảng"
+      "courseKind": "Khóa học nền tảng",
+      "studyStyle": "Live Class",
+      "studentEnrollment": 280,
+      "whoIsFor": [
+        "Người mới bắt đầu chưa có kiến thức về lập trình hay cơ sở dữ liệu.",
+        "Nhân sự muốn học SQL để tự truy xuất dữ liệu và làm báo cáo tự động.",
+        "Sinh viên hoặc người đi làm muốn ứng tuyển vị trí Data / Business Analyst."
+      ],
+      "outcomes": [
+        "Tự tin viết câu lệnh SQL phức tạp (JOINs, Window Functions, CTE).",
+        "Tối ưu hóa tốc độ truy vấn trên hệ thống dữ liệu lớn của doanh nghiệp.",
+        "Sở hữu Portfolio đồ án Capstone thực chiến để gây ấn tượng với nhà tuyển dụng."
+      ],
+      "inputRequirement": "Không yêu cầu kiến thức lập trình hay toán cao cấp từ trước. Bạn chỉ cần chuẩn bị máy tính cá nhân (Windows hoặc macOS) và tinh thần học hỏi nghiêm túc."
     },
     {
       "id": "data-analytical-thinking",
@@ -55,7 +81,20 @@
       "isActive": true,
       "isFeatured": false,
       "sortOrder": 3,
-      "courseKind": "Khóa học chuyên sâu"
+      "courseKind": "Khóa học chuyên sâu",
+      "studyStyle": "Live Class",
+      "studentEnrollment": 250,
+      "whoIsFor": [
+        "Data Analyst muốn nâng cao tư duy phân tích và kỹ năng thiết kế Dashboard.",
+        "Nhân sự cấp trung muốn đọc hiểu và trình bày dữ liệu thuyết phục hơn.",
+        "Người đã có kiến thức SQL cơ bản muốn hoàn thiện kỹ năng phân tích chuyên sâu."
+      ],
+      "outcomes": [
+        "Phân tích dữ liệu với tư duy phản biện, xác định đúng vấn đề kinh doanh.",
+        "Thiết kế Metrics Tree và Dashboard phục vụ quyết định quản trị.",
+        "Trình bày insight bằng ngôn ngữ dữ liệu thuyết phục cho stakeholder."
+      ],
+      "inputRequirement": "Học viên cần có kiến thức SQL cơ bản, bao gồm truy vấn, lọc, tổng hợp và kết hợp dữ liệu."
     }
   ],
   "curriculum": [

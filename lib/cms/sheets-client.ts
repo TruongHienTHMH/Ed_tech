@@ -292,6 +292,17 @@ export class SheetsClient {
       // Parse 'student_enrollment' (e.g. 250, 320)
       const studentEnrollment = Number(row["student_enrollment"] || row.student_enrollment) || (250 + idx * 50);
 
+      // Parse 3 trường nội dung chi tiết khóa học
+      const whoIsFor = this.parseMultilineText(
+        row.who_is_for || row.whoisfor || row.danh_cho || ""
+      );
+      const outcomes = this.parseMultilineText(
+        row.outcomes || row.outcome || row.ket_qua || ""
+      );
+      const inputRequirement = row.input_requirement
+        ? String(row.input_requirement).trim()
+        : undefined;
+
       // Find matching curriculum modules directly from Google Sheets
       const courseCurriculum: CurriculumModule[] = rawCurriculum
         .filter((m) => {
@@ -398,6 +409,9 @@ export class SheetsClient {
         courseKind,
         studyStyle,
         studentEnrollment,
+        whoIsFor: whoIsFor.length > 0 ? whoIsFor : undefined,
+        outcomes: outcomes.length > 0 ? outcomes : undefined,
+        inputRequirement: inputRequirement || undefined,
         curriculumModules: courseCurriculum,
       };
     });

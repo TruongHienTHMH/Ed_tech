@@ -104,52 +104,68 @@ export default function Footer() {
             </ul>
 
             {/* Social Media Icons */}
-            <div className="flex items-center gap-4 pt-3">
+            <div className="flex items-center gap-3 pt-3">
               <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-200 p-1.5 flex items-center justify-center transition-colors"
-              >
-                <Image
-                  src="/assets/figma/5d3dc012b6a90ac35f204a321ac874ed53b35e81.png"
-                  alt="Instagram"
-                  width={24}
-                  height={24}
-                  className="object-contain"
-                />
-              </a>
-
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-200 p-1.5 flex items-center justify-center transition-colors"
-              >
-                <Image
-                  src="/assets/figma/b5e37fb98f29c6fe09b28906ad379fd1e22d5abf.png"
-                  alt="Facebook"
-                  width={24}
-                  height={24}
-                  className="object-contain"
-                />
-              </a>
-
-              <a
-                href="https://tiktok.com"
+                href="https://www.tiktok.com/@datawithly"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="TikTok"
-                className="w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-200 p-1.5 flex items-center justify-center transition-colors"
+                className="w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-200 p-2 flex items-center justify-center transition-all hover:scale-105 text-neutral-800"
               >
                 <Image
-                  src="/assets/figma/fb2492c1b7d7c65a104edaa8e809cc8a5a19315f.png"
+                  src="/assets/icons/tiktok.svg"
                   alt="TikTok"
-                  width={24}
-                  height={24}
-                  className="object-contain"
+                  width={20}
+                  height={20}
+                  className="w-4 h-4 object-contain"
+                />
+              </a>
+
+              <a
+                href="https://www.instagram.com/datawithly/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-200 p-2 flex items-center justify-center transition-all hover:scale-105 text-neutral-800"
+              >
+                <Image
+                  src="/assets/icons/instagram.svg"
+                  alt="Instagram"
+                  width={20}
+                  height={20}
+                  className="w-4 h-4 object-contain"
+                />
+              </a>
+
+              <a
+                href="https://www.threads.com/@datawithly"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Threads"
+                className="w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-200 p-2 flex items-center justify-center transition-all hover:scale-105 text-neutral-800"
+              >
+                <Image
+                  src="/assets/icons/threads.svg"
+                  alt="Threads"
+                  width={20}
+                  height={20}
+                  className="w-4 h-4 object-contain"
+                />
+              </a>
+
+              <a
+                href="https://www.facebook.com/profile.php?id=61594436940087"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-200 p-2 flex items-center justify-center transition-all hover:scale-105 text-neutral-800"
+              >
+                <Image
+                  src="/assets/icons/facebook.svg"
+                  alt="Facebook"
+                  width={20}
+                  height={20}
+                  className="w-4 h-4 object-contain"
                 />
               </a>
             </div>

@@ -50,7 +50,7 @@ export default function CourseFigmaHighlights() {
               <span className="text-3xl p-3 bg-white rounded-xl shadow-xs border border-gray-100 group-hover:scale-110 transition-transform">
                 {item.icon}
               </span>
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#AF445A]/10 text-[#AF445A]">
+              <span className="text-xs font-semibold px-2 py-2 text-[#AF445A]">
                 {item.badge}
               </span>
             </div>

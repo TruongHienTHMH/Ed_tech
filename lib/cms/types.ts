@@ -23,6 +23,9 @@ export interface Course {
   courseKind?: string;                // e.g. "Khóa học nổi bật", "Khóa học nền tảng", "Khóa học chuyên sâu"
   studyStyle?: string;                // Cột 'study-style' từ Google Sheets (e.g. "Live Class", "Video", "Kèm 1:1")
   studentEnrollment?: number;         // Cột 'student_enrollment' từ Google Sheets (e.g. 250, 320)
+  whoIsFor?: string[];                // "Khóa học này dành cho ai" - mỗi phần tử = 1 bullet point
+  outcomes?: string[];                // "Sau khóa học làm được gì" - mỗi phần tử = 1 bullet point
+  inputRequirement?: string;          // "Yêu cầu đầu vào" - đoạn văn bản hoặc tiêu chí
   curriculumModules?: CurriculumModule[];
 }
 
