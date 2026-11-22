@@ -62,7 +62,7 @@ export default function CourseMethodologyFlow() {
         </h2>
       </div>
       <p className="text-sm sm:text-base text-neutral-600 mb-6 leading-relaxed">
-        Tại sao Mentor Hứa Thảo Ly luôn bắt đầu từ bài toán kinh doanh? Bởi một câu lệnh SQL dù chạy nhanh đến mấy cũng vô nghĩa nếu trả lời sai câu hỏi của doanh nghiệp.
+        Tại sao Mentor Hứa Thảo Lý luôn bắt đầu từ bài toán kinh doanh? Bởi một câu lệnh SQL dù chạy nhanh đến mấy cũng vô nghĩa nếu trả lời sai câu hỏi của doanh nghiệp.
       </p>
 
       {/* 5-Step Process Flow: 2-column balanced grid on desktop, single column vertical on mobile */}

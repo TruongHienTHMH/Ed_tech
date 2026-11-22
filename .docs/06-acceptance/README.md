@@ -2,7 +2,7 @@
 
 - **Mục đích:** Thiết lập khung tiêu chuẩn kiểm thử đa tầng, quy tắc nghiệm thu chất lượng (Quality Gates) và quy trình ký duyệt (Sign-off) cho toàn bộ nền tảng giáo dục DataWithLy.
 - **Trạng thái:** Active / Production Ready
-- **Người duyệt:** TechLead & Client Hứa Thảo Ly
+- **Người duyệt:** TechLead & Client Hứa Thảo Lý
 - **Ngày cập nhật:** 2026-11-05
 - **Nguồn tham khảo:** 
   - [Quy trình triển khai](../08-project/delivery-process.md)
@@ -14,7 +14,7 @@
 
 ## 1. Tuyên Ngôn Chất Lượng (Quality Statement)
 
-Hệ thống **DataWithLy** được xây dựng với mục tiêu mang lại trải nghiệm học tập và tiếp cận kiến thức mượt mà nhất cho học viên, đồng thời cung cấp công cụ quản trị nội dung an toàn, trực quan cho Mentor Hứa Thảo Ly trên nền tảng Google Sheets kết hợp Next.js App Router.
+Hệ thống **DataWithLy** được xây dựng với mục tiêu mang lại trải nghiệm học tập và tiếp cận kiến thức mượt mà nhất cho học viên, đồng thời cung cấp công cụ quản trị nội dung an toàn, trực quan cho Mentor Hứa Thảo Lý trên nền tảng Google Sheets kết hợp Next.js App Router.
 
 Tiêu chuẩn chất lượng của dự án dựa trên 4 trụ cột cốt lõi:
 1. **Độ tin cậy & Ổn định (Reliability & Zero White Screen):** Hệ thống cam kết không bao giờ hiển thị "Màn hình trắng chết chóc" (White Screen of Death - BR-11). Mọi lỗi kết nối từ Google Sheets đều phải được cô lập bởi React Error Boundary và hiển thị thẻ Fallback Card thân thiện.

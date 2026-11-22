@@ -9,11 +9,11 @@ import { BlogService } from "@/lib/services/blog.service";
 export const metadata: Metadata = {
   title: "Góc Chia Sẻ Kiến Thức Data Analytics | DataWithLy",
   description:
-    "Tổng hợp các bài viết, case study và mẹo SQL, Dashboard, Lộ trình nghề nghiệp từ Mentor Hứa Thảo Ly.",
+    "Tổng hợp các bài viết, case study và mẹo SQL, Dashboard, Lộ trình nghề nghiệp từ Mentor Hứa Thảo Lý.",
   openGraph: {
     title: "Góc Chia Sẻ Kiến Thức Data Analytics | DataWithLy",
     description:
-      "Tổng hợp các bài viết, case study và mẹo SQL, Dashboard, Lộ trình nghề nghiệp từ Mentor Hứa Thảo Ly.",
+      "Tổng hợp các bài viết, case study và mẹo SQL, Dashboard, Lộ trình nghề nghiệp từ Mentor Hứa Thảo Lý.",
     type: "website",
     locale: "vi_VN",
   },

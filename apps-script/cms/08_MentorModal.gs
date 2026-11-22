@@ -7,7 +7,7 @@ function showMentorModal() {
 
   var currentMentor = {
     id: "mentor-ly-hua",
-    name: "Hứa Thảo Ly",
+    name: "Hứa Thảo Lý",
     title: "Lead Mentor & Founder DataWithLy",
     bio: "Hơn 7 năm kinh nghiệm thực chiến trong ngành Dữ liệu tại các tập đoàn công nghệ và tài chính hàng đầu Việt Nam. Từng trực tiếp xây dựng hạ tầng báo cáo phục vụ hàng triệu người dùng.",
     companies_worked: "MoMo, Tiki, ACB Bank",

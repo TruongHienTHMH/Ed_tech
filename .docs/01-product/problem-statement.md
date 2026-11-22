@@ -15,7 +15,7 @@
 
 ## 1. Bối cảnh hiện trạng
 
-Hiện tại, người học tiếp cận thương hiệu **DataWithLy** và Founder **Hứa Thảo Ly** chủ yếu qua các kênh truyền thông xã hội tự nhiên (TikTok `@datawithly`, Instagram `@datawithly`, Threads, Facebook và trang cá nhân LinkedIn).
+Hiện tại, người học tiếp cận thương hiệu **DataWithLy** và Founder **Hứa Thảo Lý** chủ yếu qua các kênh truyền thông xã hội tự nhiên (TikTok `@datawithly`, Instagram `@datawithly`, Threads, Facebook và trang cá nhân LinkedIn).
 
 Khi có nhu cầu tìm hiểu các khóa học phân tích dữ liệu, người học thường nhắn tin trực tiếp qua Direct Message (DM) hoặc Zalo cá nhân để hỏi về lộ trình, giáo trình từng buổi học, mức học phí và lịch khai giảng. Quá trình này dẫn đến tình trạng:
 - Thông tin bị phân tán, thiếu một nguồn tham chiếu chính thức và hoàn chỉnh để người học tự đối chiếu mức độ phù hợp với trình độ hiện tại của mình.
@@ -49,7 +49,7 @@ Khi dự án website DataWithLy hoàn thành:
    - 100% lead đăng ký từ website được chuyển tự động vào bảng tính Google Sheets nội bộ bảo mật kèm thông tin: Họ tên, Số điện thoại, Khóa học quan tâm, Khung giờ hẹn gọi và nguồn chiến dịch (UTM).
    - Tư vấn viên nhận được thông báo tức thì qua email để liên hệ chăm sóc học viên trong thời gian sớm nhất.
 3. **Đối với người quản trị nội dung:**
-   - Chị Hứa Thảo Ly và đội ngũ có thể mở file Google Sheets bất cứ lúc nào để sửa đổi học phí, cập nhật ngày khai giảng, bổ sung review học viên hoặc đăng bài blog mới; website tự động cập nhật nội dung mới mượt mà mà không cần chỉnh sửa một dòng code nào.
+   - Chị Hứa Thảo Lý và đội ngũ có thể mở file Google Sheets bất cứ lúc nào để sửa đổi học phí, cập nhật ngày khai giảng, bổ sung review học viên hoặc đăng bài blog mới; website tự động cập nhật nội dung mới mượt mà mà không cần chỉnh sửa một dòng code nào.
 
 ---
 

@@ -17,7 +17,7 @@ export default function AboutCta() {
 
           <div className="relative z-10 max-w-2xl mx-auto">
             <span className="inline-block px-3.5 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs sm:text-sm font-semibold tracking-wide uppercase mb-6">
-              Bắt đầu hành trình cùng LyData
+              Bắt đầu hành trình cùng LYDATA
             </span>
 
             <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
@@ -25,7 +25,7 @@ export default function AboutCta() {
             </h2>
 
             <p className="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg text-white/90 leading-relaxed font-light">
-              Đừng ngần ngại để lại thông tin để được chính Founder Hứa Thảo Ly và đội ngũ chuyên môn
+              Đừng ngần ngại để lại thông tin để được chính Founder Hứa Thảo Lý và đội ngũ chuyên môn
               đánh giá hồ sơ và định hướng lộ trình học tập tối ưu nhất cho bạn.
             </p>
 

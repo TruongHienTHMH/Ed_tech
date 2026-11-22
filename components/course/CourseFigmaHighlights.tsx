@@ -26,7 +26,7 @@ const HIGHLIGHTS: HighlightItem[] = [
     icon: "🎯",
     badge: "Đồng hành 1-on-1",
     title: "Mentor sửa bài & Phỏng vấn",
-    description: "Mentor Hứa Thảo Ly trực tiếp review code, góp ý bài tập hàng tuần và sửa CV/Portfolio 1:1 sát tuyển dụng.",
+    description: "Mentor Hứa Thảo Lý trực tiếp review code, góp ý bài tập hàng tuần và sửa CV/Portfolio 1:1 sát tuyển dụng.",
   },
 ];
 

@@ -16,7 +16,7 @@
 
 ## 1. Bối cảnh & Giá trị nghiệp vụ cốt lõi
 
-**DataWithLy** là mô hình đào tạo phân tích dữ liệu thực chiến (Data Analytics - DA & Business Analysis - BA) kết hợp tư vấn lộ trình 1-1 do **Mentor Hứa Thảo Ly** (Ex Senior DA tại MoMo, cựu DA tại Tiki, ACB) trực tiếp sáng lập và giảng dạy.
+**DataWithLy** là mô hình đào tạo phân tích dữ liệu thực chiến (Data Analytics - DA & Business Analysis - BA) kết hợp tư vấn lộ trình 1-1 do **Mentor Hứa Thảo Lý** (Ex Senior DA tại MoMo, cựu DA tại Tiki, ACB) trực tiếp sáng lập và giảng dạy.
 
 Nghiệp vụ của hệ thống vận hành xoay quanh **2 luồng giá trị cốt lõi**:
 1. **Luồng giá trị giáo dục & Tiếp cận học viên (Public Educational Value):** Cung cấp thông tin minh bạch, trực quan về lộ trình đào tạo, chi tiết giáo trình từng buổi học (Syllabus Accordion), bảng học phí niêm yết, các sản phẩm Dashboard thực tế của học viên và bài viết chia sẻ kiến thức chuyên môn.

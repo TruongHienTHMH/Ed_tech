@@ -90,10 +90,10 @@ export default function Navbar({
           <Image
             src={
               isLight
-                ? "/assets/mentor/logo-lydata-red.svg"
+                ? "/assets/mentor/logo-LYDATA-red.svg"
                 : "/assets/figma/14feb7923d10e1372397793711962f265e88f9a9.svg"
             }
-            alt="LyData Logo"
+            alt="LYDATA Logo"
             width={140}
             height={46}
             className="h-9 sm:h-11 w-auto object-contain transition-all"

@@ -51,7 +51,7 @@ export async function generateMetadata({
       images: post.coverImageUrl ? [{ url: post.coverImageUrl }] : [],
       type: "article",
       publishedTime: post.publishedAt,
-      authors: [post.authorName || "Hứa Thảo Ly"],
+      authors: [post.authorName || "Hứa Thảo Lý"],
       locale: "vi_VN",
     },
   };
@@ -172,7 +172,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               {/* Author Box */}
               <div className="pt-6 border-t border-neutral-200">
                 <BlogAuthorBox
-                  name={post.authorName || "Hứa Thảo Ly"}
+                  name={post.authorName || "Hứa Thảo Lý"}
                   avatarUrl={post.authorAvatarUrl}
                 />
               </div>

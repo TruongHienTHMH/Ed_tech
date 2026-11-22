@@ -94,7 +94,7 @@
 - `database/seeders/CourseSeeder.ts`: 3 ảnh bìa 4K sắc nét theo từng khóa học.
 - `database/seeders/ProjectSeeder.ts`: Mở rộng 9 dự án thực tế lưới 3x3 Figma.
 - `database/seeders/TestimonialSeeder.ts`: Mở rộng 6 học viên lưới 3x2 Figma kèm avatar thật.
-- `database/seeders/MentorSeeder.ts`: Cập nhật avatar sắc nét Mentor Hứa Thảo Ly.
+- `database/seeders/MentorSeeder.ts`: Cập nhật avatar sắc nét Mentor Hứa Thảo Lý.
 - `components/course/CourseFigmaInstructor.tsx`: Sửa avatar link chuẩn Mentor.
 - `components/home/TestimonialsSection.tsx`: Hiển thị avatar học viên thật từ Seeder.
 - `database/seeders/snapshot.json`: Snapshot dữ liệu chuẩn hóa mới nhất.

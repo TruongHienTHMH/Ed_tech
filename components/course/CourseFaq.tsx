@@ -20,7 +20,7 @@ export default function CourseFaq({ courseId, courseTitle }: CourseFaqProps) {
   const faqs: FaqItem[] = [
     {
       q: "Khóa học có cam kết 'bao đỗ việc làm' tại các tập đoàn lớn không?",
-      a: "DataWithLy không đưa ra những lời hứa ảo như 'cam kết 100% bao đỗ Google/Grab/Shopee'. Việc trúng tuyển phụ thuộc vào nỗ lực, kỷ luật rèn luyện và kỹ năng của chính bạn. Chúng tôi cam kết đem lại kiến thức thực chiến chuẩn doanh nghiệp, trực tiếp Mentor Hứa Thảo Ly sửa CV 1-on-1, luyện phỏng vấn thử và kết nối cơ hội tuyển dụng trong mạng lưới đối tác đến khi bạn tự tin ứng tuyển.",
+      a: "DataWithLy không đưa ra những lời hứa ảo như 'cam kết 100% bao đỗ Google/Grab/Shopee'. Việc trúng tuyển phụ thuộc vào nỗ lực, kỷ luật rèn luyện và kỹ năng của chính bạn. Chúng tôi cam kết đem lại kiến thức thực chiến chuẩn doanh nghiệp, trực tiếp Mentor Hứa Thảo Lý sửa CV 1-on-1, luyện phỏng vấn thử và kết nối cơ hội tuyển dụng trong mạng lưới đối tác đến khi bạn tự tin ứng tuyển.",
     },
     {
       q: "Nếu bận đột xuất có được xem lại video bài giảng không?",
@@ -132,7 +132,7 @@ export default function CourseFaq({ courseId, courseTitle }: CourseFaqProps) {
                 Nhận Lộ Trình Học Phù Hợp
               </h3>
               <p className="text-xs sm:text-sm text-neutral-600 mt-1.5 leading-relaxed">
-                Điền thông tin để Mentor Hứa Thảo Ly tư vấn chi tiết về khóa học{" "}
+                Điền thông tin để Mentor Hứa Thảo Lý tư vấn chi tiết về khóa học{" "}
                 <strong className="text-neutral-900 font-semibold">{courseTitle}</strong>.
               </p>
             </div>

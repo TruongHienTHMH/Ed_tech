@@ -25,7 +25,7 @@
 
 ### 1. Header & Bộ lọc Phân loại (Category Filter)
 - **Tiêu đề trang:** `"Góc Chia Sẻ Kiến Thức Data Analytics"`.
-- **Mô tả:** Lời tựa từ Mentor Hứa Thảo Ly về hành trình học tập, kinh nghiệm dự án và các mẹo thực hành dữ liệu.
+- **Mô tả:** Lời tựa từ Mentor Hứa Thảo Lý về hành trình học tập, kinh nghiệm dự án và các mẹo thực hành dữ liệu.
 - **Thanh Filter Tabs:**
   - `Tất cả` (Mặc định).
   - `SQL thực chiến` (Các kỹ thuật query, tối ưu hiệu năng cơ sở dữ liệu).
@@ -42,7 +42,7 @@
   - Thời lượng đọc ước tính (ví dụ: `5 phút đọc`).
   - Tiêu đề bài viết (H3, tối đa 2 dòng, cắt đuôi `line-clamp-2`).
   - Tóm tắt nội dung (tối đa 3 dòng `line-clamp-3`).
-  - Chân thẻ: Tên tác giả (*Hứa Thảo Ly*), ngày đăng (`DD/MM/YYYY`) và link dẫn tới `/blog/[slug]`.
+  - Chân thẻ: Tên tác giả (*Hứa Thảo Lý*), ngày đăng (`DD/MM/YYYY`) và link dẫn tới `/blog/[slug]`.
 
 ---
 
@@ -56,7 +56,7 @@ flowchart TD
         Article["Cột chính: Tiêu đề + Meta + Nội dung Markdown (Code Highlight)"]
         Sidebar["Cột phụ: Mục lục tự động (TOC - Sticky)"]
     end
-    Main --> Author["4. Hộp thông tin Tác giả (Mentor Hứa Thảo Ly)"]
+    Main --> Author["4. Hộp thông tin Tác giả (Mentor Hứa Thảo Lý)"]
     Author --> CTA["5. Khối Banner Khóa học liên quan"]
     CTA --> Related["6. Danh sách 3 Bài viết cùng chủ đề"]
     Related --> Foot["7. Footer"]
@@ -79,7 +79,7 @@ flowchart TD
    - Hiển thị cố định ở sidebar bên phải trên màn hình Desktop (ẩn trên Mobile/Tablet).
    - Tự động làm nổi bật (Highlight) mục tương ứng khi người dùng cuộn đến vị trí đó (Scrollspy).
 4. **Hộp thông tin Tác giả & CTA Khóa học liên quan:**
-   - Cuối bài viết có avatar Mentor Hứa Thảo Ly kèm lời kết tâm huyết và link dẫn đến trang thông tin giảng viên.
+   - Cuối bài viết có avatar Mentor Hứa Thảo Lý kèm lời kết tâm huyết và link dẫn đến trang thông tin giảng viên.
    - Banner nổi bật gợi ý khóa học phù hợp với chủ đề bài viết (ví dụ: bài viết về SQL Window Function sẽ gợi ý khóa học *SQL for Data Analytics* kèm nút `[Xem khóa học]`).
 5. **Bài viết liên quan (Related Articles):**
    - Hiển thị 3 bài viết ngẫu nhiên hoặc cùng thể loại để giữ chân độc giả tiếp tục tìm hiểu.
@@ -92,7 +92,7 @@ flowchart TD
 |---|---|---|---|
 | **1. Bình thường (Normal)** | Bài viết tồn tại với `is_active = TRUE`. | Dựng hoàn chỉnh bài viết với định dạng Markdown đẹp mắt, TOC hoạt động, code block có màu sắc. | Cho phép độc giả đọc, copy code, nhấn vào mục lục để nhảy tới phần tương ứng. |
 | **2. Đang tải (Loading)** | Chuyển trang hoặc route đang fetch. | Hiển thị Skeleton Loader cho tiêu đề, các khối văn bản giả lập và khung code giả lập. | Giữ ổn định bố cục (CLS = 0). |
-| **3. Thể loại rỗng (Empty Category)** | Người dùng chọn một tab thể loại chưa có bài viết nào được publish. | Hiển thị màn hình rỗng tinh tế: *"Chủ đề này đang được Mentor Hứa Thảo Ly biên soạn nội dung. Bạn có thể xem các chủ đề khác nhé!"* kèm nút `[Xem tất cả bài viết]`. | Không để giao diện trống trải kỳ quặc. |
+| **3. Thể loại rỗng (Empty Category)** | Người dùng chọn một tab thể loại chưa có bài viết nào được publish. | Hiển thị màn hình rỗng tinh tế: *"Chủ đề này đang được Mentor Hứa Thảo Lý biên soạn nội dung. Bạn có thể xem các chủ đề khác nhé!"* kèm nút `[Xem tất cả bài viết]`. | Không để giao diện trống trải kỳ quặc. |
 | **4. Không tìm thấy (Not Found / 404)** | `slug` bài viết không khớp hoặc đã bị ẩn (`is_active = FALSE`). | Kích hoạt hàm `notFound()`. Hiển thị trang 404: *"Bài viết bạn tìm kiếm không tồn tại hoặc đã được chuyển địa chỉ"*, kèm nút `[Về trang Blog]`. | Trả về HTTP Status 404 chuẩn. |
 | **5. Lỗi (Error)** | Sự cố phân tích cú pháp Markdown hoặc mạng lỗi. | Error Boundary bắt lỗi cục bộ. Hiển thị thông báo: *"Không thể hiển thị nội dung bài viết này"* kèm nút `[Tải lại]`. | Đảm bảo trang web không bao giờ bị trắng màn hình. |
 

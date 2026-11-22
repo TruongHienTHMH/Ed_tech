@@ -32,13 +32,13 @@ const SOCIAL_LINKS: SocialLink[] = [
   {
     name: "Facebook",
     url: "https://www.facebook.com/profile.php?id=61594436940087",
-    ariaLabel: "Facebook Mentor Hứa Thảo Ly",
+    ariaLabel: "Facebook Mentor Hứa Thảo Lý",
     iconSrc: "/assets/icons/facebook.svg",
   },
   {
     name: "Zalo",
     url: "https://zalo.me/0769361960",
-    ariaLabel: "Zalo Mentor Hứa Thảo Ly (0769 361 960)",
+    ariaLabel: "Zalo Mentor Hứa Thảo Lý (0769 361 960)",
     iconSrc: "/assets/figma/08742fdf977fc095f72d070c8238ee5aa891910d.png",
   },
 ];
@@ -147,7 +147,7 @@ export default function AboutHero() {
             <div className="relative aspect-[472/446] w-full rounded-[24px] overflow-hidden bg-gradient-to-br from-[#FFF5F6] via-[#FAF7F8] to-[#F3EBED] border border-[#EFE5E7] shadow-sm group">
               <Image
                 src="/assets/mentor/ly.png"
-                alt="Founder Hứa Thảo Ly - LyData"
+                alt="Founder Hứa Thảo Lý - LYDATA"
                 fill
                 priority
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 450px, 472px"

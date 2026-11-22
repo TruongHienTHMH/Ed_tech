@@ -20,7 +20,7 @@
 
 3. **Hệ thống Email thông báo 2 chiều cho Lead:**
    - **Email 1 (Client / Admin):** Gửi đến `hientruongthmh@gmail.com` (có thể cấu hình thêm email khách hàng qua `CLIENT_NOTIFICATION_EMAILS` trong Apps Script), trình bày đầy đủ thông tin: Họ tên, Số điện thoại, Email, Khóa học quan tâm, Nhu cầu/ghi chú, Nguồn UTM, Mã đơn Lead.
-   - **Email 2 (Học viên / Lead):** Gửi email cảm ơn cá nhân hóa từ Mentor Hứa Thảo Ly, cam kết liên hệ tư vấn trong vòng 15-30 phút, kèm nút bấm nổi bật liên kết trực tiếp đến Zalo Mentor (`https://zalo.me/...`).
+   - **Email 2 (Học viên / Lead):** Gửi email cảm ơn cá nhân hóa từ Mentor Hứa Thảo Lý, cam kết liên hệ tư vấn trong vòng 15-30 phút, kèm nút bấm nổi bật liên kết trực tiếp đến Zalo Mentor (`https://zalo.me/...`).
 
 4. **Kiến trúc SSR vs CSR, Server State vs Client State (TanStack Query + Zustand):**
    - Phân định rõ ràng ranh giới giữa Server Components (RSC) và Client Components (CSR).

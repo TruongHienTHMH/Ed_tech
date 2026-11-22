@@ -76,7 +76,7 @@ function addBlogsBatchFromModal(blogList) {
       sanitizeFormula(excerpt),
       sanitizeFormula(contentMd),
       sanitizeFormula(coverImg),
-      sanitizeFormula(item.author_name || "Hứa Thảo Ly"),
+      sanitizeFormula(item.author_name || "Hứa Thảo Lý"),
       sanitizeFormula(avatarImg),
       sanitizeFormula(publishedAt),
       item.is_active === true || item.is_active === "true"

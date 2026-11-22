@@ -2,7 +2,7 @@
 
 - **Mục đích:** Đảm bảo khả năng truy vết 100% (End-to-End Traceability) từ Yêu cầu chức năng (Modules M00-M05), Quy tắc kinh doanh (Business Rules BR-01 đến BR-13) và Bộ tiêu chuẩn phi chức năng (NFR Specifications) sang Tiêu chí chấp nhận (AC), Kịch bản kiểm thử (Test Cases) và Bằng chứng nghiệm thu thực tế.
 - **Trạng thái:** Active / Production Ready
-- **Người duyệt:** TechLead & Client Hứa Thảo Ly
+- **Người duyệt:** TechLead & Client Hứa Thảo Lý
 - **Ngày cập nhật:** 2026-11-05
 - **Nguồn tham khảo:** 
   - [Khung kiểm thử README.md](README.md)
@@ -22,7 +22,7 @@
 | **REQ-M00-003** | Tài liệu Swagger UI tương tác trực tiếp `/api/docs` | [M00-Setup](../03-modules/M00-setup-and-connectivity/README.md) | NFR-OBS-002 | AC-M00-003 | `TC-M00-001` | Giao diện Swagger UI render chuẩn OpenAPI 3.0 | **Pass** |
 | **REQ-M00-004** | Bộ script thao tác dữ liệu (CRUD) có Mutex Lock | [M00-Setup](../03-modules/M00-setup-and-connectivity/README.md) | BR-01, BR-13 | AC-M00-004 | `TC-M00-002`, `TC-UNIT-016` | Dữ liệu ghi tuần tự qua `LockService.waitLock(10000)` | **Pass** |
 | **REQ-M01-001** | Hero Section định vị thương hiệu DataWithLy | [M01-HomePage](../03-modules/M01-homepage/README.md) | NFR-USABILITY-001 | AC-M01-001 | `TC-M01-001` | Tiêu đề, slogan, bảng màu Crimson Wine Red `#8B1D2C` chuẩn | **Pass** |
-| **REQ-M01-002** | Khối Social Proof & Tiểu sử Mentor Hứa Thảo Ly | [M01-HomePage](../03-modules/M01-homepage/README.md) | NFR-USABILITY-002 | AC-M01-002 | `TC-M01-001` | Thông tin chính xác: Ex-Senior DA tại MoMo, Tiki, ACB | **Pass** |
+| **REQ-M01-002** | Khối Social Proof & Tiểu sử Mentor Hứa Thảo Lý | [M01-HomePage](../03-modules/M01-homepage/README.md) | NFR-USABILITY-002 | AC-M01-002 | `TC-M01-001` | Thông tin chính xác: Ex-Senior DA tại MoMo, Tiki, ACB | **Pass** |
 | **REQ-M01-003** | Danh sách khóa học nổi bật trên Trang chủ | [M01-HomePage](../03-modules/M01-homepage/README.md) | BR-01, BR-04 | AC-M01-003 | `TC-M01-001`, `TC-UNIT-009` | Render card khóa học, lọc theo tag, chỉ hiện `is_active=true` | **Pass** |
 | **REQ-M01-004** | Nút kêu gọi hành động (CTA) & Điều hướng mượt mà | [M01-HomePage](../03-modules/M01-homepage/README.md) | NFR-USABILITY-003 | AC-M01-004 | `TC-M01-001` | Cuộn mượt đến form hoặc chuyển trang trong < 100ms | **Pass** |
 | **REQ-M02-001** | Trang chi tiết khóa học theo URL Slug động | [M02-CourseDetails](../03-modules/M02-course-details/README.md) | BR-04 | AC-M02-001 | `TC-M02-001`, `TC-UNIT-008` | URL chuẩn SEO `/courses/[slug]`, render đầy đủ thông tin | **Pass** |

@@ -120,7 +120,7 @@ CREATE TABLE student_projects (
 COMMENT ON TABLE student_projects IS 'Bảng lưu trữ 4 dự án học viên tiêu biểu hiển thị trên Trang chủ';
 
 -- ==============================================================================
--- 6. TAB: MENTOR_PROFILE (Thông tin giảng viên Hứa Thảo Ly)
+-- 6. TAB: MENTOR_PROFILE (Thông tin giảng viên Hứa Thảo Lý)
 -- ==============================================================================
 
 CREATE TABLE mentor_profile (
@@ -130,7 +130,7 @@ CREATE TABLE mentor_profile (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-COMMENT ON TABLE mentor_profile IS 'Bảng lưu trữ thông tin tiểu sử và năng lực Mentor Hứa Thảo Ly';
+COMMENT ON TABLE mentor_profile IS 'Bảng lưu trữ thông tin tiểu sử và năng lực Mentor Hứa Thảo Lý';
 
 -- ==============================================================================
 -- 7. TAB: TESTIMONIALS (Đánh giá học viên thực tế K1-K10)
@@ -161,7 +161,7 @@ CREATE TABLE blog_posts (
     title VARCHAR(255) NOT NULL,                        -- Tiêu đề bài viết
     category VARCHAR(100) NOT NULL,                     -- Phân loại: 'SQL', 'Dashboard & BI', 'Career'
     read_time VARCHAR(50) NOT NULL DEFAULT '5 phút đọc',-- Thời gian đọc ước tính
-    author VARCHAR(100) NOT NULL DEFAULT 'Hứa Thảo Ly', -- Tác giả bài viết
+    author VARCHAR(100) NOT NULL DEFAULT 'Hứa Thảo Lý', -- Tác giả bài viết
     published_date DATE NOT NULL DEFAULT CURRENT_DATE,  -- Ngày phát hành
     summary TEXT NOT NULL,                              -- Tóm tắt hiển thị trên card preview
     content_markdown TEXT NOT NULL,                     -- Toàn văn bài viết định dạng Markdown

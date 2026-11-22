@@ -9,7 +9,7 @@ export const openApiSpec = {
     title: "DataWithLy Educational Platform API",
     version: "1.0.0",
     description:
-      "Tài liệu kỹ thuật API chính thức cho nền tảng giáo dục DataWithLy (Mentor Hứa Thảo Ly). Bao gồm các dịch vụ kết nối Google Sheets, giám sát sức khỏe hệ thống, thu thập Lead học viên, On-demand ISR Revalidation và lưu trữ hình ảnh Cloudflare R2.",
+      "Tài liệu kỹ thuật API chính thức cho nền tảng giáo dục DataWithLy (Mentor Hứa Thảo Lý). Bao gồm các dịch vụ kết nối Google Sheets, giám sát sức khỏe hệ thống, thu thập Lead học viên, On-demand ISR Revalidation và lưu trữ hình ảnh Cloudflare R2.",
     contact: {
       name: "DataWithLy Engineering Team",
       email: "tech@datawithly.edu.vn",

@@ -495,7 +495,7 @@ export class SheetsClient {
       const role = String(m.title || m.role || "Lead Mentor");
       return {
         id: String(m.id || `mentor-${idx + 1}`),
-        name: String(m.name || "Hứa Thảo Ly"),
+        name: String(m.name || "Hứa Thảo Lý"),
         role,
         title: role,
         bio: String(m.bio || ""),
@@ -562,7 +562,7 @@ export class SheetsClient {
         : b.contentMarkdown
           ? String(b.contentMarkdown)
           : undefined,
-      authorName: String(b.author_name || b.authorName || "Hứa Thảo Ly"),
+      authorName: String(b.author_name || b.authorName || "Hứa Thảo Lý"),
       publishedAt: String(b.published_at || b.publishedAt || new Date().toISOString().split("T")[0]),
       coverImageUrl: resolveImageUrl(
         (b.cover_image_url || b.cover_image || b.thumbnail || b.image_url || b.coverImageUrl) as string | undefined,

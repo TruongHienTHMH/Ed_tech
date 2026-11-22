@@ -145,7 +145,7 @@ Trả về khi Google Apps Script bị timeout hoặc quá tải:
 
 ## 3. Đặc tả API `POST /api/revalidate` (On-demand ISR Webhook)
 
-Được kích hoạt tự động từ thanh menu Google Sheets khi Chị Hứa Thảo Ly hoặc người quản trị bấm nút *"Xuất bản thay đổi lên Web"*.
+Được kích hoạt tự động từ thanh menu Google Sheets khi Chị Hứa Thảo Lý hoặc người quản trị bấm nút *"Xuất bản thay đổi lên Web"*.
 
 ### 3.1. Request Headers & Body
 ```http

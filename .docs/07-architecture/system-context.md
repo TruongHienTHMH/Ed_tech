@@ -21,7 +21,7 @@ Sơ đồ thể hiện vị trí trung tâm của nền tảng **DataWithLy Webs
 graph TD
     subgraph Users["NGƯỜI DÙNG & TÁC NHÂN"]
         User_Student["Học viên / Người tìm hiểu khóa học<br/>(Student / Prospect)"]
-        User_Admin["Người quản trị / Mentor Hứa Thảo Ly<br/>(Content Manager / Founder)"]
+        User_Admin["Người quản trị / Mentor Hứa Thảo Lý<br/>(Content Manager / Founder)"]
         User_Consultant["Đội ngũ Tư vấn viên<br/>(Sales / Admissions Team)"]
         User_Bot["Công cụ tìm kiếm & Bots<br/>(Googlebot, Social Crawlers, Bad Bots)"]
     end
@@ -126,7 +126,7 @@ graph TB
 
 1. **Tách biệt hoàn toàn Môi trường Staging và Production ở tầng Webhook:**
    - Trong giai đoạn Đợt 1 (MVP), biến môi trường `GOOGLE_APPS_SCRIPT_URL` trỏ vào Webhook của tệp **Google Sheets Staging (Test)**.
-   - Khi chuyển sang Đợt 4 (Production), chỉ cần cập nhật URL và Secret Token sang tệp **Private Leads Production** của Chị Hứa Thảo Ly mà không cần sửa đổi bất kỳ dòng mã logic nào.
+   - Khi chuyển sang Đợt 4 (Production), chỉ cần cập nhật URL và Secret Token sang tệp **Private Leads Production** của Chị Hứa Thảo Lý mà không cần sửa đổi bất kỳ dòng mã logic nào.
 2. **Loại bỏ trạng thái phiên (Stateless Architecture):**
    - Ứng dụng Next.js hoạt động hoàn toàn dưới dạng phi trạng thái (Stateless), giúp hệ thống dễ dàng triển khai trên mạng lưới Vercel Edge Serverless mà không bị phụ thuộc vào Server Memory giữa các request.
    - Trạng thái điền form dở dang của học viên được lưu giữ cục bộ tại trình duyệt (`React State / SessionStorage`) để đảm bảo khả năng phục hồi dữ liệu khi mạng chập chờn.

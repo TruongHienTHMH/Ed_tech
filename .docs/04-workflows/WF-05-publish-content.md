@@ -1,6 +1,6 @@
 # WF-05 — Quản trị & Xuất bản nội dung qua Google Sheets (Publish Content)
 
-- **Mục đích:** Đặc tả quy trình dành cho Chị Hứa Thảo Ly và đội ngũ biên tập nội dung thực hiện chỉnh sửa khóa học, cập nhật lịch khai giảng, thay đổi học phí hoặc đăng bài viết mới trực tiếp trên Google Sheets và kích hoạt xuất bản lên website mà không cần lập trình viên can thiệp.
+- **Mục đích:** Đặc tả quy trình dành cho Chị Hứa Thảo Lý và đội ngũ biên tập nội dung thực hiện chỉnh sửa khóa học, cập nhật lịch khai giảng, thay đổi học phí hoặc đăng bài viết mới trực tiếp trên Google Sheets và kích hoạt xuất bản lên website mà không cần lập trình viên can thiệp.
 - **Trạng thái:** Approved — đã thống nhất theo kế hoạch kiến trúc ngày 2026-11-03.
 - **Người duyệt:** Chủ dự án & TechLead.
 - **Ngày cập nhật:** 2026-11-03.
@@ -27,7 +27,7 @@
 
 ## 2. Tác nhân & Điều kiện kích hoạt
 
-- **Tác nhân chính:** Founder Hứa Thảo Ly hoặc Người biên tập nội dung được phân quyền.
+- **Tác nhân chính:** Founder Hứa Thảo Lý hoặc Người biên tập nội dung được phân quyền.
 - **Điểm bắt đầu:** Mở file Google Sheets `Public Content Sheet` trên trình duyệt máy tính.
 - **Điều kiện trước:** Đã cài đặt menu tùy chỉnh `LY DATA CMS` qua Google Apps Script.
 

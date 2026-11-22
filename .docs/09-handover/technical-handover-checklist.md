@@ -16,7 +16,7 @@
 | Nền tảng | Tài nguyên / Dịch vụ | Quyền hạn yêu cầu | Ghi chú & Tài khoản quản trị |
 |---|---|---|---|
 | **Google Cloud Platform (GCP)** | Google Sheets API v4, Google Drive API | Service Account: `Editor` | Dùng để kết nối API đọc/ghi từ Next.js Server |
-| **Google Workspace** | File Google Sheets Quản trị & File Private Leads | Owner / Editor | Tài khoản Google của Founder Hứa Thảo Ly |
+| **Google Workspace** | File Google Sheets Quản trị & File Private Leads | Owner / Editor | Tài khoản Google của Founder Hứa Thảo Lý |
 | **Google Apps Script** | Webhook Gateway (`Code.gs`) | Web App: "Execute as Me", "Who has access: Anyone" | Nhận POST từ Next.js và chạy kịch bản gửi mail MailApp |
 | **Vercel / Cloudflare** | Next.js 15+ Hosting | Project Admin | Triển khai mã nguồn Frontend và Edge CDN |
 | **Domain Registrar** | Tên miền `datawithly.edu.vn` (hoặc `.vn` / `.com`) | DNS Management | Trỏ bản ghi A / CNAME về máy chủ Vercel |

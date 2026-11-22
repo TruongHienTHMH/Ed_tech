@@ -12,7 +12,7 @@
  * - AlumniCompaniesSection (Top/Bottom gradient wave banners & Partner brand logos)
  * - ComboPricingSection (Sale Star, Fire badge, Check icons)
  * - TestimonialsSection (Student reviewer avatars)
- * - MentorSection (Instructor Hứa Thảo Ly avatar & credentials)
+ * - MentorSection (Instructor Hứa Thảo Lý avatar & credentials)
  */
 
 export interface SectionImageItem {
@@ -263,8 +263,8 @@ export const SECTION_IMAGES_REGISTRY: Record<string, SectionImageItem[]> = {
       section: "mentor",
       figmaNodeId: "12:682",
       filePath: "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
-      title: "Giảng viên Hứa Thảo Ly",
-      alt: "Hứa Thảo Ly Portrait",
+      title: "Giảng viên Hứa Thảo Lý",
+      alt: "Hứa Thảo Lý Portrait",
     },
   ],
 };

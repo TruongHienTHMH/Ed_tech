@@ -2,7 +2,7 @@
 
 - **Mục đích:** Đặc tả chi tiết các bộ kịch bản kiểm thử đơn vị (Unit Tests), cung cấp mã kiểm thử mẫu (Test Suites với Vitest / Jest), dữ liệu đầu vào (Mocks), và các điều kiện kiểm tra (Assertions) cho toàn bộ các hàm cốt lõi, schema validator, bộ làm sạch chuỗi và thuật toán quản lý bộ nhớ của dự án DataWithLy.
 - **Trạng thái:** Active / Production Ready
-- **Người duyệt:** TechLead & Client Hứa Thảo Ly
+- **Người duyệt:** TechLead & Client Hứa Thảo Lý
 - **Ngày cập nhật:** 2026-11-05
 - **Nguồn tham khảo:** 
   - [Khung kiểm thử README.md](README.md)
@@ -102,13 +102,13 @@ describe('Unit Test Suite 1: Lead Submission Schema Validation', () => {
     const input = {
       fullName: '  Học Viên Data  ',
       phone: '0912345678',
-      email: '  HocVien.LyData@GMAIL.com  ',
+      email: '  HocVien.LYDATA@GMAIL.com  ',
       courseId: 'sql-for-data-analytics',
     };
 
     const parsed = leadSubmissionSchema.parse(input);
     expect(parsed.fullName).toBe('Học Viên Data');
-    expect(parsed.email).toBe('hocvien.lydata@gmail.com');
+    expect(parsed.email).toBe('hocvien.LYDATA@gmail.com');
   });
 
   it('TC-UNIT-003: Phát hiện và xử lý bẫy bot Honeypot (BR-06)', () => {

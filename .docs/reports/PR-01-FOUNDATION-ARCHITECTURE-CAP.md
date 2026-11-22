@@ -15,7 +15,7 @@
 
 Đợt bàn giao này đã hoàn thành việc tái cấu trúc, chuẩn hóa và đóng gói toàn diện **hệ thống tài liệu nền tảng** cho dự án website đào tạo **DataWithLy**. Hệ thống tài liệu đóng vai trò là "Nguồn sự thật duy nhất" (Single Source of Truth), chuyển hóa toàn bộ các dữ liệu phân tán từ slide bài giảng, file excel yêu cầu, tài liệu trao đổi khách hàng và bản vẽ Figma thành các chỉ thị kỹ thuật chính xác cho Agent Code:
 
-1. **Chuẩn hóa thương hiệu & Nhận diện:** Thống nhất thương hiệu chính thức là **DataWithLy** (tối ưu hóa SEO Google và đồng bộ mạng xã hội `@datawithly`); Founder & Lead Mentor **Hứa Thảo Ly** (Ex Senior DA tại MoMo, Tiki, ACB); chuyển đổi màu sắc sang tone **Đỏ Mận (Crimson / Wine Red)**; loại bỏ 100% các claim ảo không có cơ sở.
+1. **Chuẩn hóa thương hiệu & Nhận diện:** Thống nhất thương hiệu chính thức là **DataWithLy** (tối ưu hóa SEO Google và đồng bộ mạng xã hội `@datawithly`); Founder & Lead Mentor **Hứa Thảo Lý** (Ex Senior DA tại MoMo, Tiki, ACB); chuyển đổi màu sắc sang tone **Đỏ Mận (Crimson / Wine Red)**; loại bỏ 100% các claim ảo không có cơ sở.
 2. **Chuẩn hóa 3 khóa học thực tế:** `SQL for Data Analytics` (12 buổi / 2.990k), `Analytical Thinking & Dashboard Design` (16 buổi + CV / 3.790k), `End-to-End Analytics with SQL & Dashboard Design` (25 buổi + CV / 5.690k).
 3. **Thiết lập chuẩn giao diện:** Xây dựng **Hệ thống khoảng cách 4-point Spacing System (4px Grid)** và trích xuất Typography (`Be Vietnam Pro`, `Inter`) trực tiếp từ Figma qua Figma MCP.
 4. **Phân tích và lựa chọn Định lý CAP cho các Workflows:** Xác lập rõ ràng chiến lược đánh đổi: Read Path chọn **AP**, Write Path Lead Ingestion chọn **CP + Client Resilience**, Notification Path chọn **Async Eventual Consistency**.

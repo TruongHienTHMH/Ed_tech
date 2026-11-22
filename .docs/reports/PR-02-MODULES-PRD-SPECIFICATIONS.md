@@ -14,7 +14,7 @@
 Báo cáo PR này ghi nhận việc hoàn thiện toàn diện bộ tài liệu đặc tả sản phẩm (PRD) và hướng dẫn kỹ thuật cho tất cả 5 module nghiệp vụ cốt lõi của website **DataWithLy** (`docs/03-modules/`).
 
 Mọi tài liệu đã được chuyển từ trạng thái sơ khai (Draft / TBD) sang trạng thái **Đặc tả chi tiết sẵn sàng cho Agent lập trình (Ready for Implementation)**, đồng bộ 100% với:
-- Dữ liệu slide bài giảng và hồ sơ Mentor Hứa Thảo Ly (`[LYDATA] Data Analytics Courses.pptx.pdf`).
+- Dữ liệu slide bài giảng và hồ sơ Mentor Hứa Thảo Lý (`[LYDATA] Data Analytics Courses.pptx.pdf`).
 - Bảng yêu cầu nội dung và danh mục 3 khóa học thực tế (`Website LY DATA - content to fill.xlsx`).
 - Bản vẽ thiết kế Figma chính thức (`epfQwa5s3iMO6toM4Fmmpu:0:1`).
 - Các yêu cầu bổ sung về bảo mật, chống spam 3 lớp và CAP Theorem.

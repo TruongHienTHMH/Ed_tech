@@ -1325,9 +1325,9 @@
   "mentors": [
     {
       "id": "hua-thao-ly",
-      "name": "Hứa Thảo Ly",
-      "role": "Founder Lydata & Senior Data Analyst",
-      "title": "Founder Lydata • Senior Data Analyst @ MoMo • Former Tiki, ACB",
+      "name": "Hứa Thảo Lý",
+      "role": "Founder LYDATA & Senior Data Analyst",
+      "title": "Founder LYDATA • Senior Data Analyst @ MoMo • Former Tiki, ACB",
       "bio": "Với hơn 5+ năm kinh nghiệm làm việc trong lĩnh vực Data Analytics (Senior Data Analyst @ MoMo, Former Data Analyst @ Tiki, Former Data Analyst @ ACB) và từng là Quán quân E!Contest FTU2, Á quân Innovation Contest MoMo, Á quân GenAI MiMir Master, mình đã đồng hành cùng hơn 200+ học viên chuyển ngành và nâng cao năng lực phân tích dữ liệu ứng dụng thực chiến.",
       "avatarUrl": "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
       "companies": [
@@ -1441,7 +1441,7 @@
     {
       "id": "faq-03",
       "question": "Học viên có được hỗ trợ sau khi kết thúc khóa học không?",
-      "answer": "Có! Học viên được tham gia cộng đồng Alumni Data trọn đời, được hỗ trợ giải đáp thắc mắc công việc thực tế, review CV/Portfolio xin việc và kết nối cơ hội tuyển dụng từ mạng lưới đối tác của Lydata.",
+      "answer": "Có! Học viên được tham gia cộng đồng Alumni Data trọn đời, được hỗ trợ giải đáp thắc mắc công việc thực tế, review CV/Portfolio xin việc và kết nối cơ hội tuyển dụng từ mạng lưới đối tác của LYDATA.",
       "category": "Support",
       "sortOrder": 3,
       "isActive": true
@@ -1463,7 +1463,7 @@
       "category": "SQL",
       "excerpt": "Khám phá các mẹo, thủ thuật và câu lệnh SQL hữu ích giúp viết truy vấn ngắn gọn, tối ưu và hiệu quả hơn trong môi trường doanh nghiệp thực tế.",
       "coverImageUrl": "/assets/figma/71218f0038c8a9ce02ba0e6f6b102fbf63b6953b.png",
-      "authorName": "Hứa Thảo Ly",
+      "authorName": "Hứa Thảo Lý",
       "publishedAt": "2026-03-01",
       "readTimeMinutes": 6,
       "isActive": true,
@@ -1476,7 +1476,7 @@
       "category": "Dashboard",
       "excerpt": "Những nguyên lý thị giác quan trọng giúp báo cáo của bạn vừa chuẩn logic kinh doanh vừa đẹp mắt, thuyết phục ban lãnh đạo ngay từ cái nhìn đầu tiên.",
       "coverImageUrl": "/assets/figma/71218f0038c8a9ce02ba0e6f6b102fbf63b6953b.png",
-      "authorName": "Hứa Thảo Ly",
+      "authorName": "Hứa Thảo Lý",
       "publishedAt": "2026-03-05",
       "readTimeMinutes": 7,
       "isActive": true,
@@ -1489,11 +1489,11 @@
       "category": "Career",
       "excerpt": "Kinh nghiệm thực chiến từ việc học công cụ, làm portfolio dự án đến cách trả lời câu hỏi phỏng vấn hóc búa dành cho người trái ngành.",
       "coverImageUrl": "/assets/figma/71218f0038c8a9ce02ba0e6f6b102fbf63b6953b.png",
-      "authorName": "Hứa Thảo Ly",
+      "authorName": "Hứa Thảo Lý",
       "publishedAt": "2026-03-10",
       "readTimeMinutes": 8,
       "isActive": true,
-      "contentMarkdown": "## 1. Chuyển ngành sang Data Analytics có quá muộn?\n\nRất nhiều bạn từ khối ngành kinh tế, marketing, logistics hay tài chính ngân hàng thường lo lắng: *\"Mình không biết lập trình, học toán bình thường thì có làm được Data Analyst không?\"*\n\nCâu trả lời ngắn gọn là: **Hoàn toàn được!** Data Analyst không đòi hỏi bạn phải có bằng Khoa học Máy tính. Điều quan trọng nhất của một DA là **tư duy kinh doanh (Business Sense)** kết hợp với khả năng sử dụng dữ liệu để chứng minh luận điểm.\n\n---\n\n## 2. 4 Giai đoạn trong lộ trình chinh phục nghề DA\n\n### Giai đoạn 1: Tư duy phân tích và Nền tảng số liệu\n- Hiểu các mô hình kinh doanh phổ biến (E-commerce, SaaS, Retail, Banking).\n- Nắm rõ các chỉ số vận hành cốt lõi: CAC, LTV, AOV, Churn Rate, Retention Rate.\n\n### Giai đoạn 2: Vũ khí tối thượng — SQL thực chiến\nSQL là kỹ năng bắt buộc số 1 mà 99% các vị trí tuyển dụng Data Analyst đều yêu cầu. Bạn cần thành thạo:\n- Lọc, kết hợp dữ liệu: `WHERE`, `JOIN` (INNER, LEFT, FULL).\n- Gom nhóm và tính toán: `GROUP BY`, `HAVING`, Aggregations.\n- Các hàm nâng cao: CTEs, Window Functions (`ROW_NUMBER`, `LEAD`, `LAG`).\n\n### Giai đoạn 3: Trực quan hóa dữ liệu (BI Dashboard)\n- Lựa chọn công cụ phù hợp: Looker Studio, Power BI hoặc Tableau.\n- Thiết kế luồng dữ liệu tự động và xây dựng báo cáo phân tích tương tác.\n\n### Giai đoạn 4: Python cho Phân tích thăm dò (EDA)\nSử dụng thư viện `pandas` và `matplotlib` để làm sạch dữ liệu lớn và trực quan hóa phân phối:\n\n```python\nimport pandas as pd\nimport numpy as np\n\n# Đọc dữ liệu khách hàng và kiểm tra tỷ lệ rời bỏ (Churn)\ndf = pd.read_csv(\"customer_churn_data.csv\")\n\n# Tính toán các chỉ số cơ bản\nsummary = df.groupby(\"subscription_plan\").agg(\n    total_users=(\"user_id\", \"count\"),\n    avg_monthly_spend=(\"monthly_charge\", \"mean\"),\n    churn_rate=(\"is_churned\", lambda x: np.mean(x) * 100)\n).reset_index()\n\nprint(\"Báo cáo tỷ lệ Churn theo gói dịch vụ:\")\nprint(summary.round(2))\n```\n\n---\n\n## 3. Bí quyết xây dựng Portfolio dự án gây ấn tượng với nhà tuyển dụng\n\nThay vì chỉ nộp CV với các dự án Titanic hay Iris dataset có sẵn trên Kaggle, hãy tạo ít nhất **2 dự án Capstone giải quyết bài toán kinh doanh cụ thể**:\n1. **Dự án E-commerce Basket Analysis:** Phân tích quy luật mua sắm chéo để gợi ý sản phẩm bán kèm.\n2. **Dự án Customer Segmentation (RFM):** Phân khúc khách hàng theo Tần suất, Giá trị và Thời gian mua sắm gần nhất.\n\n---\n\n## 4. Lời kết từ Mentor Hứa Thảo Ly\n\nCon đường chuyển ngành sẽ có những thời điểm bạn cảm thấy quá tải trước lượng kiến thức đồ sộ. Nhưng nếu có một lộ trình học có định hướng, người hướng dẫn sát sao và kiên trì rèn luyện dự án thực tế, bạn hoàn toàn có thể tự tin ứng tuyển vị trí Data Analyst trong vòng 4 đến 6 tháng."
+      "contentMarkdown": "## 1. Chuyển ngành sang Data Analytics có quá muộn?\n\nRất nhiều bạn từ khối ngành kinh tế, marketing, logistics hay tài chính ngân hàng thường lo lắng: *\"Mình không biết lập trình, học toán bình thường thì có làm được Data Analyst không?\"*\n\nCâu trả lời ngắn gọn là: **Hoàn toàn được!** Data Analyst không đòi hỏi bạn phải có bằng Khoa học Máy tính. Điều quan trọng nhất của một DA là **tư duy kinh doanh (Business Sense)** kết hợp với khả năng sử dụng dữ liệu để chứng minh luận điểm.\n\n---\n\n## 2. 4 Giai đoạn trong lộ trình chinh phục nghề DA\n\n### Giai đoạn 1: Tư duy phân tích và Nền tảng số liệu\n- Hiểu các mô hình kinh doanh phổ biến (E-commerce, SaaS, Retail, Banking).\n- Nắm rõ các chỉ số vận hành cốt lõi: CAC, LTV, AOV, Churn Rate, Retention Rate.\n\n### Giai đoạn 2: Vũ khí tối thượng — SQL thực chiến\nSQL là kỹ năng bắt buộc số 1 mà 99% các vị trí tuyển dụng Data Analyst đều yêu cầu. Bạn cần thành thạo:\n- Lọc, kết hợp dữ liệu: `WHERE`, `JOIN` (INNER, LEFT, FULL).\n- Gom nhóm và tính toán: `GROUP BY`, `HAVING`, Aggregations.\n- Các hàm nâng cao: CTEs, Window Functions (`ROW_NUMBER`, `LEAD`, `LAG`).\n\n### Giai đoạn 3: Trực quan hóa dữ liệu (BI Dashboard)\n- Lựa chọn công cụ phù hợp: Looker Studio, Power BI hoặc Tableau.\n- Thiết kế luồng dữ liệu tự động và xây dựng báo cáo phân tích tương tác.\n\n### Giai đoạn 4: Python cho Phân tích thăm dò (EDA)\nSử dụng thư viện `pandas` và `matplotlib` để làm sạch dữ liệu lớn và trực quan hóa phân phối:\n\n```python\nimport pandas as pd\nimport numpy as np\n\n# Đọc dữ liệu khách hàng và kiểm tra tỷ lệ rời bỏ (Churn)\ndf = pd.read_csv(\"customer_churn_data.csv\")\n\n# Tính toán các chỉ số cơ bản\nsummary = df.groupby(\"subscription_plan\").agg(\n    total_users=(\"user_id\", \"count\"),\n    avg_monthly_spend=(\"monthly_charge\", \"mean\"),\n    churn_rate=(\"is_churned\", lambda x: np.mean(x) * 100)\n).reset_index()\n\nprint(\"Báo cáo tỷ lệ Churn theo gói dịch vụ:\")\nprint(summary.round(2))\n```\n\n---\n\n## 3. Bí quyết xây dựng Portfolio dự án gây ấn tượng với nhà tuyển dụng\n\nThay vì chỉ nộp CV với các dự án Titanic hay Iris dataset có sẵn trên Kaggle, hãy tạo ít nhất **2 dự án Capstone giải quyết bài toán kinh doanh cụ thể**:\n1. **Dự án E-commerce Basket Analysis:** Phân tích quy luật mua sắm chéo để gợi ý sản phẩm bán kèm.\n2. **Dự án Customer Segmentation (RFM):** Phân khúc khách hàng theo Tần suất, Giá trị và Thời gian mua sắm gần nhất.\n\n---\n\n## 4. Lời kết từ Mentor Hứa Thảo Lý\n\nCon đường chuyển ngành sẽ có những thời điểm bạn cảm thấy quá tải trước lượng kiến thức đồ sộ. Nhưng nếu có một lộ trình học có định hướng, người hướng dẫn sát sao và kiên trì rèn luyện dự án thực tế, bạn hoàn toàn có thể tự tin ứng tuyển vị trí Data Analyst trong vòng 4 đến 6 tháng."
     }
   ],
   "promotions": [

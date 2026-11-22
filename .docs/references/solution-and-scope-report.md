@@ -1,6 +1,6 @@
 # BÁO CÁO GIẢI PHÁP KỸ THUẬT & PHẠM VI DỰ ÁN
 ## HỆ THỐNG WEBSITE KHÓA HỌC THƯƠNG HIỆU LY DATA
-* **Chủ nhiệm dự án (Client / Stakeholder):** Chị Hứa Thảo Ly (Founder LY DATA)
+* **Chủ nhiệm dự án (Client / Stakeholder):** Chị Hứa Thảo Lý (Founder LY DATA)
 * **Đơn vị tư vấn & phát triển:** Trương Hoàng Minh Hiển & Tech Lead Agent Antigravity
 * **Mục tiêu báo cáo:** Làm rõ phạm vi tính năng, giải trình cơ chế vận hành CMS bằng Google Sheets (Ưu - Nhược điểm & Giải pháp kỹ thuật), hướng dẫn thao tác thực tế và thống nhất yêu cầu (Requirements Sign-off) trước khi chuyển sang giai đoạn tạo PRD và sinh mã nguồn tự động.
 
@@ -41,7 +41,7 @@ graph TD
 
 ### 1.1. Tầm nhìn & Mục tiêu sản phẩm
 Website LY DATA được định vị là cổng thông tin đào tạo thực chiến hàng đầu trong lĩnh vực **Data Analysis (DA) & Business Analysis (BA)** tại Việt Nam. Không chỉ là một trang giới thiệu đơn thuần, website được thiết kế xoay quanh **mục tiêu tối ưu hóa tỷ lệ chuyển đổi (High-Converting Conversion Funnel)**:
-1. **Trang chủ (Homepage):** Định vị thương hiệu giảng viên Hứa Thảo Ly (Ex Senior DA tại MoMo, Tiki, ACB), khẳng định uy tín thông qua số liệu thực tế, giải thưởng, dải logo đối tác (Google, Microsoft, Samsung...) và thư viện Dashboard dự án thực tế của học viên.
+1. **Trang chủ (Homepage):** Định vị thương hiệu giảng viên Hứa Thảo Lý (Ex Senior DA tại MoMo, Tiki, ACB), khẳng định uy tín thông qua số liệu thực tế, giải thưởng, dải logo đối tác (Google, Microsoft, Samsung...) và thư viện Dashboard dự án thực tế của học viên.
 2. **Trang chi tiết khóa học (Course Detail):** Cung cấp giáo trình trực quan dạng Accordion (Syllabus chi tiết đến từng buổi học), bảng học phí minh bạch, chính sách học tập qua Zoom Meeting và các cam kết đầu ra rõ ràng.
 3. **Trang Giới thiệu (About Us / About Me):** Kể câu chuyện truyền cảm hứng, phương pháp đào tạo thực chiến "học đúng - làm được" từ người trong ngành.
 4. **Trang Bài viết chia sẻ (Blog Detail):** Phục vụ SEO tự nhiên (Organic Traffic), chia sẻ mẹo SQL, tư duy phân tích và giữ chân học viên tiềm năng.
@@ -65,7 +65,7 @@ Thay vì phải đầu tư xây dựng một trang quản trị (Admin Dashboard
 | **3. Quản lý Giảng viên (Mentors)** | Chỉnh sửa ảnh chân dung, chức danh Founder, triết lý đào tạo, danh sách cột mốc làm việc tại MoMo, Tiki, ACB và các giải thưởng đạt được. | Hiển thị tại khối Giảng viên ở Course Detail và toàn bộ trang About Us. |
 | **4. Quản lý Giá & Combo (Packages_Pricing)** | Cập nhật giá bán lẻ, giá gốc gạch ngang, giá COMBO ưu đãi tiết kiệm, danh sách gạch đầu dòng ưu/nhược điểm (tick xanh/gạch chéo đỏ). | Hiển thị bảng so sánh giá thông minh *"Đầu tư thông minh cho sự nghiệp"*. |
 | **5. Quản lý Đánh giá học viên (Testimonials)** | Thêm lời nhận xét mới, tên học viên, vị trí công tác, tag khóa học, link ảnh avatar và số sao đánh giá (1 - 5 sao). Đánh dấu `TRUE/FALSE` để chọn review xuất hiện trên trang chủ. | Hiển thị trên lưới 9 đánh giá uy tín (3x3) tại trang chủ. |
-| **6. Quản lý Dự án học viên (StudentProjects)** | Nhập tên dự án (Cohort Analysis, Ecommerce Retention...), link ảnh chụp Dashboard thực tế, link tương tác trực tiếp. | Hiển thị tại khối thư viện *"Dự án của học viên qua các khóa học tại Lydata"*. |
+| **6. Quản lý Dự án học viên (StudentProjects)** | Nhập tên dự án (Cohort Analysis, Ecommerce Retention...), link ảnh chụp Dashboard thực tế, link tương tác trực tiếp. | Hiển thị tại khối thư viện *"Dự án của học viên qua các khóa học tại LYDATA"*. |
 | **7. Quản lý Bài viết chia sẻ (Blogs)** | Đăng bài viết mới, chọn chuyên mục (`Series học SQL`), tiêu đề, ngày đăng, lượt xem, ảnh bìa và nội dung bài viết hỗ trợ định dạng **Markdown** (in đậm, danh sách, đoạn code SQL). | Hiển thị tại cụm 3 bài viết trang chủ và toàn bộ trang đọc bài viết chi tiết. |
 | **8. Quản lý Đối tác (Partners)** | Thêm tên công ty/trường đại học, link logo SVG/WebP (Google, Tokopedia, Microsoft, Samsung...). | Hiển thị thanh chạy logo học viên trúng tuyển (Trust Bar). |
 | **9. Cấu hình chung & Khuyến mãi (SiteConfig)** | Bật/tắt thanh banner flash sale trên cùng (`75% OFF`, `4 days only!`), thiết lập đồng hồ đếm ngược, thay đổi số hotline, email liên hệ và các link mạng xã hội (TikTok, Facebook, LinkedIn, Zalo). | Cập nhật toàn bộ Header, Top Bar và Footer của tất cả các trang. |

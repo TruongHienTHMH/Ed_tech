@@ -10,7 +10,7 @@
 function getLeadsSystemInfo() {
   return {
     system: "DataWithLy Leads CRM Engine",
-    brand: "DataWithLy (Mentor Hứa Thảo Ly)",
+    brand: "DataWithLy (Mentor Hứa Thảo Lý)",
     version: "2.2.0",
     architecture: "Standalone Leads CRM Bundle (Zero HTML Modals, Pure REST Backend)",
     status: "HEALTHY",
@@ -345,7 +345,7 @@ function setupLeadsCrmTable() {
       "Tôi chắc chắn",
       "NEW",
       "Học viên mong muốn học ca tối thứ 3 - thứ 5",
-      "Mentor Hứa Thảo Ly",
+      "Mentor Hứa Thảo Lý",
       "homepage_consultation_form",
       new Date().toISOString()
     ]);
@@ -719,12 +719,12 @@ function sendLeadEmails(payload) {
 
   // --- 2. EMAIL CẢM ƠN HỌC VIÊN KÈM MÃ ZALO TƯ VẤN ---
   if (leadEmail && leadEmail.indexOf("@") !== -1) {
-    var studentSubject = "🎯 Xác nhận đăng ký tư vấn lộ trình Data Analytics - Mentor Hứa Thảo Ly";
+    var studentSubject = "🎯 Xác nhận đăng ký tư vấn lộ trình Data Analytics - Mentor Hứa Thảo Lý";
     var studentHtml = [
       "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #E5E7EB; border-radius: 8px;'>",
       "<div style='background: #8B1D2C; color: #FFFFFF; padding: 20px; border-radius: 6px 6px 0 0; text-align: center;'>",
       "<h1 style='margin: 0; font-size: 20px;'>Chào mừng bạn đến với DataWithLy!</h1>",
-      "<p style='margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;'>Nền tảng đào tạo Data Analytics thực chiến cùng Mentor Hứa Thảo Ly</p>",
+      "<p style='margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;'>Nền tảng đào tạo Data Analytics thực chiến cùng Mentor Hứa Thảo Lý</p>",
       "</div>",
       "<div style='padding: 24px; background: #FFFFFF; line-height: 1.6; color: #374151;'>",
       "<p>Chào <strong>" + leadName + "</strong>,</p>",
@@ -735,7 +735,7 @@ function sendLeadEmails(payload) {
       "</div>",
       "<p style='font-size: 13px; color: #6B7280;'>Nếu bạn có thắc mắc cần giải đáp gấp, bạn có thể chủ động bấm vào nút Zalo bên trên để được hỗ trợ tức thì.</p>",
       "<hr style='border: none; border-top: 1px solid #E5E7EB; margin: 20px 0;'>",
-      "<p style='margin: 0; font-size: 13px; color: #9CA3AF;'>Trân trọng,<br><strong style='color: #4B5563;'>Hứa Thảo Ly & Đội ngũ DataWithLy</strong><br>Hotline/Zalo: 0769 361 960</p>",
+      "<p style='margin: 0; font-size: 13px; color: #9CA3AF;'>Trân trọng,<br><strong style='color: #4B5563;'>Hứa Thảo Lý & Đội ngũ DataWithLy</strong><br>Hotline/Zalo: 0769 361 960</p>",
       "</div>",
       "</div>"
     ].join("");

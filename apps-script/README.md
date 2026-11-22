@@ -1,6 +1,6 @@
 # Hướng Dẫn Cài Đặt & Cấu Trúc Mã Nguồn Google Apps Script (CMS DataWithLy)
 
-- **Dành cho:** Mentor Hứa Thảo Ly & Đội ngũ Kỹ thuật
+- **Dành cho:** Mentor Hứa Thảo Lý & Đội ngũ Kỹ thuật
 - **Kiến trúc:** Modular Architecture (15 Scripts `.gs` + 10 Native HTML Modals `.html` + Entrypoint `Code.gs`)
 - **Bảo mật:** Enterprise Security qua `PropertiesService` (Zero Hardcoded Secret).
 

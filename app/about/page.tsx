@@ -12,21 +12,21 @@ import AboutCta from "@/components/about/AboutCta";
 import { ContentFetcher } from "@/lib/cms/content-fetcher";
 
 export const metadata: Metadata = {
-  title: "Giới thiệu & Founder Hứa Thảo Ly | Đào Tạo Data Analyst Thực Chiến",
+  title: "Giới thiệu & Founder Hứa Thảo Lý | Đào Tạo Data Analyst Thực Chiến",
   description:
-    "Tìm hiểu Giới thiệu và Founder Hứa Thảo Ly (Cựu Lead Data Analyst MoMo, Tiki, ACB). Phương pháp đào tạo Data Analyst dựa trên tư duy kinh doanh và dữ liệu Production thật.",
+    "Tìm hiểu Giới thiệu và Founder Hứa Thảo Lý (Cựu Lead Data Analyst MoMo, Tiki, ACB). Phương pháp đào tạo Data Analyst dựa trên tư duy kinh doanh và dữ liệu Production thật.",
   openGraph: {
-    title: "Giới thiệu & Founder Hứa Thảo Ly | Học Data Analyst Thực Chiến",
+    title: "Giới thiệu & Founder Hứa Thảo Lý | Học Data Analyst Thực Chiến",
     description:
-      "LyData giúp bạn trở thành Data Analyst thực chiến thông qua tư duy bản chất, dữ liệu thật và kèm cặp 1-on-1 sát sao.",
-    url: "https://lydata.vn/about",
-    siteName: "LyData",
+      "LYDATA giúp bạn trở thành Data Analyst thực chiến thông qua tư duy bản chất, dữ liệu thật và kèm cặp 1-on-1 sát sao.",
+    url: "https://LYDATA.vn/about",
+    siteName: "LYDATA",
     images: [
       {
         url: "/assets/mentor/ly.png",
         width: 800,
         height: 1000,
-        alt: "Founder Hứa Thảo Ly - LyData",
+        alt: "Founder Hứa Thảo Lý - LYDATA",
       },
     ],
     locale: "vi_VN",

@@ -16,7 +16,7 @@
      * `Badge variant="tag"`: Hiển thị chủ đề khóa học (`course.tag`).
      * `Badge variant="level"`: Hiển thị trình độ học viên (`course.level`).
      * `Badge variant="liveClass"`: Hiển thị "Live Class" với hiệu ứng radar pulsing xanh lá (`animate-ping`) chuẩn Figma.
-     * **Gỡ bỏ hoàn toàn** badge "Mentor Hứa Thảo Ly trực tiếp kèm" trong danh sách badges đầu trang theo yêu cầu.
+     * **Gỡ bỏ hoàn toàn** badge "Mentor Hứa Thảo Lý trực tiếp kèm" trong danh sách badges đầu trang theo yêu cầu.
    - **Bổ sung đầy đủ 4 thông số khóa học theo Figma Node `12:1430`:**
      * Thời lượng: `{course.duration || "12 buổi học (24 giờ)"}` (icon `Clock`).
      * Lịch học: "Tối Thứ 3 & Thứ 5 (19:30 - 21:30)" (icon `Calendar`).

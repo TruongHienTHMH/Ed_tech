@@ -56,7 +56,7 @@ export default function BlogListContainer({
             Chưa có bài viết nào trong danh mục &ldquo;{selectedCategory}&rdquo;
           </h3>
           <p className="text-sm text-neutral-500 max-w-md mx-auto">
-            Mentor Hứa Thảo Ly đang biên soạn các bài viết chất lượng cho chủ đề này. Bạn hãy quay lại sau hoặc khám phá các chủ đề khác nhé!
+            Mentor Hứa Thảo Lý đang biên soạn các bài viết chất lượng cho chủ đề này. Bạn hãy quay lại sau hoặc khám phá các chủ đề khác nhé!
           </p>
           <button
             type="button"

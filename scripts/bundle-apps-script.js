@@ -74,7 +74,7 @@ function createModalTemplate(templateName) {
 function getDataWithLySystemInfo() {
   return {
     system: "DataWithLy CMS Content Engine",
-    brand: "DataWithLy (Mentor Hứa Thảo Ly)",
+    brand: "DataWithLy (Mentor Hứa Thảo Lý)",
     version: "2.2.0",
     architecture: "Standalone CMS Content Bundle with 10 Inlined Native Modals",
     status: "HEALTHY",
@@ -129,7 +129,7 @@ function bundleLeadsPackage() {
 function getLeadsSystemInfo() {
   return {
     system: "DataWithLy Leads CRM Engine",
-    brand: "DataWithLy (Mentor Hứa Thảo Ly)",
+    brand: "DataWithLy (Mentor Hứa Thảo Lý)",
     version: "2.2.0",
     architecture: "Standalone Leads CRM Bundle (Zero HTML Modals, Pure REST Backend)",
     status: "HEALTHY",

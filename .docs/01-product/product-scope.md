@@ -23,7 +23,7 @@
 | **M04** | **Lead Capture** | Biểu mẫu Modal thu thập thông tin đăng ký tư vấn, chống spam 3 lớp, bảo toàn dữ liệu và gửi email thông báo | **Đợt 1 (Staging)** |
 | **M05** | **Content Management** | Cơ chế đọc dữ liệu từ Google Sheets, hiển thị ra web và làm mới bộ nhớ đệm (ISR On-demand Revalidation) | **Đợt 1 (MVP)** |
 | **M02** | **Course Details** | 3 trang độc lập chi tiết hóa mục tiêu, visual flow và Accordion giáo trình (Syllabus) của từng khóa học | **Đợt 2** |
-| **M06** | **About Us** | Trang câu chuyện thương hiệu, hồ sơ và thành tích của Founder & Lead Mentor Hứa Thảo Ly | **Đợt 2** |
+| **M06** | **About Us** | Trang câu chuyện thương hiệu, hồ sơ và thành tích của Founder & Lead Mentor Hứa Thảo Lý | **Đợt 2** |
 | **M03** | **Blog & Resources** | Trang danh sách bài viết theo chuyên mục, trang đọc bài viết chi tiết hỗ trợ Markdown, và thư viện dự án | **Đợt 3** |
 | **M07** | **Production & Analytics** | Chuyển đổi sang Sheets Production, gắn mã GA4, cấu hình tên miền chính thức và SEO toàn diện | **Đợt 4** |
 
@@ -57,7 +57,7 @@ gantt
 | Thành phần HomePage | Phạm vi thực hiện cụ thể trong Đợt 1 | Nguồn dữ liệu & Ghi chú |
 |---|---|---|
 | **Header & Top Bar** | - Thông báo ưu đãi hoặc lịch khai giảng gần nhất (có thể cấu hình bật/tắt).<br/>- Logo thương hiệu **DataWithLy**.<br/>- Menu điều hướng đa tầng:<br/>  + *Trang chủ*<br/>  + *Khóa học ▾* (Dropdown dẫn tới 3 khóa học)<br/>  + *Tài nguyên ▾* (Dropdown: Kiến thức & Chia sẻ, Dự án học viên)<br/>  + *Về DataWithLy*<br/>  + Nút CTA nổi bật `[Nhận tư vấn]` kích hoạt mở Lead Modal.<br/>- Menu Drawer cho phiên bản Mobile. | Nạp cấu hình từ tab `SiteConfig` trên Google Sheets. |
-| **Hero Section** | - Headline chuẩn hóa: *"Học Data Analytics từ tư duy đến thực hành"*.<br/>- Sub-headline: *"Lộ trình bài bản từ cơ bản đến nâng cao, dự án thực tế, hỗ trợ tận tâm"*.<br/>- Nút CTA kép: `[Nhận tư vấn lộ trình 1-1]` (mở modal) và `[Khám phá khóa học]` (cuộn xuống khối khóa học).<br/>- Ảnh chân dung Mentor Hứa Thảo Ly và các chứng nhận chuyên môn. | Dữ liệu chuẩn hóa từ file `content to fill.xlsx` và slide bài giảng. |
+| **Hero Section** | - Headline chuẩn hóa: *"Học Data Analytics từ tư duy đến thực hành"*.<br/>- Sub-headline: *"Lộ trình bài bản từ cơ bản đến nâng cao, dự án thực tế, hỗ trợ tận tâm"*.<br/>- Nút CTA kép: `[Nhận tư vấn lộ trình 1-1]` (mở modal) và `[Khám phá khóa học]` (cuộn xuống khối khóa học).<br/>- Ảnh chân dung Mentor Hứa Thảo Lý và các chứng nhận chuyên môn. | Dữ liệu chuẩn hóa từ file `content to fill.xlsx` và slide bài giảng. |
 | **USP 3 Cards (Vì sao chọn DataWithLy)** | - Headline: *"Vì sao nên học cùng DataWithLy?"*.<br/>- Sub-headline: *"Không chỉ học công cụ, bạn sẽ được rèn luyện tư duy phân tích và thực hành trên những bài toán gần với công việc Data Analyst thực tế"*.<br/>- 3 Card giá trị:<br/>  1. *Lộ trình bài bản* (icon Roadmap/Book): Hiểu bản chất thay vì học vẹt công cụ.<br/>  2. *Dự án thực tế* (icon Case Study/Project): Dữ liệu thực chiến từ E-commerce và Ngân hàng.<br/>  3. *Mentor đồng hành & feedback* (icon Feedback/Mentor): Kèm cặp trực tiếp, sửa bài tập 1-1. | Thay thế 4 card cũ; cập nhật icon và câu chữ đúng yêu cầu. |
 | **Lưới Khóa học tại DataWithLy** | - Trưng bày 3 thẻ khóa học chính thức:<br/>  1. `SQL for Data Analytics` (12 buổi | 2.990.000 VNĐ | Live Online).<br/>  2. `Analytical Thinking & Dashboard Design` (16 buổi + CV | 3.790.000 VNĐ | Live Online).<br/>  3. `End-to-End Analytics with SQL & Dashboard Design` (25 buổi + CV | 5.690.000 VNĐ | Live Online).<br/>- Thẻ hiển thị: Ảnh bìa sắc nét, thời lượng theo số buổi, học phí rõ ràng, tóm tắt đầu ra và 2 nút CTA: `[Xem chi tiết]` và `[Đăng ký ngay]`. | Nạp từ tab `Courses` trên Google Sheets. |
 | **Thư viện Dự án học viên** | Trưng bày các sản phẩm phân tích dữ liệu thực tế: Dashboard Phân tích phim (Film), Bán lẻ (AdventureWork), Giáo dục (EduTech), Thương mại điện tử (Ecommerce) và các bài thuyết trình slide mẫu của học viên. | Thay thế khối "Tài liệu miễn phí" cũ theo yêu cầu khách hàng. |
@@ -76,7 +76,7 @@ gantt
   - Khóa 3: `/courses/end-to-end-analytics-sql-dashboard`
   - Mỗi trang bao gồm: Khối Hero khóa học, Thanh Sticky Card đăng ký nhanh, Visual flow bài toán (`Business Problem → Metrics → Analysis → Insight → Dashboard`), Khối đối tượng phù hợp và kết quả đầu ra, và **Accordion giáo trình (Syllabus)** chi tiết 12 - 25 buổi với tính năng Expand/Collapse All.
 - **Trang Giới thiệu Về DataWithLy (`/about`):**
-  - Câu chuyện sáng lập và triết lý đào tạo thực chiến của Mentor Hứa Thảo Ly.
+  - Câu chuyện sáng lập và triết lý đào tạo thực chiến của Mentor Hứa Thảo Lý.
   - Cột mốc sự nghiệp (ACB -> Tiki -> MoMo -> DataWithLy) và các giải thưởng đạt được.
 
 ---
@@ -89,7 +89,7 @@ gantt
 - **Trang Đọc bài viết chi tiết (`/blog/[slug]`):**
   - Trình render nội dung Markdown hỗ trợ Syntax Highlighting cho đoạn mã SQL/Python kèm nút bấm `Copy Code` 1-click.
   - Thanh tiến trình đọc bài (Reading Progress Bar).
-  - Khối tác giả Mentor Hứa Thảo Ly và nút kêu gọi nhận tài liệu / tư vấn khóa học cuối bài.
+  - Khối tác giả Mentor Hứa Thảo Lý và nút kêu gọi nhận tài liệu / tư vấn khóa học cuối bài.
 - **Trang Thư viện Dự án học viên (`/projects`):**
   - Trưng bày đầy đủ các bộ Dashboard tương tác trực tiếp (Power BI Web / Tableau) và slide báo cáo phân tích kinh doanh của học viên.
 
@@ -97,7 +97,7 @@ gantt
 
 ### 2.4. Đợt 4 — Production Transition, SEO & Bàn Giao (Final Release)
 
-- **Chuyển đổi hạ tầng dữ liệu:** Chuyển đổi Webhook nộp lead từ Google Sheets Staging sang file Google Sheets Private Leads chính thức của Chị Hứa Thảo Ly.
+- **Chuyển đổi hạ tầng dữ liệu:** Chuyển đổi Webhook nộp lead từ Google Sheets Staging sang file Google Sheets Private Leads chính thức của Chị Hứa Thảo Lý.
 - **Tối ưu hóa SEO & Tracking:**
   - Cấu hình thẻ OpenGraph preview (ảnh lớn `1200x630px` hiển thị đẹp khi gửi link trên Zalo/Facebook).
   - Tự động sinh `sitemap.xml` và `robots.txt`.
