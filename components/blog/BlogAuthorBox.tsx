@@ -12,7 +12,7 @@ export interface BlogAuthorBoxProps {
 }
 
 export default function BlogAuthorBox({
-  name = "Hứa Thảo Ly",
+  name = "Hứa Thảo Lý",
   role = "Lead Instructor & Founder DataWithLy",
   bio = "Senior Data Analyst với hơn 7 năm kinh nghiệm thực chiến tại các tập đoàn và kỳ lân công nghệ (MoMo, Tiki, ACB Bank). Đã đồng hành và dẫn dắt 500+ học viên chuyển ngành và thăng tiến thành công trong lĩnh vực Phân tích dữ liệu.",
   avatarUrl = "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",

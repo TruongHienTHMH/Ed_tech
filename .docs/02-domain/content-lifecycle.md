@@ -50,11 +50,11 @@ stateDiagram-v2
 
 | Giai đoạn | Mô tả trạng thái | Nơi lưu trữ / Hiển thị | Ai thực hiện |
 |:---:|---|---|:---:|
-| **`DRAFT`**<br/>(Bản nháp) | Người quản trị đang thêm mới hoặc chỉnh sửa câu chữ, học phí, ngày khai giảng trực tiếp trên ô tính Google Sheets. Nội dung này **chưa hiển thị ngay ra ngoài web** để tránh học viên nhìn thấy nội dung đang sửa dở. | File `Public Content Sheet` | Chị Hứa Thảo Ly hoặc Cộng tác viên biên tập. |
+| **`DRAFT`**<br/>(Bản nháp) | Người quản trị đang thêm mới hoặc chỉnh sửa câu chữ, học phí, ngày khai giảng trực tiếp trên ô tính Google Sheets. Nội dung này **chưa hiển thị ngay ra ngoài web** để tránh học viên nhìn thấy nội dung đang sửa dở. | File `Public Content Sheet` | Chị Hứa Thảo Lý hoặc Cộng tác viên biên tập. |
 | **`LINTED`**<br/>(Đã kiểm duyệt) | Dữ liệu đã vượt qua bộ quét kiểm tra tính toàn vẹn (Data Linting): không có ô bắt buộc bị bỏ trống, cột số đúng định dạng số nguyên, link ảnh chuẩn CDN. | File `Public Content Sheet` | Script tự động chạy khi bấm menu. |
-| **`PUBLISHED`**<br/>(Đã kích hoạt) | Người quản trị bấm nút *"Xuất bản thay đổi lên Web"*. Google Apps Script gửi tín hiệu HTTPS POST kèm Secret Token sang API Route `/api/revalidate` của máy chủ Next.js. | Kênh truyền thông Webhook | Chị Hứa Thảo Ly kích hoạt qua 1 cú click. |
+| **`PUBLISHED`**<br/>(Đã kích hoạt) | Người quản trị bấm nút *"Xuất bản thay đổi lên Web"*. Google Apps Script gửi tín hiệu HTTPS POST kèm Secret Token sang API Route `/api/revalidate` của máy chủ Next.js. | Kênh truyền thông Webhook | Chị Hứa Thảo Lý kích hoạt qua 1 cú click. |
 | **`LIVE_ON_EDGE`**<br/>(Hiển thị trực tuyến) | Máy chủ Next.js làm mới bộ nhớ đệm (ISR Revalidation), biên dịch lại các trang tĩnh liên quan và phân phối trên mạng lưới máy chủ toàn cầu (Vercel Edge Network) trong vòng 1 - 2 giây. | Trình duyệt của Học viên | Hệ thống Next.js tự động xử lý. |
-| **`ARCHIVED`**<br/>(Tạm ẩn / Lưu trữ) | Khóa học đã đủ sĩ số, dừng tuyển sinh hoặc bài blog cần gỡ tạm thời. Chỉ cần đổi cột `is_active = FALSE` và bấm xuất bản. Khóa học tự động ẩn khỏi Slider trang chủ nhưng lịch sử trong bảng tính vẫn được bảo lưu vĩnh viễn. | Lưu trữ trong Sheets, ẩn trên Web | Chị Hứa Thảo Ly thực hiện khi đổi cờ. |
+| **`ARCHIVED`**<br/>(Tạm ẩn / Lưu trữ) | Khóa học đã đủ sĩ số, dừng tuyển sinh hoặc bài blog cần gỡ tạm thời. Chỉ cần đổi cột `is_active = FALSE` và bấm xuất bản. Khóa học tự động ẩn khỏi Slider trang chủ nhưng lịch sử trong bảng tính vẫn được bảo lưu vĩnh viễn. | Lưu trữ trong Sheets, ẩn trên Web | Chị Hứa Thảo Lý thực hiện khi đổi cờ. |
 
 ---
 

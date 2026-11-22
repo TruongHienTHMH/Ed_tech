@@ -43,4 +43,4 @@ Tài liệu này là nguồn tham chiếu chuẩn xác (Source of Truth) cho to�
 | :--- | :---: | :--- | :--- |
 | **Gradient Upper Wave** | `12:781` | `banner-upper.png` | Dải màu gradient uốn lượn mép trên section |
 | **Gradient Lower Wave** | `12:783` | `banner-lower.png` | Dải màu gradient uốn lượn mép dưới section |
-| **Giảng viên Hứa Thảo Ly** | `12:682` | `00d85e9072dd2031d3c61249ae87330dd98d7556.png` | Ảnh chân dung chính thức của giảng viên |
+| **Giảng viên Hứa Thảo Lý** | `12:682` | `00d85e9072dd2031d3c61249ae87330dd98d7556.png` | Ảnh chân dung chính thức của giảng viên |

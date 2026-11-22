@@ -14,7 +14,7 @@ export default function Footer() {
           <div className="lg:col-span-5 flex flex-col gap-4">
             <Link href="/" className="inline-block">
               <Image
-                src="/assets/mentor/logo-lydata-red.svg"
+                src="/assets/mentor/logo-LYDATA-red.svg"
                 alt="DataWithLy Logo"
                 width={140}
                 height={46}
@@ -26,7 +26,7 @@ export default function Footer() {
               DataWithLy - Nền tảng đào tạo Data Analytics thực chiến từ cơ bản đến nâng cao. Đồng hành cùng học viên từ tư duy, truy vấn dữ liệu đến xây dựng Portfolio chuyên nghiệp.
             </p>
             <div className="pt-2 text-xs text-neutral-400">
-              Mentor: Hứa Thảo Ly (Ex-Senior Data Analyst tại MoMo, Tiki, ACB)
+              Mentor: Hứa Thảo Lý (Ex-Senior Data Analyst tại MoMo, Tiki, ACB)
             </div>
           </div>
 

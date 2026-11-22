@@ -32,7 +32,7 @@
       * `CourseFigmaOverview.tsx`: Mô tả khóa học, "Khóa học này dành cho ai?", "Sau khóa học bạn có thể làm được gì?", và ghi chú không yêu cầu đầu vào.
       * `CourseFigmaHighlights.tsx`: 3 thẻ nổi bật bo góc với biểu tượng đặc trưng.
       * `CourseFigmaWeekAccordion.tsx`: Đề cương phân nhóm theo Tuần (Week 1 đến Week 6) có huy hiệu ngày tháng vuông (`TH10 03`, `TH10 26`), nút [Expand all lessons] và tag đánh dấu bài thực hành, đồ án.
-      * `CourseFigmaInstructor.tsx`: Hồ sơ Mentor Hứa Thảo Ly với ảnh đại diện 180x180, cựu công ty MoMo/Tiki/ACB, nút liên hệ tư vấn và các liên kết mạng xã hội.
+      * `CourseFigmaInstructor.tsx`: Hồ sơ Mentor Hứa Thảo Lý với ảnh đại diện 180x180, cựu công ty MoMo/Tiki/ACB, nút liên hệ tư vấn và các liên kết mạng xã hội.
       * `CourseMethodologyFlow.tsx` & `CourseOutcomes.tsx`: Sơ đồ 5 bước tư duy và dự án học viên.
       * `CourseFaq.tsx`: Câu hỏi thường gặp theo từng khóa học.
     - **Cột phải Sticky (384px):**

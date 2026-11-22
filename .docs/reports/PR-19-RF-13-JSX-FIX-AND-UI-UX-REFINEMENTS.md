@@ -33,7 +33,7 @@
 * **Vấn đề trước đây:** Dòng ghi chú bằng tiếng Anh pháp lý (*"By continuing, you accept our Terms of Use and our Privacy Policy"*) gây cảm giác xa lạ và khô cứng đối với học viên Việt Nam.
 * **Giải pháp triển khai:**
   - Thay thế bằng thông điệp kêu gọi hành động tự nhiên, ấm áp và nêu bật giá trị nhận được:
-    > *✨ Nhập email để nhận ngay trọn bộ lộ trình chi tiết & tư vấn 1:1 miễn phí từ Mentor Hứa Thảo Ly*
+    > *✨ Nhập email để nhận ngay trọn bộ lộ trình chi tiết & tư vấn 1:1 miễn phí từ Mentor Hứa Thảo Lý*
 
 ---
 

@@ -131,7 +131,7 @@ export default function CourseHero({ course }: CourseHeroProps) {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs text-white/60">Mentor đứng lớp</p>
-                    <p className="text-base font-bold text-white">Hứa Thảo Ly</p>
+                    <p className="text-base font-bold text-white">Hứa Thảo Lý</p>
                   </div>
                   <div className="text-right">
                     <p className="text-xs text-white/60">Kinh nghiệm thực chiến</p>

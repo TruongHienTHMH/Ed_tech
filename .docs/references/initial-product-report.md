@@ -14,7 +14,7 @@
 
 Website là cổng thông tin giới thiệu các khóa đào tạo trong lĩnh vực **Data Analysis (DA)**. Gồm các trang sau:
 
-1. **Trang chủ (Homepage):** Giới thiệu thương hiệu giảng viên Hứa Thảo Ly (Ex Senior DA tại MoMo, Tiki, ACB), cung cấp các số liệu thực tế, giải thưởng, dải logo đối tác (Google, Microsoft, Samsung...) và thư viện Dashboard dự án thực tế của học viên.  
+1. **Trang chủ (Homepage):** Giới thiệu thương hiệu giảng viên Hứa Thảo Lý (Ex Senior DA tại MoMo, Tiki, ACB), cung cấp các số liệu thực tế, giải thưởng, dải logo đối tác (Google, Microsoft, Samsung...) và thư viện Dashboard dự án thực tế của học viên.  
 2. **Trang chi tiết khóa học (Course Detail):** Cung cấp giáo trình trực quan dạng Accordion (Syllabus chi tiết đến từng buổi học), bảng học phí minh bạch, chính sách học tập qua Zoom Meeting và các cam kết đầu ra rõ ràng.  
 3. **Trang Giới thiệu (About Us / About Me):** Phương pháp đào tạo thực chiến "học đúng \- làm được" từ người trong ngành.  
 4. **Trang Bài viết chia sẻ (Blog Detail):** Chia sẻ mẹo SQL, tư duy phân tích và giữ chân học viên tiềm năng.
@@ -42,7 +42,7 @@ Thay vì phải đầu tư xây dựng một trang quản trị (Admin Dashboard
 | **3\. Quản lý Giảng viên (Mentors)** | Chỉnh sửa ảnh chân dung, chức danh Founder, triết lý đào tạo, danh sách cột mốc làm việc tại MoMo, Tiki, ACB và các giải thưởng đạt được. | Hiển thị tại khối Giảng viên ở Course Detail và toàn bộ trang About Us. |
 | **4\. Quản lý Giá & Combo (Packages\_Pricing)** | Cập nhật giá bán lẻ, giá gốc gạch ngang, giá COMBO ưu đãi tiết kiệm, danh sách gạch đầu dòng ưu/nhược điểm (tick xanh/gạch chéo đỏ). | Hiển thị bảng so sánh giá thông minh *"Đầu tư thông minh cho sự nghiệp"*. |
 | **5\. Quản lý Đánh giá học viên (Testimonials)** | Thêm lời nhận xét mới, tên học viên, vị trí công tác, tag khóa học, link ảnh avatar và số sao đánh giá (1 \- 5 sao). Đánh dấu `TRUE/FALSE` để chọn review xuất hiện trên trang chủ. | Hiển thị trên lưới 9 đánh giá uy tín (3x3) tại trang chủ. |
-| **6\. Quản lý Dự án học viên (StudentProjects)** | Nhập tên dự án (Cohort Analysis, Ecommerce Retention...), link ảnh chụp Dashboard thực tế, link tương tác trực tiếp. | Hiển thị tại khối thư viện *"Dự án của học viên qua các khóa học tại Lydata"*. |
+| **6\. Quản lý Dự án học viên (StudentProjects)** | Nhập tên dự án (Cohort Analysis, Ecommerce Retention...), link ảnh chụp Dashboard thực tế, link tương tác trực tiếp. | Hiển thị tại khối thư viện *"Dự án của học viên qua các khóa học tại LYDATA"*. |
 | **7\. Quản lý Bài viết chia sẻ (Blogs)** | Đăng bài viết mới, chọn chuyên mục (`Series học SQL`), tiêu đề, ngày đăng, lượt xem, ảnh bìa và nội dung bài viết hỗ trợ định dạng **Markdown** (in đậm, danh sách, đoạn code SQL). | Hiển thị tại cụm 3 bài viết trang chủ và toàn bộ trang đọc bài viết chi tiết. |
 | **8\. Quản lý Đối tác (Partners)** | Thêm tên công ty/trường đại học, link logo SVG/WebP (Google, Tokopedia, Microsoft, Samsung...). | Hiển thị thanh chạy logo học viên trúng tuyển (Trust Bar). |
 | **9\. Cấu hình chung & Khuyến mãi (SiteConfig)** | Bật/tắt thanh banner flash sale trên cùng (`75% OFF`, `4 days only!`), thiết lập đồng hồ đếm ngược, thay đổi số hotline, email liên hệ và các link mạng xã hội (TikTok, Facebook, LinkedIn, Zalo). | Cập nhật toàn bộ Header, Top Bar và Footer của tất cả các trang. |
@@ -217,7 +217,7 @@ flowchart TD
 ### 6.2. Trang Chủ (Homepage - Figma Node `1602:6924`)
 * **Khối Hero Section:**
   * Tagline / Badge: `⭐ Top 1 Khóa học Data Analysis thực chiến chuẩn doanh nghiệp`.
-  * Headline H1: Nêu bật định vị thương hiệu đào tạo thực chiến từ Mentor Hứa Thảo Ly (Ex Senior DA tại MoMo, Tiki, ACB).
+  * Headline H1: Nêu bật định vị thương hiệu đào tạo thực chiến từ Mentor Hứa Thảo Lý (Ex Senior DA tại MoMo, Tiki, ACB).
   * Lời dẫn (Subheadline): Đào tạo tư duy phân tích sắc bén, làm chủ SQL, Power BI, Python từ các bài toán thực tế của doanh nghiệp.
   * Cụm CTA kép:
     * Nút chính: *"Nhận tư vấn lộ trình 1-1"* (Mở Modal tư vấn).
@@ -226,7 +226,7 @@ flowchart TD
     * `+1,500` Học viên đã tốt nghiệp.
     * `98%` Học viên đánh giá hài lòng và áp dụng được ngay vào công việc.
     * `4.9 / 5.0 ⭐` Điểm đánh giá trung bình.
-  * Hình ảnh Hero: Ảnh chân dung Mentor Hứa Thảo Ly kèm các badge chứng chỉ chuyên môn và logo cựu doanh nghiệp công tác (MoMo, Tiki, ACB).
+  * Hình ảnh Hero: Ảnh chân dung Mentor Hứa Thảo Lý kèm các badge chứng chỉ chuyên môn và logo cựu doanh nghiệp công tác (MoMo, Tiki, ACB).
 * **Dải Logo Đối tác & Nơi học viên công tác (Trust Bar / Partners):**
   * Danh sách logo: Google, Tokopedia, Microsoft, Samsung, Shopee, VPBank, Tiki, MoMo...
   * Hiệu ứng: Infinite Horizontal Marquee (băng chuyền logo tự động cuộn ngang vô tận mượt mà). Tự động nạp logo từ tab `Partners`.
@@ -284,14 +284,14 @@ flowchart TD
   * Cột hiển thị: Tên gói, Subtitle, Mức giá, Danh sách quyền lợi có biểu tượng tick xanh (`✓`) và các quyền lợi không có biểu tượng gạch chéo đỏ (`✗`).
   * Huy hiệu `Gói Phổ Biến Nhất (Most Popular)` nổi bật ở gói Combo. Nạp từ tab `Packages_Pricing`.
 * **Khối Thông tin Giảng viên Phụ trách (Mentor Section):**
-  * Chân dung giảng viên Hứa Thảo Ly, trích dẫn triết lý đào tạo thực chiến, tóm tắt các dự án lớn đã trực tiếp vận hành tại MoMo, Tiki, ACB.
+  * Chân dung giảng viên Hứa Thảo Lý, trích dẫn triết lý đào tạo thực chiến, tóm tắt các dự án lớn đã trực tiếp vận hành tại MoMo, Tiki, ACB.
 * **Khối Câu hỏi thường gặp (Course FAQ Accordion):**
   * Hệ thống câu hỏi - trả lời mở rộng mượt mà giải đáp: Chính sách học bù, bảo lưu khóa học, hỗ trợ sau giờ học và cam kết đầu ra.
 
 ---
 
 ### 6.4. Trang Giới Thiệu (About Me / About Us - Figma Node `857:2621`)
-* **Câu chuyện Thương hiệu & Giảng viên Hứa Thảo Ly:**
+* **Câu chuyện Thương hiệu & Giảng viên Hứa Thảo Lý:**
   * Hành trình từ con số 0 đến Lead Data Analyst tại các tập đoàn công nghệ và ngân hàng lớn.
   * Lý do sáng lập LY DATA và sứ mệnh xóa bỏ khoảng cách giữa lý thuyết hàn lâm và yêu cầu tuyển dụng thực tế của doanh nghiệp.
 * **Dòng thời gian Sự nghiệp (Career Milestones):**
@@ -313,7 +313,7 @@ flowchart TD
     * Bảng biểu đối chiếu dữ liệu.
     * Trích dẫn chuyên gia (Blockquote).
   * Thanh tiến trình đọc bài (Reading Progress Bar) chạy ở mép trên cùng màn hình.
-  * Khối tác giả (Author Box): Chân dung Hứa Thảo Ly, chức danh và lời mời tham gia cộng đồng.
+  * Khối tác giả (Author Box): Chân dung Hứa Thảo Lý, chức danh và lời mời tham gia cộng đồng.
   * Khối Bài viết liên quan (Related Posts) và Khối CTA nhận tài liệu/tư vấn cuối bài viết.
 
 ---
@@ -338,7 +338,7 @@ flowchart TD
 * **Trạng thái Giao diện (Form UI States):**
   * *Trạng thái nhập liệu (Idle):* Hiển thị placeholder rõ ràng, báo lỗi đỏ ngay dưới từng ô nếu dữ liệu chưa hợp lệ (Inline Validation).
   * *Trạng thái đang gửi (Submitting):* Nút bấm chuyển sang Loading Spinner mượt mà, vô hiệu hóa (disabled) các ô nhập liệu để tránh người dùng thao tác đè.
-  * *Trạng thái thành công (Success):* Ẩn form, hiển thị màn hình chúc mừng với icon tick xanh, thông báo: *"Đăng ký thành công! Mentor Hứa Thảo Ly và đội ngũ tư vấn sẽ liên hệ với bạn trong vòng 15 phút tới."*, kèm nút bấm tham gia Nhóm Zalo Hỗ trợ Học tập.
+  * *Trạng thái thành công (Success):* Ẩn form, hiển thị màn hình chúc mừng với icon tick xanh, thông báo: *"Đăng ký thành công! Mentor Hứa Thảo Lý và đội ngũ tư vấn sẽ liên hệ với bạn trong vòng 15 phút tới."*, kèm nút bấm tham gia Nhóm Zalo Hỗ trợ Học tập.
   * *Trạng thái lỗi kết nối (Error):* Thông báo nhẹ nhàng: *"Kết nối mạng không ổn định, vui lòng thử lại hoặc liên hệ Hotline/Zalo 09xx.xxx.xxx để được hỗ trợ tức thì"*.
 
 ---
@@ -467,15 +467,15 @@ erDiagram
 * `site_name`: `LY DATA - Đào Tạo Phân Tích Dữ Liệu Thực Chiến`
 * `hotline_display`: `0909.123.456`
 * `hotline_tel`: `+84909123456`
-* `contact_email`: `contact@lydata.edu.vn`
-* `zalo_oa_url`: `https://zalo.me/lydata_official`
-* `facebook_url`: `https://facebook.com/lydata.official`
-* `tiktok_url`: `https://tiktok.com/@lydata_analytics`
+* `contact_email`: `contact@LYDATA.edu.vn`
+* `zalo_oa_url`: `https://zalo.me/LYDATA_official`
+* `facebook_url`: `https://facebook.com/LYDATA.official`
+* `tiktok_url`: `https://tiktok.com/@LYDATA_analytics`
 * `top_banner_active`: `TRUE`
 * `top_banner_sale_text`: `🔥 Khai giảng khóa mới - Nhận học bổng 75% OFF hôm nay!`
 * `top_banner_deadline`: `2026-10-31T23:59:59`
 * `default_seo_title`: `Khóa Học Data Analysis & Business Analysis Thực Chiến | LY DATA`
-* `default_seo_description`: `Khóa học phân tích dữ liệu thực chiến từ Mentor Hứa Thảo Ly (Ex Senior DA tại MoMo, Tiki, ACB). Làm chủ SQL, Power BI, Python qua case study thực tế.`
+* `default_seo_description`: `Khóa học phân tích dữ liệu thực chiến từ Mentor Hứa Thảo Lý (Ex Senior DA tại MoMo, Tiki, ACB). Làm chủ SQL, Power BI, Python qua case study thực tế.`
 
 ---
 
@@ -489,7 +489,7 @@ erDiagram
 | `title` | String | Có | Tên khóa học hiển thị | `Khóa Học SQL for Data Analytics Thực Chiến` |
 | `summary` | String | Có | Đoạn mô tả ngắn (1 - 2 câu) | `Làm chủ tư duy truy vấn và xử lý dữ liệu lớn với PostgreSQL qua bài toán kinh doanh thực tế.` |
 | `description` | String | Không | Mô tả đầy đủ về mục tiêu và kết quả đầu ra | `Khóa học trang bị cho bạn toàn bộ kỹ năng viết truy vấn phức tạp, Window Functions, CTE...` |
-| `thumbnail_url` | String (URL) | Có | Link ảnh bìa khóa học trên CDN Cloudinary | `https://res.cloudinary.com/lydata/image/upload/v1/courses/sql-hero.webp` |
+| `thumbnail_url` | String (URL) | Có | Link ảnh bìa khóa học trên CDN Cloudinary | `https://res.cloudinary.com/LYDATA/image/upload/v1/courses/sql-hero.webp` |
 | `badge_label` | String | Không | Huy hiệu gắn trên góc thẻ | `Bán Chạy Nhất` |
 | `level` | String | Có | Cấp độ đào tạo | `Người Mới Bắt Đầu (Beginner)` |
 | `duration_weeks` | Number | Có | Thời lượng tính theo tuần | `6` |
@@ -547,14 +547,14 @@ erDiagram
 ---
 
 #### Tab 5: `Mentors` (Hồ Sơ Giảng Viên)
-*Mục đích:* Quản lý thông tin profile của Founder Hứa Thảo Ly và đội ngũ trợ giảng.
+*Mục đích:* Quản lý thông tin profile của Founder Hứa Thảo Lý và đội ngũ trợ giảng.
 
 | Tên Cột | Kiểu Dữ Liệu | Bắt Buộc | Mô Tả & Ràng Buộc | Dữ Liệu Mẫu |
 | :--- | :--- | :---: | :--- | :--- |
 | `mentor_id` | String | Có | Mã định danh giảng viên | `hua-thao-ly` |
-| `full_name` | String | Có | Họ và tên giảng viên | `Hứa Thảo Ly` |
+| `full_name` | String | Có | Họ và tên giảng viên | `Hứa Thảo Lý` |
 | `title_role` | String | Có | Chức danh chuyên môn | `Founder & Lead Data Mentor` |
-| `avatar_url` | String (URL) | Có | Ảnh chân dung độ nét cao trên CDN | `https://res.cloudinary.com/lydata/image/upload/v1/mentors/thao-ly-avatar.webp` |
+| `avatar_url` | String (URL) | Có | Ảnh chân dung độ nét cao trên CDN | `https://res.cloudinary.com/LYDATA/image/upload/v1/mentors/thao-ly-avatar.webp` |
 | `bio_summary` | String | Có | Tóm tắt tiểu sử ngắn | `Ex Senior Data Analyst tại MoMo, Tiki, ACB với hơn 7 năm kinh nghiệm thực chiến.` |
 | `philosophy` | String | Có | Triết lý đào tạo cốt lõi | `Dữ liệu chỉ thực sự có giá trị khi nó tạo ra tác động trực tiếp lên quyết định kinh doanh.` |
 | `milestones` | String (Multiline)| Có | Các cột mốc công tác (xuống dòng bằng `Alt+Enter`)| `- 2023 - 2025: Senior Data Analyst tại Ví MoMo\n- 2020 - 2023: BI & Product Analyst tại Sàn Tiki\n- 2018 - 2020: Data Analyst tại Ngân hàng ACB` |
@@ -573,7 +573,7 @@ erDiagram
 | `student_name` | String | Có | Họ tên học viên | `Trần Minh Hoàng` |
 | `student_role` | String | Có | Vị trí công tác hiện tại | `Data Analyst tại Shopee Việt Nam` |
 | `student_company`| String | Không | Tên doanh nghiệp đang làm việc | `Shopee` |
-| `avatar_url` | String (URL) | Có | Ảnh chân dung học viên trên CDN | `https://res.cloudinary.com/lydata/image/upload/v1/reviews/hoang-tran.webp` |
+| `avatar_url` | String (URL) | Có | Ảnh chân dung học viên trên CDN | `https://res.cloudinary.com/LYDATA/image/upload/v1/reviews/hoang-tran.webp` |
 | `course_id` | String | Có | Khóa ngoại nối với khóa học đã học | `sql-for-data-analytics` |
 | `rating_stars` | Number | Có | Điểm đánh giá (1 -> 5 sao) | `5` |
 | `content` | String | Có | Lời nhận xét chi tiết của học viên | `Khóa học rất thực chiến! Nhờ phần tối ưu truy vấn SQL và các bài tập sát với thực tế phỏng vấn, mình đã pass vòng technical của Shopee ngay tuần thứ 5!` |
@@ -591,7 +591,7 @@ erDiagram
 | `project_name` | String | Có | Tên sản phẩm dự án | `Cohort Retention & Churn Prediction Dashboard` |
 | `student_name` | String | Có | Tác giả dự án | `Lê Phương Thảo` |
 | `course_id` | String | Có | Khóa học đã tạo ra dự án | `sql-for-data-analytics` |
-| `thumbnail_url` | String (URL) | Có | Ảnh chụp màn hình Dashboard sắc nét trên CDN | `https://res.cloudinary.com/lydata/image/upload/v1/projects/cohort-dashboard.webp` |
+| `thumbnail_url` | String (URL) | Có | Ảnh chụp màn hình Dashboard sắc nét trên CDN | `https://res.cloudinary.com/LYDATA/image/upload/v1/projects/cohort-dashboard.webp` |
 | `demo_url` | String (URL) | Không | Link xem tương tác trực tiếp (Power BI Web / Tableau Public)| `https://app.powerbi.com/view?r=sample_token` |
 | `tools_used` | String | Có | Danh sách công cụ sử dụng (cách nhau bằng dấu phẩy)| `SQL, PostgreSQL, Power BI, DAX` |
 | `summary` | String | Có | Tóm tắt bài toán kinh doanh dự án giải quyết | `Phân tích tỷ lệ giữ chân khách hàng định kỳ 30-60-90 ngày cho chuỗi bán lẻ thời trang.` |
@@ -611,7 +611,7 @@ erDiagram
 | `author_id` | String | Có | Mã tác giả nối với tab `Mentors` | `hua-thao-ly` |
 | `published_date`| String (Date)| Có | Ngày xuất bản bài viết (`YYYY-MM-DD`) | `2026-10-15` |
 | `read_time` | String | Có | Thời gian đọc ước tính | `6 phút đọc` |
-| `thumbnail_url` | String (URL) | Có | Link ảnh bìa bài viết trên CDN | `https://res.cloudinary.com/lydata/image/upload/v1/blogs/sql-window-cover.webp` |
+| `thumbnail_url` | String (URL) | Có | Link ảnh bìa bài viết trên CDN | `https://res.cloudinary.com/LYDATA/image/upload/v1/blogs/sql-window-cover.webp` |
 | `excerpt` | String | Có | Đoạn trích dẫn ngắn hiển thị ở trang danh sách | `Tìm hiểu cách ứng dụng ROW_NUMBER, RANK, DENSE_RANK và LEAD/LAG để giải quyết các bài toán xếp hạng doanh thu.` |
 | `content_markdown`| String (LongText)| Có | Toàn bộ nội dung bài viết hỗ trợ cú pháp **Markdown** | `## 1. Giới thiệu Window Functions\nTrong phân tích dữ liệu...\n\`\`\`sql\nSELECT user_id, order_date, SUM(amount) OVER (PARTITION BY user_id) as total_spent FROM orders;\n\`\`\`` |
 | `is_featured` | Boolean | Có | Đánh dấu hiển thị tại Trang chủ | `TRUE` |
@@ -627,7 +627,7 @@ erDiagram
 | :--- | :--- | :---: | :--- | :--- |
 | `partner_id` | String | Có | Mã định danh đối tác | `ptn-google` |
 | `partner_name` | String | Có | Tên công ty / tập đoàn | `Google` |
-| `logo_url` | String (URL) | Có | Link ảnh logo dạng vector SVG hoặc WebP trong suốt | `https://res.cloudinary.com/lydata/image/upload/v1/partners/google-logo.svg` |
+| `logo_url` | String (URL) | Có | Link ảnh logo dạng vector SVG hoặc WebP trong suốt | `https://res.cloudinary.com/LYDATA/image/upload/v1/partners/google-logo.svg` |
 | `category` | String | Không | Nhóm đơn vị (`Tập đoàn Công nghệ`, `Ngân hàng`...) | `Tập đoàn Công nghệ` |
 | `website_url` | String (URL) | Không | Đường link website chính thức của đối tác | `https://about.google` |
 | `order_index` | Number | Có | Thứ tự sắp xếp trên dải chạy | `1` |
@@ -784,7 +784,7 @@ export type LeadSubmission = z.infer<typeof LeadSubmissionSchema>;
 * **Thẻ Meta Toàn Cục:** Đầy đủ `title`, `description`, `canonical`, `viewport`, `robots`.
 * **Social Graph Tags:** Đầy đủ `og:title`, `og:description`, `og:image`, `og:url`, `twitter:card="summary_large_image"` để khi gửi link trên Zalo/Facebook sẽ hiển thị thẻ hình ảnh lớn chuyên nghiệp.
 * **Dữ liệu có cấu trúc Schema.org (JSON-LD):**
-  * *Trang chủ:* Schema `EducationalOrganization` và `Person` (Mentor Hứa Thảo Ly).
+  * *Trang chủ:* Schema `EducationalOrganization` và `Person` (Mentor Hứa Thảo Lý).
   * *Trang Khóa học:* Schema `Course` (bao gồm tên khóa, học phí, ngày khai giảng, đơn vị đào tạo).
   * *Trang Blog:* Schema `BlogPosting` (tiêu đề, tác giả, ngày đăng, ảnh đại diện).
 * **Sitemap & Robots:** Tự động sinh `sitemap.xml` và `robots.txt` chuẩn chỉ cho Google Bot thu thập dữ liệu.
@@ -925,7 +925,7 @@ gantt
   * [ ] Khối FAQ câu hỏi thường gặp.
 * [ ] **5.3. Trang Giới Thiệu (`/app/about/page.tsx`):**
   * [ ] Câu chuyện sáng lập & triết lý đào tạo thực chiến.
-  * [ ] Timeline sự nghiệp của Mentor Hứa Thảo Ly.
+  * [ ] Timeline sự nghiệp của Mentor Hứa Thảo Lý.
   * [ ] Quy trình 4 bước đào tạo độc quyền.
 * [ ] **5.4. Trang Danh Sách Blog (`/app/blog/page.tsx`):**
   * [ ] Bộ lọc chuyên mục.

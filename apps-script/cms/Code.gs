@@ -31,7 +31,7 @@ function createModalTemplate(templateName) {
 function getDataWithLySystemInfo() {
   return {
     system: "DataWithLy CMS Content Master",
-    brand: "DataWithLy (Mentor Hứa Thảo Ly)",
+    brand: "DataWithLy (Mentor Hứa Thảo Lý)",
     version: "2.3.0",
     architecture: "Modular Architecture with Native HTML Modals",
     status: "HEALTHY",

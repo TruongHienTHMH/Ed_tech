@@ -68,7 +68,7 @@ function setupLeadsCrmTable() {
       "Tôi chắc chắn",
       "NEW",
       "Học viên mong muốn học ca tối thứ 3 - thứ 5",
-      "Mentor Hứa Thảo Ly",
+      "Mentor Hứa Thảo Lý",
       "homepage_consultation_form",
       new Date().toISOString()
     ]);

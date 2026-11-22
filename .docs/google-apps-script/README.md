@@ -58,7 +58,7 @@ Tạo file `.env.local` ở thư mục gốc của project:
 GOOGLE_APPS_SCRIPT_URL="https://script.google.com/macros/s/AKfycb.../exec"
 
 # Shared Secret Token (Trùng với APPS_SCRIPT_SECRET trong Script Properties)
-GOOGLE_APPS_SCRIPT_SECRET="lydata_sec_987654321_secret_token"
+GOOGLE_APPS_SCRIPT_SECRET="LYDATA_sec_987654321_secret_token"
 
 # Google Tag Manager Container ID
 NEXT_PUBLIC_GTM_ID="GTM-XXXXXXX"

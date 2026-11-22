@@ -48,7 +48,7 @@ export default function TestimonialsSection({
             Đánh giá của học viên
           </h2>
           <p className="text-[#676767] text-base font-normal max-w-[650px]">
-            Cùng lắng nghe cảm nhận thực tế từ những học viên đã tham gia các khóa học tại Lydata.
+            Cùng lắng nghe cảm nhận thực tế từ những học viên đã tham gia các khóa học tại LYDATA.
           </p>
         </div>
 

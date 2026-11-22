@@ -78,7 +78,7 @@ sequenceDiagram
 | **2** | Nhập Họ tên, SĐT, Email | Inline validation kiểm tra trực tiếp. Nếu số điện thoại sai định dạng, hiển thị chữ đỏ nhắc nhở ngay dưới ô. | Regex 10 chữ số di động VN. |
 | **3** | Bấm nút `[Gửi Đăng Ký]` | Nút bấm chuyển sang biểu tượng xoay (Loading Spinner), các ô nhập liệu bị khóa tạm thời để tránh sửa đổi trong khi gửi. | Tránh người dùng bấm liên tục. |
 | **4** | Hệ thống xử lý Backend | Next.js API kiểm tra 3 lớp phòng vệ, khử trùng dấu `=`, chuyển sang Google Apps Script ghi tuần tự vào Google Sheets Staging/Production. | Shared Secret Authentication. |
-| **5** | Hoàn tất nộp form | Modal chuyển sang màn hình chúc mừng: *"Đăng ký thành công! Mentor Hứa Thảo Ly và đội ngũ tư vấn sẽ liên hệ với bạn trong vòng 15 phút tới."*, kèm nút tham gia nhóm Zalo hỗ trợ. | Gửi email thông báo chạy bất đồng bộ trong nền. |
+| **5** | Hoàn tất nộp form | Modal chuyển sang màn hình chúc mừng: *"Đăng ký thành công! Mentor Hứa Thảo Lý và đội ngũ tư vấn sẽ liên hệ với bạn trong vòng 15 phút tới."*, kèm nút tham gia nhóm Zalo hỗ trợ. | Gửi email thông báo chạy bất đồng bộ trong nền. |
 
 ---
 

@@ -23,7 +23,7 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
     return {
       id: p.id || registryItem?.id || `p-${idx}`,
       title: p.title || registryItem?.title || `Dự án phân tích dữ liệu #${idx + 1}`,
-      studentName: p.authorName || registryItem?.authorName || "Học viên Lydata",
+      studentName: p.authorName || registryItem?.authorName || "Học viên LYDATA",
       image: resolveImageUrl(p.imageUrl || registryItem?.filePath, "project", idx),
       aspect: registryItem?.aspect || (idx >= 6 ? "tall" : "normal"),
     };
@@ -54,7 +54,7 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
 
         {/* Section Title */}
         <h2 className="font-heading font-bold text-2xl sm:text-3xl lg:text-[40px] leading-tight text-center text-white mb-8 sm:mb-10 max-w-[680px]">
-          Dự án của học viên qua các khóa học tại Lydata
+          Dự án của học viên qua các khóa học tại LYDATA
         </h2>
 
         {/* 3x3 Showcase Grid:

@@ -15,7 +15,7 @@
 
 ## 1. Sản phẩm và mục đích
 
-**DataWithLy** là nền tảng website giới thiệu thương hiệu đào tạo, giảng viên và các khóa học phân tích dữ liệu thực chiến do **Mentor Hứa Thảo Ly** (Ex Senior Data Analyst tại MoMo, cựu DA tại Tiki, ACB) sáng lập và trực tiếp giảng dạy.
+**DataWithLy** là nền tảng website giới thiệu thương hiệu đào tạo, giảng viên và các khóa học phân tích dữ liệu thực chiến do **Mentor Hứa Thảo Lý** (Ex Senior Data Analyst tại MoMo, cựu DA tại Tiki, ACB) sáng lập và trực tiếp giảng dạy.
 
 Với thông điệp cốt lõi **"Học Data Analytics từ tư duy đến thực hành"**, DataWithLy giải quyết khoảng cách giữa lý thuyết công cụ hàn lâm và nhu cầu tuyển dụng thực tế của doanh nghiệp. Website giúp người học tiếp cận lộ trình đào tạo bài bản, minh bạch về giáo trình và học phí, khám phá các sản phẩm dự án thực tế của học viên và để lại thông tin khi muốn được tư vấn lộ trình 1-1 hoặc đăng ký tham gia lớp học.
 
@@ -51,14 +51,14 @@ Website giới thiệu và mở tuyển sinh cho 3 khóa học cốt lõi:
 | **Độc giả & Người tìm hiểu kiến thức** | Đọc các bài viết chia sẻ mẹo SQL, tư duy phân tích số liệu, kỹ năng phỏng vấn | Tiếp cận bài viết định dạng Markdown chất lượng có cú pháp code rõ ràng, có đường dẫn tự nhiên đến khóa học liên quan |
 | **Đội ngũ tư vấn & Tuyển sinh** | Nhận thông tin đăng ký nhanh chóng, đầy đủ ngữ cảnh để gọi điện hỗ trợ học viên | Dữ liệu lead được lưu tức thì vào Google Sheets, nhận email cảnh báo real-time, có ghi chú về nền tảng và khung giờ hẹn gọi |
 | **Đội ngũ Marketing** | Đo lường hiệu quả các kênh truyền thông và chiến dịch quảng cáo | Hệ thống tự động bắt và lưu các tham số UTM (source, medium, campaign) đi kèm từng lượt submit form |
-| **Người quản trị nội dung** (Mentor Hứa Thảo Ly & Cộng sự) | Tự chỉnh sửa học phí, lịch khai giảng, thêm review, viết bài blog mà không phụ thuộc vào lập trình viên | Quản trị 100% qua file Google Sheets quen thuộc; website tự động cập nhật nội dung qua cơ chế ISR Revalidation |
+| **Người quản trị nội dung** (Mentor Hứa Thảo Lý & Cộng sự) | Tự chỉnh sửa học phí, lịch khai giảng, thêm review, viết bài blog mà không phụ thuộc vào lập trình viên | Quản trị 100% qua file Google Sheets quen thuộc; website tự động cập nhật nội dung qua cơ chế ISR Revalidation |
 
 ---
 
 ## 5. Bốn khu vực trải nghiệm sản phẩm
 
 1. **Trang chủ (HomePage):**
-   - Định vị thương hiệu DataWithLy và Mentor Hứa Thảo Ly.
+   - Định vị thương hiệu DataWithLy và Mentor Hứa Thảo Lý.
    - Menu điều hướng đa tầng: `Trang chủ | Khóa học ▾ | Tài nguyên ▾ | Về DataWithLy | [Nhận tư vấn]`.
    - Khối 3 giá trị cốt lõi (USP Cards): *Lộ trình bài bản*, *Dự án thực tế*, *Mentor đồng hành & feedback*.
    - Khối danh sách 3 khóa học tại DataWithLy kèm học phí và thời lượng.
@@ -70,7 +70,7 @@ Website giới thiệu và mở tuyển sinh cho 3 khóa học cốt lõi:
    - Lộ trình giáo trình (Curriculum) dạng Accordion mở rộng chi tiết từng buổi học với nút *Expand/Collapse All*.
    - Hai nút hành động CTA nổi bật: `[Đăng ký ngay]` (mở modal khóa sẵn khóa học) và `[Nhận tư vấn]`.
 3. **Trang Giới thiệu (About Us / Về DataWithLy):**
-   - Câu chuyện sáng lập và triết lý đào tạo thực chiến từ Mentor Hứa Thảo Ly.
+   - Câu chuyện sáng lập và triết lý đào tạo thực chiến từ Mentor Hứa Thảo Lý.
    - Dòng thời gian sự nghiệp và các thành tích nổi bật tại MoMo, Tiki, ACB và các cuộc thi quốc gia.
 4. **Trang Blog & Tài nguyên (Blog & Resources):**
    - Danh sách bài viết chia sẻ kiến thức chuyên môn phân theo chủ đề (SQL Tips, Dashboard Design, Tư duy phân tích).

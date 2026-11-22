@@ -13,7 +13,7 @@
 Milestone RF-06 tập trung giải quyết dứt điểm 2 bài toán quan trọng trong vận hành thực tế của nền tảng DataWithLy:
 1. **Lỗi đường dẫn ảnh (Image SRC) do sai lệch cột trên Google Sheets & thiếu hệ thống Fallback chuẩn:**
    - Trong Google Sheets, người quản trị có thể đặt nhiều biến thể tên cột cho ảnh bìa/avatar (`cover_image_url`, `cover_image`, `thumbnail`, `ảnh_bìa`, `avatar_url`, `ảnh_đại_diện`, `ảnh_dự_án`...).
-   - Trước đây các component giao diện sử dụng fallback rải rác hoặc fallback nhầm (ví dụ: `CourseHero` fallback nhầm ảnh bìa khóa học sang khuôn mặt của Mentor Hứa Thảo Ly), và xuất hiện các đường dẫn ảo `/uploads/...` hoặc `/images/...` không tồn tại.
+   - Trước đây các component giao diện sử dụng fallback rải rác hoặc fallback nhầm (ví dụ: `CourseHero` fallback nhầm ảnh bìa khóa học sang khuôn mặt của Mentor Hứa Thảo Lý), và xuất hiện các đường dẫn ảo `/uploads/...` hoặc `/images/...` không tồn tại.
    - Khi chạy script seed, có nguy cơ làm mất dữ liệu nhập của người dùng nếu không tách bạch rõ ràng giữa reset và seed.
 
 2. **Cơ chế Webhook thông minh tự động nhận diện môi trường (Localhost vs Production):**
@@ -32,7 +32,7 @@ Milestone RF-06 tập trung giải quyết dứt điểm 2 bài toán quan trọ
     - SQL for Data Analytics: `/assets/figma/05ab7dcc030820120da8f65c6b464967f554e0d8.png`
     - Data Analytical Thinking: `/assets/figma/b1c9fe6fd2d3dafb5b4b32d30320f68d7cde1f5c.png`
   - **Giảng viên (Mentors):**
-    - Mentor Hứa Thảo Ly: `/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png`
+    - Mentor Hứa Thảo Lý: `/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png`
   - **Học viên (Testimonials - 6 Avatars):**
     - `e40866062bc7c3587c903859bd52be66623217cc.png`
     - `2fc0a1c70056162f5d32de1029e4b71d620e97c4.png`

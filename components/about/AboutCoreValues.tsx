@@ -18,7 +18,7 @@ export default function AboutCoreValues() {
       ),
       title: "Business-First Mindset",
       subtitle: "Tư duy bản chất bài toán kinh doanh",
-      description: "Không chỉ dạy cú pháp câu lệnh vô hồn, LyData rèn luyện bạn cách đặt câu hỏi phản biện, xác định đúng chỉ số North Star Metrics và phân tích nguyên nhân gốc rễ (Root Cause Analysis).",
+      description: "Không chỉ dạy cú pháp câu lệnh vô hồn, LYDATA rèn luyện bạn cách đặt câu hỏi phản biện, xác định đúng chỉ số North Star Metrics và phân tích nguyên nhân gốc rễ (Root Cause Analysis).",
       points: [
         "Hiểu cội nguồn mô hình kinh doanh Fintech, E-commerce, Banking",
         "Biết cách làm việc với Stakeholders và giải quyết bài toán thực tế",
@@ -69,12 +69,12 @@ export default function AboutCoreValues() {
           <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-[#1C1B1D] tracking-tight">
             Vì sao học viên chọn{" "}
             <span className="bg-gradient-to-r from-[#8B1D2C] via-[#AF445A] to-[#784080] bg-clip-text text-transparent">
-              LyData
+              LYDATA
             </span>
             ?
           </h2>
           <p className="mt-4 text-base sm:text-lg text-neutral-600">
-            3 trụ cột tạo nên sự khác biệt vượt trội trong chất lượng đầu ra của học viên LyData.
+            3 trụ cột tạo nên sự khác biệt vượt trội trong chất lượng đầu ra của học viên LYDATA.
           </p>
         </div>
 

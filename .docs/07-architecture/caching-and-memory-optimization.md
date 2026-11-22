@@ -21,7 +21,7 @@ Nền tảng đào tạo DataWithLy có đặc thù vận hành mang tính tươ
    - Hàng chục ngàn lượt xem từ các chiến dịch quảng cáo Facebook, LinkedIn, TikTok và tìm kiếm tự nhiên (SEO).
    - Độc giả chủ yếu đọc thông tin khóa học, đề cương từng buổi, bài viết blog, và hồ sơ giảng viên.
 2. **Tần suất Sửa đổi cực thấp (Infrequent Writes):**
-   - Nội dung trên Google Sheets chỉ thay đổi khi Founder Hứa Thảo Ly điều chỉnh học phí, cập nhật lịch học hoặc mở đợt tuyển sinh mới (khoảng 1-2 lần/tuần).
+   - Nội dung trên Google Sheets chỉ thay đổi khi Founder Hứa Thảo Lý điều chỉnh học phí, cập nhật lịch học hoặc mở đợt tuyển sinh mới (khoảng 1-2 lần/tuần).
 3. **Giới hạn Hạn ngạch Google Sheets API (Rate Limits & Quota):**
    - Google Sheets API v4 giới hạn khoảng **300 requests/phút/project** và **60 requests/phút/user**.
    - Độ trễ mạng của Google Sheets tương đối lớn (500ms - 1.500ms).

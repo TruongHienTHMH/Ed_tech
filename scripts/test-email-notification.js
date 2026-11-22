@@ -123,7 +123,7 @@ function generateStudentEmailPayload(record, zaloLink) {
       <h2 style="color: #784080;">Chào ${leadName}, cảm ơn bạn đã quan tâm đến DataWithLy!</h2>
       <p>DataWithLy đã nhận được thông tin đăng ký tư vấn khóa học <strong>${courseDisplay}</strong> của bạn.</p>
       <div style="background-color: #f8f0f3; padding: 16px; border-radius: 8px; border-left: 4px solid #AF445A;">
-        <p>Mentor Hứa Thảo Ly và đội ngũ cố vấn sẽ liên hệ trực tiếp qua số điện thoại <strong>${record.phone}</strong> trong vòng <strong>15 - 30 phút</strong> tới để giải đáp thắc mắc và gửi lộ trình chi tiết.</p>
+        <p>Mentor Hứa Thảo Lý và đội ngũ cố vấn sẽ liên hệ trực tiếp qua số điện thoại <strong>${record.phone}</strong> trong vòng <strong>15 - 30 phút</strong> tới để giải đáp thắc mắc và gửi lộ trình chi tiết.</p>
       </div>
       <div style="text-align: center; margin: 24px 0;">
         <a href="${zaloUrl}" style="background-color: #0068FF; color: #ffffff; padding: 12px 24px; border-radius: 24px; text-decoration: none; font-weight: bold; display: inline-block;">
@@ -142,7 +142,7 @@ assert(studentEmail.recipient === mockLead.email, "Người nhận Email học v
 assert(studentEmail.subject.includes(mockLead.name), "Tiêu đề chào mừng học viên đích danh");
 assert(studentEmail.htmlBody.includes("15 - 30 phút"), "Cam kết thời gian liên hệ nhanh chóng trong 15-30 phút");
 assert(studentEmail.htmlBody.includes("https://zalo.me/0934938431"), "Nút kết nối Zalo trực tiếp với Mentor hoạt động chính xác");
-assert(studentEmail.htmlBody.includes("Hứa Thảo Ly"), "Ký tên Mentor Hứa Thảo Ly uy tín và chuyên nghiệp");
+assert(studentEmail.htmlBody.includes("Hứa Thảo Lý"), "Ký tên Mentor Hứa Thảo Lý uy tín và chuyên nghiệp");
 
 console.log("\n--- TEST 4: KIỂM TRA XÓA BỎ NÚT 'ĐỒNG BỘ NGAY' (DevSyncButton) ---");
 const devSyncButtonPath = path.join(rootDir, "components", "common", "DevSyncButton.tsx");

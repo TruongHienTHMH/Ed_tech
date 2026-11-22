@@ -19,7 +19,7 @@
 |---|---|---|
 | **Người mới bắt đầu (Beginner)** | Xem khóa học *SQL for Data Analytics* xem có cần biết lập trình trước không, lịch học ra sao, học phí bao nhiêu. | Hiểu ngay điều kiện tiên quyết (không cần nền tảng), lịch học Zoom buổi tối phù hợp người đi làm, học phí rõ ràng không ẩn phí. |
 | **Người đã có nền tảng (Upskiller)** | Tìm hiểu khóa *Analytical Thinking & Dashboard Design* để nâng cấp tư duy phân tích và kỹ năng vẽ biểu đồ kinh doanh. | Thấy rõ phương pháp giải bài toán thực tế (Metrics, Deep-dive Insight) thay vì chỉ học công cụ thuần túy. |
-| **Người muốn chuyển ngành (Career Switcher)** | Cân nhắc khóa học trọn gói *End-to-End Analytics* để có Portfolio hoàn chỉnh và được review CV. | Thấy lộ trình toàn diện 25 buổi, quyền lợi tặng kèm Review CV 1-on-1 từ Mentor Hứa Thảo Ly, mức tiết kiệm khi đăng ký trọn gói. |
+| **Người muốn chuyển ngành (Career Switcher)** | Cân nhắc khóa học trọn gói *End-to-End Analytics* để có Portfolio hoàn chỉnh và được review CV. | Thấy lộ trình toàn diện 25 buổi, quyền lợi tặng kèm Review CV 1-on-1 từ Mentor Hứa Thảo Lý, mức tiết kiệm khi đăng ký trọn gói. |
 
 ---
 

@@ -12,7 +12,7 @@ export class BlogSeeder implements Seeder<BlogPost> {
         excerpt:
           "Khám phá các mẹo, thủ thuật và câu lệnh SQL hữu ích giúp viết truy vấn ngắn gọn, tối ưu và hiệu quả hơn trong môi trường doanh nghiệp thực tế.",
         coverImageUrl: "/assets/figma/71218f0038c8a9ce02ba0e6f6b102fbf63b6953b.png",
-        authorName: "Hứa Thảo Ly",
+        authorName: "Hứa Thảo Lý",
         publishedAt: "2026-03-01",
         readTimeMinutes: 6,
         isActive: true,
@@ -116,7 +116,7 @@ Nắm vững các kỹ thuật trên không chỉ giúp bạn hoàn thành tốt
         excerpt:
           "Những nguyên lý thị giác quan trọng giúp báo cáo của bạn vừa chuẩn logic kinh doanh vừa đẹp mắt, thuyết phục ban lãnh đạo ngay từ cái nhìn đầu tiên.",
         coverImageUrl: "/assets/figma/71218f0038c8a9ce02ba0e6f6b102fbf63b6953b.png",
-        authorName: "Hứa Thảo Ly",
+        authorName: "Hứa Thảo Lý",
         publishedAt: "2026-03-05",
         readTimeMinutes: 7,
         isActive: true,
@@ -193,7 +193,7 @@ Một dashboard xuất sắc không chỉ nằm ở vẻ ngoài thẩm mỹ mà 
         excerpt:
           "Kinh nghiệm thực chiến từ việc học công cụ, làm portfolio dự án đến cách trả lời câu hỏi phỏng vấn hóc búa dành cho người trái ngành.",
         coverImageUrl: "/assets/figma/71218f0038c8a9ce02ba0e6f6b102fbf63b6953b.png",
-        authorName: "Hứa Thảo Ly",
+        authorName: "Hứa Thảo Lý",
         publishedAt: "2026-03-10",
         readTimeMinutes: 8,
         isActive: true,
@@ -252,7 +252,7 @@ Thay vì chỉ nộp CV với các dự án Titanic hay Iris dataset có sẵn t
 
 ---
 
-## 4. Lời kết từ Mentor Hứa Thảo Ly
+## 4. Lời kết từ Mentor Hứa Thảo Lý
 
 Con đường chuyển ngành sẽ có những thời điểm bạn cảm thấy quá tải trước lượng kiến thức đồ sộ. Nhưng nếu có một lộ trình học có định hướng, người hướng dẫn sát sao và kiên trì rèn luyện dự án thực tế, bạn hoàn toàn có thể tự tin ứng tuyển vị trí Data Analyst trong vòng 4 đến 6 tháng.`,
       },

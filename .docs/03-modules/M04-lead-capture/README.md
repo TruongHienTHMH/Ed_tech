@@ -16,7 +16,7 @@
 
 ## 1. Ranh giới module (Module Boundaries)
 
-Module Lead Capture đóng vai trò là kênh thu thập khách hàng tiềm năng chính của website DataWithLy, chuyển hóa sự quan tâm của học viên thành thông tin liên hệ được ghi nhận an toàn và kích hoạt quy trình tư vấn 1-on-1 từ Mentor Hứa Thảo Ly.
+Module Lead Capture đóng vai trò là kênh thu thập khách hàng tiềm năng chính của website DataWithLy, chuyển hóa sự quan tâm của học viên thành thông tin liên hệ được ghi nhận an toàn và kích hoạt quy trình tư vấn 1-on-1 từ Mentor Hứa Thảo Lý.
 
 ```
 [UI Form / Modal Island]

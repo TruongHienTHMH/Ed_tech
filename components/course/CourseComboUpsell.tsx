@@ -87,7 +87,7 @@ export default function CourseComboUpsell({ course }: CourseComboUpsellProps) {
                 </p>
                 <div className="flex items-start gap-2.5 text-sm text-neutral-700">
                   <Check className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
-                  <span>Học tương tác trực tiếp qua Zoom cùng Mentor Hứa Thảo Ly</span>
+                  <span>Học tương tác trực tiếp qua Zoom cùng Mentor Hứa Thảo Lý</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-sm text-neutral-700">
                   <Check className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
@@ -187,7 +187,7 @@ export default function CourseComboUpsell({ course }: CourseComboUpsellProps) {
                   <div className="flex items-start gap-2.5 text-sm text-white/90">
                     <CheckCircle2 className="w-4 h-4 text-[#FFC934] mt-0.5 shrink-0" />
                     <span>
-                      <strong className="text-[#FFC934]">Tặng 01 buổi Review CV 1:1</strong> tối ưu chuẩn ATS cùng Mentor Hứa Thảo Ly
+                      <strong className="text-[#FFC934]">Tặng 01 buổi Review CV 1:1</strong> tối ưu chuẩn ATS cùng Mentor Hứa Thảo Lý
                     </span>
                   </div>
                   <div className="flex items-start gap-2.5 text-sm text-white/90">

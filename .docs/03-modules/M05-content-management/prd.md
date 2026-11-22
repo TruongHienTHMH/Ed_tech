@@ -84,7 +84,7 @@ File Google Sheets Quản trị Nội dung (Public Content Sheet) bao gồm chí
 
 ### Tab 5: `mentor_profile` (Thông tin Giảng viên)
 Cấu trúc dạng Key - Value (`key`, `value`):
-- `name`: `Hứa Thảo Ly`
+- `name`: `Hứa Thảo Lý`
 - `title`: `Lead Data Analyst & Mentor`
 - `experience_summary`: `Hơn 5 năm kinh nghiệm thực chiến phân tích dữ liệu tại MoMo, Tiki, ACB...`
 - `teaching_pillars`: `1. Tư duy bài toán kinh doanh | 2. Kỹ thuật viết code chuẩn mực | 3. Trực quan hóa dữ liệu sắc nét`

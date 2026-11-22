@@ -2,7 +2,7 @@
 
 - **Mục đích:** Đặc tả các kịch bản kiểm thử chấp nhận chức năng (Functional Acceptance Tests) và kiểm thử hành trình người dùng toàn trình (End-to-End Tests) cho toàn bộ hệ thống DataWithLy.
 - **Trạng thái:** Active / Production Ready
-- **Người duyệt:** TechLead & Client Hứa Thảo Ly
+- **Người duyệt:** TechLead & Client Hứa Thảo Lý
 - **Ngày cập nhật:** 2026-11-05
 - **Nguồn tham khảo:** 
   - [Khung kiểm thử README.md](README.md)
@@ -89,7 +89,7 @@ flowchart LR
 
 ---
 
-### TC-M01-001: Hiển Thị Trang Chủ, Hero Section & Social Proof Mentor Hứa Thảo Ly
+### TC-M01-001: Hiển Thị Trang Chủ, Hero Section & Social Proof Mentor Hứa Thảo Lý
 
 - **Mã kịch bản:** `TC-M01-001`
 - **Yêu cầu / Quy tắc liên quan:** `REQ-M01-001`, `REQ-M01-002`, `REQ-M01-003`, `REQ-M01-004`, `NFR-USABILITY-001`, `NFR-PERF-001`
@@ -98,7 +98,7 @@ flowchart LR
 - **Các bước thực hiện:**
   1. Truy cập trang chủ `https://<domain>/`.
   2. Kiểm tra Hero Section: Tiêu đề, Tagline, nút CTA "Nhận Lộ Trình Tư Vấn".
-  3. Kiểm tra khối Social Proof / Giới thiệu Mentor: Logo các đơn vị công tác (MoMo, Tiki, ACB), thông tin kinh nghiệm Senior Data Analytics của Chị Hứa Thảo Ly.
+  3. Kiểm tra khối Social Proof / Giới thiệu Mentor: Logo các đơn vị công tác (MoMo, Tiki, ACB), thông tin kinh nghiệm Senior Data Analytics của Chị Hứa Thảo Lý.
   4. Kiểm tra danh sách khóa học nổi bật: Các khóa học đang hoạt động (`is_active = true`) hiển thị đầy đủ thẻ Tag, Học phí, Thời lượng.
   5. Bấm vào nút CTA "Nhận Lộ Trình Tư Vấn".
 - **Kết quả mong đợi:**
@@ -160,7 +160,7 @@ flowchart LR
 - **Tiền điều kiện:** Bài viết blog `lo-trinh-chuyen-nganh-data-analytics-2026` được lưu trong tab `blog_posts`.
 - **Các bước thực hiện:**
   1. Truy cập `https://<domain>/blog/lo-trinh-chuyen-nganh-data-analytics-2026`.
-  2. Kiểm tra giao diện hiển thị bài viết (tiêu đề, tác giả Mentor Hứa Thảo Ly, ngày xuất bản, nội dung Markdown, hình ảnh minh họa).
+  2. Kiểm tra giao diện hiển thị bài viết (tiêu đề, tác giả Mentor Hứa Thảo Lý, ngày xuất bản, nội dung Markdown, hình ảnh minh họa).
   3. Bấm vào nút chia sẻ bài viết lên Facebook / LinkedIn.
   4. Sử dụng công cụ Facebook Sharing Debugger hoặc OpenGraph.xyz để kiểm tra URL bài viết.
 - **Kết quả mong đợi:**
@@ -191,7 +191,7 @@ flowchart LR
   5. Mở kênh Telegram nội bộ của đội ngũ tư vấn DataWithLy.
   6. Mở tab `private_leads` trên Google Sheets.
 - **Kết quả mong đợi:**
-  - Nút bấm hiển thị trạng thái đang gửi (Spinner Loading) và chuyển sang thông báo thành công xanh lá trong < 1.5 giây: *"Đăng ký thành công! Mentor Hứa Thảo Ly sẽ liên hệ tư vấn trong vòng 24h"*.
+  - Nút bấm hiển thị trạng thái đang gửi (Spinner Loading) và chuyển sang thông báo thành công xanh lá trong < 1.5 giây: *"Đăng ký thành công! Mentor Hứa Thảo Lý sẽ liên hệ tư vấn trong vòng 24h"*.
   - Form tự động reset các ô nhập liệu sau khi gửi thành công.
   - Kênh Telegram nhận được tin nhắn thông báo lead mới trong vòng **< 3 giây** (tuân thủ `BR-07`).
   - Dòng dữ liệu mới xuất hiện trong tab bí mật `private_leads` với đầy đủ thông tin, trạng thái mặc định là `NEW`. Tab này hoàn toàn được bảo mật, không bị lộ ra ngoài giao diện web (tuân thủ `BR-03`).

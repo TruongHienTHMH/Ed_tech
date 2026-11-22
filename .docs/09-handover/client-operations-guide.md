@@ -1,6 +1,6 @@
 # Sổ Tay Vận Hành & Hướng Dẫn Sử Dụng Ứng Dụng (Client Operations Guide)
 
-- **Dành riêng cho:** Founder Mentor Hứa Thảo Ly & Đội ngũ Vận hành / Tư vấn viên DataWithLy
+- **Dành riêng cho:** Founder Mentor Hứa Thảo Lý & Đội ngũ Vận hành / Tư vấn viên DataWithLy
 - **Mục đích:** Hướng dẫn chi tiết từng bước (Step-by-step) cách quản lý nội dung khóa học, đề cương, bài viết và xử lý thông tin học viên đăng ký tư vấn một cách dễ dàng, nhanh chóng và an toàn nhất.
 - **Trạng thái:** Chính thức bàn giao
 - **Ngày phát hành:** 2026-11-04

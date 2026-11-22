@@ -14,7 +14,7 @@
 
 ## 1. Ranh giới module (Module Boundaries)
 
-Module Blog đóng vai trò là kênh thu hút lưu lượng truy cập tự nhiên (Organic Search Traffic / SEO) và xây dựng uy tín chuyên môn cho thương hiệu DataWithLy và Mentor Hứa Thảo Ly thông qua các bài viết phân tích kỹ thuật sâu sắc, hướng dẫn thực hành SQL/Power BI và chia sẻ bài học thực chiến.
+Module Blog đóng vai trò là kênh thu hút lưu lượng truy cập tự nhiên (Organic Search Traffic / SEO) và xây dựng uy tín chuyên môn cho thương hiệu DataWithLy và Mentor Hứa Thảo Lý thông qua các bài viết phân tích kỹ thuật sâu sắc, hướng dẫn thực hành SQL/Power BI và chia sẻ bài học thực chiến.
 
 ### Trong phạm vi (In-Scope)
 1. **Trang Danh sách bài viết (`app/blog/page.tsx`):**
@@ -25,7 +25,7 @@ Module Blog đóng vai trò là kênh thu hút lưu lượng truy cập tự nhi
    - Breadcrumb điều hướng chuẩn cấu trúc Schema.org.
    - Trình phân tích cú pháp Markdown (`react-markdown` + `rehype-highlight` hoặc Shiki) hỗ trợ tô màu cú pháp (Syntax Highlighting) cho các khối mã nguồn SQL, Python, DAX.
    - Mục lục tự động (Table of Contents - TOC) dính cạnh bài viết trên màn hình Desktop.
-   - Hộp thông tin tác giả Mentor Hứa Thảo Ly và Khối kêu gọi hành động (Related CTA Box) dẫn link tới khóa học liên quan.
+   - Hộp thông tin tác giả Mentor Hứa Thảo Lý và Khối kêu gọi hành động (Related CTA Box) dẫn link tới khóa học liên quan.
    - Danh sách 3 bài viết gợi ý liên quan (Related Posts).
 3. **Tối ưu hóa SEO & Metadata tự động:**
    - Tạo thẻ OpenGraph (OG Image, Title, Description, Canonical URL) động cho từng bài viết.
@@ -55,7 +55,7 @@ Module Blog đóng vai trò là kênh thu hút lưu lượng truy cập tự nhi
   ├── <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px]">
   │     ├── <ArticleContent markdown={data.content} /> (Markdown + Code Highlighting)
   │     └── <TableOfContents headings={headings} /> (Desktop Sticky Sidebar)
-  ├── <AuthorBioBox author="Hứa Thảo Ly" />
+  ├── <AuthorBioBox author="Hứa Thảo Lý" />
   ├── <RelatedCourseBanner courseId={recommendedCourse} />
   ├── <RelatedArticles posts={relatedPosts} />
   └── <Footer />

@@ -733,7 +733,7 @@ export default function LeadForm({
       </div>
 
       <p className="text-[11px] text-neutral-500 text-center pt-1 font-medium">
-        Cam kết bảo mật thông tin • Tư vấn 1-on-1 cùng Mentor Hứa Thảo Ly
+        Cam kết bảo mật thông tin • Tư vấn 1-on-1 cùng Mentor Hứa Thảo Lý
       </p>
     </form>
   );

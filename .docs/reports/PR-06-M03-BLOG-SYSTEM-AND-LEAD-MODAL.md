@@ -11,7 +11,7 @@
 ## 1. Tóm tắt nội dung (Summary)
 Đợt bàn giao này mang đến 2 tính năng trọng yếu cho trải nghiệm người dùng và tỷ lệ chuyển đổi của website:
 1. **Modal Form Đăng Ký Tư Vấn Khớp 100% Figma Node `12:3320` & `12:2735`:** Hoàn thiện popup đăng ký tư vấn chuyên nghiệp, tích hợp checkbox chọn khóa coaching, radio cam kết tham gia đúng giờ, và kích hoạt đồng bộ từ tất cả các nút CTA trên toàn site.
-2. **Phân Hệ Blog Kiến Thức M03 (`/blog` & `/blog/[slug]`):** Xây dựng trang danh sách bài viết có bộ lọc tức thì và trang chi tiết bài viết Markdown cao cấp, trang bị thanh tiến độ đọc (Reading Progress Bar), mục lục tự động (TOC Scrollspy), khung hiển thị Code Block có nút Sao chép mã 1-click, hộp thông tin tác giả Mentor Hứa Thảo Ly và banner đề xuất khóa học liên quan.
+2. **Phân Hệ Blog Kiến Thức M03 (`/blog` & `/blog/[slug]`):** Xây dựng trang danh sách bài viết có bộ lọc tức thì và trang chi tiết bài viết Markdown cao cấp, trang bị thanh tiến độ đọc (Reading Progress Bar), mục lục tự động (TOC Scrollspy), khung hiển thị Code Block có nút Sao chép mã 1-click, hộp thông tin tác giả Mentor Hứa Thảo Lý và banner đề xuất khóa học liên quan.
 
 ---
 
@@ -41,7 +41,7 @@
     - `ReadingProgressBar.tsx`: Dải tiến độ đọc dính top màn hình.
     - `TableOfContents.tsx`: Mục lục tự động trích xuất H2/H3 và highlight theo vị trí cuộn trang.
     - `CodeBlockWithCopy.tsx`: Khung code dark theme `#1A1D24` với 3 chấm phong cách macOS và nút [Sao chép mã] đổi sang "Đã chép!" trong 2s.
-    - `BlogAuthorBox.tsx`: Khối hồ sơ giảng viên Mentor Hứa Thảo Ly cuối bài viết.
+    - `BlogAuthorBox.tsx`: Khối hồ sơ giảng viên Mentor Hứa Thảo Lý cuối bài viết.
     - `BlogRelatedCourseBanner.tsx`: Banner gợi ý khóa học liên quan có nút mở popup tư vấn.
   * Các routes Blog:
     - `app/blog/page.tsx` & `loading.tsx`: Danh sách bài viết có đầy đủ 5 trạng thái UI.

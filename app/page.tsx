@@ -53,7 +53,7 @@ export default async function Home() {
         {/* 6. Blogs về Data Analytics - Chia sẻ miễn phí (Figma Node 12:838) */}
         <BlogSection blogs={blogPosts} />
 
-        {/* 7. Dự án của học viên qua các khóa học tại Lydata (Figma Node 12:873) */}
+        {/* 7. Dự án của học viên qua các khóa học tại LYDATA (Figma Node 12:873) */}
         <StudentProjectsSection projects={studentProjects} />
 
         {/* 8. Đánh giá của học viên (Figma Node 12:892) */}

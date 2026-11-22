@@ -26,7 +26,7 @@ Module Trang Chủ chịu trách nhiệm dựng toàn bộ trang đích (`/`) t�
 2. **Hero Section:**
    - Tagline badge: `"ONLINE DATA ANALYTICS COURSE"`.
    - Tiêu đề chính (H1): `"Học Data Analytics từ tư duy đến thực hành."`.
-   - Mô tả giá trị: Lộ trình bài bản từ cơ bản đến nâng cao, dự án thực tế, hỗ trợ tận tâm cùng Mentor Hứa Thảo Ly.
+   - Mô tả giá trị: Lộ trình bài bản từ cơ bản đến nâng cao, dự án thực tế, hỗ trợ tận tâm cùng Mentor Hứa Thảo Lý.
    - Dual CTAs: `[Tư vấn lộ trình]` (kích hoạt M04) và `[Khám phá khóa học]` (cuộn mượt xuống khối khóa học).
 3. **Giá trị cốt lõi (3 USP Cards):**
    - 01. Thực chiến giải quyết bài toán kinh doanh thực tế.
@@ -42,7 +42,7 @@ Module Trang Chủ chịu trách nhiệm dựng toàn bộ trang đích (`/`) t�
    - Bố cục lưới 2x2 trên Desktop và vuốt ngang mượt mà trên Mobile (thay thế khối Free Resources cũ theo chỉ thị sheet Main).
    - Hiển thị 4 dự án thực tế: *Phim ảnh (Film Industry Analytics), Doanh thu xe đạp & phụ kiện (AdventureWorks), Nền tảng EdTech, Hiệu quả sàn TMĐT*.
 6. **Khối Giới thiệu Giảng viên (Mentor Section):**
-   - Chân dung Mentor Hứa Thảo Ly (Ex Senior DA tại MoMo, Tiki, ACB).
+   - Chân dung Mentor Hứa Thảo Lý (Ex Senior DA tại MoMo, Tiki, ACB).
    - 3 trụ cột phương pháp đào tạo: *Business Context - Clean Code - Visual Impact*.
 7. **Khối Đánh giá học viên (Testimonials):**
    - Danh sách đánh giá thật từ học viên các khóa K1 đến K10.

@@ -270,7 +270,7 @@ function testMentorModuleUpsert() {
   var total = 0;
 
   var mockTable = [
-    ["mentor-ly-hua", "Hứa Thảo Ly", "Lead Mentor", "Bio cũ", "MoMo", "/avatar1.jpg", "https://linkedin/1", true]
+    ["mentor-ly-hua", "Hứa Thảo Lý", "Lead Mentor", "Bio cũ", "MoMo", "/avatar1.jpg", "https://linkedin/1", true]
   ];
 
   function simulateUpsertMentor(table, data) {
@@ -312,7 +312,7 @@ function testMentorModuleUpsert() {
   total++;
   var resUpdate = simulateUpsertMentor(mockTable, {
     id: "mentor-ly-hua",
-    name: "Hứa Thảo Ly",
+    name: "Hứa Thảo Lý",
     title: "Founder & Lead Mentor",
     bio: "Hơn 7 năm kinh nghiệm tại MoMo, Tiki, ACB",
     companies_worked: "MoMo, Tiki, ACB Bank",

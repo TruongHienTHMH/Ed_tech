@@ -36,7 +36,7 @@ const SOCIAL_LINKS: SocialLink[] = [
   {
     name: "LinkedIn",
     url: "https://www.linkedin.com/in/huathaoly",
-    handle: "Hứa Thảo Ly",
+    handle: "Hứa Thảo Lý",
     iconPath: "/assets/icons/linkedin.svg",
   },
 ];
@@ -46,25 +46,19 @@ const CAREER_MILESTONES = [
     role: "Lead Data Analyst",
     company: "MoMo (M_Service)",
     period: "Fintech & Payments",
-    highlight: "Xây dựng hệ thống Data Mart, phân tích hành vi người dùng triệu đô và tối ưu Retention.",
+    highlight: "",
   },
   {
-    role: "Senior Data Analyst",
+    role: "Data Analyst",
     company: "Tiki Corporation",
     period: "E-Commerce",
-    highlight: "Phân tích chiến dịch Flash Sale, phễu chuyển đổi và tối ưu chi phí vận hành Logistics.",
+    highlight: "",
   },
   {
     role: "Business & Data Analyst",
     company: "ACB (Ngân hàng Á Châu)",
     period: "Banking & Financial Services",
-    highlight: "Quản trị rủi ro tín dụng, tự động hóa báo cáo Business Intelligence cho khối nghiệp vụ.",
-  },
-  {
-    role: "Cử nhân Kinh tế Đối ngoại",
-    company: "Đại học Ngoại Thương (FTU2)",
-    period: "Foundation",
-    highlight: "Tốt nghiệp loại Giỏi với nền tảng vững chắc về kinh tế học, tài chính và phân tích định lượng.",
+    highlight: "",
   },
 ];
 
@@ -88,7 +82,7 @@ export default function AboutFounder() {
               <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden bg-gradient-to-b from-[#AF445A]/10 to-[#784080]/10 border border-[#EFE5E7]">
                 <Image
                   src="/assets/mentor/ly.png"
-                  alt="Hứa Thảo Ly - Founder LyData"
+                  alt="Hứa Thảo Lý - Founder LYDATA"
                   fill
                   className="object-cover object-top"
                   sizes="(max-width: 768px) 100vw, 400px"
@@ -97,14 +91,14 @@ export default function AboutFounder() {
                 {/* Brand Logo Floating Badge */}
                 <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-[#EFE5E7] shadow-sm flex items-center gap-2">
                   <Image
-                    src="/assets/mentor/logo-lydata-red.svg"
-                    alt="LyData Logo"
+                    src="/assets/mentor/logo-LYDATA-red.svg"
+                    alt="LYDATA Logo"
                     width={20}
                     height={20}
                     className="w-5 h-5 object-contain"
                   />
                   <span className="text-xs font-bold text-[#8B1D2C] tracking-wide uppercase">
-                    LyData Official
+                    LYDATA Official
                   </span>
                 </div>
               </div>
@@ -113,7 +107,7 @@ export default function AboutFounder() {
               <div className="mt-6 text-center sm:text-left">
                 <div className="flex items-center justify-center sm:justify-start gap-2">
                   <h3 className="font-heading text-2xl font-bold text-[#1C1B1D]">
-                    Hứa Thảo Ly
+                    Hứa Thảo Lý
                   </h3>
                   {/* Verified Icon SVG */}
                   <svg
@@ -130,10 +124,10 @@ export default function AboutFounder() {
                   </svg>
                 </div>
                 <p className="text-sm font-medium text-[#AF445A] mt-1">
-                  Founder &amp; Principal Mentor tại LyData
+                  Founder &amp; Mentor tại LYDATA
                 </p>
                 <p className="text-xs text-neutral-500 mt-0.5">
-                  5+ Năm Lead Data Analyst • Top Voice Chia sẻ Kiến thức Data
+                  5+ năm kinh nghiệm trong lĩnh vực Data Analytics - Senior Data Analyst tại MoMo
                 </p>
 
                 {/* Social Connect Icons */}
@@ -176,7 +170,7 @@ export default function AboutFounder() {
               </h3>
               <div className="space-y-4 text-neutral-600 text-sm sm:text-base leading-relaxed">
                 <p>
-                  Xuất phát điểm từ sinh viên chuyên ngành Kinh tế Đối ngoại tại trường Đại học Ngoại Thương (FTU2),
+                  Xuất phát điểm từ sinh viên chuyên ngành Tài chính Quốc tế tại trường Đại học Ngoại Thương (FTU2),
                   mình hiểu rõ rào cản lớn nhất của những bạn học kinh tế, marketing hay tài chính khi bước chân vào
                   thế giới Data: <strong className="text-[#1C1B1D]">sợ toán, sợ code và không biết bắt đầu từ đâu.</strong>
                 </p>
@@ -184,11 +178,11 @@ export default function AboutFounder() {
                   Trong suốt 5 năm lăn lộn thực tế qua các môi trường dữ liệu quy mô hàng đầu Việt Nam như
                   <strong className="text-[#8B1D2C]"> MoMo, Tiki, ACB</strong>, mình nhận ra rằng các doanh nghiệp
                   không chỉ tìm một người biết gõ SQL hay kéo thả biểu đồ. Họ khao khát những Data Analyst có
-                  <strong className="text-[#1C1B1D]"> tư duy bản chất (Business Mindset)</strong> — biết cách bóc tách bài toán kinh doanh,
-                  truy vấn chuẩn xác và kể câu chuyện số liệu (Data Storytelling) để giúp ban giám đốc ra quyết định.
+                  <strong className="text-[#8B1D2C]"> tư duy bản chất (Business Mindset)</strong> — biết cách bóc tách bài toán kinh doanh,
+                  truy vấn chuẩn xác và <strong className="text-[#8B1D2C]">kể câu chuyện số liệu (Data Storytelling)</strong> để giúp high level ra quyết định.
                 </p>
                 <p>
-                  Đó là lý do <strong className="text-[#8B1D2C]">LyData</strong> ra đời. Với giáo trình chuẩn hóa từ
+                  Đó là lý do <strong className="text-[#8B1D2C]">LYDATA</strong> ra đời. Với giáo trình chuẩn hóa từ
                   Production Data thực chiến và phương pháp kèm cặp 1-on-1 sát sao, mình muốn rút ngắn con đường
                   chuyển ngành của bạn từ vài năm xuống còn vài tháng với sự tự tin vững chắc nhất.
                 </p>

@@ -334,7 +334,7 @@ function setupMentorProfilesTab(ss) {
 
   if (sheet.getLastRow() === 1) {
     sheet.appendRow([
-      "mentor-ly-hua", "Hứa Thảo Ly", "Lead Mentor & Founder DataWithLy",
+      "mentor-ly-hua", "Hứa Thảo Lý", "Lead Mentor & Founder DataWithLy",
       "Hơn 7 năm kinh nghiệm thực chiến trong ngành Dữ liệu tại các tập đoàn công nghệ và tài chính hàng đầu Việt Nam. Từng trực tiếp xây dựng hạ tầng báo cáo phục vụ hàng triệu người dùng.",
       "MoMo, Tiki, ACB Bank",
       "/uploads/mentors/ly-hua.jpg", "https://linkedin.com/in/lyhuadata", true
@@ -465,7 +465,7 @@ function setupBlogPostsTab(ss) {
       "Khám phá các mẹo, thủ thuật và câu lệnh SQL hữu ích giúp viết truy vấn ngắn gọn, tối ưu và hiệu quả hơn.",
       "## 1. Giới thiệu SQL trong doanh nghiệp\nSQL là kỹ năng nền tảng cho mọi Data Analyst. Việc tối ưu truy vấn giúp tiết kiệm tài nguyên hệ thống đáng kể.\n\n## 2. Các mẹo tối ưu phổ biến\n- Tránh sử dụng `SELECT *` trong môi trường Production.\n- Luôn tạo Index trên các cột thường xuyên lọc trong `WHERE` và `JOIN`.\n- Tận dụng `Common Table Expressions (CTE)` thay cho Subquery phức tạp.",
       "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png",
-      "Hứa Thảo Ly", "/uploads/mentors/ly-hua.jpg", "2026-03-01", true
+      "Hứa Thảo Lý", "/uploads/mentors/ly-hua.jpg", "2026-03-01", true
     ]);
     sheet.appendRow([
       "blog-dashboard-5-giay",
@@ -475,7 +475,7 @@ function setupBlogPostsTab(ss) {
       "Những nguyên lý thị giác quan trọng giúp báo cáo của bạn vừa chuẩn logic kinh doanh vừa đẹp mắt, thuyết phục ban lãnh đạo.",
       "## Nguyên tắc 5 giây trong thiết kế Dashboard\nMột Dashboard tốt phải trả lời được câu hỏi kinh doanh cốt lõi trong vòng 5 giây đầu tiên khi người xem nhìn vào.\n\n### 3 Yếu tố cốt lõi:\n1. Phân tầng thị giác rõ ràng.\n2. Lựa chọn đúng biểu đồ phù hợp loại dữ liệu.\n3. Nhấn mạnh chỉ số quan trọng (North Star Metric).",
       "/assets/figma/05ab7dcc030820120da8f65c6b464967f554e0d8.png",
-      "Hứa Thảo Ly", "/uploads/mentors/ly-hua.jpg", "2026-03-05", true
+      "Hứa Thảo Lý", "/uploads/mentors/ly-hua.jpg", "2026-03-05", true
     ]);
   }
 }

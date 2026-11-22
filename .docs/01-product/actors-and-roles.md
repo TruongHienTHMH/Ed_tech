@@ -19,7 +19,7 @@
 
 | Tác nhân | Mục tiêu chính | Hành động trên Website | Dữ liệu được tiếp cận |
 |---|---|---|---|
-| **Người xem khóa học (Visitor)** | Tìm hiểu lộ trình học, xem xét độ uy tín của Mentor Hứa Thảo Ly và mức độ phù hợp của 3 khóa học | Xem trang chủ, duyệt danh mục khóa học, xem syllabus chi tiết, xem sản phẩm dashboard của học viên khóa trước | Tiếp cận 100% nội dung công khai (không cần đăng nhập). |
+| **Người xem khóa học (Visitor)** | Tìm hiểu lộ trình học, xem xét độ uy tín của Mentor Hứa Thảo Lý và mức độ phù hợp của 3 khóa học | Xem trang chủ, duyệt danh mục khóa học, xem syllabus chi tiết, xem sản phẩm dashboard của học viên khóa trước | Tiếp cận 100% nội dung công khai (không cần đăng nhập). |
 | **Người đăng ký tư vấn / Học viên tiềm năng (Lead)** | Muốn được tư vấn lộ trình 1-1, kiểm tra đầu vào hoặc đăng ký giữ chỗ khóa học sắp khai giảng | Bấm các nút CTA (`[Nhận tư vấn]`, `[Đăng ký ngay]`), điền biểu mẫu Modal (Họ tên, SĐT, Email, Khóa quan tâm, Khung giờ hẹn gọi, Ghi chú) | Nhận thông báo xác nhận trạng thái nộp form trên màn hình và email cảm ơn. |
 | **Độc giả kiến thức (Blog Reader)** | Nâng cao kiến thức chuyên môn, học mẹo truy vấn SQL, quy trình thiết kế dashboard | Đọc các bài viết chia sẻ, lọc bài theo chủ đề, sao chép các đoạn code SQL/Python | Toàn bộ nội dung bài viết công khai được xuất bản trên website. |
 
@@ -31,7 +31,7 @@
 
 | Vai trò nội bộ | Nhân sự đảm nhiệm | Trách nhiệm chính | Quyền hạn dữ liệu & Thao tác |
 |---|---|---|---|
-| **Founder & Lead Mentor** | **Chị Hứa Thảo Ly** | Quản lý toàn diện thương hiệu, quyết định nội dung đào tạo, học phí, lịch khai giảng và tiếp nhận danh sách học viên | - Toàn quyền truy cập cả 2 file Google Sheets: `Public Content Sheet` và `Private Leads Sheet`.<br/>- Toàn quyền chỉnh sửa giá bán, mở/ẩn khóa học và xuất bản nội dung lên website. |
+| **Founder & Lead Mentor** | **Chị Hứa Thảo Lý** | Quản lý toàn diện thương hiệu, quyết định nội dung đào tạo, học phí, lịch khai giảng và tiếp nhận danh sách học viên | - Toàn quyền truy cập cả 2 file Google Sheets: `Public Content Sheet` và `Private Leads Sheet`.<br/>- Toàn quyền chỉnh sửa giá bán, mở/ẩn khóa học và xuất bản nội dung lên website. |
 | **Đội ngũ Tư vấn viên (Consultants)** | Nhân sự tư vấn do Chị Ly chỉ định | Tiếp nhận thông tin học viên, gọi điện tư vấn lộ trình 1-1 và chăm sóc học viên trước nhập học | - Được cấp quyền truy cập file `Private Leads Sheet` để xem thông tin liên hệ và cập nhật trạng thái tư vấn.<br/>- Nhận email cảnh báo real-time khi có lượt đăng ký mới. *(Môi trường demo/test sử dụng danh sách email đã duyệt: `hien0934752432@gmail.com`, `hien.truong230214@vnuk.edu.vn`).* |
 | **Người biên tập nội dung (Content Editors)** | Chị Ly hoặc cộng tác viên hỗ trợ | Cập nhật bài viết blog, bổ sung phản hồi (testimonials) học viên, chỉnh sửa văn bản giới thiệu | - Chỉ được cấp quyền chỉnh sửa trên file `Public Content Sheet`.<br/>- **Hoàn toàn KHÔNG được truy cập file `Private Leads Sheet`** (tránh rò rỉ dữ liệu cá nhân của học viên). |
 | **Người quản trị Workspace & Hệ thống** | Chủ dự án / Quản trị viên kỹ thuật | Quản lý triển khai mã nguồn, cấu hình Webhook Google Apps Script, quản lý domain và hạ tầng máy chủ | - Quản trị kho mã nguồn GitHub, cấu hình tài khoản Vercel và kiểm soát các mã bí mật môi trường (Environment Variables). |

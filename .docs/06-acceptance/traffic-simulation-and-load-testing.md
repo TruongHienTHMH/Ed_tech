@@ -2,7 +2,7 @@
 
 - **Mục đích:** Đặc tả báo cáo thử nghiệm và các kịch bản kiểm thử hiệu năng chịu tải, giả lập lưu lượng truy cập thực tế (Traffic Simulation) nhằm bảo vệ hệ thống trước các đợt bùng nổ chiến dịch quảng cáo tuyển sinh, đảm bảo tỷ lệ Cache Hit >= 95%, và chứng minh triệt tiêu hoàn toàn nguy cơ rò rỉ bộ nhớ (Memory Leak).
 - **Trạng thái:** Active / Production Ready
-- **Người duyệt:** TechLead & Client Hứa Thảo Ly
+- **Người duyệt:** TechLead & Client Hứa Thảo Lý
 - **Ngày cập nhật:** 2026-11-05
 - **Nguồn tham khảo:** 
   - [Khung kiểm thử README.md](README.md)
@@ -74,7 +74,7 @@ flowchart TD
 
 ### Kịch Bản 2: Đột Biến Chiến Dịch Quảng Cáo & Tuyển Sinh (Marketing Campaign Spike Test)
 - **Mã kịch bản:** `TC-LOAD-002`
-- **Mô tả tình huống:** Giả lập đợt chạy quảng cáo Facebook Ads, TikTok Ads hoặc gửi email thông báo mở lớp mới của Mentor Hứa Thảo Ly, lượng truy cập ồ ạt đổ về website trong thời gian ngắn.
+- **Mô tả tình huống:** Giả lập đợt chạy quảng cáo Facebook Ads, TikTok Ads hoặc gửi email thông báo mở lớp mới của Mentor Hứa Thảo Lý, lượng truy cập ồ ạt đổ về website trong thời gian ngắn.
 - **Thông số tải:**
   - **Ramp-up:** Tăng vọt từ 0 lên **1.000 VUs trong vòng 30 giây**.
   - **Sustained Peak:** Duy trì đỉnh tải 1.000 VUs liên tục trong **5 phút**.

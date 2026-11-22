@@ -71,7 +71,7 @@ export default function CourseFigmaInstructor({ onOpenConsult }: CourseFigmaInst
             <div className="relative w-48 h-48 rounded-2xl overflow-hidden shadow-md border-4 border-[#FAF7F8] mb-4 bg-gray-100">
               <Image
                 src="/assets/mentor/ly.png"
-                alt="Mentor Hứa Thảo Ly"
+                alt="Mentor Hứa Thảo Lý"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 192px, 192px"
@@ -113,7 +113,7 @@ export default function CourseFigmaInstructor({ onOpenConsult }: CourseFigmaInst
           {/* Cột phải: Thông tin, Bio, Kinh nghiệm, Thành tích */}
           <div className="flex-1">
             <div className="flex items-center gap-2.5 mb-2 flex-wrap">
-              <h3 className="text-2xl font-bold text-gray-900">Hứa Thảo Ly</h3>
+              <h3 className="text-2xl font-bold text-gray-900">Hứa Thảo Lý</h3>
               <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#AF445A]/10 text-[#AF445A] border border-[#AF445A]/20">
                 Lead Mentor & Founder LYDATA
               </span>

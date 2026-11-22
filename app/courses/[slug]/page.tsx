@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description =
     course.description ||
     course.tagline ||
-    "Khóa học Data Analytics thực chiến theo phương pháp giải quyết bài toán kinh doanh cùng Mentor Hứa Thảo Ly.";
+    "Khóa học Data Analytics thực chiến theo phương pháp giải quyết bài toán kinh doanh cùng Mentor Hứa Thảo Lý.";
 
   return {
     title,
@@ -119,7 +119,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
                 capstoneCount={course.capstoneCount}
               />
 
-              {/* 4. Giảng viên của bạn (Hứa Thảo Ly, MoMo, Tiki, ACB) */}
+              {/* 4. Giảng viên của bạn (Hứa Thảo Lý, MoMo, Tiki, ACB) */}
               <CourseFigmaInstructor />
 
               {/* 5. Phương pháp học 5 bước */}

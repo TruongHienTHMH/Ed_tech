@@ -24,7 +24,7 @@ export default function BlogSidebarMiniCard({
           Cần tư vấn lộ trình học Data?
         </h3>
         <p className="text-xs text-neutral-600 mt-1 leading-relaxed">
-          Mentor Hứa Thảo Ly sẽ trao đổi trực tiếp 1-on-1 để định hướng khóa học phù hợp với năng lực và mục tiêu của bạn.
+          Mentor Hứa Thảo Lý sẽ trao đổi trực tiếp 1-on-1 để định hướng khóa học phù hợp với năng lực và mục tiêu của bạn.
         </p>
       </div>
       <button

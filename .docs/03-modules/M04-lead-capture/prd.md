@@ -17,7 +17,7 @@
 
 | Tác nhân | Mục tiêu / Nhu cầu | Kết quả mong đợi |
 |---|---|---|
-| **Học viên tiềm năng (Lead)** | Đăng ký nhận tư vấn lộ trình học Data Analytics từ Mentor Hứa Thảo Ly. | Điền thông tin dễ dàng, nhận phản hồi xác nhận tiếp nhận ngay (< 5 giây), nhận email xác nhận kèm tài liệu định hướng. |
+| **Học viên tiềm năng (Lead)** | Đăng ký nhận tư vấn lộ trình học Data Analytics từ Mentor Hứa Thảo Lý. | Điền thông tin dễ dàng, nhận phản hồi xác nhận tiếp nhận ngay (< 5 giây), nhận email xác nhận kèm tài liệu định hướng. |
 | **Đội ngũ tư vấn / Mentor** | Nhận thông tin lead chính xác, không bị trùng lặp, không bị spam bot phá hoại. | Dữ liệu lead xuất hiện đầy đủ trong Google Sheets Private, có email báo ngay về hộp thư để kịp thời liên hệ tư vấn. |
 | **Hệ thống (Web App)** | Bảo vệ tính toàn vẹn của dữ liệu và uy tín thương hiệu. | Ngăn chặn rò rỉ PII, kháng lỗi Formula Injection, đảm bảo không bao giờ làm mất dữ liệu đã điền của học viên. |
 
@@ -131,7 +131,7 @@ sequenceDiagram
 |---|---|---|---|
 | **1. Khởi tạo (Idle)** | Modal vừa mở lên hoặc form nhúng vừa hiển thị. | Form sạch sẽ với các trường thông tin. Nếu có dữ liệu trong `sessionStorage`, tự động điền lại (Auto-restore) kèm thông báo nhỏ: *"Đã khôi phục thông tin bạn vừa nhập"*. | Sẵn sàng nhận thao tác nhập từ người dùng. |
 | **2. Đang gửi (Submitting)** | Người dùng nhấn nút `[Gửi thông tin tư vấn]`. | Nút gửi bị vô hiệu hóa (`disabled`), hiển thị spinner xoay nhẹ cùng văn bản *"Đang tiếp nhận thông tin..."*. Các trường input chuyển sang `readOnly`. | Kích hoạt API call `POST /api/leads`. Bắt đầu tính timeout 15 giây. |
-| **3. Thành công (Success)** | API trả về mã HTTP `200` và `{ status: "success" }`. | Hiển thị màn hình cảm ơn rực rỡ với icon tích xanh SVG: *"Cảm ơn bạn [Tên học viên]! DataWithLy đã tiếp nhận yêu cầu."*<br>- Thông điệp: Mentor Hứa Thảo Ly sẽ liên hệ tư vấn trong vòng 15-30 phút (giờ hành chính) hoặc tối đa 12h.<br>- Nút bấm phụ: `[Tham gia Nhóm Zalo Học tập]` và `[Đóng]`. | Xóa dữ liệu form trong `sessionStorage`. Gửi event GA4 `lead_submitted` (không kèm PII). |
+| **3. Thành công (Success)** | API trả về mã HTTP `200` và `{ status: "success" }`. | Hiển thị màn hình cảm ơn rực rỡ với icon tích xanh SVG: *"Cảm ơn bạn [Tên học viên]! DataWithLy đã tiếp nhận yêu cầu."*<br>- Thông điệp: Mentor Hứa Thảo Lý sẽ liên hệ tư vấn trong vòng 15-30 phút (giờ hành chính) hoặc tối đa 12h.<br>- Nút bấm phụ: `[Tham gia Nhóm Zalo Học tập]` và `[Đóng]`. | Xóa dữ liệu form trong `sessionStorage`. Gửi event GA4 `lead_submitted` (không kèm PII). |
 | **4. Lỗi có thể thử lại (Recoverable Error)** | Mạng rớt hoặc API trả về lỗi 5xx / Timeout. | Hệ thống tự động thực hiện **3 lần gửi lại (Auto-retry)** với độ trễ lũy thừa (1s, 2s, 4s). Nếu cả 3 lần đều lỗi, hiển thị banner cảnh báo màu hổ phách/đỏ: *"Hệ thống tạm thời gián đoạn. Dữ liệu của bạn đã được lưu an toàn. Vui lòng nhấn Thử lại."* kèm nút nổi bật **[Thử lại ngay]**. | Giữ nguyên 100% dữ liệu đã điền trên form và trong `sessionStorage`. Người dùng không phải gõ lại một từ nào. |
 | **5. Từ chối âm thầm (Silent Reject)** | Honeypot bị điền hoặc dính Spam Pattern rõ rệt. | Hiển thị màn hình thành công như bình thường (để bot tưởng đã gửi thành công và dừng spam). | Không gọi API ghi vào Google Sheets, không gửi email. |
 
@@ -143,8 +143,8 @@ Theo quyết định đã duyệt, hệ thống thiết lập gửi email thông
 
 ### 1. Email xác nhận gửi Học viên
 - **Tiêu đề:** `[DataWithLy] Xác nhận yêu cầu tư vấn khóa học Data Analytics`
-- **Người gửi:** `DataWithLy by Hứa Thảo Ly <hientruongthmh@gmail.com>`
-- **Nội dung tóm tắt:** Lời chào từ Mentor Hứa Thảo Ly, xác nhận khóa học học viên đang quan tâm, cam kết thời gian liên hệ (trong 15-30 phút giờ hành chính), đính kèm cẩm nang lộ trình học DA cho người mới bắt đầu.
+- **Người gửi:** `DataWithLy by Hứa Thảo Lý <hientruongthmh@gmail.com>`
+- **Nội dung tóm tắt:** Lời chào từ Mentor Hứa Thảo Lý, xác nhận khóa học học viên đang quan tâm, cam kết thời gian liên hệ (trong 15-30 phút giờ hành chính), đính kèm cẩm nang lộ trình học DA cho người mới bắt đầu.
 
 ### 2. Email thông báo gửi Đội ngũ Tư vấn (Admin Alert)
 - **Tiêu đề:** `🔥 [LEAD MỚI] [DataWithLy] - [Tên học viên] - Khóa: [Tên khóa]`

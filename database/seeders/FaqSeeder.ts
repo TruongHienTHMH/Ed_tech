@@ -26,7 +26,7 @@ export class FaqSeeder implements Seeder<FAQ> {
         id: "faq-03",
         question: "Học viên có được hỗ trợ sau khi kết thúc khóa học không?",
         answer:
-          "Có! Học viên được tham gia cộng đồng Alumni Data trọn đời, được hỗ trợ giải đáp thắc mắc công việc thực tế, review CV/Portfolio xin việc và kết nối cơ hội tuyển dụng từ mạng lưới đối tác của Lydata.",
+          "Có! Học viên được tham gia cộng đồng Alumni Data trọn đời, được hỗ trợ giải đáp thắc mắc công việc thực tế, review CV/Portfolio xin việc và kết nối cơ hội tuyển dụng từ mạng lưới đối tác của LYDATA.",
         category: "Support",
         sortOrder: 3,
         isActive: true,

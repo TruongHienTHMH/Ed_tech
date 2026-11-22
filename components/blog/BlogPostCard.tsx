@@ -81,7 +81,7 @@ export default function BlogPostCard({ post, className = "" }: BlogPostCardProps
                 Ly
               </div>
               <span className="font-semibold text-neutral-800">
-                {post.authorName || "Hứa Thảo Ly"}
+                {post.authorName || "Hứa Thảo Lý"}
               </span>
             </div>
             <span>{formattedDate}</span>
