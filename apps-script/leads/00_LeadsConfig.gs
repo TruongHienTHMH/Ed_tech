@@ -24,7 +24,7 @@ var CONFIG = {
   },
 
   get CLIENT_NOTIFICATION_EMAILS() {
-    var defaultEmails = ["hientruongthmh@gmail.com"];
+    var defaultEmails = ["lyhuathithao@gmail.com"];
     var propEmail = getScriptProperty("CLIENT_NOTIFICATION_EMAILS", "");
     if (!propEmail) {
       propEmail = getScriptProperty("CLIENT_NOTIFICATION_EMAIL", "");
@@ -37,7 +37,7 @@ var CONFIG = {
   },
 
   get ZALO_CONTACT_URL() {
-    return getScriptProperty("ZALO_CONTACT_URL", "https://zalo.me/0934938431");
+    return getScriptProperty("ZALO_CONTACT_URL", "https://zalo.me/0769361960");
   },
 
   get TELEGRAM_BOT_TOKEN() {

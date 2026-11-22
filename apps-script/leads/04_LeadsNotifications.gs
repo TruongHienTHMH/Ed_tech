@@ -79,7 +79,7 @@ function sendLeadEmails(payload) {
       "</div>",
       "<p style='font-size: 13px; color: #6B7280;'>Nếu bạn có thắc mắc cần giải đáp gấp, bạn có thể chủ động bấm vào nút Zalo bên trên để được hỗ trợ tức thì.</p>",
       "<hr style='border: none; border-top: 1px solid #E5E7EB; margin: 20px 0;'>",
-      "<p style='margin: 0; font-size: 13px; color: #9CA3AF;'>Trân trọng,<br><strong style='color: #4B5563;'>Hứa Thảo Ly & Đội ngũ DataWithLy</strong><br>Hotline/Zalo: 0934 938 431</p>",
+      "<p style='margin: 0; font-size: 13px; color: #9CA3AF;'>Trân trọng,<br><strong style='color: #4B5563;'>Hứa Thảo Ly & Đội ngũ DataWithLy</strong><br>Hotline/Zalo: 0769 361 960</p>",
       "</div>",
       "</div>"
     ].join("");

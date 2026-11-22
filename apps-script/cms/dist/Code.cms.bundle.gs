@@ -3,7 +3,7 @@
  * DATAWITHLY CMS CONTENT MASTER - GOOGLE APPS SCRIPT BUNDLE (ALL-IN-ONE)
  * ==============================================================================
  * Phiên bản: 2.2.0 (DataWithLy CMS Content Master)
- * Thời gian đóng gói: 2026-11-22T04:59:17.511Z
+ * Thời gian đóng gói: 2026-11-22T06:22:00.312Z
  * ==============================================================================
  */
 
@@ -1315,7 +1315,7 @@ function setupPackagesPricingTab(ss) {
     sheet.appendRow([
       "pkg-thinking-single", "single-analytical-thinking", "Khóa Data Analytical Thinking",
       4500000, 3790000, "Khóa Lẻ",
-      "15 buổi học tư duy phân tích số liệu\nXây dựng Metrics Tree và Business Case Study\nThiết kế Dashboard trực quan cho C-Level\nHoàn thiện 01 Capstone Project chuẩn Portfolio",
+      "16 buổi học tư duy phân tích số liệu\nXây dựng Metrics Tree và Business Case Study\nThiết kế Dashboard trực quan cho C-Level\nHoàn thiện 01 Capstone Project chuẩn Portfolio",
       false, true, 3
     ]);
   }
