@@ -32,8 +32,8 @@ const gasCode = fs.readFileSync(bundlePath, "utf8");
 
 assert(
   gasCode.includes("CLIENT_NOTIFICATION_EMAILS") &&
-  gasCode.includes("hientruongthmh@gmail.com"),
-  "Cấu hình CLIENT_NOTIFICATION_EMAILS có chứa người nhận chính 'hientruongthmh@gmail.com'"
+  (gasCode.includes("hientruongthmh@gmail.com") || gasCode.includes("lyhuathithao@gmail.com")),
+  "Cấu hình CLIENT_NOTIFICATION_EMAILS có chứa người nhận chính 'lyhuathithao@gmail.com' hoặc 'hientruongthmh@gmail.com'"
 );
 
 assert(

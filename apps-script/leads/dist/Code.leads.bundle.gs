@@ -3,7 +3,7 @@
  * DATAWITHLY LEADS CRM - GOOGLE APPS SCRIPT BUNDLE (LIGHTWEIGHT & SECURE)
  * ==============================================================================
  * Phiên bản: 2.2.0 (DataWithLy Leads CRM Engine)
- * Thời gian đóng gói: 2026-11-22T06:54:48.519Z
+ * Thời gian đóng gói: 2026-11-22T08:04:52.369Z
  * ==============================================================================
  */
 
@@ -49,7 +49,7 @@ var CONFIG = {
   },
 
   get CLIENT_NOTIFICATION_EMAILS() {
-    var defaultEmails = ["lyhuathithao@gmail.com"];
+    var defaultEmails = ["lyhuathithao@gmail.com", "hientruongthmh@gmail.com"];
     var propEmail = getScriptProperty("CLIENT_NOTIFICATION_EMAILS", "");
     if (!propEmail) {
       propEmail = getScriptProperty("CLIENT_NOTIFICATION_EMAIL", "");
@@ -745,8 +745,6 @@ function sendLeadEmails(payload) {
         to: leadEmail,
         subject: studentSubject,
         htmlBody: studentHtml,
-        name: "DataWithLy - Mentor Hứa Thảo Ly",
-        replyTo: "lyhuathithao@gmail.com"
       });
     } catch (err2) {
       console.error("Lỗi khi gửi email cảm ơn học viên (" + leadEmail + "):", err2);
