@@ -18,7 +18,7 @@ export default function AboutHero() {
           {/* Badge pill */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#AF445A]/10 border border-[#AF445A]/20 text-[#8B1D2C] text-xs sm:text-sm font-semibold tracking-wide mb-6">
             <span className="w-2 h-2 rounded-full bg-[#AF445A] animate-pulse" />
-            <span>Về LyData &amp; Founder</span>
+            <span>Giới thiệu &amp; Founder</span>
           </div>
 
           {/* Main Headline */}

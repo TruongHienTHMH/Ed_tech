@@ -131,10 +131,7 @@ export default function LeadForm({
       if (defaultCourseId) {
         setFormData((prev) => ({
           ...prev,
-          interestedCourses:
-            prev.interestedCourses.length > 0
-              ? prev.interestedCourses
-              : getInitialCourses(defaultCourseId),
+          interestedCourses: getInitialCourses(defaultCourseId),
         }));
       }
       if (initialEmail) {
@@ -445,7 +442,7 @@ export default function LeadForm({
               {isSubmitting ? "Đang thử lại..." : "Thử lại ngay"}
             </button>
             <a
-              href="https://zalo.me/0934938431"
+              href="https://zalo.me/0769361960"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackClickZalo({ cta_location: "form_error_fallback" })}

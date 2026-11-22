@@ -42,17 +42,17 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#why-choose-us" className="hover:text-[#AF445A] transition-colors">
+                <Link href="/#why-choose-us" className="hover:text-[#AF445A] transition-colors">
                   Lộ trình học tập
                 </Link>
               </li>
               <li>
-                <Link href="#projects" className="hover:text-[#AF445A] transition-colors">
+                <Link href="/#projects" className="hover:text-[#AF445A] transition-colors">
                   Dự án học viên
                 </Link>
               </li>
               <li>
-                <Link href="#blogs" className="hover:text-[#AF445A] transition-colors">
+                <Link href="/blog" className="hover:text-[#AF445A] transition-colors">
                   Kiến thức & Blog
                 </Link>
               </li>
@@ -66,17 +66,17 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5 text-sm text-neutral-600">
               <li>
-                <Link href="#courses" className="hover:text-[#AF445A] transition-colors">
+                <Link href="/courses/sql-for-data-analytics" className="hover:text-[#AF445A] transition-colors">
                   SQL for Analytics
                 </Link>
               </li>
               <li>
-                <Link href="#courses" className="hover:text-[#AF445A] transition-colors">
+                <Link href="/courses/data-analytical-thinking" className="hover:text-[#AF445A] transition-colors">
                   Analytical Thinking
                 </Link>
               </li>
               <li>
-                <Link href="#combo-pricing" className="hover:text-[#AF445A] transition-colors font-medium text-[#784080]">
+                <Link href="/courses/end-to-end-analytics" className="hover:text-[#AF445A] transition-colors font-medium text-[#784080]">
                   Combo 2 Khóa (16% OFF)
                 </Link>
               </li>
@@ -91,11 +91,15 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm text-neutral-600">
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-[#AF445A] shrink-0" />
-                <span>(+84) 934 938 431</span>
+                <a href="tel:0769361960" className="hover:text-[#AF445A] transition-colors">
+                  (+84) 769 361 960
+                </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-[#AF445A] shrink-0" />
-                <span>vietds@gmail.com</span>
+                <a href="mailto:lyhuathithao@gmail.com" className="hover:text-[#AF445A] transition-colors">
+                  lyhuathithao@gmail.com
+                </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <MapPin className="w-4 h-4 text-[#AF445A] shrink-0" />

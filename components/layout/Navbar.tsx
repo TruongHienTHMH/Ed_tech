@@ -25,7 +25,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Trang chủ", href: "/", exact: true },
-  { label: "Về LyData", href: "/about", exact: false },
+  { label: "Giới thiệu", href: "/about", exact: false },
   { label: "Khóa học", href: "/courses", hasDropdown: true },
   { label: "Dự án học viên", href: "/#projects", exact: false },
   { label: "Đánh giá", href: "/#testimonials", exact: false },

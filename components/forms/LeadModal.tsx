@@ -45,7 +45,7 @@ export default function LeadModal({
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-[564px] max-h-[92vh] overflow-y-auto bg-white rounded-3xl p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-[564px] max-h-[92vh] overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden bg-white rounded-3xl p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -75,6 +75,7 @@ export default function LeadModal({
 
         {/* Modal Form Body */}
         <LeadForm
+          key={defaultCourseId}
           formId={`modal_form_${ctaLocation}`}
           ctaId={`modal_submit_${ctaLocation}`}
           defaultCourseId={defaultCourseId}

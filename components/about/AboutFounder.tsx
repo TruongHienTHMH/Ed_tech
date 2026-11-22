@@ -11,25 +11,25 @@ interface SocialLink {
 const SOCIAL_LINKS: SocialLink[] = [
   {
     name: "TikTok",
-    url: "https://www.tiktok.com/@lydata",
-    handle: "@lydata",
+    url: "https://www.tiktok.com/@datawithly",
+    handle: "@datawithly",
     iconPath: "/assets/icons/tiktok.svg",
   },
   {
     name: "Instagram",
-    url: "https://www.instagram.com/lydata",
-    handle: "@lydata",
+    url: "https://www.instagram.com/datawithly/",
+    handle: "@datawithly",
     iconPath: "/assets/icons/instagram.svg",
   },
   {
     name: "Threads",
-    url: "https://www.threads.net/@lydata",
-    handle: "@lydata",
+    url: "https://www.threads.com/@datawithly",
+    handle: "@datawithly",
     iconPath: "/assets/icons/threads.svg",
   },
   {
     name: "Facebook",
-    url: "https://www.facebook.com/lydata.vn",
+    url: "https://www.facebook.com/profile.php?id=61594436940087",
     handle: "Ly Data",
     iconPath: "/assets/icons/facebook.svg",
   },

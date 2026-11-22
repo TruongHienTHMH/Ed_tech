@@ -1,25 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
-import { Check, X } from "@/components/common/Icons";
 import { Button } from "@/components/common/Button";
 import { PackagePricing } from "@/lib/cms/types";
 import { seedPackages } from "@/data/seed-data";
-import { getFlatAttribution } from "@/lib/analytics/attribution";
+import { openLeadModal } from "@/components/forms/LeadModalManager";
 
 interface ComboPricingSectionProps {
   packages?: PackagePricing[];
 }
 
-export default function ComboPricingSection({ packages = seedPackages }: ComboPricingSectionProps) {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState("Combo End-to-End Analytics");
-  const [leadForm, setLeadForm] = useState({ name: "", email: "", phone: "", _hp: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+function resolveCourseIdFromPackage(pkg: PackagePricing): string {
+  const text = `${pkg.packageId || ""} ${pkg.id || ""} ${pkg.name || ""}`.toLowerCase();
+  if (text.includes("sql")) return "sql-for-data-analytics";
+  if (text.includes("thinking") || text.includes("dashboard")) return "data-analytical-thinking";
+  return "end-to-end-analytics";
+}
 
+export default function ComboPricingSection({ packages = seedPackages }: ComboPricingSectionProps) {
   const activePackages = packages && packages.length > 0 ? packages : seedPackages;
 
   // 1. Lọc các gói lẻ từ Google Sheets theo package_id chứa "single"
@@ -69,70 +68,6 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
       ? Math.round((savingsAmount / comboPackage.originalPrice) * 100)
       : 16;
 
-  const handleOpenRegister = (planName: string) => {
-    setSelectedPlan(planName);
-    setModalOpen(true);
-    setSuccess(false);
-    setErrorMessage(null);
-  };
-
-  const handleRegisterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!leadForm.name || !leadForm.phone) {
-      setErrorMessage("Vui lòng điền họ tên và số điện thoại.");
-      return;
-    }
-
-    setIsSubmitting(true);
-    setErrorMessage(null);
-    try {
-      const submissionId =
-        typeof crypto !== "undefined" && crypto.randomUUID
-          ? crypto.randomUUID()
-          : `lead_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-
-      const attr = getFlatAttribution();
-      const courseId = selectedPlan.toLowerCase().includes("combo")
-        ? "end-to-end-analytics"
-        : selectedPlan.toLowerCase().includes("sql")
-        ? "sql-for-data-analytics"
-        : "data-analytical-thinking";
-
-      const res = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          submission_id: submissionId,
-          name: leadForm.name.trim(),
-          email: leadForm.email.trim(),
-          phone: leadForm.phone.trim(),
-          course_id: courseId,
-          course_name: selectedPlan,
-          coaching_course: selectedPlan,
-          target_or_goal: `Đăng ký gói học: ${selectedPlan}`,
-          form_id: "combo_pricing_card",
-          cta_id: "combo_register_button",
-          _hp: leadForm._hp,
-          client_submitted_at: new Date().toISOString(),
-          ...attr,
-        }),
-      });
-
-      const data = await res.json();
-      if (res.ok && data.ok) {
-        setSuccess(true);
-      } else {
-        setErrorMessage(
-          data?.error?.message || "Đã xảy ra lỗi khi gửi thông tin. Vui lòng thử lại."
-        );
-      }
-    } catch {
-      setErrorMessage("Không thể kết nối đến máy chủ. Vui lòng kiểm tra lại mạng hoặc liên hệ Zalo.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <section id="combo-pricing" className="relative w-full bg-neutral-50/50 pt-16 lg:pt-24 pb-0 overflow-hidden">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 pb-16 lg:pb-20">
@@ -163,25 +98,33 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
 
               {/* 2 Separate Course Cards in 1 Row (Figma Frame 1000007460 / Node 12:1184 - Package ID: single-*) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
-                {displaySinglePackages.map((pkg, idx) => (
-                  <div
-                    key={pkg.id || idx}
-                    className="border border-[#784080]/40 rounded-[12px] p-3.5 sm:p-4 lg:p-[18px] flex flex-col justify-between bg-white shadow-xs cursor-pointer hover:border-[#784080] transition-colors"
-                    onClick={() => handleOpenRegister(pkg.name)}
-                  >
-                    <div>
-                      <h3 className="font-bold text-base sm:text-[18px] lg:text-[19px] text-[#2E2E2E] leading-snug mb-1">
-                        {pkg.name}
-                      </h3>
-                      <p className="text-xs sm:text-[13px] text-[#969696] font-medium leading-relaxed mb-3">
-                        {pkg.featuresList?.[0] || "Làm quen và xây dựng năng lực phân tích dữ liệu thực chiến."}
+                {displaySinglePackages.map((pkg, idx) => {
+                  const courseId = resolveCourseIdFromPackage(pkg);
+                  return (
+                    <div
+                      key={pkg.id || idx}
+                      className="border border-[#784080]/40 rounded-[12px] p-3.5 sm:p-4 lg:p-[18px] flex flex-col justify-between bg-white shadow-xs cursor-pointer hover:border-[#784080] transition-colors"
+                      onClick={() =>
+                        openLeadModal({
+                          courseId,
+                          ctaLocation: `combo_pricing_${courseId}`,
+                        })
+                      }
+                    >
+                      <div>
+                        <h3 className="font-bold text-base sm:text-[18px] lg:text-[19px] text-[#2E2E2E] leading-snug mb-1">
+                          {pkg.name}
+                        </h3>
+                        <p className="text-xs sm:text-[13px] text-[#969696] font-medium leading-relaxed mb-3">
+                          {pkg.featuresList?.[0] || "Làm quen và xây dựng năng lực phân tích dữ liệu thực chiến."}
+                        </p>
+                      </div>
+                      <p className="font-bold text-base sm:text-lg lg:text-[20px] bg-gradient-to-r from-[#784080] to-[#AF445A] bg-clip-text text-transparent">
+                        {pkg.salePrice ? `${pkg.salePrice.toLocaleString("vi-VN")}VNĐ` : "2,990,000VNĐ"}
                       </p>
                     </div>
-                    <p className="font-bold text-base sm:text-lg lg:text-[20px] bg-gradient-to-r from-[#784080] to-[#AF445A] bg-clip-text text-transparent">
-                      {pkg.salePrice ? `${pkg.salePrice.toLocaleString("vi-VN")}VNĐ` : "2,990,000VNĐ"}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Divider Line phân chia giữa 2 khóa học và 4 điểm Pain Points */}
@@ -199,7 +142,7 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
                 <div key={i} className="flex items-center gap-3">
                   <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shrink-0">
                     <Image
-                      src="/assets/figma/427717fb616f6e486ff78a45ffe62b030a5012e7.svg"
+                      src="/assets/decorations/verify.svg"
                       alt="icon"
                       width={26}
                       height={26}
@@ -311,7 +254,12 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
                 variant="primary"
                 size="lg"
                 fullWidth
-                onClick={() => handleOpenRegister("Combo End-to-End Analytics")}
+                onClick={() =>
+                  openLeadModal({
+                    courseId: "end-to-end-analytics",
+                    ctaLocation: "combo_pricing_combo_button",
+                  })
+                }
                 className="font-bold text-base sm:text-[18px] py-4 rounded-[8px] bg-gradient-to-r from-[#AF445A] to-[#784080] text-white shadow-md hover:opacity-95 active:scale-[0.99] transition-all cursor-pointer"
               >
                 Đăng kí combo ngay
@@ -331,103 +279,6 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
           className="w-full h-auto object-cover"
         />
       </div>
-
-      {/* Registration Modal Dialog */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
-            <button
-              onClick={() => setModalOpen(false)}
-              className="absolute top-5 right-5 text-neutral-400 hover:text-neutral-700 p-1.5 rounded-full hover:bg-neutral-100 transition-colors cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            {success ? (
-              <div className="text-center py-6">
-                <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Check className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold text-neutral-900 mb-2">Đăng ký thành công!</h3>
-                <p className="text-sm text-neutral-600 mb-6">
-                  Đội ngũ Ly Data sẽ liên hệ với bạn qua Zalo/Điện thoại trong vòng 15 phút để hỗ trợ hoàn tất lộ trình học.
-                </p>
-                <Button
-                  variant="primary"
-                  size="md"
-                  fullWidth
-                  onClick={() => setModalOpen(false)}
-                  className="font-semibold"
-                >
-                  Hoàn tất
-                </Button>
-              </div>
-            ) : (
-              <div>
-                <h3 className="text-xl font-bold text-neutral-900 mb-1">Đăng ký tư vấn khóa học</h3>
-                <p className="text-sm text-neutral-500 mb-5">
-                  Gói đã chọn: <strong className="text-[#AF445A]">{selectedPlan}</strong>
-                </p>
-
-                <form onSubmit={handleRegisterSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-neutral-700 mb-1">Họ và tên</label>
-                    <input
-                      type="text"
-                      required
-                      value={leadForm.name}
-                      onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
-                      placeholder="Nguyễn Văn A"
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-sm focus:outline-none focus:border-[#AF445A] focus:ring-1 focus:ring-[#AF445A]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-neutral-700 mb-1">Số điện thoại / Zalo</label>
-                    <input
-                      type="tel"
-                      required
-                      value={leadForm.phone}
-                      onChange={(e) => setLeadForm({ ...leadForm, phone: e.target.value })}
-                      placeholder="0912 345 678"
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-sm focus:outline-none focus:border-[#AF445A] focus:ring-1 focus:ring-[#AF445A]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-neutral-700 mb-1">Email nhận tài liệu</label>
-                    <input
-                      type="email"
-                      required
-                      value={leadForm.email}
-                      onChange={(e) => setLeadForm({ ...leadForm, email: e.target.value })}
-                      placeholder="email@gmail.com"
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-sm focus:outline-none focus:border-[#AF445A] focus:ring-1 focus:ring-[#AF445A]"
-                    />
-                  </div>
-
-                  {errorMessage && (
-                    <p className="text-xs text-rose-600 bg-rose-50 p-2.5 rounded-lg font-medium">{errorMessage}</p>
-                  )}
-
-                  <div className="pt-2">
-                    <Button
-                      type="submit"
-                      variant="primary"
-                      size="lg"
-                      fullWidth
-                      isLoading={isSubmitting}
-                      className="font-bold text-sm sm:text-base py-3"
-                    >
-                      Gửi thông tin đăng ký
-                    </Button>
-                  </div>
-                </form>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </section>
   );
 }
