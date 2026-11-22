@@ -4,9 +4,9 @@ import { Seeder } from "./types";
 export class SettingSeeder implements Seeder<SystemSettings> {
   run(): SystemSettings {
     return {
-      hotline: "(+84) 934 938 431",
-      zaloUrl: "https://zalo.me/0934938431",
-      contactEmail: "vietds@gmail.com",
+      hotline: "(+84) 769 361 960",
+      zaloUrl: "https://zalo.me/0769361960",
+      contactEmail: "lyhuathithao@gmail.com",
       announcementBar: "🎉 Khai giảng khóa mới ngày 26 tháng 10, 2026 - Giảm ngay 500.000đ khi đăng ký sớm!",
       revalidationUrl: "/api/revalidate",
     };

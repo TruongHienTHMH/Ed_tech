@@ -3,7 +3,7 @@
  * DATAWITHLY LEADS CRM - GOOGLE APPS SCRIPT BUNDLE (LIGHTWEIGHT & SECURE)
  * ==============================================================================
  * Phiên bản: 2.2.0 (DataWithLy Leads CRM Engine)
- * Thời gian đóng gói: 2026-11-22T04:59:17.518Z
+ * Thời gian đóng gói: 2026-11-22T06:22:00.317Z
  * ==============================================================================
  */
 
@@ -49,7 +49,7 @@ var CONFIG = {
   },
 
   get CLIENT_NOTIFICATION_EMAILS() {
-    var defaultEmails = ["hientruongthmh@gmail.com"];
+    var defaultEmails = ["lyhuathithao@gmail.com"];
     var propEmail = getScriptProperty("CLIENT_NOTIFICATION_EMAILS", "");
     if (!propEmail) {
       propEmail = getScriptProperty("CLIENT_NOTIFICATION_EMAIL", "");
@@ -62,7 +62,7 @@ var CONFIG = {
   },
 
   get ZALO_CONTACT_URL() {
-    return getScriptProperty("ZALO_CONTACT_URL", "https://zalo.me/0934938431");
+    return getScriptProperty("ZALO_CONTACT_URL", "https://zalo.me/0769361960");
   },
 
   get TELEGRAM_BOT_TOKEN() {
@@ -733,7 +733,7 @@ function sendLeadEmails(payload) {
       "</div>",
       "<p style='font-size: 13px; color: #6B7280;'>Nếu bạn có thắc mắc cần giải đáp gấp, bạn có thể chủ động bấm vào nút Zalo bên trên để được hỗ trợ tức thì.</p>",
       "<hr style='border: none; border-top: 1px solid #E5E7EB; margin: 20px 0;'>",
-      "<p style='margin: 0; font-size: 13px; color: #9CA3AF;'>Trân trọng,<br><strong style='color: #4B5563;'>Hứa Thảo Ly & Đội ngũ DataWithLy</strong><br>Hotline/Zalo: 0934 938 431</p>",
+      "<p style='margin: 0; font-size: 13px; color: #9CA3AF;'>Trân trọng,<br><strong style='color: #4B5563;'>Hứa Thảo Ly & Đội ngũ DataWithLy</strong><br>Hotline/Zalo: 0769 361 960</p>",
       "</div>",
       "</div>"
     ].join("");

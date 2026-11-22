@@ -279,7 +279,7 @@ function setupPackagesPricingTab(ss) {
     sheet.appendRow([
       "pkg-thinking-single", "single-analytical-thinking", "Khóa Data Analytical Thinking",
       4500000, 3790000, "Khóa Lẻ",
-      "15 buổi học tư duy phân tích số liệu\nXây dựng Metrics Tree và Business Case Study\nThiết kế Dashboard trực quan cho C-Level\nHoàn thiện 01 Capstone Project chuẩn Portfolio",
+      "16 buổi học tư duy phân tích số liệu\nXây dựng Metrics Tree và Business Case Study\nThiết kế Dashboard trực quan cho C-Level\nHoàn thiện 01 Capstone Project chuẩn Portfolio",
       false, true, 3
     ]);
   }
