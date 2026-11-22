@@ -24,7 +24,7 @@ var CONFIG = {
   },
 
   get CLIENT_NOTIFICATION_EMAILS() {
-    var defaultEmails = ["lyhuathithao@gmail.com", "hientruongthmh@gmail.com"];
+    var defaultEmails = ["lyhuathithao@gmail.com"];
     var propEmail = getScriptProperty("CLIENT_NOTIFICATION_EMAILS", "");
     if (!propEmail) {
       propEmail = getScriptProperty("CLIENT_NOTIFICATION_EMAIL", "");

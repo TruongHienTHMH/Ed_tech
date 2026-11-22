@@ -16,7 +16,7 @@ Tài liệu này cung cấp toàn bộ quy trình đưa dự án **DataWithLy (e
 | Property (Khóa) | Value (Giá trị) | Ghi chú |
 | :--- | :--- | :--- |
 | `SHARED_SECRET` | `96e77022e0f8c18c7da95b88b2be38810aa205e2c452e70cad121272bc3d03dd` | Mã bí mật xác thực giữa Next.js và Apps Script |
-| `CLIENT_NOTIFICATION_EMAILS` | `hientruongthmh@gmail.com` | Email nhận thông báo khi có Lead mới đăng ký |
+| `CLIENT_NOTIFICATION_EMAILS` | `lyhuathithao@gmail.com` | Email nhận thông báo khi có Lead mới đăng ký |
 | `ZALO_CONTACT_URL` | `https://zalo.me/0934938431` | Link nút Zalo trong email gửi học viên |
 
 5. Nhấn **Save script properties**.
@@ -89,4 +89,4 @@ Khi tạo Project trên Vercel (hoặc vào **Project Settings -> Environment Va
 - [ ] **Trang chủ (`/`)**: Khối Hero căn giữa chuẩn, responsive đẹp trên mobile, danh sách khóa học hiển thị đầy đủ hình ảnh.
 - [ ] **Trang chi tiết (`/courses/sql-for-data-analytics`)**: Lộ trình 12 buổi hiển thị trọn vẹn, không bị lỗi thiếu chương.
 - [ ] **Trang combo (`/courses/end-to-end-analytics`)**: Lộ trình 27 buổi kết hợp SQL & Dashboard hoạt động mượt mà.
-- [ ] **Đăng ký Lead (`LeadModal`)**: Điền thông tin thử nghiệm -> Đơn lưu vào Google Sheets -> Email thông báo gửi về `hientruongthmh@gmail.com` -> Email cảm ơn kèm link Zalo gửi về hộp thư học viên.
+- [ ] **Đăng ký Lead (`LeadModal`)**: Điền thông tin thử nghiệm -> Đơn lưu vào Google Sheets -> Email thông báo gửi về `lyhuathithao@gmail.com` -> Email cảm ơn kèm link Zalo gửi về hộp thư học viên.
