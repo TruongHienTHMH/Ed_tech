@@ -3,6 +3,15 @@ import { LeadService } from "@/lib/modules/leads/lead.service";
 import { LeadInputDto } from "@/lib/modules/leads/types";
 import { InMemoryRateLimiter } from "@/lib/security/rate-limiter";
 
+export async function GET() {
+  return NextResponse.json({
+    ok: true,
+    service: "DataWithLy Leads API",
+    message: "Tuyến đường tiếp nhận Lead hoạt động bình thường. Vui lòng sử dụng phương thức POST để gửi thông tin học viên.",
+    timestamp: new Date().toISOString(),
+  });
+}
+
 export async function POST(request: NextRequest) {
   try {
     // 1. IP Rate Limiting (BR-09: Tối đa 3 lần/phút/IP)
@@ -56,6 +65,9 @@ export async function POST(request: NextRequest) {
     };
 
     const httpStatus = statusMap[result.error?.code || ""] || 500;
+    if (httpStatus >= 500) {
+      console.warn(`[Route /api/leads] Trả về HTTP ${httpStatus} (${result.error?.code}):`, result.error?.message);
+    }
     return NextResponse.json(result, { status: httpStatus });
   } catch (error: unknown) {
     console.error("[Route Error /api/leads]:", (error as Error)?.message);

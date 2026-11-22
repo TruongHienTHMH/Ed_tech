@@ -3,7 +3,7 @@
  * DATAWITHLY LEADS CRM - GOOGLE APPS SCRIPT BUNDLE (LIGHTWEIGHT & SECURE)
  * ==============================================================================
  * Phiên bản: 2.2.0 (DataWithLy Leads CRM Engine)
- * Thời gian đóng gói: 2026-11-21T11:19:50.268Z
+ * Thời gian đóng gói: 2026-11-22T04:59:17.518Z
  * ==============================================================================
  */
 
@@ -77,6 +77,7 @@ var CONFIG = {
 };
 
 var COACHING_COURSES_LIST = [
+  "End-to-End Analytics with SQL & Dashboard",
   "SQL for Data Analytics",
   "Analytical Thinking & Data Analysis with Looker Studio",
   "Combo SQL & Looker Studio",
@@ -446,8 +447,17 @@ function doGet(e) {
 }
 
 function doPost(e) {
+  var activeConfig = typeof CONFIG !== "undefined" ? CONFIG : {
+    get SHARED_SECRET() {
+      try { return PropertiesService.getScriptProperties().getProperty("SHARED_SECRET") || ""; } catch(err) { return ""; }
+    },
+    LOCK_TIMEOUT_MS: 10000,
+    TELEGRAM_BOT_TOKEN: "",
+    TELEGRAM_CHAT_ID: ""
+  };
+
   var lock = LockService.getScriptLock();
-  var hasLock = lock.tryLock(CONFIG.LOCK_TIMEOUT_MS);
+  var hasLock = lock.tryLock(activeConfig.LOCK_TIMEOUT_MS || 10000);
 
   if (!hasLock) {
     return ContentService.createTextOutput(JSON.stringify({
@@ -460,7 +470,7 @@ function doPost(e) {
     var rawData = e.postData.contents;
     var payload = JSON.parse(rawData);
 
-    var configuredSecret = CONFIG.SHARED_SECRET;
+    var configuredSecret = activeConfig.SHARED_SECRET;
     if (configuredSecret && configuredSecret.trim() !== "" && payload.secret !== configuredSecret) {
       return ContentService.createTextOutput(JSON.stringify({
         ok: false,
@@ -505,7 +515,7 @@ function doPost(e) {
         updatedAt
       ]);
 
-      if (CONFIG.TELEGRAM_BOT_TOKEN && CONFIG.TELEGRAM_CHAT_ID) {
+      if (activeConfig.TELEGRAM_BOT_TOKEN && activeConfig.TELEGRAM_CHAT_ID) {
         sendTelegramNotification(payload);
       }
 
