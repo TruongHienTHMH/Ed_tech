@@ -35,6 +35,10 @@ interface FormDataState {
 }
 
 const AVAILABLE_COURSES = [
+  {
+    id: "end-to-end-analytics",
+    name: "End-to-End Analytics with SQL & Dashboard",
+  },
   { id: "sql-for-data-analytics", name: "SQL for Data Analytics" },
   {
     id: "data-analytical-thinking",
@@ -69,18 +73,15 @@ export default function LeadForm({
   const [initialPending] = useState(() => getInitialPendingData());
 
   const getInitialCourses = (courseId: string): string[] => {
+    if (courseId === "end-to-end-analytics") {
+      return ["End-to-End Analytics with SQL & Dashboard"];
+    }
     if (
       courseId === "data-analytical-thinking" ||
       courseId === "analytical-thinking-dashboard-design" ||
       courseId === "analytics-thinking"
     ) {
       return ["Analytical Thinking & Data Analysis with Looker Studio"];
-    }
-    if (courseId === "end-to-end-analytics") {
-      return [
-        "SQL for Data Analytics",
-        "Analytical Thinking & Data Analysis with Looker Studio",
-      ];
     }
     return ["SQL for Data Analytics"];
   };
@@ -223,8 +224,10 @@ export default function LeadForm({
     if (!submissionId) setSubmissionId(currentSubId);
 
     const primaryCourse = formData.interestedCourses.some((c) =>
-      c.toLowerCase().includes("sql")
+      c.toLowerCase().includes("end-to-end")
     )
+      ? "end-to-end-analytics"
+      : formData.interestedCourses.some((c) => c.toLowerCase().includes("sql"))
       ? "sql-for-data-analytics"
       : "data-analytical-thinking";
 

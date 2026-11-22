@@ -6,6 +6,7 @@ import { Check, X } from "@/components/common/Icons";
 import { Button } from "@/components/common/Button";
 import { PackagePricing } from "@/lib/cms/types";
 import { seedPackages } from "@/data/seed-data";
+import { getFlatAttribution } from "@/lib/analytics/attribution";
 
 interface ComboPricingSectionProps {
   packages?: PackagePricing[];
@@ -14,7 +15,7 @@ interface ComboPricingSectionProps {
 export default function ComboPricingSection({ packages = seedPackages }: ComboPricingSectionProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("Combo End-to-End Analytics");
-  const [leadForm, setLeadForm] = useState({ name: "", email: "", phone: "" });
+  const [leadForm, setLeadForm] = useState({ name: "", email: "", phone: "", _hp: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -90,6 +91,13 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
           ? crypto.randomUUID()
           : `lead_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
+      const attr = getFlatAttribution();
+      const courseId = selectedPlan.toLowerCase().includes("combo")
+        ? "end-to-end-analytics"
+        : selectedPlan.toLowerCase().includes("sql")
+        ? "sql-for-data-analytics"
+        : "data-analytical-thinking";
+
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -98,13 +106,15 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
           name: leadForm.name.trim(),
           email: leadForm.email.trim(),
           phone: leadForm.phone.trim(),
-          course_id: selectedPlan.toLowerCase().includes("combo")
-            ? "end-to-end-analytics"
-            : "sql-for-data-analytics",
+          course_id: courseId,
           course_name: selectedPlan,
+          coaching_course: selectedPlan,
+          target_or_goal: `Đăng ký gói học: ${selectedPlan}`,
           form_id: "combo_pricing_card",
           cta_id: "combo_register_button",
+          _hp: leadForm._hp,
           client_submitted_at: new Date().toISOString(),
+          ...attr,
         }),
       });
 
@@ -117,7 +127,7 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
         );
       }
     } catch {
-      setErrorMessage("Không thể kết nối đến máy chủ. Vui lòng kiểm tra lại mạng.");
+      setErrorMessage("Không thể kết nối đến máy chủ. Vui lòng kiểm tra lại mạng hoặc liên hệ Zalo.");
     } finally {
       setIsSubmitting(false);
     }
