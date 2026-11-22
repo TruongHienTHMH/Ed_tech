@@ -12,11 +12,11 @@ import AboutCta from "@/components/about/AboutCta";
 import { ContentFetcher } from "@/lib/cms/content-fetcher";
 
 export const metadata: Metadata = {
-  title: "Về LyData & Founder Hứa Thảo Ly | Đào Tạo Data Analyst Thực Chiến",
+  title: "Giới thiệu & Founder Hứa Thảo Ly | Đào Tạo Data Analyst Thực Chiến",
   description:
-    "Tìm hiểu về LyData và Founder Hứa Thảo Ly (Cựu Lead Data Analyst MoMo, Tiki, ACB). Phương pháp đào tạo Data Analyst dựa trên tư duy kinh doanh và dữ liệu Production thật.",
+    "Tìm hiểu Giới thiệu và Founder Hứa Thảo Ly (Cựu Lead Data Analyst MoMo, Tiki, ACB). Phương pháp đào tạo Data Analyst dựa trên tư duy kinh doanh và dữ liệu Production thật.",
   openGraph: {
-    title: "Về LyData & Founder Hứa Thảo Ly | Học Data Analyst Thực Chiến",
+    title: "Giới thiệu & Founder Hứa Thảo Ly | Học Data Analyst Thực Chiến",
     description:
       "LyData giúp bạn trở thành Data Analyst thực chiến thông qua tư duy bản chất, dữ liệu thật và kèm cặp 1-on-1 sát sao.",
     url: "https://lydata.vn/about",
