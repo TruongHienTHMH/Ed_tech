@@ -37,7 +37,7 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5 text-sm text-neutral-600">
               <li>
-                <Link href="#courses" className="hover:text-[#AF445A] transition-colors">
+                <Link href="/about" className="hover:text-[#AF445A] transition-colors">
                   Về chúng tôi
                 </Link>
               </li>

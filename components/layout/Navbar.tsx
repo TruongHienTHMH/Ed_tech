@@ -25,6 +25,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Trang chủ", href: "/", exact: true },
+  { label: "Về LyData", href: "/about", exact: false },
   { label: "Khóa học", href: "/courses", hasDropdown: true },
   { label: "Dự án học viên", href: "/#projects", exact: false },
   { label: "Đánh giá", href: "/#testimonials", exact: false },
@@ -87,13 +88,15 @@ export default function Navbar({
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-3 shrink-0 focus:outline-none">
           <Image
-            // src="/assets/mentor/logo-lydata-red.svg"
-            src="/assets/figma/14feb7923d10e1372397793711962f265e88f9a9.svg"
-            alt="DataWithLy Logo"
+            src={
+              isLight
+                ? "/assets/mentor/logo-lydata-red.svg"
+                : "/assets/figma/14feb7923d10e1372397793711962f265e88f9a9.svg"
+            }
+            alt="LyData Logo"
             width={140}
             height={46}
-            className={`h-9 sm:h-11 w-auto object-contain transition-all ${isLight ? "brightness-0" : ""
-              }`}
+            className="h-9 sm:h-11 w-auto object-contain transition-all"
             style={{ width: "auto" }}
             priority
           />
