@@ -541,9 +541,9 @@ export class SheetsClient {
     });
 
     const parsedSettings: SystemSettings = {
-      hotline: settingsMap.hotline || "0934 938 431",
-      zaloUrl: settingsMap.zalo_url || "https://zalo.me/0934938431",
-      contactEmail: settingsMap.contact_email || "vietds@gmail.com",
+      hotline: settingsMap.hotline || "0769361960",
+      zaloUrl: settingsMap.zalo_url || "https://zalo.me/0769361960",
+      contactEmail: settingsMap.contact_email || "lyhuathithao@gmail.com",
       announcementBar: settingsMap.announcement_bar || "",
       revalidationUrl: settingsMap.revalidation_url || "",
       raw: settingsMap,

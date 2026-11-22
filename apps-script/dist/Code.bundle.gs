@@ -3,7 +3,7 @@
  * DATAWITHLY CMS CONTENT MASTER - GOOGLE APPS SCRIPT BUNDLE (ALL-IN-ONE)
  * ==============================================================================
  * Phiên bản: 2.2.0 (DataWithLy CMS Content Master)
- * Thời gian đóng gói: 2026-11-22T06:22:00.312Z
+ * Thời gian đóng gói: 2026-11-22T06:54:48.511Z
  * ==============================================================================
  */
 
@@ -1471,7 +1471,7 @@ function setupSettingsTab(ss) {
   if (sheet.getLastRow() === 1) {
     sheet.appendRow(["hotline", "(+84) 934 938 431", "Số điện thoại hotline tư vấn tuyển sinh"]);
     sheet.appendRow(["zalo_url", "https://zalo.me/0934938431", "Đường dẫn chat Zalo tư vấn nhanh"]);
-    sheet.appendRow(["contact_email", "vietds@gmail.com", "Email nhận thư liên hệ"]);
+    sheet.appendRow(["contact_email", "lyhuathithao@gmail.com", "Email nhận thư liên hệ"]);
     sheet.appendRow(["announcement_bar", "Level Up Week: Learn More, Save 75%! - 4 days only! Get 70+ online SQL courses and save up to $450", "Thông báo trên thanh header"]);
     sheet.appendRow(["web_deploy_url", "https://ed-tech-mu-umber.vercel.app", "URL Website Production chính thức trên Vercel"]);
     sheet.appendRow(["active_revalidation_env", "PROD", "Môi trường đồng bộ kích hoạt (PROD hoặc LOCAL)"]);
