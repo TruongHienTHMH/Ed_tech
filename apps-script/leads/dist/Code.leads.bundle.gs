@@ -3,7 +3,7 @@
  * DATAWITHLY LEADS CRM - GOOGLE APPS SCRIPT BUNDLE (LIGHTWEIGHT & SECURE)
  * ==============================================================================
  * Phiên bản: 2.2.0 (DataWithLy Leads CRM Engine)
- * Thời gian đóng gói: 2026-11-22T06:22:00.317Z
+ * Thời gian đóng gói: 2026-11-22T08:07:23.269Z
  * ==============================================================================
  */
 
@@ -657,7 +657,7 @@ function doPost(e) {
  * MODULE 04: HỆ THỐNG THÔNG BÁO TỰ ĐỘNG LEADS CRM (LEADS NOTIFICATIONS)
  * ==============================================================================
  * 1. sendLeadEmails(payload): Gửi email 2 chiều:
- *    - Email 1: Thông báo tức thì tới ban tuyển sinh / Founder Ly Hứa (hientruongthmh@gmail.com).
+ *    - Email 1: Thông báo tức thì tới ban tuyển sinh / Founder Ly Hứa (lyhuathithao@gmail.com).
  *    - Email 2: Gửi thư cảm ơn học viên kèm mã liên kết Zalo tư vấn 1-1.
  * 2. sendTelegramNotification(payload): Bắn cảnh báo tức thì qua Telegram Bot (< 2s).
  * ==============================================================================
@@ -673,7 +673,7 @@ function sendLeadEmails(payload) {
   var courseId = payload.course_id || "general";
   var message = payload.message || payload.target_or_goal || "Không có";
   var timeStr = Utilities.formatDate(new Date(), "Asia/Ho_Chi_Minh", "dd/MM/yyyy HH:mm:ss");
-  var zaloUrl = CONFIG.ZALO_CONTACT_URL || "https://zalo.me/0934938431";
+  var zaloUrl = CONFIG.ZALO_CONTACT_URL || "https://zalo.me/0769361960";
 
   // --- 1. EMAIL GỬI CHO CLIENT (ADMIN / TUYỂN SINH) ---
   var clientRecipients = CONFIG.CLIENT_NOTIFICATION_EMAILS;
@@ -707,7 +707,9 @@ function sendLeadEmails(payload) {
         MailApp.sendEmail({
           to: emailTo,
           subject: clientSubject,
-          htmlBody: clientHtml
+          htmlBody: clientHtml,
+          name: "DataWithLy Leads System",
+          replyTo: leadEmail && leadEmail.indexOf("@") !== -1 ? leadEmail : "lyhuathithao@gmail.com"
         });
       } catch (err) {
         console.error("Lỗi khi gửi email thông báo cho Client (" + emailTo + "):", err);
@@ -742,7 +744,7 @@ function sendLeadEmails(payload) {
       MailApp.sendEmail({
         to: leadEmail,
         subject: studentSubject,
-        htmlBody: studentHtml
+        htmlBody: studentHtml,
       });
     } catch (err2) {
       console.error("Lỗi khi gửi email cảm ơn học viên (" + leadEmail + "):", err2);

@@ -32,8 +32,8 @@ const gasCode = fs.readFileSync(bundlePath, "utf8");
 
 assert(
   gasCode.includes("CLIENT_NOTIFICATION_EMAILS") &&
-  gasCode.includes("hientruongthmh@gmail.com"),
-  "Cấu hình CLIENT_NOTIFICATION_EMAILS có chứa người nhận chính 'hientruongthmh@gmail.com'"
+  gasCode.includes("lyhuathithao@gmail.com"),
+  "Cấu hình CLIENT_NOTIFICATION_EMAILS có chứa người nhận chính 'lyhuathithao@gmail.com'"
 );
 
 assert(
@@ -55,7 +55,7 @@ assert(
 );
 
 // 2. Mô phỏng tạo Email Payload & Kiểm tra logic sinh Email
-console.log("\n--- TEST 2: MÔ PHỎNG NỘI DUNG EMAIL GỬI CLIENT (hientruongthmh@gmail.com) ---");
+console.log("\n--- TEST 2: MÔ PHỎNG NỘI DUNG EMAIL GỬI CLIENT (lyhuathithao@gmail.com) ---");
 
 const mockLead = {
   submission_id: "SUB-EMAIL-QA-001",
@@ -73,7 +73,7 @@ const mockLead = {
 
 // Logic mô phỏng tương thích hoàn toàn với Google Apps Script MailApp
 function generateClientEmailPayload(record, adminRecipient) {
-  const recipient = adminRecipient || "hientruongthmh@gmail.com";
+  const recipient = adminRecipient || "lyhuathithao@gmail.com";
   const courseDisplay = record.course_name || record.course_id || "Chung";
   const leadName = record.name || "Khách hàng ẩn danh";
 
@@ -99,9 +99,9 @@ function generateClientEmailPayload(record, adminRecipient) {
   return { recipient, subject, htmlBody };
 }
 
-const clientEmail = generateClientEmailPayload(mockLead, "hientruongthmh@gmail.com");
+const clientEmail = generateClientEmailPayload(mockLead, "lyhuathithao@gmail.com");
 
-assert(clientEmail.recipient === "hientruongthmh@gmail.com", "Người nhận Client Email đúng là 'hientruongthmh@gmail.com'");
+assert(clientEmail.recipient === "lyhuathithao@gmail.com", "Người nhận Client Email đúng là 'lyhuathithao@gmail.com'");
 assert(clientEmail.subject.includes(mockLead.name), "Tiêu đề Email Client chứa tên học viên");
 assert(clientEmail.subject.includes(mockLead.course_name), "Tiêu đề Email Client chứa tên khóa học");
 assert(clientEmail.htmlBody.includes(mockLead.phone), "Nội dung Email Client chứa số điện thoại để gọi tư vấn");

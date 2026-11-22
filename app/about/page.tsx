@@ -4,7 +4,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FloatingCta from "@/components/layout/FloatingCta";
 import AboutHero from "@/components/about/AboutHero";
-import AboutStats from "@/components/about/AboutStats";
+import AboutExperience from "@/components/about/AboutExperience";
 import AboutFounder from "@/components/about/AboutFounder";
 import AboutCoreValues from "@/components/about/AboutCoreValues";
 import AboutJourney from "@/components/about/AboutJourney";
@@ -51,8 +51,8 @@ export default async function AboutPage() {
         {/* 1. Hero Introduction */}
         <AboutHero />
 
-        {/* 2. Key Metrics & Impact */}
-        <AboutStats />
+        {/* 2. Key Metrics & Experience Milestones */}
+        <AboutExperience />
 
         {/* 3. Founder Story & Career Milestones */}
         <AboutFounder />
