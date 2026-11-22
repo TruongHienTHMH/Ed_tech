@@ -23,10 +23,10 @@ export default function Footer() {
               />
             </Link>
             <p className="text-neutral-500 text-sm leading-relaxed max-w-sm">
-              DataWithLy - Nền tảng đào tạo Data Analytics thực chiến từ cơ bản đến nâng cao. Đồng hành cùng học viên từ tư duy, truy vấn dữ liệu đến xây dựng Portfolio chuyên nghiệp.
+              LYDATA - Nền tảng đào tạo Data Analytics thực chiến từ cơ bản đến nâng cao. Đồng hành cùng học viên từ tư duy, truy vấn dữ liệu đến xây dựng Portfolio chuyên nghiệp.
             </p>
             <div className="pt-2 text-xs text-neutral-400">
-              Mentor: Hứa Thảo Lý (Ex-Senior Data Analyst tại MoMo, Tiki, ACB)
+              Mentor: Hứa Thảo Lý (Senior Data Analyst tại MoMo, Tiki, ACB)
             </div>
           </div>
 
