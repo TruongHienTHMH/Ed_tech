@@ -73,9 +73,6 @@ Chị Ly hoặc biên tập viên chỉ cần sao chép mẫu sau và gửi cho 
 
 ## 3. Hướng dẫn Chi tiết 5 Nghiệp vụ Vận hành Cốt lõi
 
-> [!NOTE]
-> Bên dưới mỗi nghiệp vụ đã được bố trí sẵn khung **`[📷 ĐÍNH KÈM ẢNH CHỤP MÀN HÌNH TẠI ĐÂY]`**. Bạn có thể gửi ảnh qua khung chat để mình nhúng trực tiếp vào tài liệu!
-
 ---
 
 ### a. Đồng bộ Nội dung lên Website (1-Click Revalidation)
@@ -87,10 +84,7 @@ Chị Ly hoặc biên tập viên chỉ cần sao chép mẫu sau và gửi cho 
   4. Đợi 1 giây, màn hình hiển thị thông báo pop-up: *"✅ Đồng bộ thành công! Nội dung mới đã hiển thị trên web."*
   5. Mở website và bấm F5 để thấy ngay kết quả mới.
 
-```markdown
-> [📷 ĐÍNH KÈM ẢNH CHỤP MÀN HÌNH 1: Menu [🚀 DataWithLy CMS] > Nút '⚡ Đồng Bộ Lên Website' tại đây]
-```
-
+![Sync image](dong-bo.png)
 ---
 
 ### b. Thêm Khóa học Mới
@@ -110,27 +104,10 @@ Chị Ly hoặc biên tập viên chỉ cần sao chép mẫu sau và gửi cho 
   2. Thêm một dòng mới ở dưới cùng với các cột: `course_id`, `title`, `price_original`, `price_sale`, `total_sessions`, `badge`, `is_active` (`TRUE`).
   3. Bấm **`[🚀 DataWithLy CMS] > ⚡ Đồng Bộ Lên Website`**.
 
-```markdown
-> [📷 ĐÍNH KÈM ẢNH CHỤP MÀN HÌNH 2: Form Thêm Khóa Học Mới hoặc Giao diện Tab courses tại đây]
-```
+![alt text](image.png)
+![alt text](new-course-modal.png)
 
----
-
-### c. Thêm Lộ trình Học Mới (Learning Roadmap)
-* **Mục đích**: Thiết lập lộ trình từng bước (ví dụ: *Giai đoạn 1: Tư duy dữ liệu ➔ Giai đoạn 2: Kỹ năng SQL ➔ Giai đoạn 3: Dashboard & Storytelling ➔ Giai đoạn 4: Đồ án Production*).
-* **Các bước thao tác**:
-  1. Mở tab `courses`, tìm khóa học cần gắn lộ trình.
-  2. Tại các cột định vị lộ trình `learning_path` hoặc cấu trúc giai đoạn, nhập các mốc học tập theo thứ tự từ cơ bản đến nâng cao.
-  3. Kiểm tra xem các khóa học tiên quyết đã được liên kết đúng mã `course_id` hay chưa.
-  4. Bấm **`[🚀 DataWithLy CMS] > ⚡ Đồng Bộ Lên Website`**.
-
-```markdown
-> [📷 ĐÍNH KÈM ẢNH CHỤP MÀN HÌNH 3: Cấu trúc cột Lộ trình học trên Sheets & Khung hiển thị lộ trình trên Website tại đây]
-```
-
----
-
-### d. Quản trị Combo Package (Gói Học Tiết Kiệm)
+### c. Quản trị Combo Package (Gói Học Tiết Kiệm)
 * **Mục đích**: Bán theo gói combo nhiều khóa học với mức giá ưu đãi (ví dụ: *Combo Nhập Môn: SQL + PowerBI*, tiết kiệm 25%).
 * **Các bước thao tác**:
   1. Mở tab `packages`.
@@ -145,13 +122,11 @@ Chị Ly hoặc biên tập viên chỉ cần sao chép mẫu sau và gửi cho 
      * `is_active`: Đặt `TRUE` để cho phép đăng ký trên web.
   3. Bấm **`[🚀 DataWithLy CMS] > ⚡ Đồng Bộ Lên Website`**.
 
-```markdown
-> [📷 ĐÍNH KÈM ẢNH CHỤP MÀN HÌNH 4: Tab packages trên Sheets & Giao diện thẻ Combo trên trang Khóa học tại đây]
-```
+![alt text](package.png)
 
 ---
 
-### e. Quản trị Nội dung Đề cương Buổi học (Curriculum / Syllabus)
+### d. Quản trị Nội dung Đề cương Buổi học (Curriculum / Syllabus)
 * **Mục đích**: Cập nhật chi tiết từng chương học, từng buổi học và nội dung thực hành hiển thị trong Accordion trên trang chi tiết khóa học.
 * **Các bước thao tác**:
   1. Mở tab `curriculum`.
@@ -172,10 +147,8 @@ Chị Ly hoặc biên tập viên chỉ cần sao chép mẫu sau và gửi cho 
      > Khi đưa lên website, hệ thống sẽ tự động tách thành 3 dòng riêng biệt có icon tích xanh sắc nét.
   5. Bấm **`[🚀 DataWithLy CMS] > ⚡ Đồng Bộ Lên Website`**.
 
-```markdown
-> [📷 ĐÍNH KÈM ẢNH CHỤP MÀN HÌNH 5: Thao tác gõ Alt+Enter trong ô bullets tab curriculum & Giao diện Accordion trên Web tại đây]
-```
-
+![alt text](lo-trinh.png)
+![alt text](lo-trinh-modal.png)
 ---
 
 ## 4. Hướng dẫn Tiếp nhận & Xử lý Leads Học Viên
