@@ -110,10 +110,11 @@ export default async function CourseDetailPage({ params }: PageProps) {
               {/* 2. Điểm nổi bật */}
               <CourseFigmaHighlights />
 
-              {/* 3. Chương trình giảng dạy theo tuần (Date badges TH10 03) */}
+              {/* 3. Chương trình giảng dạy theo tuần (Chuẩn Figma 380:1502) */}
               <CourseFigmaWeekAccordion
                 modules={modules}
                 courseTitle={course.title}
+                courseSubtitle={course.description || course.tagline}
                 totalSessions={course.totalSessions}
                 practiceCount={course.practiceCount}
                 capstoneCount={course.capstoneCount}

@@ -125,23 +125,6 @@ export default function CourseHero({ course }: CourseHeroProps) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1F242F] via-transparent to-transparent opacity-80" />
               </div>
-
-              {/* Card Footer Information */}
-              <div className="p-5 sm:p-6 bg-[#252525]/90 backdrop-blur-md border-t border-white/10 flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-white/60">Mentor đứng lớp</p>
-                    <p className="text-base font-bold text-white">Hứa Thảo Lý</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs text-white/60">Kinh nghiệm thực chiến</p>
-                    <p className="text-sm font-semibold text-[#FFC934]">Ex-Senior DA MoMo, Tiki</p>
-                  </div>
-                </div>
-                <p className="text-xs text-white/70 leading-relaxed italic">
-                  “Khóa học tập trung rèn luyện tư duy đặt câu hỏi đúng với số liệu trước khi gõ dòng lệnh đầu tiên.”
-                </p>
-              </div>
             </div>
           </div>
         </div>
