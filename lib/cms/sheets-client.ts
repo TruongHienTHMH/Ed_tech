@@ -266,7 +266,7 @@ export class SheetsClient {
         const matched = String(row.duration || "").match(/\d+/);
         totalSessions = matched ? parseInt(matched[0], 10) : (slug === "end-to-end-analytics" || id === "end-to-end-analytics" ? 25 : slug === "sql-for-data-analytics" ? 12 : 16);
       }
-      const practiceCount = Number(row.practice_count || row.practicecount || (slug === "sql-for-data-analytics" ? 4 : slug === "data-analytical-thinking" ? 3 : 6));
+      const practiceCount = Number(row.practice_count || row.pratice_count || row.practicecount || (slug === "sql-for-data-analytics" ? 4 : slug === "data-analytical-thinking" ? 3 : 6));
       const capstoneCount = Number(row.capstone_count || row.capstonecount || (slug === "sql-for-data-analytics" ? 1 : 2));
 
       const level = (String(row.level || "Beginner") as Course["level"]);

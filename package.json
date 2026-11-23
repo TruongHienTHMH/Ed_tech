@@ -18,7 +18,8 @@
     "test:lead": "node scripts/test-lead-submission.js",
     "test:rate": "node scripts/test-rate-limiter.js",
     "test:email": "node scripts/test-email-notification.js",
-    "test": "npm run test:gas && npm run test:lead && npm run test:rate && npm run test:email",
+    "test:course-columns": "node scripts/test-course-columns-alignment.js",
+    "test": "npm run test:gas && npm run test:course-columns && npm run test:lead && npm run test:rate && npm run test:email",
     "db:reset": "node scripts/reset-db.js",
     "db:seed": "node scripts/seed-sheets.js",
     "db:fresh": "node scripts/reset-db.js && node scripts/seed-sheets.js",
@@ -28,7 +29,8 @@
     "@tanstack/react-query": "^5.107.1",
     "next": "16.3.4",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "sonner": "^2.0.8"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

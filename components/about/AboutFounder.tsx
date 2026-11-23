@@ -91,7 +91,7 @@ export default function AboutFounder() {
                 {/* Brand Logo Floating Badge */}
                 <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-[#EFE5E7] shadow-sm flex items-center gap-2">
                   <Image
-                    src="/assets/mentor/logo-LYDATA-red.svg"
+                    src="/assets/mentor/logo-lydata-red.svg"
                     alt="LYDATA Logo"
                     width={20}
                     height={20}

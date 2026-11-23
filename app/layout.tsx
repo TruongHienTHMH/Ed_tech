@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Toaster } from "sonner";
 import GoogleTagManager from "@/components/analytics/GoogleTagManager";
 import AttributionTracker from "@/components/analytics/AttributionTracker";
 import LeadModalManager from "@/components/forms/LeadModalManager";
 import QueryProvider from "@/components/providers/QueryProvider";
+import SyncNotifier from "@/components/common/SyncNotifier";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://datawithly.com"),
@@ -29,6 +31,8 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col font-sans bg-white text-[#252525] selection:bg-[#AF445A]/20 selection:text-[#AF445A]">
         <QueryProvider>
+          <Toaster richColors position="top-right" closeButton expand />
+          <SyncNotifier />
           <GoogleTagManager />
           <AttributionTracker />
           {children}

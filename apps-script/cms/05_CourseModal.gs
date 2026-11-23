@@ -77,36 +77,35 @@ function addCoursesBatchFromModal(courseList) {
     var inputRequirement = sanitizeFormula((item.input_requirement || item.inputRequirement || "").toString().trim());
 
     rowsToAdd.push([
-      sanitizeFormula(uniqueId),
-      sanitizeFormula(title),
-      sanitizeFormula(uniqueSlug),
-      sanitizeFormula(item.course_kind || item.courseKind || "Khóa học nổi bật"),
-      sanitizeFormula(item.tag || "SQL"),
-      sanitizeFormula(item.tagline || ""),
-      tuition,
-      originalTuition,
-      sanitizeFormula(totalSessions + " buổi"),
-      sanitizeFormula(item.level || "Beginner"),
-      sanitizeFormula(studyStyle),
-      studentEnrollment,
-      item.is_active === true || item.is_active === "true",
-      item.is_featured === true || item.is_featured === "true",
-      sortOrder,
-      sanitizeFormula(item.description || ""),
-      sanitizeFormula(item.cover_image_url || ""),
-      totalSessions,
-      practiceCount,
-      capstoneCount,
-      whoIsFor,
-      outcomes,
-      inputRequirement
+      sanitizeFormula(uniqueId),                                                  // 1: id
+      sanitizeFormula(title),                                                     // 2: title
+      sanitizeFormula(uniqueSlug),                                                // 3: slug
+      sanitizeFormula(item.course_kind || item.courseKind || "Khóa học nổi bật"), // 4: course_kind
+      sanitizeFormula(item.tag || "SQL"),                                         // 5: tag
+      sanitizeFormula(item.tagline || ""),                                        // 6: tagline
+      tuition,                                                                    // 7: tuition_vnd
+      originalTuition,                                                            // 8: original_tuition_vnd
+      sanitizeFormula(item.level || "Beginner"),                                  // 9: level
+      item.is_active === true || item.is_active === "true",                       // 10: is_active
+      item.is_featured === true || item.is_featured === "true",                   // 11: is_featured
+      sortOrder,                                                                  // 12: sort_order
+      sanitizeFormula(studyStyle),                                                // 13: study_style
+      studentEnrollment,                                                          // 14: student_enrollment
+      whoIsFor,                                                                   // 15: who_is_for
+      outcomes,                                                                   // 16: outcomes
+      inputRequirement,                                                           // 17: input_requirement
+      sanitizeFormula(item.description || ""),                                    // 18: description
+      totalSessions,                                                              // 19: total_sessions
+      practiceCount,                                                              // 20: pratice_count
+      capstoneCount,                                                              // 21: capstone_count
+      sanitizeFormula(item.cover_image_url || "")                                 // 22: cover_image_url
     ]);
 
     addedCourses.push({ id: uniqueId, title: title, slug: uniqueSlug });
   }
 
   var startRow = sheet.getLastRow() + 1;
-  sheet.getRange(startRow, 1, rowsToAdd.length, 23).setValues(rowsToAdd);
+  sheet.getRange(startRow, 1, rowsToAdd.length, 22).setValues(rowsToAdd);
 
   // Định dạng hiển thị VNĐ (Cột 7 và 8)
   sheet.getRange(startRow, 7, rowsToAdd.length, 2).setNumberFormat('#,##0 "đ"');
