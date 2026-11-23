@@ -1,83 +1,162 @@
-# Checklist Bàn Giao Kỹ Thuật (Technical Handover Checklist)
+# Tài Liệu Bàn Giao Kỹ Thuật & Cấu Trúc Mã Nguồn (Technical Architecture & Handover Checklist)
 
-- **Mục đích:** Đặc tả danh mục tài nguyên kỹ thuật, cấu hình biến môi trường, phân quyền tài khoản đám mây và quy trình chuyển đổi giữa môi trường Staging và Production khi bàn giao hệ thống **DataWithLy**.
-- **Đối tượng sử dụng:** TechLead, DevOps Engineer, Backend Developer tiếp quản
-- **Trạng thái:** Sẵn sàng nghiệm thu kỹ thuật
-- **Ngày cập nhật:** 2026-11-04
-- **Nguồn tham khảo:** 
-  - [Thiết kế API & Hợp đồng giao tiếp](../07-architecture/api-design.md)
-  - [Module Thiết lập kết nối (M00)](../03-modules/M00-setup-and-connectivity/README.md)
-  - [Sổ tay vận hành cho Khách hàng](client-operations-guide.md)
+- **Mục đích:** Đặc tả chi tiết toàn bộ danh mục mã nguồn làm việc với Google Sheets, các mô-đun quản trị quan trọng, cơ chế bộ nhớ đệm (ISR Caching), bảo mật chống spam và quy trình bảo trì cho lập trình viên tiếp quản hệ thống **DataWithLy**.
+- **Đối tượng sử dụng:** TechLead, DevOps Engineer, Fullstack / Backend Developer tiếp quản
+- **Trạng thái:** Sẵn sàng nghiệm thu kỹ thuật (Production Ready)
+- **Ngày cập nhật:** 2026-11-22
+- **Phiên bản hệ thống:** Next.js 16+ (App Router) & Google Apps Script Engine v2.2.0
 
 ---
 
-## 1. Danh mục Tài nguyên Đám mây & Quyền hạn (Cloud Accounts & IAM)
+## 1. Sơ Đồ Kiến Trúc Luồng Dữ Liệu (Data Flow Architecture)
 
-| Nền tảng | Tài nguyên / Dịch vụ | Quyền hạn yêu cầu | Ghi chú & Tài khoản quản trị |
-|---|---|---|---|
-| **Google Cloud Platform (GCP)** | Google Sheets API v4, Google Drive API | Service Account: `Editor` | Dùng để kết nối API đọc/ghi từ Next.js Server |
-| **Google Workspace** | File Google Sheets Quản trị & File Private Leads | Owner / Editor | Tài khoản Google của Founder Hứa Thảo Lý |
-| **Google Apps Script** | Webhook Gateway (`Code.gs`) | Web App: "Execute as Me", "Who has access: Anyone" | Nhận POST từ Next.js và chạy kịch bản gửi mail MailApp |
-| **Vercel / Cloudflare** | Next.js 15+ Hosting | Project Admin | Triển khai mã nguồn Frontend và Edge CDN |
-| **Domain Registrar** | Tên miền `datawithly.edu.vn` (hoặc `.vn` / `.com`) | DNS Management | Trỏ bản ghi A / CNAME về máy chủ Vercel |
+```mermaid
+flowchart TD
+    subgraph Google Cloud Ecosystem
+        GS_CMS["Google Sheets Master CMS\n(9 Tabs Dữ liệu)"]
+        GS_LEADS["Google Sheets Leads CRM\n(Tab leads Riêng tư)"]
+        GAS_CMS["Apps Script CMS Master WebApp\n(CSV Export / JSON API & Linter)"]
+        GAS_LEADS["Apps Script Leads CRM WebApp\n(MailApp Notification & Append Row)"]
+    end
 
----
+    subgraph Next.js 16 Core Engine
+        SC["lib/cms/sheets-client.ts\n(In-memory Cache 5m & Auto-retry)"]
+        CF["lib/cms/content-fetcher.ts\n(Domain Layer & Relational Joins)"]
+        API_LEADS["app/api/leads/route.ts\n(Honeypot + RateLimiter + Idempotency)"]
+        API_REVALIDATE["app/api/revalidate/route.ts\n(On-Demand ISR Purge Cache)"]
+    end
 
-## 2. Bảng Đối chiếu Biến Môi Trường (Environment Variables Matrix)
+    subgraph Frontend Pages & Components
+        PAGE_HOME["Trang Chủ (app/page.tsx)"]
+        PAGE_COURSE["Trang Khóa Học (app/courses/[slug]/page.tsx)"]
+        PAGE_ABOUT["Trang Giới Thiệu (app/about/page.tsx)"]
+        MODAL_LEAD["LeadModal Component (Tư vấn 1-on-1)"]
+    end
 
-| Tên biến môi trường | Môi trường Staging (Thử nghiệm) | Môi trường Production (Chính thức) | Ghi chú bảo mật |
-|---|---|---|---|
-| `NEXT_PUBLIC_APP_URL` | `https://staging.datawithly.edu.vn` | `https://datawithly.edu.vn` | URL công khai của website |
-| `GOOGLE_SHEETS_CONTENT_ID` | ID file Sheets Staging (Nội dung mẫu) | ID file Sheets Production (Chính thức) | Chỉ đọc công khai qua CSV/API |
-| `GOOGLE_SHEETS_LEADS_ID` | ID file Sheets Test Leads | ID file Sheets Private Leads thật | **Bảo mật tuyệt đối — Không lộ ra Client** |
-| `APPS_SCRIPT_LEADS_WEBHOOK_URL`| Webhook Staging Deployment URL | Webhook Production Deployment URL | Endpoint tiếp nhận lead |
-| `REVALIDATION_SECRET` | `staging_revalidate_secret_key_123` | Chuỗi ngẫu nhiên 64 ký tự an toàn | Xác thực Webhook làm mới ISR Cache |
-| `DATA_SOURCE_MODE` | `google_sheets` | `google_sheets` | Chế độ nguồn dữ liệu |
-| `ADMIN_ALERT_EMAILS` | `hien0934752432@gmail.com, hien.truong230214@vnuk.edu.vn` | Email tư vấn viên chính thức của Chị Ly | Nhận email cảnh báo lead mới |
+    GS_CMS <--> GAS_CMS
+    GAS_CMS -->|HTTPS Fetch / CSV Export| SC
+    SC --> CF
+    CF --> PAGE_HOME
+    CF --> PAGE_COURSE
+    CF --> PAGE_ABOUT
 
----
+    MODAL_LEAD -->|POST JSON Request| API_LEADS
+    API_LEADS -->|Forward Payload Webhook| GAS_LEADS
+    GAS_LEADS -->|Append Row| GS_LEADS
+    GAS_LEADS -->|Send Email| Gmail["Gmail Service (lyhuathithao@gmail.com)"]
 
-## 3. Quy trình Triển khai Google Apps Script Webhook
-
-Để đảm bảo webhook ghi nhận lead và menu `[DataWithLy CMS]` hoạt động chính xác:
-
-1. **Gắn mã nguồn vào file Sheets:**
-   - Mở file Google Sheets Quản trị.
-   - Vào menu **`Tiện ích mở rộng (Extensions) > Apps Script`**.
-   - Dán toàn bộ mã nguồn `Code.gs` và các file HTML Dialog từ thư mục `scripts/apps-script/`.
-2. **Cấu hình Quyền hạn (Permissions):**
-   - Bấm **Chạy (Run)** hàm `setupTriggers` lần đầu.
-   - Google sẽ hiển thị hộp thoại cấp quyền truy cập: Chọn tài khoản và chấp thuận các quyền: `Google Sheets`, `Gmail / MailApp`.
-3. **Triển khai Web App (Deploy as Web App):**
-   - Bấm nút **Triển khai (Deploy) > Tùy chọn triển khai mới (New Deployment)**.
-   - Chọn loại: **Ứng dụng web (Web App)**.
-   - Cấu hình bắt buộc:
-     - *Thực thi dưới dạng (Execute as):* **Tôi (Địa chỉ email của bạn - Me)**.
-     - *Người có quyền truy cập (Who has access):* **Bất kỳ ai (Anyone)**.
-   - Copy đường dẫn Web App URL thu được và gán vào biến môi trường `APPS_SCRIPT_LEADS_WEBHOOK_URL` trên Vercel.
+    GAS_CMS -->|POST Trigger On-Demand| API_REVALIDATE
+    API_REVALIDATE -->|revalidatePath layout| SC
+```
 
 ---
 
-## 4. Checklist Chuyển Đổi Môi Trường (Staging ➔ Production Promotion)
+## 2. Danh Mục Toàn Bộ Mã Nguồn Làm Việc Với Google Sheets
 
-Trước khi kích hoạt chính thức website phục vụ chiến dịch tuyển sinh:
+Dưới đây là chi tiết từng tệp mã nguồn trong dự án trực tiếp giao tiếp hoặc điều khiển dữ liệu Google Sheets:
 
-- [ ] **1. Kiểm tra File Sheets:** File Google Sheets Production đã có đủ 9 tab nội dung và 1 tab Private Leads theo đúng `references/database-schema.sql`.
-- [ ] **2. Kiểm tra Health Check:** Gọi `GET https://datawithly.edu.vn/api/health/sheets` qua Swagger UI `/api-docs` và nhận phản hồi `status: "healthy"` với độ trễ < 800ms.
-- [ ] **3. Thử nghiệm Form Tư Vấn End-to-End:**
-  - Điền một hồ sơ thử nghiệm trên Form trang chủ.
-  - Xác nhận hồ sơ xuất hiện ngay lập tức trong tab `leads` của Sheets Production.
-  - Xác nhận email cảm ơn được gửi đến hòm thư người đăng ký và email cảnh báo được gửi đến đội ngũ tư vấn.
-- [ ] **4. Thử nghiệm Chống Spam (Anti-Spam Verification):**
-  - Kiểm tra Honeypot: Giả lập điền trường `website_hp` -> Form phản hồi Silent Reject (không ghi dòng vào Sheets).
-  - Kiểm tra Rate Limit: Gửi 4 lần liên tiếp từ 1 IP -> Lần thứ 4 nhận mã lỗi 429.
-  - Kiểm tra Formula Sanitization: Điền thử chuỗi `=1+1` vào ô Họ tên -> Ghi nhận thành `'=1+1` an toàn.
-- [ ] **5. Thử nghiệm 1-Click Revalidate:**
-  - Chỉnh sửa một tiêu đề trên Sheets.
-  - Chọn menu `[DataWithLy CMS] > Đồng Bộ Lên Website`.
-  - Mở website xác nhận nội dung mới hiển thị ngay lập tức sau 1-2 giây.
-- [ ] **6. Bàn giao Tài khoản & Xóa bỏ Token Test:** Đổi biến môi trường `REVALIDATION_SECRET` sang chuỗi bí mật chính thức và lưu trữ vào trình quản lý mật khẩu của Founder.
+### 2.1. Tầng Next.js Backend & API Client
+
+| STT | Tệp mã nguồn | Đường dẫn file | Chức năng chi tiết |
+|:---:|:---|:---|:---|
+| 1 | **Sheets Core Client** | `lib/cms/sheets-client.ts` | **Trái tim giao tiếp dữ liệu**: <br/>• Tự động chuyển đổi giữa chế độ đọc Web App API JSON và Google Sheets CSV Export công khai.<br/>• Tích hợp bộ đệm In-Memory Cache (TTL: 5 phút) giảm tải 95% request đến Google API.<br/>• Cơ chế Snapshot Fallback: Khi mất mạng hoặc Google Sheets gián đoạn, tự động nạp dữ liệu từ `database/seeders/snapshot.json`, đảm bảo website **Zero-Downtime**.<br/>• Cơ chế Exponential Backoff Auto-Retry (tối đa 3 lần). |
+| 2 | **Content Fetcher** | `lib/cms/content-fetcher.ts` | **Tầng logic nghiệp vụ (Domain Layer)**: <br/>• Lọc bỏ các bản ghi `is_active === false`.<br/>• Ghép nối quan hệ (Relational Joins): Nối `curriculum` vào từng `course` thông qua `course_id`.<br/>• Tự động format hiển thị tiền tệ VNĐ (`3.500.000 đ`).<br/>• Quản trị các trường `total_sessions`, danh sách `packages` và `promotions`. |
+| 3 | **CMS Data API Route** | `app/api/cms/sheets-data/route.ts` | **REST API Endpoint**: Cung cấp toàn bộ payload dữ liệu CMS đã parse cho phía client-side hoặc preview tool. |
+| 4 | **Leads API Route** | `app/api/leads/route.ts` | **Endpoint tiếp nhận đơn Lead**: <br/>• Kiểm tra bẫy Honeypot `website_hp` (chống bot tự động submit).<br/>• Áp dụng Rate Limiter `lib/security/rate-limiter.ts` (tối đa 3 lần/phút/IP).<br/>• Chống trùng đơn (Idempotency Token UUID).<br/>• Chống chèn công thức độc hại (Formula Sanitization: thêm `'` trước `=`, `+`, `-`, `@`).<br/>• Chuyển tiếp payload an toàn sang Web App Apps Script. |
+| 5 | **Revalidate API Route** | `app/api/revalidate/route.ts` | **Endpoint xóa cache On-Demand ISR**: Tiếp nhận tín hiệu từ nút bấm trên Sheets của chị Ly, kích hoạt `revalidatePath('/', 'layout')` làm mới toàn bộ trang tĩnh ngay lập tức (< 1 giây). Bảo vệ bằng mã bí mật `REVALIDATION_SECRET`. |
+| 6 | **Health Check Sheets** | `app/api/health/sheets/route.ts` | **Health check endpoint**: Kiểm tra độ trễ (latency), trạng thái kết nối tới Google Sheets và phản hồi mã HTTP 200 (healthy) hoặc 503 (unhealthy). |
 
 ---
 
-[Quay lại Mục lục Bàn giao](README.md) | [Đến Sổ tay Khách hàng](client-operations-guide.md)
+### 2.2. Tầng Google Apps Script (Serverless trên Google Workspace)
+
+Mã nguồn được phân tách module rõ ràng trong thư mục `apps-script/` và được đóng gói tự động thành file bundle duy nhất bằng lệnh `npm run bundle:gas`:
+
+#### A. Phân hệ CMS Master (`apps-script/cms/`) ➔ Đóng gói thành `Code.cms.bundle.gs`:
+1. `00_Config.gs`: Khai báo hằng số hệ thống, Secret Key, môi trường kích hoạt (PROD / LOCAL).
+2. `01_MenuSetup.gs`: Thiết lập thanh menu `[🚀 DataWithLy CMS]` khi mở bảng tính.
+3. `02_RevalidationWebhook.gs`: Gọi Webhook sang Next.js server để xóa cache ISR.
+4. `03_CmsTablesSetup.gs`: Tự động khởi tạo cấu trúc và header cho 9 tabs dữ liệu.
+5. `04_DataLinter.gs`: Bộ kiểm tra tính toàn vẹn dữ liệu (Validate URL, học phí âm, slug trùng, email không hợp lệ).
+6. `05_ModalsController.gs`: Điều khiển hiển thị các popup HTML nhập liệu trên Sheets.
+7. `06_ModalsHtmlTemplates/`: Gồm 10 tệp giao diện nhập liệu cho từng tab: `CourseModal.html`, `CurriculumModal.html`, `PackageModal.html`, `MentorModal.html`, `PromotionsModal.html`, `TestimonialModal.html`, `FaqModal.html`, `SettingsModal.html`, `BlogModal.html`.
+
+#### B. Phân hệ Leads CRM (`apps-script/leads/`) ➔ Đóng gói thành `Code.leads.bundle.gs`:
+1. `00_LeadsConfig.gs`: Cấu hình danh sách email nhận thông báo: `lyhuathithao@gmail.com`.
+2. `01_LeadsDoPost.gs`: Nhận POST request từ Next.js API, ghi dòng dữ liệu mới vào tab `leads`.
+3. `04_LeadsNotifications.gs`: Kích hoạt dịch vụ `MailApp`:
+   * Email 1: Thông báo tức thì cho Mentor Ly kèm thông tin chi tiết của học viên.
+   * Email 2: Thư cảm ơn học viên kèm nút liên kết Zalo cá nhân của Mentor.
+
+---
+
+### 2.3. Tầng Helper Scripts & Testing CLI (`scripts/`)
+
+| Lệnh / File | Đường dẫn file | Công dụng |
+|:---|:---|:---|
+| `npm run bundle:gas` | `scripts/bundle-apps-script.js` | Tự động quét và đóng gói các module nhỏ trong `apps-script/` thành file bundle duy nhất sẵn sàng nạp vào Google Sheets. |
+| `npm run db:seed` | `scripts/seed-sheets.js` | Nạp toàn bộ dữ liệu mẫu từ snapshot lên file Google Sheets mới. |
+| `npm run db:reset` | `scripts/reset-db.js` | Xóa sạch dữ liệu mẫu và đưa bảng tính về trạng thái ban đầu. |
+| `npm test` | `package.json` | Chạy toàn bộ 4 bộ test tự động CI/CD (`test:gas`, `test:lead`, `test:rate`, `test:email`). |
+
+---
+
+## 3. Các Mã Nguồn & Kiến Trúc Quản Trị Quan Trọng
+
+### 3.1. Chiến Lược Bộ Nhớ Đệm (ISR Caching & Stale-While-Revalidate)
+* Để đạt điểm số Google PageSpeed 95+ và tải trang trong < 0.5 giây, tất cả các trang nội dung chính đều được cấu hình Incremental Static Regeneration (ISR):
+  * `app/page.tsx`: `export const revalidate = 300;` (5 phút)
+  * `app/courses/[slug]/page.tsx`: `export const revalidate = 300;`
+  * `app/about/page.tsx`: `export const revalidate = 300;`
+  * `app/blog/page.tsx`: `export const revalidate = 300;`
+* **On-Demand Purge**: Khi chị Ly bấm nút **`⚡ Đồng Bộ Lên Website`**, Google Apps Script sẽ gửi POST request kèm secret key sang `https://lydata.vn/api/revalidate`. Next.js sẽ kích hoạt:
+  ```typescript
+  revalidatePath("/", "layout");
+  ```
+  Lệnh này xóa toàn bộ cache tĩnh của website ngay lập tức mà không làm gián đoạn người dùng đang truy cập.
+
+---
+
+### 3.2. Kiến Trúc Bảo Mật & Chống Spam Đa Lớp (Anti-Spam Triad)
+Hệ thống tiếp nhận Lead được bảo vệ nghiêm ngặt chống lại tấn công DDOS, Spam bot và SQL/Formula Injection:
+1. **Honeypot Trap**: Trường `website_hp` ẩn đối với người dùng thật nhưng bot tự động sẽ điền. Nếu trường này có dữ liệu, hệ thống trả về mã 200 giả mạo (Silent Reject) và không ghi vào Sheets.
+2. **In-Memory Rate Limiter ([lib/security/rate-limiter.ts](file:///Users/hientruongthmh/Documents/Web_Jobs/ed_da_tech/lib/security/rate-limiter.ts))**: Chặn mỗi IP không được gửi quá 3 lần / phút. Lần thứ 4 sẽ nhận lỗi HTTP 429 Too Many Requests.
+3. **Idempotency UUID Token**: Mỗi form khi mở ra sẽ sinh một mã `submission_id` duy nhất dạng UUID. Nếu người dùng bấm liên tục nút gửi, chỉ có đơn đầu tiên được ghi nhận, loại bỏ 100% tình trạng trùng đơn.
+4. **Formula Sanitization**: Ngăn chặn tấn công khai thác mã độc trên bảng tính. Tất cả các chuỗi bắt đầu bằng `=`, `+`, `-`, `@` sẽ tự động được thêm dấu nháy đơn `'` ở đầu.
+
+---
+
+### 3.3. Ma Trận Biến Môi Trường (Environment Variables Matrix)
+
+| Tên biến môi trường | Môi trường Staging | Môi trường Production | Phạm vi & Ghi chú bảo mật |
+|:---|:---|:---|:---|
+| `NEXT_PUBLIC_APP_URL` | `https://staging.datawithly.edu.vn` | `https://lydata.vn` | **Client-Safe**: Dùng cho Canonical SEO và chia sẻ mạng xã hội. |
+| `GOOGLE_SHEETS_CONTENT_ID` | ID Google Sheets Staging | ID Google Sheets Production | **Server-Only**: ID bảng tính CMS Master đọc dữ liệu. |
+| `GOOGLE_SHEETS_LEADS_ID` | ID Google Sheets Leads Test | ID Google Sheets Leads Thật | **Server-Only (Tuyệt mật)**: Không bao giờ lộ ra trình duyệt. |
+| `APPS_SCRIPT_LEADS_WEBHOOK_URL`| URL Web App Apps Script Test | URL Web App Apps Script Thật | **Server-Only**: Endpoint tiếp nhận và gửi mail lead. |
+| `REVALIDATION_SECRET` | `staging_secret_key_123` | Chuỗi 64 ký tự ngẫu nhiên | **Server-Only**: Khóa bảo vệ API xóa cache. |
+| `CLIENT_NOTIFICATION_EMAILS`| `lyhuathithao@gmail.com` | `lyhuathithao@gmail.com` | **Server-Only**: Email nhận thông báo Lead mới. |
+
+---
+
+## 4. Hướng Dẫn Deploy & Chuyển Giao Quyền Sở Hữu (Ownership Transfer)
+
+### Bước 1: Bàn giao Bảng tính Google Sheets
+1. Mở file Google Sheets CMS Master & Leads CRM.
+2. Bấm nút **Chia sẻ (Share)** ở góc trên bên phải.
+3. Thêm tài khoản Google của chị Ly (`lyhuathithao@gmail.com`), phân quyền **Chủ sở hữu (Transfer Ownership)**.
+
+### Bước 2: Deploy lại Google Apps Script dưới quyền Chị Ly
+1. Dùng tài khoản của chị Ly mở file Sheets lên.
+2. Vào **Tiện ích mở rộng (Extensions) > Apps Script**.
+3. Bấm **Deploy (Triển khai) > New Deployment (Tùy chọn triển khai mới)**.
+4. Cấu hình:
+   * Loại: **Web App (Ứng dụng web)**.
+   * Execute as: **Tôi (lyhuathithao@gmail.com)**.
+   * Who has access: **Bất kỳ ai (Anyone)**.
+5. Bấm Deploy và tiến hành cấp quyền (Authorize) lần đầu tiên cho tài khoản của chị Ly.
+6. Copy Web App URL mới thu được và cập nhật vào biến `APPS_SCRIPT_LEADS_WEBHOOK_URL` trên Vercel.
+
+---
+
+[Quay lại Sổ tay Khách hàng](client-operations-guide.md) | [Quay lại Mục lục](README.md)
