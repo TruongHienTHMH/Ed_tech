@@ -306,16 +306,23 @@ function applySeedSnapshotToSpreadsheet(snapshot) {
         c.tagline || "",
         Number(c.tuitionVnd || c.tuition_vnd || 0),
         Number(c.originalTuitionVnd || c.original_tuition_vnd || 0),
-        c.duration || "8 tuần",
         c.level || "Beginner",
         c.isActive !== false,
         c.isFeatured === true,
         Number(c.sortOrder || c.sort_order || (i + 1)),
+        c.studyStyle || c.study_style || "Live Class",
+        Number(c.studentEnrollment || c.student_enrollment || 250),
+        c.whoIsFor || c.who_is_for || "",
+        c.outcomes || "",
+        c.inputRequirement || c.input_requirement || "",
         c.description || "",
+        Number(c.totalSessions || c.total_sessions || 12),
+        Number(c.practiceCount || c.practice_count || 4),
+        Number(c.capstoneCount || c.capstone_count || 1),
         c.coverImageUrl || c.cover_image_url || "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png"
       ];
     });
-    cSheet.getRange(2, 1, cRows.length, 15).setValues(cRows);
+    cSheet.getRange(2, 1, cRows.length, 22).setValues(cRows);
     cSheet.getRange(2, 7, cRows.length, 2).setNumberFormat('#,##0 "đ"');
     stats.courses = cRows.length;
   }
