@@ -4,10 +4,18 @@ import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 export default function SyncNotifier() {
-  const mountTimeRef = useRef<number>(Date.now());
-  const lastSeenRef = useRef<number>(Date.now());
+  const mountTimeRef = useRef<number | null>(null);
+  const lastSeenRef = useRef<number | null>(null);
 
   useEffect(() => {
+    const now = Date.now();
+    if (mountTimeRef.current === null) {
+      mountTimeRef.current = now;
+    }
+    if (lastSeenRef.current === null) {
+      lastSeenRef.current = now;
+    }
+
     // 1. Hàm kiểm tra trạng thái cập nhật từ server
     const checkSyncStatus = async () => {
       try {
@@ -19,12 +27,13 @@ export default function SyncNotifier() {
 
         const data = await res.json();
         const serverTimestamp = Number(data.lastRevalidatedAt);
+        const mountTime = mountTimeRef.current || now;
 
         // Nếu server có revalidation diễn ra SAU khi component được mount
         // và KHÁC với timestamp đã thông báo trước đó
         if (
           serverTimestamp &&
-          serverTimestamp > mountTimeRef.current &&
+          serverTimestamp > mountTime &&
           serverTimestamp !== lastSeenRef.current
         ) {
           lastSeenRef.current = serverTimestamp;

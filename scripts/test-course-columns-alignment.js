@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Test đối chiếu khớp 100% thứ tự cột giữa headers và rowsToAdd trong Course CMS
  */

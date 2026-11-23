@@ -120,7 +120,7 @@ export default function LeadForm({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [showOverloadQrModal, setShowOverloadQrModal] = useState<boolean>(false);
 
-  const [errorMessage, setErrorMessage] = useState<string>(() => {
+  const [, setErrorMessage] = useState<string>(() => {
     return initialPending
       ? "Bạn có biểu mẫu chưa hoàn tất gửi lần trước. Hãy bấm 'Thử lại ngay'."
       : "";

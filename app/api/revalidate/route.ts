@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Ghi nhận mốc thời gian revalidation để SyncNotifier client nhận biết tức thì
-    const syncTimestamp = recordRevalidation();
+    recordRevalidation();
     let freshData = null;
     try {
       const report = await ContentFetcher.getLiveSyncReport(true);
