@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { ChevronDown } from "@/components/common/Icons";
 import LeadForm from "@/components/forms/LeadForm";
+import { FAQ } from "@/lib/cms/types";
 
 interface FaqItem {
   q: string;
@@ -12,37 +13,54 @@ interface FaqItem {
 interface CourseFaqProps {
   courseId: string;
   courseTitle: string;
+  faqs?: FAQ[];
 }
 
-export default function CourseFaq({ courseId, courseTitle }: CourseFaqProps) {
+const defaultFaqs: FaqItem[] = [
+  {
+    q: "Khóa học có cam kết 'bao đỗ việc làm' tại các tập đoàn lớn không?",
+    a: "DataWithLy không đưa ra những lời hứa ảo như 'cam kết 100% bao đỗ Google/Grab/Shopee'. Việc trúng tuyển phụ thuộc vào nỗ lực, kỷ luật rèn luyện và kỹ năng của chính bạn. Chúng tôi cam kết đem lại kiến thức thực chiến chuẩn doanh nghiệp, trực tiếp Mentor Hứa Thảo Lý sửa CV 1-on-1, luyện phỏng vấn thử và kết nối cơ hội tuyển dụng trong mạng lưới đối tác đến khi bạn tự tin ứng tuyển.",
+  },
+  {
+    q: "Nếu bận đột xuất có được xem lại video bài giảng không?",
+    a: "Có! 100% các buổi học qua Zoom đều được ghi hình chất lượng cao (Full HD). Video recording và slide bài giảng sẽ được cập nhật lên hệ thống ngay sau buổi học để bạn xem lại bất cứ lúc nào và lưu trữ trọn đời.",
+  },
+  {
+    q: "Người chưa từng học lập trình hay toán cao cấp có theo kịp không?",
+    a: "Hoàn toàn theo kịp! Lộ trình được thiết kế đặc thù cho cả người mới bắt đầu từ số 0. Thay vì dạy cú pháp phức tạp hàn lâm, Mentor hướng dẫn tư duy phân tích bằng các câu hỏi thực tế trong kinh doanh, sau đó từng bước hướng dẫn cách gõ câu lệnh để lấy ra dữ liệu mong muốn.",
+  },
+  {
+    q: "Chính sách 'Học lại miễn phí' được áp dụng như thế nào?",
+    a: "Nếu vì lý do công việc đột xuất hoặc chưa nắm vững kiến thức sau khi kết thúc khóa học, bạn hoàn toàn có thể đăng ký học lại khóa tiếp theo hoàn toàn MIỄN PHÍ trong vòng 1 năm kể từ ngày khai giảng.",
+  },
+  {
+    q: "Lớp học tương tác ra sao và nếu gặp bài khó thì hỏi ai?",
+    a: "Lớp học trực tiếp qua Zoom với sĩ số giới hạn để đảm bảo Mentor có thể tương tác với từng học viên. Ngoài giờ học, bạn có nhóm hỗ trợ học tập riêng cùng Mentor và Trợ giảng, giải đáp bài tập và thắc mắc kỹ thuật 24/7.",
+  },
+  {
+    q: "Có chính sách chia nhỏ đợt thanh toán học phí không?",
+    a: "Có, DataWithLy hỗ trợ chia nhỏ học phí làm 2 đợt hoặc thanh toán qua thẻ tín dụng trả góp 0% lãi suất nhằm tạo điều kiện thuận lợi nhất cho học viên tham gia học tập.",
+  },
+];
+
+export default function CourseFaq({ courseId, courseTitle, faqs = [] }: CourseFaqProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  const faqs: FaqItem[] = [
-    {
-      q: "Khóa học có cam kết 'bao đỗ việc làm' tại các tập đoàn lớn không?",
-      a: "DataWithLy không đưa ra những lời hứa ảo như 'cam kết 100% bao đỗ Google/Grab/Shopee'. Việc trúng tuyển phụ thuộc vào nỗ lực, kỷ luật rèn luyện và kỹ năng của chính bạn. Chúng tôi cam kết đem lại kiến thức thực chiến chuẩn doanh nghiệp, trực tiếp Mentor Hứa Thảo Lý sửa CV 1-on-1, luyện phỏng vấn thử và kết nối cơ hội tuyển dụng trong mạng lưới đối tác đến khi bạn tự tin ứng tuyển.",
-    },
-    {
-      q: "Nếu bận đột xuất có được xem lại video bài giảng không?",
-      a: "Có! 100% các buổi học qua Zoom đều được ghi hình chất lượng cao (Full HD). Video recording và slide bài giảng sẽ được cập nhật lên hệ thống ngay sau buổi học để bạn xem lại bất cứ lúc nào và lưu trữ trọn đời.",
-    },
-    {
-      q: "Người chưa từng học lập trình hay toán cao cấp có theo kịp không?",
-      a: "Hoàn toàn theo kịp! Lộ trình được thiết kế đặc thù cho cả người mới bắt đầu từ số 0. Thay vì dạy cú pháp phức tạp hàn lâm, Mentor hướng dẫn tư duy phân tích bằng các câu hỏi thực tế trong kinh doanh, sau đó từng bước hướng dẫn cách gõ câu lệnh để lấy ra dữ liệu mong muốn.",
-    },
-    {
-      q: "Chính sách 'Học lại miễn phí' được áp dụng như thế nào?",
-      a: "Nếu vì lý do công việc đột xuất hoặc chưa nắm vững kiến thức sau khi kết thúc khóa học, bạn hoàn toàn có thể đăng ký học lại khóa tiếp theo hoàn toàn MIỄN PHÍ trong vòng 1 năm kể từ ngày khai giảng.",
-    },
-    {
-      q: "Lớp học tương tác ra sao và nếu gặp bài khó thì hỏi ai?",
-      a: "Lớp học trực tiếp qua Zoom với sĩ số giới hạn để đảm bảo Mentor có thể tương tác với từng học viên. Ngoài giờ học, bạn có nhóm hỗ trợ học tập riêng cùng Mentor và Trợ giảng, giải đáp bài tập và thắc mắc kỹ thuật 24/7.",
-    },
-    {
-      q: "Có chính sách chia nhỏ đợt thanh toán học phí không?",
-      a: "Có, DataWithLy hỗ trợ chia nhỏ học phí làm 2 đợt hoặc thanh toán qua thẻ tín dụng trả góp 0% lãi suất nhằm tạo điều kiện thuận lợi nhất cho học viên tham gia học tập.",
-    },
-  ];
+  // Ưu tiên nạp dữ liệu động từ Google Sheets (tab faqs), fallback sang defaultFaqs nếu chưa có dữ liệu
+  const displayFaqs: FaqItem[] = useMemo(() => {
+    if (faqs && faqs.length > 0) {
+      const activeFaqs = faqs.filter((f) => f.isActive !== false);
+      if (activeFaqs.length > 0) {
+        return activeFaqs
+          .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
+          .map((f) => ({
+            q: f.question,
+            a: f.answer,
+          }));
+      }
+    }
+    return defaultFaqs;
+  }, [faqs]);
 
   const toggleFaq = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -67,7 +85,7 @@ export default function CourseFaq({ courseId, courseTitle }: CourseFaqProps) {
             </div>
 
             <div className="space-y-3.5 mt-8">
-              {faqs.map((faq, idx) => {
+              {displayFaqs.map((faq, idx) => {
                 const isOpen = openIndex === idx;
 
                 return (

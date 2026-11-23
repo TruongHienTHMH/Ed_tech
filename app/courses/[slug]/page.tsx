@@ -12,7 +12,6 @@ import CourseFigmaInstructor from "@/components/course/CourseFigmaInstructor";
 import CourseFigmaStickySidebar from "@/components/course/CourseFigmaStickySidebar";
 import CourseMethodologyFlow from "@/components/course/CourseMethodologyFlow";
 import CourseOutcomes from "@/components/course/CourseOutcomes";
-import CourseComboUpsell from "@/components/course/CourseComboUpsell";
 import CourseFaq from "@/components/course/CourseFaq";
 import { CourseService } from "@/lib/services/course.service";
 import { ContentFetcher } from "@/lib/cms/content-fetcher";
@@ -80,11 +79,12 @@ export default async function CourseDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // Concurrent fetch for curriculum, student projects, and all courses
-  const [modules, studentProjects, allCourses] = await Promise.all([
+  // Concurrent fetch for curriculum, student projects, all courses, and FAQs from Google Sheets
+  const [modules, studentProjects, allCourses, faqs] = await Promise.all([
     CourseService.getCurriculumByCourseId(course.id, course.slug).catch(() => []),
     ContentFetcher.getStudentProjects().catch(() => []),
     CourseService.getCourses().catch(() => []),
+    ContentFetcher.getFaqs().catch(() => []),
   ]);
 
   return (
@@ -137,10 +137,10 @@ export default async function CourseDetailPage({ params }: PageProps) {
         </div>
 
         {/* 3. Câu hỏi thường gặp & Tư vấn 1:1 (Full Width Container 1200px) */}
-        <CourseFaq courseId={course.id} courseTitle={course.title} />
+        <CourseFaq courseId={course.id} courseTitle={course.title} faqs={faqs} />
 
         {/* 4. Combo Upsell Banner (Trọn bộ End-to-End) */}
-        <CourseComboUpsell course={course} />
+        {/* <CourseComboUpsell course={course} /> */}
       </main>
 
       {/* Global Footer */}

@@ -39,6 +39,13 @@ const COMPANY_LOGOS = [
     height: 40,
     imgClassName: "h-9 sm:h-10",
   },
+  {
+    name: "ThamMyLinhAnh",
+    src: "/assets/companies/linh-anh.jpeg",
+    width: 40,
+    height: 40,
+    imgClassName: "h-9 sm:h-10",
+  },
 ];
 
 export default function AlumniCompaniesSection() {
@@ -69,7 +76,7 @@ export default function AlumniCompaniesSection() {
       <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16 flex flex-col items-center">
         {/* Title */}
         <h2 className="font-heading font-bold text-2xl sm:text-3xl lg:text-[38px] leading-snug text-center text-white mb-10 sm:mb-12 max-w-[680px]">
-          Mentees đã trúng tuyển tại các công ty lớn
+          Học viên đã trúng tuyển tại các công ty lớn
         </h2>
 
         {/* Infinite Horizontal Auto-Marquee Slider (Figma Node 12:782) */}

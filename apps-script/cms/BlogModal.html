@@ -182,8 +182,11 @@
           '<div class="form-group col-1">' +
             '<label>Chuyên Mục Bài Viết <span class="required">*</span></label>' +
             '<select name="category">' +
+              '<option value="SQL">SQL (Phân tích cơ sở dữ liệu)</option>' +
+              '<option value="Dashboard">Dashboard (Trực quan hóa Power BI/Tableau)</option>' +
+              '<option value="Python">Python (Xử lý dữ liệu nâng cao)</option>' +
               '<option value="Sự nghiệp">Sự nghiệp (Career Path)</option>' +
-              '<option value="Kỹ thuật">Kỹ thuật (SQL / BI / Python)</option>' +
+              '<option value="Kỹ thuật">Kỹ thuật (Data Engineering / BI)</option>' +
               '<option value="Case Study">Case Study Thực Chiến</option>' +
               '<option value="Góc nhìn">Góc nhìn & Tư duy Dữ liệu</option>' +
             '</select>' +
@@ -191,6 +194,7 @@
           '<div class="form-group col-1">' +
             '<label>Tác Giả <span class="required">*</span></label>' +
             '<input type="text" name="author_name" required value="Hứa Thảo Lý" placeholder="Hứa Thảo Lý">' +
+            '<input type="hidden" name="author_avatar_url" value="/uploads/mentors/ly-hua.jpg">' +
           '</div>' +
         '</div>' +
         '<div class="form-group">' +
@@ -198,12 +202,16 @@
           '<input type="text" name="description" required placeholder="Mô tả ngắn gọn 1-2 câu hiển thị cho Google Search & mạng xã hội...">' +
         '</div>' +
         '<div class="form-group">' +
-          '<label>Đoạn Trích Dẫn (Excerpt) <span class="required">*</span></label>' +
-          '<textarea name="excerpt" rows="2" required placeholder="Đoạn văn mở đầu hiển thị trên thẻ bài viết trang danh sách..."></textarea>' +
+          '<label>Đoạn Trích Dẫn Mở Đầu (Excerpt / Sapo) <span class="required">*</span></label>' +
+          '<textarea name="excerpt" rows="2" required placeholder="Đoạn văn mở đầu hiển thị trên thẻ bài viết trang danh sách và đầu bài viết..."></textarea>' +
         '</div>' +
         '<div class="form-group">' +
-          '<label>Nội Dung Bài Viết (Hỗ trợ Markdown) <span class="required">*</span></label>' +
-          '<textarea name="content_markdown" rows="6" required placeholder="## 1. Mở đầu bài viết\nNội dung chi tiết phân tích...\n\n```sql\nSELECT * FROM data;\n```"></textarea>' +
+          '<label>Nội Dung Bài Viết (Hỗ trợ Markdown & Code) <span class="required">*</span></label>' +
+          '<textarea name="content_markdown" rows="8" required placeholder="## 1. Mở đầu bài viết\nNội dung chi tiết phân tích...\n\n```sql\nSELECT * FROM data;\n```"></textarea>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Ảnh Bìa Hero Bài Viết (Cover Image URL)</label>' +
+          '<input type="text" name="cover_image_url" placeholder="/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png hoặc URL ảnh công khai">' +
         '</div>' +
         '<div class="form-row" style="margin-top: 6px;">' +
           '<div class="form-group col-1">' +
@@ -275,15 +283,30 @@
           return;
         }
 
+        var contentMd = (card.querySelector('[name="content_markdown"]').value || "").trim();
+        if (!contentMd) {
+          showError("Vui lòng nhập nội dung cho bài viết #" + (i + 1) + ".");
+          card.querySelector('[name="content_markdown"]').focus();
+          return;
+        }
+
+        var desc = (card.querySelector('[name="description"]').value || "").trim() || excerpt;
+        var coverImg = (card.querySelector('[name="cover_image_url"]').value || "").trim() || "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png";
         var author = (card.querySelector('[name="author_name"]').value || "").trim() || "Hứa Thảo Lý";
+        var avatarUrl = (card.querySelector('[name="author_avatar_url"]').value || "").trim() || "/uploads/mentors/ly-hua.jpg";
         var publishedAt = card.querySelector('[name="published_at"]').value || new Date().toISOString().split("T")[0];
 
         blogList.push({
+          id: (card.querySelector('[name="id"]').value || "").trim(),
           title: title,
           slug: card.querySelector('[name="slug"]').value || slugify(title),
           category: card.querySelector('[name="category"]').value,
+          description: desc,
           excerpt: excerpt,
+          content_markdown: contentMd,
+          cover_image_url: coverImg,
           author_name: author,
+          author_avatar_url: avatarUrl,
           published_at: publishedAt,
           is_active: card.querySelector('[name="is_active"]').checked
         });
