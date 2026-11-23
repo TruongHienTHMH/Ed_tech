@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import { toast } from "sonner";
 import { getFlatAttribution } from "@/lib/analytics/attribution";
 import {
   trackFormStart,
@@ -116,6 +118,7 @@ export default function LeadForm({
     return initialPending ? "error" : "idle";
   });
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [showOverloadQrModal, setShowOverloadQrModal] = useState<boolean>(false);
 
   const [errorMessage, setErrorMessage] = useState<string>(() => {
     return initialPending
@@ -216,6 +219,7 @@ export default function LeadForm({
 
     setIsSubmitting(true);
     setErrorMessage("");
+    toast.loading("Đang gửi thông tin đăng ký tư vấn...", { id: "lead-submit-toast" });
 
     const currentSubId = submissionId || crypto.randomUUID();
     if (!submissionId) setSubmissionId(currentSubId);
@@ -283,6 +287,11 @@ export default function LeadForm({
 
       if (response.ok && result.ok) {
         setStatus("success");
+        toast.success("Đăng ký tư vấn thành công!", {
+          id: "lead-submit-toast",
+          description: `Cảm ơn ${formData.name}. Giảng viên Lý Data sẽ liên hệ trực tiếp qua số điện thoại/Zalo ${formData.phone} trong vòng 12 giờ làm việc.`,
+          duration: 6000,
+        });
         try {
           localStorage.removeItem(PENDING_LEAD_STORAGE_KEY);
         } catch {
@@ -312,6 +321,13 @@ export default function LeadForm({
 
       setStatus("error");
       setErrorMessage(errText);
+      setShowOverloadQrModal(true);
+
+      toast.error("Hệ thống đang quá tải", {
+        id: "lead-submit-toast",
+        description: "Bạn vui lòng liên hệ trực tiếp để nhận tư vấn sớm hơn nhé.",
+        duration: 8000,
+      });
 
       // Save pending payload to localStorage
       try {
@@ -420,36 +436,80 @@ export default function LeadForm({
         />
       </div>
 
-      {/* Form Error Alert */}
-      {status === "error" && (
+      {/* Card Pop-out QR Zalo khi server quá tải */}
+      {showOverloadQrModal && (
         <div
-          ref={errorRef}
-          tabIndex={-1}
-          aria-live="assertive"
-          className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm space-y-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
+          onClick={() => setShowOverloadQrModal(false)}
         >
-          <div className="flex items-start gap-2 font-semibold">
-            <span className="text-red-500 font-bold">⚠️</span>
-            <span>{errorMessage || "Có lỗi xảy ra khi gửi thông tin."}</span>
-          </div>
-          <div className="flex flex-wrap items-center gap-3 pt-1">
+          <div
+            className="relative w-full max-w-[420px] bg-white rounded-3xl p-6 sm:p-7 shadow-2xl text-center space-y-4 animate-in zoom-in-95 duration-200 border border-red-100"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Nút đóng */}
             <button
               type="button"
-              onClick={handleRetry}
-              disabled={isSubmitting}
-              className="px-4 py-1.5 rounded-lg bg-red-600 text-white font-semibold text-xs hover:bg-red-700 transition-colors shadow-xs active:scale-95 cursor-pointer"
+              onClick={() => setShowOverloadQrModal(false)}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-neutral-100 text-neutral-500 hover:bg-neutral-200 hover:text-neutral-900 flex items-center justify-center transition-colors cursor-pointer"
+              aria-label="Đóng thông báo"
             >
-              {isSubmitting ? "Đang thử lại..." : "Thử lại ngay"}
+              ✕
             </button>
-            <a
-              href="https://zalo.me/0769361960"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackClickZalo({ cta_location: "form_error_fallback" })}
-              className="text-xs text-[#8B1D2C] font-semibold underline hover:text-[#AF445A]"
-            >
-              Hoặc nhắn tin qua Zalo hỗ trợ &rarr;
-            </a>
+
+            {/* Icon cảnh báo & Thông điệp màu đỏ theo yêu cầu */}
+            <div className="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto text-2xl font-bold">
+              ⚠️
+            </div>
+
+            <div className="space-y-1.5">
+              <h4 className="font-heading font-bold text-lg text-red-600 leading-snug">
+                Hệ Thống Đang Quá Tải
+              </h4>
+              <p className="text-sm text-neutral-700 leading-relaxed font-medium">
+                Server đang quá tải bạn vui lòng liên hệ trực tiếp để nhận tư vấn sớm hơn nhé.
+              </p>
+            </div>
+
+            {/* Ảnh QR Zalo */}
+            <div className="py-1">
+              <div className="relative w-[210px] h-[210px] mx-auto rounded-2xl overflow-hidden border-2 border-red-100 shadow-md bg-neutral-50 flex items-center justify-center">
+                <Image
+                  src="/assets/mentor/qr-zalo.png"
+                  alt="QR Code Zalo Tư Vấn DataWithLy"
+                  width={210}
+                  height={210}
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </div>
+
+            {/* Nút bấm liên hệ Zalo & Thử lại */}
+            <div className="space-y-2 pt-1">
+              <a
+                href="https://zalo.me/0769361960"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackClickZalo({ cta_location: "form_error_qr_popout" })}
+                className="w-full py-3 px-4 rounded-xl bg-[#0068FF] text-white font-bold text-sm text-center flex items-center justify-center gap-2 hover:bg-[#0052cc] transition-colors shadow-md active:scale-98"
+              >
+                <span>Mở Zalo kết nối ngay (0769 361 960)</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setShowOverloadQrModal(false);
+                  handleRetry();
+                }}
+                disabled={isSubmitting}
+                className="w-full py-2.5 px-4 rounded-xl bg-neutral-100 text-neutral-700 font-semibold text-xs hover:bg-neutral-200 transition-colors"
+              >
+                {isSubmitting ? "Đang gửi lại..." : "Thử gửi lại form"}
+              </button>
+            </div>
           </div>
         </div>
       )}

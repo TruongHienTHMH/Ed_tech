@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag, revalidatePath } from "next/cache";
 import { ContentFetcher } from "@/lib/cms/content-fetcher";
+import { recordRevalidation } from "@/lib/cms/sync-state";
 
 export async function POST(request: NextRequest) {
   try {
@@ -61,7 +62,8 @@ export async function POST(request: NextRequest) {
       ContentFetcher.invalidateCache();
     }
 
-    // Tự động kéo dữ liệu mới nhất và log ra terminal ở local
+    // Ghi nhận mốc thời gian revalidation để SyncNotifier client nhận biết tức thì
+    const syncTimestamp = recordRevalidation();
     let freshData = null;
     try {
       const report = await ContentFetcher.getLiveSyncReport(true);
