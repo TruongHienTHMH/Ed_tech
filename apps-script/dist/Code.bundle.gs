@@ -3,7 +3,7 @@
  * DATAWITHLY CMS CONTENT MASTER - GOOGLE APPS SCRIPT BUNDLE (ALL-IN-ONE)
  * ==============================================================================
  * Phiên bản: 2.2.0 (DataWithLy CMS Content Master)
- * Thời gian đóng gói: 2026-11-23T02:33:47.914Z
+ * Thời gian đóng gói: 2026-11-23T10:56:54.017Z
  * ==============================================================================
  */
 
@@ -112,10 +112,7 @@ var CONFIG = {
 
   get WEB_DEPLOY_URL() {
     var url = getScriptProperty("WEB_DEPLOY_URL", "");
-    if (!url || url.indexOf("datawithly.edu.vn") !== -1) {
-      return "https://ed-tech-mu-umber.vercel.app";
-    }
-    return url;
+    return url ? url.replace(/\/+$/, "") : "";
   },
 
   get REVALIDATION_SECRET() {
@@ -126,7 +123,7 @@ var CONFIG = {
 
   get REVALIDATION_PROD_URL() {
     var explicitUrl = getScriptProperty("REVALIDATION_PROD_URL", "");
-    if (explicitUrl && explicitUrl.indexOf("datawithly.edu.vn") === -1) {
+    if (explicitUrl) {
       return explicitUrl;
     }
 
@@ -136,7 +133,7 @@ var CONFIG = {
       var secret = this.REVALIDATION_SECRET;
       return base + "/api/revalidate" + (secret ? ("?secret=" + encodeURIComponent(secret)) : "");
     }
-    return "https://ed-tech-mu-umber.vercel.app/api/revalidate";
+    return "";
   },
 
   get REVALIDATION_LOCAL_URL() {
@@ -152,6 +149,8 @@ var CONFIG = {
   },
 
   get REVALIDATION_URL() {
+    var explicitUrl = getScriptProperty("REVALIDATION_URL", "");
+    if (explicitUrl) return explicitUrl;
     return this.REVALIDATION_PROD_URL;
   },
 
@@ -1473,11 +1472,12 @@ function setupSettingsTab(ss) {
   var sheet = getOrCreateSheetWithHeader(ss, "settings", headers, "#1F242F");
 
   if (sheet.getLastRow() === 1) {
+    var initialDeployUrl = PropertiesService.getScriptProperties().getProperty("WEB_DEPLOY_URL") || "";
     sheet.appendRow(["hotline", "(+84) 934 938 431", "Số điện thoại hotline tư vấn tuyển sinh"]);
     sheet.appendRow(["zalo_url", "https://zalo.me/0934938431", "Đường dẫn chat Zalo tư vấn nhanh"]);
     sheet.appendRow(["contact_email", "lyhuathithao@gmail.com", "Email nhận thư liên hệ"]);
     sheet.appendRow(["announcement_bar", "Level Up Week: Learn More, Save 75%! - 4 days only! Get 70+ online SQL courses and save up to $450", "Thông báo trên thanh header"]);
-    sheet.appendRow(["web_deploy_url", "https://ed-tech-mu-umber.vercel.app", "URL Website Production chính thức trên Vercel"]);
+    sheet.appendRow(["web_deploy_url", initialDeployUrl, "URL Website Production chính thức (Lấy từ Script Properties)"]);
     sheet.appendRow(["active_revalidation_env", "PROD", "Môi trường đồng bộ kích hoạt (PROD hoặc LOCAL)"]);
   }
 }
@@ -2513,9 +2513,6 @@ function triggerWebsiteRevalidation() {
   if (webDeployUrl && webDeployUrl.indexOf("datawithly.edu.vn") !== -1) {
     webDeployUrl = "";
   }
-  if (!webDeployUrl) {
-    webDeployUrl = "https://ed-tech-mu-umber.vercel.app";
-  }
 
   // 2. Dọn dẹp ô cell cũ trong tab settings nếu có domain datawithly.edu.vn
   if (settingsSheet) {
@@ -2526,10 +2523,8 @@ function triggerWebsiteRevalidation() {
         var keyName = (sVals[r][0] || "").toString().trim().toLowerCase();
         var cellVal = (sVals[r][1] || "").toString().trim();
         if (cellVal.indexOf("datawithly.edu.vn") !== -1) {
-          if (keyName === "web_deploy_url") {
-            settingsSheet.getRange(r + 1, 2).setValue("https://ed-tech-mu-umber.vercel.app");
-          } else if (keyName === "revalidation_prod_url" || keyName === "revalidation_url") {
-            settingsSheet.getRange(r + 1, 2).setValue("https://ed-tech-mu-umber.vercel.app/api/revalidate");
+          if (keyName === "web_deploy_url" || keyName === "revalidation_prod_url" || keyName === "revalidation_url") {
+            settingsSheet.getRange(r + 1, 2).setValue("");
           }
         }
       }
@@ -2545,10 +2540,18 @@ function triggerWebsiteRevalidation() {
   } else {
     if (prodUrl && prodUrl.indexOf("http") === 0) {
       targetUrl = prodUrl;
-    } else {
+    } else if (webDeployUrl && webDeployUrl.indexOf("http") === 0) {
       targetUrl = webDeployUrl.replace(/\/+$/, "") + "/api/revalidate";
+    } else {
+      ui.alert(
+        "⚠️ Chưa Cấu Hình URL Website",
+        "Hệ thống chưa tìm thấy cấu hình WEB_DEPLOY_URL hoặc REVALIDATION_URL trong Script Properties.\n\n" +
+        "👉 Vui lòng vào thanh menu: 🚀 DataWithLy CMS ➔ 🔗 Cài Đặt URL Website để lưu URL tên miền (ví dụ: https://datawithly.com).",
+        ui.ButtonSet.OK
+      );
+      return;
     }
-    envName = "🚀 PRODUCTION WEBSITE (" + webDeployUrl + ")";
+    envName = "🚀 PRODUCTION WEBSITE (" + (webDeployUrl || targetUrl) + ")";
   }
 
   // 3. Gắn kèm mã bí mật REVALIDATION_SECRET nếu chưa có trong URL
@@ -2685,8 +2688,8 @@ function promptSetWebDeployUrl() {
   var currentUrl = PropertiesService.getScriptProperties().getProperty("WEB_DEPLOY_URL") || "";
 
   var prompt = ui.prompt(
-    "🔗 Cài Đặt URL Website Vercel / Production",
-    "Nhập đường dẫn trang web đang chạy (ví dụ: https://ed-tech-mu-umber.vercel.app):\n" +
+    "🔗 Cài Đặt URL Website Production",
+    "Nhập đường dẫn website chính thức (ví dụ: https://datawithly.com):\n" +
     "(Hiện tại: " + (currentUrl || "Chưa cấu hình") + ")",
     ui.ButtonSet.OK_CANCEL
   );

@@ -56,10 +56,7 @@ var CONFIG = {
 
   get WEB_DEPLOY_URL() {
     var url = getScriptProperty("WEB_DEPLOY_URL", "");
-    if (!url || url.indexOf("datawithly.edu.vn") !== -1) {
-      return "https://ed-tech-mu-umber.vercel.app";
-    }
-    return url;
+    return url ? url.replace(/\/+$/, "") : "";
   },
 
   get REVALIDATION_SECRET() {
@@ -70,7 +67,7 @@ var CONFIG = {
 
   get REVALIDATION_PROD_URL() {
     var explicitUrl = getScriptProperty("REVALIDATION_PROD_URL", "");
-    if (explicitUrl && explicitUrl.indexOf("datawithly.edu.vn") === -1) {
+    if (explicitUrl) {
       return explicitUrl;
     }
 
@@ -80,7 +77,7 @@ var CONFIG = {
       var secret = this.REVALIDATION_SECRET;
       return base + "/api/revalidate" + (secret ? ("?secret=" + encodeURIComponent(secret)) : "");
     }
-    return "https://ed-tech-mu-umber.vercel.app/api/revalidate";
+    return "";
   },
 
   get REVALIDATION_LOCAL_URL() {
@@ -96,6 +93,8 @@ var CONFIG = {
   },
 
   get REVALIDATION_URL() {
+    var explicitUrl = getScriptProperty("REVALIDATION_URL", "");
+    if (explicitUrl) return explicitUrl;
     return this.REVALIDATION_PROD_URL;
   },
 

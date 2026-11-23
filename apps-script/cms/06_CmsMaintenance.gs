@@ -446,9 +446,6 @@ function triggerWebsiteRevalidation() {
   if (webDeployUrl && webDeployUrl.indexOf("datawithly.edu.vn") !== -1) {
     webDeployUrl = "";
   }
-  if (!webDeployUrl) {
-    webDeployUrl = "https://ed-tech-mu-umber.vercel.app";
-  }
 
   // 2. Dọn dẹp ô cell cũ trong tab settings nếu có domain datawithly.edu.vn
   if (settingsSheet) {
@@ -459,10 +456,8 @@ function triggerWebsiteRevalidation() {
         var keyName = (sVals[r][0] || "").toString().trim().toLowerCase();
         var cellVal = (sVals[r][1] || "").toString().trim();
         if (cellVal.indexOf("datawithly.edu.vn") !== -1) {
-          if (keyName === "web_deploy_url") {
-            settingsSheet.getRange(r + 1, 2).setValue("https://ed-tech-mu-umber.vercel.app");
-          } else if (keyName === "revalidation_prod_url" || keyName === "revalidation_url") {
-            settingsSheet.getRange(r + 1, 2).setValue("https://ed-tech-mu-umber.vercel.app/api/revalidate");
+          if (keyName === "web_deploy_url" || keyName === "revalidation_prod_url" || keyName === "revalidation_url") {
+            settingsSheet.getRange(r + 1, 2).setValue("");
           }
         }
       }
@@ -478,10 +473,18 @@ function triggerWebsiteRevalidation() {
   } else {
     if (prodUrl && prodUrl.indexOf("http") === 0) {
       targetUrl = prodUrl;
-    } else {
+    } else if (webDeployUrl && webDeployUrl.indexOf("http") === 0) {
       targetUrl = webDeployUrl.replace(/\/+$/, "") + "/api/revalidate";
+    } else {
+      ui.alert(
+        "⚠️ Chưa Cấu Hình URL Website",
+        "Hệ thống chưa tìm thấy cấu hình WEB_DEPLOY_URL hoặc REVALIDATION_URL trong Script Properties.\n\n" +
+        "👉 Vui lòng vào thanh menu: 🚀 DataWithLy CMS ➔ 🔗 Cài Đặt URL Website để lưu URL tên miền (ví dụ: https://datawithly.com).",
+        ui.ButtonSet.OK
+      );
+      return;
     }
-    envName = "🚀 PRODUCTION WEBSITE (" + webDeployUrl + ")";
+    envName = "🚀 PRODUCTION WEBSITE (" + (webDeployUrl || targetUrl) + ")";
   }
 
   // 3. Gắn kèm mã bí mật REVALIDATION_SECRET nếu chưa có trong URL
@@ -618,8 +621,8 @@ function promptSetWebDeployUrl() {
   var currentUrl = PropertiesService.getScriptProperties().getProperty("WEB_DEPLOY_URL") || "";
 
   var prompt = ui.prompt(
-    "🔗 Cài Đặt URL Website Vercel / Production",
-    "Nhập đường dẫn trang web đang chạy (ví dụ: https://ed-tech-mu-umber.vercel.app):\n" +
+    "🔗 Cài Đặt URL Website Production",
+    "Nhập đường dẫn website chính thức (ví dụ: https://datawithly.com):\n" +
     "(Hiện tại: " + (currentUrl || "Chưa cấu hình") + ")",
     ui.ButtonSet.OK_CANCEL
   );
