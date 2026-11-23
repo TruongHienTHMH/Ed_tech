@@ -20,7 +20,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Thực hành truy vấn dữ liệu với SELECT, DISTINCT, COUNT, LIMIT.",
           "Lọc dữ liệu bằng WHERE, AND, OR, NOT, IN, BETWEEN, LIKE.",
           "Hiểu và xử lý giá trị NULL trong các tình huống thực tế."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 5,
         sortOrder: 1,
@@ -40,7 +40,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Thực hành các hàm tổng hợp như COUNT, SUM, AVG, MIN, MAX.",
           "Gom nhóm và lọc dữ liệu với GROUP BY và HAVING.",
           "Làm quen với các hàm tích hợp phổ biến như Date Functions, String Functions và Mathematical Functions."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 4,
         sortOrder: 2,
@@ -59,7 +59,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Tìm hiểu Primary Key và Foreign Key để hiểu mối quan hệ giữa các bảng.",
           "Thực hành JOIN và các loại JOIN phổ biến trong SQL.",
           "Kết hợp dữ liệu bằng UNION"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 3,
@@ -77,7 +77,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
         bulletPoints: [
           "Luyện tập với các bài tập SQL theo nhiều mức độ từ cơ bản đến nâng cao.",
           "Thực hành các bài toán mô phỏng tình huống thực tế trong doanh nghiệp."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 2,
         sortOrder: 4,
@@ -96,7 +96,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Tìm hiểu Subquery và các cách ứng dụng trong truy vấn SQL.",
           "Thực hành Common Table Expressions (CTE) để tổ chức câu lệnh hiệu quả.",
           "So sánh Subquery và CTE, đồng thời biết khi nào nên sử dụng từng kỹ thuật trong thực tế."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 5,
@@ -114,7 +114,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
         bulletPoints: [
           "Tìm hiểu nhóm lệnh DDL (Data Definition Language) như CREATE, ALTER, DROP, TRUNCATE để tạo và quản lý cấu trúc Database.",
           "Thực hành nhóm lệnh DML (Data Manipulation Language) như INSERT, UPDATE, DELETE để thêm, chỉnh sửa và xóa dữ liệu."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 2,
         sortOrder: 6,
@@ -132,7 +132,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
         bulletPoints: [
           "Hiểu khái niệm Window Function và lý do nên sử dụng trong thực tế.",
           "Thực hành các nhóm hàm phổ biến như Ranking, Aggregate và Analytical Functions."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 2,
         sortOrder: 7,
@@ -151,7 +151,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Nhận diện các dạng dữ liệu lộn xộn, thiếu hoặc không nhất quán.",
           "Thực hành các kỹ thuật làm sạch và chuẩn hóa dữ liệu bằng SQL.",
           "Áp dụng các phương pháp xử lý dữ liệu phổ biến trong các bài toán phân tích thực tế"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 8,
@@ -170,7 +170,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Hiểu khái niệm Cohort Analysis và các loại Cohort phổ biến.",
           "Tìm hiểu lợi ích và các trường hợp ứng dụng trong doanh nghiệp.",
           "Thực hành các bước xây dựng và phân tích Cohort Analysis bằng SQL."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 9,
@@ -189,7 +189,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Hiểu RFM: Recency, Frequency & Monetary.",
           "Tính toán các chỉ số RFM bằng SQL",
           "Phân nhóm người dùng theo RFM, và phân tích đặc điểm & hành vi từng nhóm người dùng."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 10,
@@ -207,7 +207,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
         bulletPoints: [
           "Luyện tập với các bài tập SQL theo nhiều mức độ từ cơ bản đến nâng cao.",
           "Thực hành các bài toán mô phỏng tình huống thực tế trong doanh nghiệp."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 2,
         sortOrder: 11,
@@ -226,7 +226,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Review và chữa chi tiết SQL Capstone Project 1 & 2.",
           "Góp ý về tư duy phân tích, logic truy vấn và cách tối ưu SQL.",
           "Tổng kết các lỗi thường gặp và chia sẻ kinh nghiệm từ các dự án thực tế."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 12,
@@ -249,7 +249,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Tìm hiểu các giai đoạn trưởng thành của dữ liệu trong doanh nghiệp.",
           "Phân biệt các loại phân tích dữ liệu",
           "Làm quen với các chỉ số và hàm thống kê phổ biến"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 1,
@@ -268,7 +268,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Tìm hiểu tư duy Problem Solving và Critical Thinking trong phân tích dữ liệu.",
           "Nắm vững các bước phân tích, phân rã và xác định nguyên nhân của một vấn đề.",
           "Thực hành áp dụng các bộ khung giải quyết vấn đề thông qua các tình huống kinh doanh thực tế."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 2,
@@ -287,7 +287,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Nắm vững quy trình phân tích dữ liệu từ xác định bài toán đến đề xuất giải pháp.",
           "Phân tích chi tiết từng bước trong quy trình thông qua các ví dụ thực tế.",
           "Hiểu khi nào nên áp dụng từng loại phân tích dữ liệu và cách triển khai phù hợp với từng bài toán kinh doanh."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 3,
@@ -306,7 +306,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Hiểu cách định nghĩa và chuẩn hóa các chỉ số (Metrics & KPI).",
           "Phân biệt các loại chỉ số phổ biến và những lỗi thường gặp khi xây dựng KPI.",
           "Thực hành quy trình chuyển đổi mục tiêu kinh doanh thành các chỉ số đo lường thông qua các ví dụ thực tế."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 4,
@@ -325,7 +325,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Tổng quan về Data Modeling và các loại mô hình dữ liệu.",
           "Tìm hiểu Star Schema, Snowflake Schema cùng ưu nhược điểm của từng mô hình.",
           "Hiểu khái niệm Data Grain và Slowly Changing Dimension (SCD)."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 5,
@@ -344,7 +344,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Nhận diện các dạng dữ liệu lộn xộn, thiếu hoặc không nhất quán.",
           "Thực hành các kỹ thuật làm sạch và chuẩn hóa dữ liệu bằng SQL.",
           "Áp dụng các phương pháp xử lý dữ liệu phổ biến trong các bài toán phân tích thực tế"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 6,
@@ -363,7 +363,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Nắm vững các nguyên tắc cốt lõi trong Data Visualization.",
           "Biết cách lựa chọn loại biểu đồ phù hợp với từng loại dữ liệu và mục tiêu phân tích.",
           "Thực hành sử dụng màu sắc, label và legend để tăng khả năng đọc hiểu và truyền tải insight hiệu quả."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 7,
@@ -382,7 +382,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Hiểu vai trò của Data Storytelling trong phân tích dữ liệu.",
           "Tìm hiểu quy trình và các thành phần của một câu chuyện dữ liệu hiệu quả.",
           "Nắm vững các nguyên tắc xây dựng Data Storytelling phù hợp với từng đối tượng người xem và mục tiêu kinh doanh."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 8,
@@ -401,7 +401,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Giới thiệu giao diện và quy trình xây dựng báo cáo trong Data Studio.",
           "Tìm hiểu các loại biểu đồ phổ biến và cách lựa chọn phù hợp với từng bài toán.",
           "Hiểu khái niệm Dimensions, Metrics và Calculated Fields, đồng thời áp dụng để tạo các biểu đồ phân tích hiệu quả."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 9,
@@ -419,7 +419,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
         bulletPoints: [
           "Tìm hiểu các nguyên tắc và quy trình thiết kế một dashboard hiệu quả.",
           "Thực hành sử dụng Data Control, Filter và các thành phần tương tác để nâng cao trải nghiệm người dùng."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 2,
         sortOrder: 10,
@@ -438,7 +438,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Hiểu khái niệm Cohort Analysis và các loại Cohort phổ biến.",
           "Tìm hiểu lợi ích và các trường hợp ứng dụng trong doanh nghiệp.",
           "Thực hành các bước xây dựng và phân tích Cohort Analysis bằng SQL, và trực quan hóa dữ liệu bằng Data Studio"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 11,
@@ -458,7 +458,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Xây dựng logic User Segmentation",
           "Phân tích đặc điểm & hành vi từng nhóm người dùng",
           "Trực quan hóa kết quả phân tích trên Data Studio"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 4,
         sortOrder: 12,
@@ -479,7 +479,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Xác định Metrics & Insights quan trọng",
           "Đánh giá Product Performance",
           "Đề xuất Product Actions từ dữ liệu"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 5,
         sortOrder: 13,
@@ -499,7 +499,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Đánh giá Layout, Visual Hierarchy & tính dễ đọc",
           "Kiểm tra Filters, Interactivity & User Experience",
           "Học viên nhận Feedback và hoàn thiện Dashboard Project"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 4,
         sortOrder: 14,
@@ -519,7 +519,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Đánh giá logic phân tích, Metrics & Insights",
           "Xây dựng Data Storytelling & cấu trúc Presentation",
           "Học viên nhận Feedback và hoàn thiện Analysis Slide Deck"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 4,
         sortOrder: 15,
@@ -539,7 +539,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Hiểu yêu cầu tuyển dụng & Job Description",
           "Xác định Skill Gap và lộ trình phát triển",
           "Xây dựng CV dành cho Data Analyst"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 4,
         sortOrder: 16,
@@ -549,12 +549,12 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       },
 
       // ==========================================
-      // END-TO-END ANALYTICS WITH SQL & DASHBOARD (25 Buổi - Nguồn Google Sheets)
+      // End-to-End Analytics with SQL & Dashboard Design (25 Buổi - Nguồn Google Sheets)
       // ==========================================
       {
         id: "mod-combo-01",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 1,
         title: "Buổi 1: Introduction to SQL",
         summary: "Xây dựng nền tảng về Data, Database và SQL.",
@@ -564,7 +564,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Thực hành truy vấn dữ liệu với SELECT, DISTINCT, COUNT, LIMIT.",
           "Lọc dữ liệu bằng WHERE, AND, OR, NOT, IN, BETWEEN, LIKE.",
           "Hiểu và xử lý giá trị NULL trong các tình huống thực tế."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 5,
         sortOrder: 1,
@@ -575,7 +575,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-02",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 2,
         title: "Buổi 2: Master Aggregate & Built-in Functions",
         summary: "Tìm hiểu các hàm quan trọng giúp tổng hợp, biến đổi và phân tích dữ liệu trong SQL.",
@@ -584,7 +584,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Thực hành các hàm tổng hợp như COUNT, SUM, AVG, MIN, MAX.",
           "Gom nhóm và lọc dữ liệu với GROUP BY và HAVING.",
           "Làm quen với các hàm tích hợp phổ biến như Date Functions, String Functions và Mathematical Functions."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 4,
         sortOrder: 2,
@@ -595,7 +595,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-03",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 3,
         title: "Buổi 3: Query data with JOIN  & UNION",
         summary: "Tìm hiểu cách kết nối và tổng hợp dữ liệu từ nhiều bảng.",
@@ -603,7 +603,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Tìm hiểu Primary Key và Foreign Key để hiểu mối quan hệ giữa các bảng.",
           "Thực hành JOIN và các loại JOIN phổ biến trong SQL.",
           "Kết hợp dữ liệu bằng UNION"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 3,
@@ -614,14 +614,14 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-04",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 4,
         title: "Buổi 4: Practice SQL 1",
         summary: "Áp dụng kiến thức đã học để giải quyết các bài tập SQL mô phỏng từ các công ty công nghệ lớn.",
         bulletPoints: [
           "Luyện tập với các bài tập SQL theo nhiều mức độ từ cơ bản đến nâng cao.",
           "Thực hành các bài toán mô phỏng tình huống thực tế trong doanh nghiệp."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 2,
         sortOrder: 4,
@@ -632,7 +632,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-05",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 5,
         title: "Buổi 5: Subquery & CTE",
         summary: "Tìm hiểu các kỹ thuật giúp xây dựng những câu truy vấn SQL phức tạp theo cách rõ ràng và dễ bảo trì hơn.",
@@ -640,7 +640,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Tìm hiểu Subquery và các cách ứng dụng trong truy vấn SQL.",
           "Thực hành Common Table Expressions (CTE) để tổ chức câu lệnh hiệu quả.",
           "So sánh Subquery và CTE, đồng thời biết khi nào nên sử dụng từng kỹ thuật trong thực tế."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 5,
@@ -651,14 +651,14 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-06",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 6,
         title: "Buổi 6: DDL & DML",
         summary: "Tìm hiểu các nhóm lệnh quan trọng trong SQL dùng để tạo, chỉnh sửa và quản lý dữ liệu trong cơ sở dữ liệu.",
         bulletPoints: [
           "Tìm hiểu nhóm lệnh DDL (Data Definition Language) như CREATE, ALTER, DROP, TRUNCATE để tạo và quản lý cấu trúc Database.",
           "Thực hành nhóm lệnh DML (Data Manipulation Language) như INSERT, UPDATE, DELETE để thêm, chỉnh sửa và xóa dữ liệu."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 2,
         sortOrder: 6,
@@ -669,14 +669,14 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-07",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 7,
         title: "Buổi 7: Master Window Functions",
         summary: "Khám phá Window Functions để tính toán trên từng nhóm dữ liệu mà vẫn giữ nguyên từng bản ghi",
         bulletPoints: [
           "Hiểu khái niệm Window Function và lý do nên sử dụng trong thực tế.",
           "Thực hành các nhóm hàm phổ biến như Ranking, Aggregate và Analytical Functions."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 2,
         sortOrder: 7,
@@ -687,7 +687,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-08",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 8,
         title: "Buổi 8: Data Cleaning",
         summary: "Tìm hiểu các vấn đề thường gặp trong dữ liệu thực tế và cách làm sạch dữ liệu trước khi phân tích.",
@@ -695,7 +695,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Nhận diện các dạng dữ liệu lộn xộn, thiếu hoặc không nhất quán.",
           "Thực hành các kỹ thuật làm sạch và chuẩn hóa dữ liệu bằng SQL.",
           "Áp dụng các phương pháp xử lý dữ liệu phổ biến trong các bài toán phân tích thực tế"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 8,
@@ -706,14 +706,14 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-09",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 9,
         title: "Buổi 9: Practice SQL 2",
         summary: "Áp dụng kiến thức đã học để giải quyết các bài tập SQL mô phỏng từ các công ty công nghệ lớn.",
         bulletPoints: [
           "Luyện tập với các bài tập SQL theo nhiều mức độ từ cơ bản đến nâng cao.",
           "Thực hành các bài toán mô phỏng tình huống thực tế trong doanh nghiệp."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 2,
         sortOrder: 9,
@@ -724,7 +724,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-10",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 10,
         title: "Buổi 10: Case Study Cohort Analysis",
         summary: "Xây dựng Cohort Analysis bằng SQL để theo dõi hành vi và khả năng giữ chân người dùng theo thời gian.",
@@ -732,7 +732,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Hiểu khái niệm Cohort Analysis và các loại Cohort phổ biến.",
           "Tìm hiểu lợi ích và các trường hợp ứng dụng trong doanh nghiệp.",
           "Thực hành các bước xây dựng và phân tích Cohort Analysis bằng SQL."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 10,
@@ -743,7 +743,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-11",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 11,
         title: "Buổi 11: Case Study RFM User Segmentation",
         summary: "Xây dựng RFM bằng SQL để phân nhóm người dùng dựa trên hành vi giao dịch.",
@@ -751,7 +751,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Hiểu RFM: Recency, Frequency & Monetary.",
           "Tính toán các chỉ số RFM bằng SQL",
           "Phân nhóm người dùng theo RFM, và phân tích đặc điểm & hành vi từng nhóm người dùng."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 11,
@@ -762,7 +762,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-12",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 12,
         title: "Buổi 12: Project SQL Capstone 2",
         summary: "Tổng kết khóa học SQL thông qua việc review chi tiết 2 bài Capstone Project.",
@@ -770,7 +770,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Review và chữa chi tiết SQL Capstone Project 1 & 2.",
           "Góp ý về tư duy phân tích, logic truy vấn và cách tối ưu SQL.",
           "Tổng kết các lỗi thường gặp và chia sẻ kinh nghiệm từ các dự án thực tế."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 12,
@@ -781,7 +781,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-13",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 13,
         title: "Buổi 13: Introduction to BI & Applied Statistics in Business",
         summary: "Trang bị nền tảng về tư duy phân tích dữ liệu và các kiến thức thống kê cơ bản thường được sử dụng trong doanh nghiệp.",
@@ -789,7 +789,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Tìm hiểu các giai đoạn trưởng thành của dữ liệu trong doanh nghiệp.",
           "Phân biệt các loại phân tích dữ liệu",
           "Làm quen với các chỉ số và hàm thống kê phổ biến"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 13,
@@ -800,7 +800,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-14",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 14,
         title: "Buổi 14: Problem Solving framework",
         summary: "Trang bị tư duy giải quyết vấn đề và phản biện, giúp Data Analyst tiếp cận bài toán kinh doanh một cách logic và có hệ thống.",
@@ -808,7 +808,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Tìm hiểu tư duy Problem Solving và Critical Thinking trong phân tích dữ liệu.",
           "Nắm vững các bước phân tích, phân rã và xác định nguyên nhân của một vấn đề.",
           "Thực hành áp dụng các bộ khung giải quyết vấn đề thông qua các tình huống kinh doanh thực tế."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 14,
@@ -819,7 +819,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-15",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 15,
         title: "Buổi 15: Data Analytics flow",
         summary: "Tìm hiểu quy trình phân tích dữ liệu chuẩn được áp dụng trong doanh nghiệp,.",
@@ -827,7 +827,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Nắm vững quy trình phân tích dữ liệu từ xác định bài toán đến đề xuất giải pháp.",
           "Phân tích chi tiết từng bước trong quy trình thông qua các ví dụ thực tế.",
           "Hiểu khi nào nên áp dụng từng loại phân tích dữ liệu và cách triển khai phù hợp với từng bài toán kinh doanh."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 15,
@@ -838,7 +838,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-16",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 16,
         title: "Buổi 16: Define Metrics",
         summary: "Tìm hiểu cách xây dựng và định nghĩa các chỉ số đo lường trong doanh nghiệp.",
@@ -846,7 +846,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Hiểu cách định nghĩa và chuẩn hóa các chỉ số (Metrics & KPI).",
           "Phân biệt các loại chỉ số phổ biến và những lỗi thường gặp khi xây dựng KPI.",
           "Thực hành quy trình chuyển đổi mục tiêu kinh doanh thành các chỉ số đo lường thông qua các ví dụ thực tế."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 16,
@@ -857,7 +857,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-17",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 17,
         title: "Buổi 17: Data Modeling for BI",
         summary: "Tìm hiểu cách dữ liệu được tổ chức trong Data Warehouse và các mô hình dữ liệu phổ biến được sử dụng trong doanh nghiệp.",
@@ -865,7 +865,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Tổng quan về Data Modeling và các loại mô hình dữ liệu.",
           "Tìm hiểu Star Schema, Snowflake Schema cùng ưu nhược điểm của từng mô hình.",
           "Hiểu khái niệm Data Grain và Slowly Changing Dimension (SCD)."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 17,
@@ -876,7 +876,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-18",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 18,
         title: "Buổi 18: Data Visualization",
         summary: "Tìm hiểu các nguyên tắc trực quan hóa dữ liệu giúp truyền tải thông tin rõ ràng và đúng thông điệp.",
@@ -884,7 +884,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Nắm vững các nguyên tắc cốt lõi trong Data Visualization.",
           "Biết cách lựa chọn loại biểu đồ phù hợp với từng loại dữ liệu và mục tiêu phân tích.",
           "Thực hành sử dụng màu sắc, label và legend để tăng khả năng đọc hiểu và truyền tải insight hiệu quả."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 18,
@@ -895,7 +895,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-19",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 19,
         title: "Buổi 19: Data Storytelling & Slide Coaching",
         summary: "Tìm hiểu nghệ thuật kể chuyện bằng dữ liệu để truyền tải insight một cách rõ ràng và thuyết phục.",
@@ -903,7 +903,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Hiểu vai trò của Data Storytelling trong phân tích dữ liệu.",
           "Tìm hiểu quy trình và các thành phần của một câu chuyện dữ liệu hiệu quả.",
           "Nắm vững các nguyên tắc xây dựng Data Storytelling phù hợp với từng đối tượng người xem và mục tiêu kinh doanh."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 19,
@@ -914,7 +914,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-20",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 20,
         title: "Buổi 20: Foundation to Data Studio",
         summary: "Làm quen với Data Studio - công cụ Business Intelligence (BI) giúp xây dựng dashboard và báo cáo trực quan.",
@@ -922,7 +922,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Giới thiệu giao diện và quy trình xây dựng báo cáo trong Data Studio.",
           "Tìm hiểu các loại biểu đồ phổ biến và cách lựa chọn phù hợp với từng bài toán.",
           "Hiểu khái niệm Dimensions, Metrics và Calculated Fields, đồng thời áp dụng để tạo các biểu đồ phân tích hiệu quả."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 3,
         sortOrder: 20,
@@ -933,14 +933,14 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-21",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 21,
         title: "Buổi 21: Dashboard UX, Filter & Interactivity",
         summary: "Tìm hiểu các nguyên tắc thiết kế dashboard hiệu quả nhằm mang lại trải nghiệm tốt cho người dùng và hỗ trợ ra quyết định nhanh chóng.",
         bulletPoints: [
           "Tìm hiểu các nguyên tắc và quy trình thiết kế một dashboard hiệu quả.",
           "Thực hành sử dụng Data Control, Filter và các thành phần tương tác để nâng cao trải nghiệm người dùng."
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 2,
         sortOrder: 21,
@@ -951,7 +951,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-22",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 22,
         title: "Buổi 22: Product Analytics",
         summary: "Tìm hiểu cách sử dụng dữ liệu để phân tích hành vi người dùng, đánh giá hiệu quả sản phẩm và hỗ trợ các quyết định cải thiện Product.",
@@ -960,7 +960,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Phân tích User Behavior & Drop-off",
           "Đánh giá Product Performance",
           "Đề xuất Product Actions từ dữ liệu"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 4,
         sortOrder: 22,
@@ -971,7 +971,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-23",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 23,
         title: "Buổi 23: Dashboard Project Review & Feedback",
         summary: "Mentor review sản phẩm Dashboard Project của học viên dựa trên các nguyên tắc Data Visualization và Dashboard Design.",
@@ -980,7 +980,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Đánh giá Layout, Visual Hierarchy & tính dễ đọc",
           "Kiểm tra Filters, Interactivity & User Experience",
           "Học viên nhận Feedback và hoàn thiện Dashboard Project"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 4,
         sortOrder: 23,
@@ -991,7 +991,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-24",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 24,
         title: "Buổi 24: Analysis Slide Review & Feedback",
         summary: "Mentor review Analysis Slide của học viên, tập trung vào tư duy phân tích, Insight và cách truyền tải kết quả đến người xem.",
@@ -1000,7 +1000,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Đánh giá logic phân tích, Metrics & Insights",
           "Xây dựng Data Storytelling & cấu trúc Presentation",
           "Học viên nhận Feedback và hoàn thiện Analysis Slide Deck"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 4,
         sortOrder: 24,
@@ -1011,7 +1011,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
       {
         id: "mod-combo-25",
         courseId: "end-to-end-analytics",
-        courseName: "End-to-End Analytics with SQL & Dashboard",
+        courseName: "End-to-End Analytics with SQL & Dashboard Design",
         moduleNumber: 25,
         title: "Buổi 25: Career Orientation & CV Feedback",
         summary: "Định hướng lộ trình nghề nghiệp Data Analyst và chuẩn bị CV để sẵn sàng hơn cho quá trình ứng tuyển.",
@@ -1020,7 +1020,7 @@ export class CurriculumSeeder implements Seeder<CurriculumModule> {
           "Hiểu yêu cầu tuyển dụng & Job Description",
           "Xác định Skill Gap và lộ trình phát triển",
           "Xây dựng CV dành cho Data Analyst"
-          ],
+        ],
         durationHours: 2.5,
         lessonsCount: 4,
         sortOrder: 25,

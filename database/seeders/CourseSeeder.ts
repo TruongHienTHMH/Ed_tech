@@ -6,7 +6,7 @@ export class CourseSeeder implements Seeder<Course> {
     return [
       {
         id: "end-to-end-analytics",
-        title: "Khóa End-to-End Analytics with SQL & Dashboard Design",
+        title: "Khóa End-to-End Analytics with SQL & Dashboard Design Design",
         slug: "end-to-end-analytics",
         tag: "End-to-End",
         tagline: "Lộ trình học toàn diện kết hợp giữa SQL và Dashboard Design",

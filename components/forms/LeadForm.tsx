@@ -39,7 +39,7 @@ interface FormDataState {
 const AVAILABLE_COURSES = [
   {
     id: "end-to-end-analytics",
-    name: "End-to-End Analytics with SQL & Dashboard",
+    name: "End-to-End Analytics with SQL & Dashboard Design Design",
   },
   { id: "sql-for-data-analytics", name: "SQL for Data Analytics" },
   {
@@ -76,7 +76,7 @@ export default function LeadForm({
 
   const getInitialCourses = (courseId: string): string[] => {
     if (courseId === "end-to-end-analytics") {
-      return ["End-to-End Analytics with SQL & Dashboard"];
+      return ["End-to-End Analytics with SQL & Dashboard Design Design"];
     }
     if (
       courseId === "data-analytical-thinking" ||

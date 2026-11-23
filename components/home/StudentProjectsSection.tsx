@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { ExternalLink, X } from "@/components/common/Icons";
+import { X } from "@/components/common/Icons";
 import { Badge } from "@/components/common/Badge";
 import { StudentProject } from "@/lib/cms/types";
 import { seedStudentProjects } from "@/data/seed-data";
@@ -14,16 +14,41 @@ interface StudentProjectsSectionProps {
   projects?: StudentProject[];
 }
 
+interface DisplayProject {
+  id: string;
+  image: string;
+  aspect: string;
+}
+
 export default function StudentProjectsSection({ projects = seedStudentProjects }: StudentProjectsSectionProps) {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedProject, setSelectedProject] = useState<DisplayProject | null>(null);
+
+  // Khóa cuộn trang khi mở popup modal và hỗ trợ phím Escape
+  useEffect(() => {
+    if (!selectedProject) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedProject(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedProject]);
 
   const activeProjects = (projects && projects.length >= 6 ? projects : seedStudentProjects).slice(0, 9);
-  const displayProjects = activeProjects.map((p, idx) => {
+  const displayProjects: DisplayProject[] = activeProjects.map((p, idx) => {
     const registryItem = STUDENT_PROJECT_IMAGES[idx];
     return {
       id: p.id || registryItem?.id || `p-${idx}`,
-      title: p.title || registryItem?.title || `Dự án phân tích dữ liệu #${idx + 1}`,
-      studentName: p.authorName || registryItem?.authorName || "Học viên LYDATA",
+
       image: resolveImageUrl(p.imageUrl || registryItem?.filePath, "project", idx),
       aspect: registryItem?.aspect || (idx >= 6 ? "tall" : "normal"),
     };
@@ -33,7 +58,7 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
     <section id="projects" className="relative w-full bg-white overflow-hidden">
       {/* Absolute Background SVG (Figma Group 472 / 12:834):
           Contains top wave (y=0..50), dark zone (y=50..532), and middle wave (y=532..582) */}
-      <div className="absolute -top-[0] left-1/2 -translate-x-1/2  min-w-[1920px] w-full h-[582px] pointer-events-none select-none z-0">
+      <div className="absolute -top-[0] left-1/2 -translate-x-1/2 min-w-[1920px] w-full h-[582px] pointer-events-none select-none z-0">
         <Image
           src="/assets/decorations/stu-project-background.svg"
           alt="Student Projects Background"
@@ -65,31 +90,37 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
           {displayProjects.map((project, idx) => {
             const isTall = idx >= 6;
             return (
-              <div
-                key={project.id}
-                onClick={() => setSelectedImage(project.image)}
-                className={`group relative rounded-2xl overflow-hidden border-4 border-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] bg-neutral-900 cursor-pointer transform hover:-translate-y-1.5 transition-all duration-300 ${
-                  isTall ? "h-[300px] sm:h-[330px]" : "h-[200px] sm:h-[216px]"
-                }`}
-              >
-                <SafeImage
-                  src={project.image}
-                  fallbackSrc={getFigmaFallback("project", idx)}
-                  alt={project.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+              <div key={project.id} className="relative group">
+                {/* Aura Glow Effect: Hào quang chuyển sắc thương hiệu khi hover */}
+                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#AF445A] via-[#FFC934]/60 to-[#784080] opacity-0 group-hover:opacity-100 blur-md transition-all duration-300 pointer-events-none" />
 
-                {/* Hover Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
-                  <p className="font-bold text-sm sm:text-base text-white leading-snug">
-                    {project.title}
-                  </p>
-                  <p className="text-xs text-white/80 mt-1 flex items-center justify-between">
-                    <span>Học viên: {project.studentName}</span>
-                    <ExternalLink className="w-4 h-4 text-[#FFC934]" />
-                  </p>
+                {/* Main Project Card */}
+                <div
+                  onClick={() => setSelectedProject(project)}
+                  className={`relative rounded-2xl overflow-hidden border-4 border-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] group-hover:shadow-[0_16px_36px_rgba(175,68,90,0.3)] bg-neutral-900 cursor-pointer transform group-hover:-translate-y-1.5 transition-all duration-300 ${
+                    isTall ? "h-[300px] sm:h-[330px]" : "h-[200px] sm:h-[216px]"
+                  }`}
+                >
+                  <SafeImage
+                    src={project.image}
+                    fallbackSrc={getFigmaFallback("project", idx)}
+                    alt="project"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+
+                  {/* Hover Overlay: Aura Glow & Popup Zoom Trigger (Không còn phần tác giả) */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4 sm:p-5">
+                    {/* Centered Zoom Icon */}
+                    <div className="flex-1 flex items-center justify-center">
+                      <div className="w-11 h-11 rounded-full bg-white/20 backdrop-blur-md border border-white/40 text-white flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition-all duration-300 group-hover:bg-[#AF445A]">
+                        <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             );
@@ -111,30 +142,48 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
         </div>
       </div>
 
-      {/* Lightbox Modal */}
-      {selectedImage && (
+      {/* Lightbox / Popup Preview Modal */}
+      {selectedProject && (
         <div
-          onClick={() => setSelectedImage(null)}
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 cursor-zoom-out animate-in fade-in"
+          onClick={() => setSelectedProject(null)}
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 cursor-zoom-out animate-in fade-in duration-200"
         >
-          <button
-            onClick={() => setSelectedImage(null)}
-            className="absolute top-6 right-6 text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 cursor-pointer"
-            aria-label="Đóng xem trước"
+          {/* Header Bar của Popup */}
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-5xl flex items-center justify-between pb-3 text-white cursor-default"
           >
-            <X className="w-6 h-6" />
-          </button>
-          <div className="relative max-w-5xl max-h-[90vh] w-full h-[80vh]">
+            <button
+              type="button"
+              onClick={() => setSelectedProject(null)}
+              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors cursor-pointer"
+              aria-label="Đóng xem trước"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Khung hiển thị ảnh Dashboard phóng to */}
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-w-5xl max-h-[80vh] w-full h-[75vh] rounded-2xl overflow-hidden border-2 border-white/20 bg-neutral-950/80 shadow-2xl cursor-default"
+          >
             <Image
-              src={selectedImage}
-              alt="Project Showcase Fullscreen"
+              src={selectedProject.image}
+              alt="project"
               fill
-              sizes="(max-width: 1280px) 90vw, 1200px"
+              sizes="(max-width: 1280px) 95vw, 1200px"
               className="object-contain"
+              priority
             />
           </div>
+
+          <p className="text-white/60 text-xs mt-3 flex items-center gap-1 select-none">
+            <span>Nhấn phím <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white font-mono">Esc</kbd> hoặc bấm ra ngoài để đóng</span>
+          </p>
         </div>
       )}
+
       {/* Lower Transition Wave Banner (Figma Node 12:837 & 12:890 / Rectangle 1575 & 1578) */}
       <div className="w-full overflow-hidden leading-none select-none pointer-events-none">
         <Image

@@ -38,7 +38,7 @@ Hệ thống hỗ trợ chính xác 3 đường dẫn trang chi tiết:
    - **Yêu cầu đầu vào:** Đã có kiến thức truy vấn dữ liệu căn bản.
    - **Trọng tâm:** Tư duy chỉ số kinh doanh (Business Metrics), thiết kế Dashboard trực quan trên Power BI/Tableau, kể chuyện với dữ liệu (Data Storytelling).
 3. `/courses/end-to-end-analytics`
-   - **Tên:** End-to-End Analytics with SQL & Dashboard Design
+   - **Tên:** End-to-End Analytics with SQL & Dashboard Design Design
    - **Thời lượng:** 25 buổi (12 tuần) \| Học phí ưu đãi: **5.690.000 VNĐ** (Giá gốc 6.780.000 VNĐ) + Tặng kèm Review CV & Mock Interview 1-on-1.
    - **Yêu cầu đầu vào:** Người muốn theo đuổi nghề Data Analyst chuyên nghiệp từ số 0.
    - **Trọng tâm:** Trọn bộ từ trích xuất dữ liệu nâng cao đến xây dựng sản phẩm Portfolio thực chiến.

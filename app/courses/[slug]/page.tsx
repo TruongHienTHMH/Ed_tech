@@ -80,10 +80,11 @@ export default async function CourseDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // Concurrent fetch for curriculum and student projects
-  const [modules, studentProjects] = await Promise.all([
+  // Concurrent fetch for curriculum, student projects, and all courses
+  const [modules, studentProjects, allCourses] = await Promise.all([
     CourseService.getCurriculumByCourseId(course.id, course.slug).catch(() => []),
     ContentFetcher.getStudentProjects().catch(() => []),
+    CourseService.getCourses().catch(() => []),
   ]);
 
   return (
@@ -130,8 +131,8 @@ export default async function CourseDetailPage({ params }: PageProps) {
               <CourseOutcomes projects={studentProjects} />
             </div>
 
-            {/* CỘT PHẢI STICKY (384px): Học phí, Rating 4.8, CTA, Khóa học bao gồm, Zoom */}
-            <CourseFigmaStickySidebar course={course} />
+            {/* CỘT PHẢI STICKY (384px): Học phí, Slider đa khóa học, CTA, Khóa học bao gồm */}
+            <CourseFigmaStickySidebar course={course} allCourses={allCourses} />
           </div>
         </div>
 

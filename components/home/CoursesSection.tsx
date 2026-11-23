@@ -99,8 +99,8 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
                         {course.title}
                       </h3>
 
-                      {/* Description (Figma 1590:5039) */}
-                      <p className="text-white/85 text-base sm:text-[18px] leading-[26px] font-normal max-w-[580px]">
+                      {/* Description (Figma 1590:5039) - Giới hạn 3 dòng kèm dấu ba chấm (...) */}
+                      <p className="text-white/85 text-base sm:text-[18px] leading-[26px] font-normal max-w-[580px] line-clamp-3">
                         {course.description}
                       </p>
 

@@ -201,7 +201,7 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
                   <h3 className="font-heading font-bold text-2xl sm:text-[28px] leading-tight text-white mb-1.5">
-                    {comboPackage?.name || "End-to-End Analytics with SQL & Dashboard"}
+                    {comboPackage?.name || "End-to-End Analytics with SQL & Dashboard Design Design"}
                   </h3>
                   <p className="text-white/80 text-base sm:text-lg font-medium">
                     {comboPackage?.badge && !comboPackage.badge.includes("%")

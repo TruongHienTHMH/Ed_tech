@@ -3,7 +3,7 @@
  * DATAWITHLY CMS CONTENT MASTER - GOOGLE APPS SCRIPT BUNDLE (ALL-IN-ONE)
  * ==============================================================================
  * Phiên bản: 2.2.0 (DataWithLy CMS Content Master)
- * Thời gian đóng gói: 2026-11-23T10:56:54.017Z
+ * Thời gian đóng gói: 2026-11-23T13:24:12.628Z
  * ==============================================================================
  */
 
@@ -1171,7 +1171,7 @@ function setupCoursesTab(ss) {
   if (sheet.getLastRow() === 1) {
     sheet.appendRow([
       "end-to-end-analytics",
-      "End-to-End Analytics with SQL & Dashboard",
+      "End-to-End Analytics with SQL & Dashboard Design",
       "end-to-end-analytics",
       "Khóa học nổi bật",
       "End-to-End",
@@ -1304,7 +1304,7 @@ function setupPackagesPricingTab(ss) {
 
   if (sheet.getLastRow() === 1) {
     sheet.appendRow([
-      "pkg-combo-e2e", "combo-end-to-end-analytics", "End-to-End Analytics with SQL & Dashboard",
+      "pkg-combo-e2e", "combo-end-to-end-analytics", "End-to-End Analytics with SQL & Dashboard Design",
       6780000, 5690000, "TIẾT KIỆM ~16%",
       "Lộ trình được thiết kế sẵn từ A-Z\nNội dung nối tiếp mạch lạc thực chiến\nTiết kiệm lên đến 1,080,000vnđ\nCommunity với hơn 1,200+ members\nUpdate nội dung kiến thức trọn đời",
       true, true, 1

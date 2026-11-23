@@ -24,7 +24,7 @@ graph TD
     
     Course_2["2. Analytical Thinking & Dashboard Design<br/>- Mã: analytical-thinking-dashboard-design<br/>- Thời lượng: 16 buổi + CV coaching<br/>- Học phí: 3.790.000 VNĐ<br/>- Đầu vào: Đã có kiến thức SQL cơ bản"]
     
-    Course_3["3. End-to-End Analytics with SQL & Dashboard Design<br/>- Mã: end-to-end-analytics-sql-dashboard<br/>- Thời lượng: 25 buổi + Career & CV<br/>- Học phí: 5.690.000 VNĐ (Gói Lộ trình tiết kiệm)<br/>- Không yêu cầu kiến thức đầu vào"]
+    Course_3["3. End-to-End Analytics with SQL & Dashboard Design Design<br/>- Mã: end-to-end-analytics-sql-dashboard<br/>- Thời lượng: 25 buổi + Career & CV<br/>- Học phí: 5.690.000 VNĐ (Gói Lộ trình tiết kiệm)<br/>- Không yêu cầu kiến thức đầu vào"]
     
     Course_Root --> Course_1
     Course_Root --> Course_2

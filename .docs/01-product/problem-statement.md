@@ -42,7 +42,7 @@ Khi có nhu cầu tìm hiểu các khóa học phân tích dữ liệu, người
 Khi dự án website DataWithLy hoàn thành:
 
 1. **Đối với người học:**
-   - Chỉ cần mở website là nắm trọn vẹn lộ trình học có hệ thống từ tư duy đến thực hành của 3 khóa học chuẩn (`SQL for Data Analytics`, `Analytical Thinking & Dashboard Design`, `End-to-End Analytics with SQL & Dashboard Design`).
+   - Chỉ cần mở website là nắm trọn vẹn lộ trình học có hệ thống từ tư duy đến thực hành của 3 khóa học chuẩn (`SQL for Data Analytics`, `Analytical Thinking & Dashboard Design`, `End-to-End Analytics with SQL & Dashboard Design Design`).
    - Xem được giáo trình chi tiết từng buổi học (Syllabus Accordion) và các sản phẩm dashboard thực tế của học viên khóa trước để tin tưởng chất lượng đào tạo.
    - Nộp form đăng ký tư vấn trong vòng dưới 30 giây, nhận được email xác nhận ngay lập tức, và form luôn giữ lại thông tin nếu đường truyền mạng gặp sự cố.
 2. **Đối với đội ngũ tư vấn và vận hành:**

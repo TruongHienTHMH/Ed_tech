@@ -39,7 +39,7 @@ Website giới thiệu và mở tuyển sinh cho 3 khóa học cốt lõi:
 |:---:|:---|:---|:---:|:---|
 | 1 | **SQL for Data Analytics** | 12 buổi (2 buổi/tuần)<br/>*Live Online qua Zoom* | **2.990.000 VNĐ** | Người mới bắt đầu với Data Analytics, sinh viên, người dùng Excel muốn nâng cao kỹ năng xử lý dữ liệu với SQL. Không yêu cầu kiến thức đầu vào. |
 | 2 | **Analytical Thinking & Dashboard Design** | 16 buổi + bonus CV & Portfolio<br/>*Live Online qua Zoom* | **3.790.000 VNĐ** | Đã có kiến thức SQL cơ bản, muốn phát triển tư duy giải quyết vấn đề kinh doanh, xác định metrics, data modeling và thiết kế dashboard ra quyết định. |
-| 3 | **End-to-End Analytics with SQL & Dashboard Design** | 25 buổi + bonus CV & Career<br/>*Live Online qua Zoom* | **5.690.000 VNĐ** | Lộ trình toàn diện từ số 0 đến tự tin ứng tuyển vị trí Data Analyst: từ truy vấn dữ liệu SQL đến tư duy phân tích, trực quan hóa và thiết kế dashboard. |
+| 3 | **End-to-End Analytics with SQL & Dashboard Design Design** | 25 buổi + bonus CV & Career<br/>*Live Online qua Zoom* | **5.690.000 VNĐ** | Lộ trình toàn diện từ số 0 đến tự tin ứng tuyển vị trí Data Analyst: từ truy vấn dữ liệu SQL đến tư duy phân tích, trực quan hóa và thiết kế dashboard. |
 
 ---
 

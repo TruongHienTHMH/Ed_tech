@@ -2,7 +2,7 @@
   "courses": [
     {
       "id": "end-to-end-analytics",
-      "title": "End-to-End Analytics with SQL & Dashboard",
+      "title": "End-to-End Analytics with SQL & Dashboard Design",
       "slug": "end-to-end-analytics",
       "tag": "End-to-End",
       "tagline": "Lộ trình học toàn diện kết hợp giữa SQL và Dashboard Design",
@@ -637,7 +637,7 @@
     {
       "id": "mod-combo-01",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 1,
       "title": "Buổi 1: Introduction to SQL",
       "summary": "Xây dựng nền tảng về Data, Database và SQL.",
@@ -658,7 +658,7 @@
     {
       "id": "mod-combo-02",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 2,
       "title": "Buổi 2: Master Aggregate & Built-in Functions",
       "summary": "Tìm hiểu các hàm quan trọng giúp tổng hợp, biến đổi và phân tích dữ liệu trong SQL.",
@@ -678,7 +678,7 @@
     {
       "id": "mod-combo-03",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 3,
       "title": "Buổi 3: Query data with JOIN  & UNION",
       "summary": "Tìm hiểu cách kết nối và tổng hợp dữ liệu từ nhiều bảng.",
@@ -697,7 +697,7 @@
     {
       "id": "mod-combo-04",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 4,
       "title": "Buổi 4: Practice SQL 1",
       "summary": "Áp dụng kiến thức đã học để giải quyết các bài tập SQL mô phỏng từ các công ty công nghệ lớn.",
@@ -715,7 +715,7 @@
     {
       "id": "mod-combo-05",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 5,
       "title": "Buổi 5: Subquery & CTE",
       "summary": "Tìm hiểu các kỹ thuật giúp xây dựng những câu truy vấn SQL phức tạp theo cách rõ ràng và dễ bảo trì hơn.",
@@ -734,7 +734,7 @@
     {
       "id": "mod-combo-06",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 6,
       "title": "Buổi 6: DDL & DML",
       "summary": "Tìm hiểu các nhóm lệnh quan trọng trong SQL dùng để tạo, chỉnh sửa và quản lý dữ liệu trong cơ sở dữ liệu.",
@@ -752,7 +752,7 @@
     {
       "id": "mod-combo-07",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 7,
       "title": "Buổi 7: Master Window Functions",
       "summary": "Khám phá Window Functions để tính toán trên từng nhóm dữ liệu mà vẫn giữ nguyên từng bản ghi",
@@ -770,7 +770,7 @@
     {
       "id": "mod-combo-08",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 8,
       "title": "Buổi 8: Data Cleaning",
       "summary": "Tìm hiểu các vấn đề thường gặp trong dữ liệu thực tế và cách làm sạch dữ liệu trước khi phân tích.",
@@ -789,7 +789,7 @@
     {
       "id": "mod-combo-09",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 9,
       "title": "Buổi 9: Practice SQL 2",
       "summary": "Áp dụng kiến thức đã học để giải quyết các bài tập SQL mô phỏng từ các công ty công nghệ lớn.",
@@ -807,7 +807,7 @@
     {
       "id": "mod-combo-10",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 10,
       "title": "Buổi 10: Case Study Cohort Analysis",
       "summary": "Xây dựng Cohort Analysis bằng SQL để theo dõi hành vi và khả năng giữ chân người dùng theo thời gian.",
@@ -826,7 +826,7 @@
     {
       "id": "mod-combo-11",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 11,
       "title": "Buổi 11: Case Study RFM User Segmentation",
       "summary": "Xây dựng RFM bằng SQL để phân nhóm người dùng dựa trên hành vi giao dịch.",
@@ -845,7 +845,7 @@
     {
       "id": "mod-combo-12",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 12,
       "title": "Buổi 12: Project SQL Capstone 2",
       "summary": "Tổng kết khóa học SQL thông qua việc review chi tiết 2 bài Capstone Project.",
@@ -864,7 +864,7 @@
     {
       "id": "mod-combo-13",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 13,
       "title": "Buổi 13: Introduction to BI & Applied Statistics in Business",
       "summary": "Trang bị nền tảng về tư duy phân tích dữ liệu và các kiến thức thống kê cơ bản thường được sử dụng trong doanh nghiệp.",
@@ -883,7 +883,7 @@
     {
       "id": "mod-combo-14",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 14,
       "title": "Buổi 14: Problem Solving framework",
       "summary": "Trang bị tư duy giải quyết vấn đề và phản biện, giúp Data Analyst tiếp cận bài toán kinh doanh một cách logic và có hệ thống.",
@@ -902,7 +902,7 @@
     {
       "id": "mod-combo-15",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 15,
       "title": "Buổi 15: Data Analytics flow",
       "summary": "Tìm hiểu quy trình phân tích dữ liệu chuẩn được áp dụng trong doanh nghiệp,.",
@@ -921,7 +921,7 @@
     {
       "id": "mod-combo-16",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 16,
       "title": "Buổi 16: Define Metrics",
       "summary": "Tìm hiểu cách xây dựng và định nghĩa các chỉ số đo lường trong doanh nghiệp.",
@@ -940,7 +940,7 @@
     {
       "id": "mod-combo-17",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 17,
       "title": "Buổi 17: Data Modeling for BI",
       "summary": "Tìm hiểu cách dữ liệu được tổ chức trong Data Warehouse và các mô hình dữ liệu phổ biến được sử dụng trong doanh nghiệp.",
@@ -959,7 +959,7 @@
     {
       "id": "mod-combo-18",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 18,
       "title": "Buổi 18: Data Visualization",
       "summary": "Tìm hiểu các nguyên tắc trực quan hóa dữ liệu giúp truyền tải thông tin rõ ràng và đúng thông điệp.",
@@ -978,7 +978,7 @@
     {
       "id": "mod-combo-19",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 19,
       "title": "Buổi 19: Data Storytelling & Slide Coaching",
       "summary": "Tìm hiểu nghệ thuật kể chuyện bằng dữ liệu để truyền tải insight một cách rõ ràng và thuyết phục.",
@@ -997,7 +997,7 @@
     {
       "id": "mod-combo-20",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 20,
       "title": "Buổi 20: Foundation to Data Studio",
       "summary": "Làm quen với Data Studio - công cụ Business Intelligence (BI) giúp xây dựng dashboard và báo cáo trực quan.",
@@ -1016,7 +1016,7 @@
     {
       "id": "mod-combo-21",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 21,
       "title": "Buổi 21: Dashboard UX, Filter & Interactivity",
       "summary": "Tìm hiểu các nguyên tắc thiết kế dashboard hiệu quả nhằm mang lại trải nghiệm tốt cho người dùng và hỗ trợ ra quyết định nhanh chóng.",
@@ -1034,7 +1034,7 @@
     {
       "id": "mod-combo-22",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 22,
       "title": "Buổi 22: Product Analytics",
       "summary": "Tìm hiểu cách sử dụng dữ liệu để phân tích hành vi người dùng, đánh giá hiệu quả sản phẩm và hỗ trợ các quyết định cải thiện Product.",
@@ -1054,7 +1054,7 @@
     {
       "id": "mod-combo-23",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 23,
       "title": "Buổi 23: Dashboard Project Review & Feedback",
       "summary": "Mentor review sản phẩm Dashboard Project của học viên dựa trên các nguyên tắc Data Visualization và Dashboard Design.",
@@ -1074,7 +1074,7 @@
     {
       "id": "mod-combo-24",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 24,
       "title": "Buổi 24: Analysis Slide Review & Feedback",
       "summary": "Mentor review Analysis Slide của học viên, tập trung vào tư duy phân tích, Insight và cách truyền tải kết quả đến người xem.",
@@ -1094,7 +1094,7 @@
     {
       "id": "mod-combo-25",
       "courseId": "end-to-end-analytics",
-      "courseName": "End-to-End Analytics with SQL & Dashboard",
+      "courseName": "End-to-End Analytics with SQL & Dashboard Design",
       "moduleNumber": 25,
       "title": "Buổi 25: Career Orientation & CV Feedback",
       "summary": "Định hướng lộ trình nghề nghiệp Data Analyst và chuẩn bị CV để sẵn sàng hơn cho quá trình ứng tuyển.",

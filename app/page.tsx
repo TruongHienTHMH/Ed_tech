@@ -1,4 +1,3 @@
-import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Navbar from "@/components/layout/Navbar";
 import HeroSection from "@/components/home/HeroSection";
 import CoursesSection from "@/components/home/CoursesSection";
@@ -28,7 +27,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-white selection:bg-[#AF445A]/20 selection:text-[#AF445A]">
       {/* Top Announcement Bar */}
-      <AnnouncementBar />
+      {/* <AnnouncementBar /> */}
 
       {/* Main Sticky Navbar */}
       <Navbar />

@@ -36,7 +36,7 @@ Module Trang Chủ chịu trách nhiệm dựng toàn bộ trang đích (`/`) t�
    - Hiển thị danh mục 3 khóa học thực tế:
      - *SQL for Data Analytics* (12 buổi | 2.990.000 VNĐ).
      - *Analytical Thinking & Dashboard Design* (16 buổi | 3.790.000 VNĐ).
-     - *End-to-End Analytics with SQL & Dashboard Design* (25 buổi | 5.690.000 VNĐ).
+     - *End-to-End Analytics with SQL & Dashboard Design Design* (25 buổi | 5.690.000 VNĐ).
    - Mỗi card có 2 nút CTA: `[Xem chi tiết]` (chuyển hướng `/courses/[slug]`) và `[Tư vấn ngay]` (mở Lead Modal M04 điền sẵn `course_id`).
 5. **Khối Dự án học viên tiêu biểu (Student Projects Showcase):**
    - Bố cục lưới 2x2 trên Desktop và vuốt ngang mượt mà trên Mobile (thay thế khối Free Resources cũ theo chỉ thị sheet Main).

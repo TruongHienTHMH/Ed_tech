@@ -185,7 +185,7 @@ export const SECTION_IMAGES_REGISTRY: Record<string, SectionImageItem[]> = {
       section: "courses",
       figmaNodeId: "12:791",
       filePath: "/assets/figma/c4ad4d89a999588201cc5ccd2a39ca7dd43febe3.png",
-      title: "End-to-End Analytics with SQL & Dashboard",
+      title: "End-to-End Analytics with SQL & Dashboard Design",
       alt: "End-to-End Analytics Cover",
     },
     {

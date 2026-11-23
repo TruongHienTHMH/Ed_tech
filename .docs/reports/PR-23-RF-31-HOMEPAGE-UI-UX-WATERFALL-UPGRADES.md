@@ -35,7 +35,7 @@
 * Kết nối menu con Dropdown với **3 khóa học từ Database** (`seedCourses` / CMS):
   * *Khóa SQL for Data Analytics* (12 buổi)
   * *Khóa Data Analytical Thinking* (16 buổi)
-  * *Combo End-to-End Analytics with SQL & Dashboard* (25 buổi) với phong cách combo nổi bật.
+  * *Combo End-to-End Analytics with SQL & Dashboard Design* (25 buổi) với phong cách combo nổi bật.
 * Đồng bộ hoàn hảo cho cả Desktop Header và Drawer Mobile Menu.
 
 ### 🔹 Stage 2: [components/home/RoadmapCard.tsx](file:///Users/hientruongthmh/Documents/Web_Jobs/ed_da_tech/components/home/RoadmapCard.tsx)
