@@ -7,9 +7,7 @@ import CourseHero from "@/components/course/CourseHero";
 import CourseFigmaOverview from "@/components/course/CourseFigmaOverview";
 import CourseFigmaHighlights from "@/components/course/CourseFigmaHighlights";
 import CourseFigmaWeekAccordion from "@/components/course/CourseFigmaWeekAccordion";
-import CourseFigmaInstructor from "@/components/course/CourseFigmaInstructor";
 import CourseFigmaStickySidebar from "@/components/course/CourseFigmaStickySidebar";
-import CourseMethodologyFlow from "@/components/course/CourseMethodologyFlow";
 import CourseOutcomes from "@/components/course/CourseOutcomes";
 import CourseFaq from "@/components/course/CourseFaq";
 import { CourseService } from "@/lib/services/course.service";
@@ -78,8 +76,9 @@ export default async function CourseDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // Concurrent fetch for curriculum, student projects, and FAQs from Google Sheets
-  const [modules, studentProjects, faqs] = await Promise.all([
+  // Concurrent fetch for courses, curriculum, student projects, and FAQs from Google Sheets
+  const [courses, modules, studentProjects, faqs] = await Promise.all([
+    ContentFetcher.getCourses().catch(() => []),
     CourseService.getCurriculumByCourseId(course.id, course.slug).catch(() => []),
     ContentFetcher.getStudentProjects().catch(() => []),
     ContentFetcher.getFaqs().catch(() => []),
@@ -91,7 +90,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
       {/* <AnnouncementBar /> */}
 
       {/* Sticky Main Navigation */}
-      <Navbar variant="light" />
+      <Navbar variant="light" courses={courses} />
 
       {/* Main Course Content — Figma Node 12:1277 Architecture */}
       <main className="flex-1">
@@ -106,10 +105,13 @@ export default async function CourseDetailPage({ params }: PageProps) {
               {/* 1. Chi tiết khóa học */}
               <CourseFigmaOverview course={course} />
 
-              {/* 2. Điểm nổi bật */}
+              {/* 2. Sau khóa học bạn làm được gì (Nhận dữ liệu từ Google Sheets AppScript) */}
+              <CourseOutcomes outcomes={course.outcomes} projects={studentProjects} />
+
+              {/* 3. Điểm nổi bật */}
               <CourseFigmaHighlights />
 
-              {/* 3. Chương trình giảng dạy theo tuần (Chuẩn Figma 380:1502) */}
+              {/* 4. Chương trình giảng dạy theo tuần (Chuẩn Figma 380:1502) */}
               <CourseFigmaWeekAccordion
                 modules={modules}
                 courseTitle={course.title}
@@ -119,14 +121,6 @@ export default async function CourseDetailPage({ params }: PageProps) {
                 capstoneCount={course.capstoneCount}
               />
 
-              {/* 4. Giảng viên của bạn (Hứa Thảo Lý, MoMo, Tiki, ACB) */}
-              <CourseFigmaInstructor />
-
-              {/* 5. Phương pháp học 5 bước */}
-              <CourseMethodologyFlow />
-
-              {/* 6. Dự án học viên tiêu biểu */}
-              <CourseOutcomes projects={studentProjects} />
             </div>
 
             {/* CỘT PHẢI STICKY (384px): Học phí, CTA, Khóa học bao gồm */}

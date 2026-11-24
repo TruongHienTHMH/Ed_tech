@@ -19,17 +19,7 @@ export default function CourseFigmaOverview({ course }: CourseFigmaOverviewProps
           "Sinh viên hoặc người đi làm muốn chuyển ngành sang vị trí Data Analyst.",
         ];
 
-  // 2. Sau khóa học bạn được gì
-  const outcomesList =
-    course.outcomes && course.outcomes.length > 0
-      ? course.outcomes
-      : [
-          "Tự tin viết câu lệnh SQL phức tạp (JOINs, Window Functions, CTE).",
-          "Tối ưu hóa tốc độ truy vấn trên hệ thống dữ liệu lớn của doanh nghiệp.",
-          "Sở hữu Portfolio đồ án Capstone thực chiến để gây ấn tượng với nhà tuyển dụng.",
-        ];
-
-  // 3. Yêu cầu đầu vào
+  // 2. Yêu cầu đầu vào
   const inputRequirementText =
     course.inputRequirement ||
     (course.slug === "data-analytical-thinking"
@@ -46,57 +36,25 @@ export default function CourseFigmaOverview({ course }: CourseFigmaOverviewProps
         </h2>
       </div>
 
-      {/* Main Description */}
-      <div className="prose prose-gray max-w-none mb-8">
-        <p className="text-base text-gray-700 leading-relaxed">
-          {course.description ||
-            "Xây dựng nền tảng Data Analytics toàn diện, từ truy vấn và xử lý dữ liệu với SQL đến tư duy phân tích, trực quan hóa và thiết kế Dashboard hoàn chỉnh cho doanh nghiệp."}
-        </p>
-      </div>
-
-      {/* 2-Column Info Grid: Who it is for & What you will achieve */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {/* Box 1: Khóa học dành cho ai? */}
-        <div className="bg-[#FAF7F8] border border-[#EFE5E7] rounded-2xl p-6">
-          <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <span>👥</span> Khóa học này dành cho ai?
-          </h3>
-          <ul className="space-y-3 text-sm text-gray-700">
-            {whoIsForList.map((item, idx) => (
-              <li key={idx} className="flex items-center gap-4">
-                <Image
-                  src="/assets/decorations/verify.svg"
-                  alt="check"
-                  width={18}
-                  height={18}
-                  className="w-4.5 h-4.5 shrink-0 mt-0.5 object-contain"
-                />
-                <span className="leading-relaxed">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Box 2: Sau khóa học làm được gì? */}
-        <div className="bg-[#FAF7F8] border border-[#EFE5E7] rounded-2xl p-6">
-          <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <span>🚀</span> Sau khóa học bạn có thể làm được gì?
-          </h3>
-          <ul className="space-y-3 text-sm text-gray-700">
-            {outcomesList.map((item, idx) => (
-              <li key={idx} className="flex items-center gap-4">
-                <Image
-                  src="/assets/decorations/verify.svg"
-                  alt="check"
-                  width={18}
-                  height={18}
-                  className="w-4.5 h-4.5 shrink-0 mt-0.5 object-contain"
-                />
-                <span className="leading-relaxed">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+      {/* Khóa học dành cho ai? */}
+      <div className="bg-[#FAF7F8] border border-[#EFE5E7] rounded-2xl p-6 mb-6">
+        <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <span>👥</span> Khóa học này dành cho ai?
+        </h3>
+        <ul className="space-y-3 text-sm text-gray-700">
+          {whoIsForList.map((item, idx) => (
+            <li key={idx} className="flex items-center gap-4">
+              <Image
+                src="/assets/decorations/verify.svg"
+                alt="check"
+                width={18}
+                height={18}
+                className="w-4.5 h-4.5 shrink-0 mt-0.5 object-contain"
+              />
+              <span className="leading-relaxed">{item}</span>
+            </li>
+          ))}
+        </ul>
       </div>
 
       {/* Input Requirement */}

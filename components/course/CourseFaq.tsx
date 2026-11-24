@@ -132,16 +132,16 @@ export default function CourseFaq({ courseId, courseTitle, faqs = [] }: CourseFa
             </div>
 
             {/* Quick Helper Note */}
-            <div className="mt-6 p-4 rounded-2xl bg-neutral-50 border border-neutral-200/70 flex items-center gap-3 text-xs sm:text-sm text-neutral-600">
+            {/* <div className="mt-6 p-4 rounded-2xl bg-neutral-50 border border-neutral-200/70 flex items-center gap-3 text-xs sm:text-sm text-neutral-600">
               <span className="text-base shrink-0">💬</span>
               <span>
                 Bạn còn câu hỏi khác? Hãy điền biểu mẫu tư vấn bên cạnh hoặc liên hệ qua Hotline/Zalo để được Mentor giải đáp trực tiếp.
               </span>
-            </div>
+            </div> */}
           </div>
 
           {/* Right Column: Embedded Lead Consultation Form (5 cols) */}
-          <div className="lg:col-span-5 bg-gradient-to-b from-[#FAF7F8] to-white border border-[#EFE5E7] rounded-3xl p-6 sm:p-8 shadow-sm lg:sticky lg:top-24">
+          {/* <div className="lg:col-span-5 bg-gradient-to-b from-[#FAF7F8] to-white border border-[#EFE5E7] rounded-3xl p-6 sm:p-8 shadow-sm lg:sticky lg:top-24">
             <div className="mb-5">
               <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#8B1D2C]/10 text-xs font-bold text-[#8B1D2C] uppercase tracking-wider mb-2">
                 Tư Vấn Miễn Phí 1:1
@@ -154,8 +154,6 @@ export default function CourseFaq({ courseId, courseTitle, faqs = [] }: CourseFa
                 <strong className="text-neutral-900 font-semibold">{courseTitle}</strong>.
               </p>
             </div>
-
-            {/* Value Props Row */}
             <div className="grid grid-cols-3 gap-2 py-3 px-2 mb-5 rounded-xl bg-white border border-[#EFE5E7] text-center text-[11px] sm:text-xs font-medium text-neutral-700">
               <div className="flex flex-col items-center gap-0.5">
                 <span className="text-xs">⚡</span>
@@ -176,7 +174,8 @@ export default function CourseFaq({ courseId, courseTitle, faqs = [] }: CourseFa
               ctaId={`btn_submit_embedded_${courseId}`}
               defaultCourseId={courseId}
             />
-          </div>
+          </div> */}
+
         </div>
       </div>
     </section>

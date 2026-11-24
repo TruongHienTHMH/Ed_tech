@@ -180,10 +180,6 @@ export default function CourseFigmaWeekAccordion({
                 const sessionDesc = mod.sessionDesc || mod.summary;
                 const dots = (mod.subContent && mod.subContent.length > 0) ? mod.subContent : mod.bulletPoints;
 
-                // Tự động nhận diện buổi thực hành (Practice) hoặc Capstone
-                const isPractice = rawTitle.toLowerCase().includes("practice") || rawTitle.toLowerCase().includes("thực hành");
-                const isCapstone = rawTitle.toLowerCase().includes("capstone") || rawTitle.toLowerCase().includes("đồ án") || mod.isMilestone;
-
                 return (
                   <div key={mod.id} className="transition-colors">
                     {/* Hàng Session Header (Clickable) */}
@@ -197,42 +193,17 @@ export default function CourseFigmaWeekAccordion({
                     >
                       <div className="flex items-center gap-3 sm:gap-3.5 flex-1 min-w-0">
                         {/* Figma Session Number Badge */}
-                        <div
-                          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0 font-bold text-xs sm:text-sm tracking-tight transition-colors ${
-                            isCapstone
-                              ? "bg-amber-100 text-amber-800 border border-amber-300"
-                              : isPractice
-                              ? "bg-pink-50 text-[#AF445A] border border-pink-200"
-                              : "bg-white border border-[#EFE5E7] shadow-2xs"
-                          }`}
-                        >
-                          {isCapstone || isPractice ? (
-                            formattedNumber
-                          ) : (
-                            <span className="bg-gradient-to-r from-[#AF445A] to-[#784080] bg-clip-text text-transparent font-extrabold">
-                              {formattedNumber}
-                            </span>
-                          )}
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0 font-bold text-xs sm:text-sm tracking-tight bg-white border border-[#EFE5E7] shadow-2xs">
+                          <span className="bg-gradient-to-r from-[#AF445A] to-[#784080] bg-clip-text text-transparent font-extrabold">
+                            {formattedNumber}
+                          </span>
                         </div>
 
                         {/* Title & Subtitle */}
                         <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <h4 className="text-sm sm:text-base font-semibold text-gray-900 leading-snug">
-                              Buổi {dayNumber}: {sessionTitle}
-                            </h4>
-
-                            {isCapstone && (
-                              <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 shrink-0">
-                                🏆 Capstone Project
-                              </span>
-                            )}
-                            {isPractice && !isCapstone && (
-                              <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-pink-50 text-[#AF445A] border border-pink-200 shrink-0">
-                                ⚡ Thực hành
-                              </span>
-                            )}
-                          </div>
+                          <h4 className="text-sm sm:text-base font-semibold text-gray-900 leading-snug">
+                            Buổi {dayNumber}: {sessionTitle}
+                          </h4>
 
                           {sessionDesc && (
                             <p className="text-xs sm:text-sm text-gray-500 font-normal mt-0.5 line-clamp-1 leading-relaxed">

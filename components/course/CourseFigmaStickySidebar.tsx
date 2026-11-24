@@ -130,15 +130,6 @@ export default function CourseFigmaStickySidebar({
         <div className="space-y-2 text-xs">
           <div className="flex items-center justify-between text-gray-700">
             <span className="flex items-center gap-1.5 text-gray-500">
-              <span>📅</span> Khai giảng:
-            </span>
-            <span suppressHydrationWarning className="font-bold text-gray-900">
-              {formatVietnameseDate(course.curriculumModules?.[0]?.startDate)}
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between text-gray-700">
-            <span className="flex items-center gap-1.5 text-gray-500">
               <span>⏱️</span> Thời lượng:
             </span>
             <span className="font-bold text-gray-900">{course.totalSessions || 12} buổi học</span>
