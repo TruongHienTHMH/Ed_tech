@@ -42,7 +42,7 @@ export default async function AboutPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white selection:bg-[#AF445A]/20 selection:text-[#AF445A]">
       {/* Top Announcement Bar */}
-      {/* <AnnouncementBar /> */}
+      <AnnouncementBar />
 
       {/* Main Navigation (Light variant for crisp reading) */}
       <Navbar variant="light" courses={courses} />

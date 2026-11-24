@@ -4,7 +4,18 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { X } from "@/components/common/Icons";
 
-interface AnnouncementBarProps {
+/**
+ * ---------------------------------------------------------------------------
+ * GLOBAL FEATURE FLAG: BẬT / TẮT ANNOUNCEMENT BAR TRÊN TOÀN BỘ CÁC TRANG
+ * ---------------------------------------------------------------------------
+ * - Hiện tại: Đang TẮT (false) theo yêu cầu. Component trả về null trên mọi page.
+ * - Khi cần BẬT LẠI: Chỉ cần đổi thành `ENABLE_ANNOUNCEMENT_BAR = true`.
+ *   Toàn bộ giao diện, hiệu ứng countdown và logic ưu đãi sẽ hoạt động trở lại.
+ * ---------------------------------------------------------------------------
+ */
+export const ENABLE_ANNOUNCEMENT_BAR = false;
+
+export interface AnnouncementBarProps {
   initialTitle?: string;
   initialSubtitle?: string;
   initialDiscount?: string;
@@ -25,6 +36,9 @@ export default function AnnouncementBar({
   });
 
   useEffect(() => {
+    // Không chạy interval đếm ngược khi cờ đang tắt
+    if (!ENABLE_ANNOUNCEMENT_BAR) return;
+
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev.seconds > 0) {
@@ -43,7 +57,10 @@ export default function AnnouncementBar({
     return () => clearInterval(timer);
   }, []);
 
-  if (!isVisible) return null;
+  // Khi tính năng tắt hoặc người dùng bấm nút đóng -> Không hiển thị gì
+  if (!ENABLE_ANNOUNCEMENT_BAR || !isVisible) {
+    return null;
+  }
 
   const pad = (n: number) => String(n).padStart(2, "0");
 
