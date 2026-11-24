@@ -4,6 +4,7 @@ import Footer from "@/components/layout/Footer";
 import FloatingCta from "@/components/layout/FloatingCta";
 import BlogListContainer from "@/components/blog/BlogListContainer";
 import { BlogService } from "@/lib/services/blog.service";
+import { ContentFetcher } from "@/lib/cms/content-fetcher";
 
 export const metadata: Metadata = {
   title: "Góc Chia Sẻ Kiến Thức Data Analytics | DataWithLy",
@@ -21,18 +22,19 @@ export const metadata: Metadata = {
 export const revalidate = 300; // ISR 5 minutes
 
 export default async function BlogPage() {
-  const [posts, categories] = await Promise.all([
+  const [posts, categories, courses, settings] = await Promise.all([
     BlogService.getBlogPosts().catch(() => []),
     BlogService.getCategories().catch(() => []),
+    ContentFetcher.getCourses().catch(() => []),
+    ContentFetcher.getSettings().catch(() => undefined),
   ]);
 
   return (
     <div className="min-h-screen flex flex-col bg-white selection:bg-[#AF445A]/20 selection:text-[#AF445A]">
-      {/* <AnnouncementBar /> */}
-      <Navbar variant="light" />
+      <Navbar variant="light" courses={courses} />
 
       <main className="flex-1">
-        {/* Blog Hero Header */}
+        {/* Blog Listing Header Tổng quan */}
         <section className="relative w-full bg-gradient-to-b from-[#FAF7F8] via-white to-white py-12 lg:py-16 border-b border-neutral-100 overflow-hidden">
           {/* Subtle background glow */}
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-gradient-to-br from-[#8B1D2C]/5 to-transparent rounded-full blur-3xl pointer-events-none" />
@@ -62,9 +64,8 @@ export default async function BlogPage() {
         </section>
       </main>
 
-      <Footer />
-      <FloatingCta />
+      <Footer settings={settings} />
+      <FloatingCta settings={settings} />
     </div>
   );
 }
-

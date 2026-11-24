@@ -5,16 +5,16 @@ import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FloatingCta from "@/components/layout/FloatingCta";
+import BlogHero from "@/components/blog/BlogHero";
 import SafeImage from "@/components/common/SafeImage";
 import { Clock } from "@/components/common/Icons";
 import ReadingProgressBar from "@/components/blog/ReadingProgressBar";
 import TableOfContents from "@/components/blog/TableOfContents";
 import BlogMarkdownRenderer from "@/components/blog/BlogMarkdownRenderer";
-import BlogAuthorBox from "@/components/blog/BlogAuthorBox";
-import BlogRelatedCourseBanner from "@/components/blog/BlogRelatedCourseBanner";
 import BlogSidebarMiniCard from "@/components/blog/BlogSidebarMiniCard";
 import BlogPostCard from "@/components/blog/BlogPostCard";
 import { BlogService } from "@/lib/services/blog.service";
+import { ContentFetcher } from "@/lib/cms/content-fetcher";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -65,25 +65,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  const relatedPosts = await BlogService.getRelatedPosts(
-    post.category,
-    post.slug,
-    3
-  ).catch(() => []);
-
-  const formattedDate = (() => {
-    try {
-      const d = new Date(post.publishedAt);
-      if (isNaN(d.getTime())) return post.publishedAt;
-      return d.toLocaleDateString("vi-VN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      });
-    } catch {
-      return post.publishedAt;
-    }
-  })();
+  const [relatedPosts, courses, settings] = await Promise.all([
+    BlogService.getRelatedPosts(
+      post.category,
+      post.slug,
+      3
+    ).catch(() => []),
+    ContentFetcher.getCourses().catch(() => []),
+    ContentFetcher.getSettings().catch(() => undefined),
+  ]);
 
   const readTime = post.readTimeMinutes || 5;
 
@@ -94,56 +84,26 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       {/* 2. Top Navigation */}
       <AnnouncementBar />
-      <Navbar variant="light" />
+      <Navbar variant="light" courses={courses} />
 
       <main className="flex-1">
-        {/* Breadcrumb Header */}
-        <div className="bg-[#FAF7F8] border-b border-neutral-100 py-4">
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-neutral-500 overflow-x-auto scrollbar-none">
-              <Link href="/" className="hover:text-neutral-900 transition-colors shrink-0">
-                Trang chủ
-              </Link>
-              <span>/</span>
-              <Link href="/blog" className="hover:text-neutral-900 transition-colors shrink-0">
-                Blog
-              </Link>
-              <span>/</span>
-              <span className="text-neutral-800 font-semibold truncate max-w-xs sm:max-w-md">
-                {post.title}
-              </span>
-            </nav>
-          </div>
-        </div>
+        {/* Blog Hero Header theo chuẩn Figma Node 422:1149 & 422:1196 */}
+        <BlogHero post={post} isDetailPage={true} breadcrumbCurrent="Blog details" />
 
         {/* Article Container (2-Column Desktop Layout) */}
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
             {/* Primary Reading Column (8 cols) */}
             <div className="lg:col-span-8 space-y-8">
-              {/* Header Meta */}
-              <div className="space-y-4">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#8B1D2C]/10 text-[#8B1D2C] border border-[#8B1D2C]/20">
-                    {post.category}
-                  </span>
-                  <div className="flex items-center gap-1.5 text-xs text-neutral-500 font-medium">
-                    <Clock className="w-3.5 h-3.5 text-[#8B1D2C]" />
-                    <span>{readTime} phút đọc</span>
-                  </div>
-                  <span className="text-xs text-neutral-400">•</span>
-                  <span className="text-xs text-neutral-500">{formattedDate}</span>
+              {/* Category & Read Time Badge */}
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#8B1D2C]/10 text-[#8B1D2C] border border-[#8B1D2C]/20">
+                  {post.category}
+                </span>
+                <div className="flex items-center gap-1.5 text-xs text-neutral-500 font-medium">
+                  <Clock className="w-3.5 h-3.5 text-[#8B1D2C]" />
+                  <span>{readTime} phút đọc</span>
                 </div>
-
-                {/* H1 Title */}
-                <h1 className="font-heading font-extrabold text-2xl sm:text-3xl lg:text-[40px] text-neutral-900 leading-tight">
-                  {post.title}
-                </h1>
-
-                {/* Lead Excerpt */}
-                <p className="text-base sm:text-lg text-neutral-600 leading-relaxed font-normal italic border-l-3 border-[#8B1D2C]/50 pl-4 py-1">
-                  {post.excerpt}
-                </p>
               </div>
 
               {/* Cover Image 16:9 */}
@@ -167,19 +127,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <BlogMarkdownRenderer
                   content={post.contentMarkdown || post.excerpt}
                 />
-              </div>
-
-              {/* Author Box */}
-              <div className="pt-6 border-t border-neutral-200">
-                <BlogAuthorBox
-                  name={post.authorName || "Hứa Thảo Lý"}
-                  avatarUrl={post.authorAvatarUrl}
-                />
-              </div>
-
-              {/* Related Course CTA Banner */}
-              <div className="pt-4">
-                <BlogRelatedCourseBanner category={post.category} />
               </div>
             </div>
 
@@ -227,8 +174,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         )}
       </main>
 
-      <Footer />
-      <FloatingCta />
+      <Footer settings={settings} />
+      <FloatingCta settings={settings} />
     </div>
   );
 }
