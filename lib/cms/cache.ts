@@ -11,7 +11,7 @@ export interface CacheEntry<T> {
 export class LRUCacheManager {
   private static store = new Map<string, CacheEntry<unknown>>();
   private static readonly MAX_ENTRIES = 100;
-  private static readonly DEFAULT_TTL_MS = 5 * 60 * 1000; // 5 minutes
+  private static readonly DEFAULT_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours (Event-Driven Invalidation via webhook)
 
   /**
    * Retrieve cached value if exists and not expired

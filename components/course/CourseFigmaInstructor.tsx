@@ -75,7 +75,6 @@ export default function CourseFigmaInstructor({ onOpenConsult }: CourseFigmaInst
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 192px, 192px"
-                priority
               />
             </div>
 

@@ -163,8 +163,9 @@ export class SheetsClient {
 
       if (json && json.ok && json.tabs) {
         const report = this.parseRawTabs(json.tabs, latencyMs);
-        const ttlMs = process.env.NODE_ENV === "development" ? 5 * 1000 : undefined;
-        LRUCacheManager.set(this.CACHE_KEY, report, ttlMs);
+        // Event-Driven Cache: Giữ dữ liệu trong RAM (24h), chỉ bị xóa khi Webhook /api/revalidate từ Google Sheets gọi sang
+        const cacheTtlMs = 24 * 60 * 60 * 1000;
+        LRUCacheManager.set(this.CACHE_KEY, report, cacheTtlMs);
 
         // Debug tay ở môi trường local: console.log dữ liệu nhận được với tiền tố "Script update new"
         console.log("Script update new:", {
@@ -221,7 +222,8 @@ export class SheetsClient {
         "fallback_snapshot"
       );
 
-      const errorTtlMs = process.env.NODE_ENV === "development" ? 5 * 1000 : 30 * 1000;
+      // Khi gặp sự cố mạng, giữ dữ liệu fallback 60 giây để tránh nghẽn mạng retry dồn dập
+      const errorTtlMs = 60 * 1000;
       LRUCacheManager.set(this.CACHE_KEY, report, errorTtlMs);
       return report;
     }

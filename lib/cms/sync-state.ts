@@ -14,8 +14,5 @@ export function recordRevalidation(): number {
 }
 
 export function getLastRevalidatedTimestamp(): number {
-  if (!globalThis.__lastRevalidatedTimestamp) {
-    globalThis.__lastRevalidatedTimestamp = Date.now();
-  }
-  return globalThis.__lastRevalidatedTimestamp;
+  return globalThis.__lastRevalidatedTimestamp || 0;
 }

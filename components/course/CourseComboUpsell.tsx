@@ -16,11 +16,9 @@ export default function CourseComboUpsell({ course }: CourseComboUpsellProps) {
     course.slug.toLowerCase().includes("end-to-end");
 
   const formatPrice = (val: number) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-      maximumFractionDigits: 0,
-    }).format(val);
+    return Math.round(val)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " ₫";
   };
 
   return (

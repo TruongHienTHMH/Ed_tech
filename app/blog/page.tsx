@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FloatingCta from "@/components/layout/FloatingCta";
@@ -29,7 +28,7 @@ export default async function BlogPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white selection:bg-[#AF445A]/20 selection:text-[#AF445A]">
-      <AnnouncementBar />
+      {/* <AnnouncementBar /> */}
       <Navbar variant="light" />
 
       <main className="flex-1">

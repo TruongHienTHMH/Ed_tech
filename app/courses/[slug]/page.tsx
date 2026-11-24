@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FloatingCta from "@/components/layout/FloatingCta";
@@ -79,18 +78,17 @@ export default async function CourseDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // Concurrent fetch for curriculum, student projects, all courses, and FAQs from Google Sheets
-  const [modules, studentProjects, allCourses, faqs] = await Promise.all([
+  // Concurrent fetch for curriculum, student projects, and FAQs from Google Sheets
+  const [modules, studentProjects, faqs] = await Promise.all([
     CourseService.getCurriculumByCourseId(course.id, course.slug).catch(() => []),
     ContentFetcher.getStudentProjects().catch(() => []),
-    CourseService.getCourses().catch(() => []),
     ContentFetcher.getFaqs().catch(() => []),
   ]);
 
   return (
     <div className="min-h-screen flex flex-col bg-white selection:bg-[#AF445A]/20 selection:text-[#AF445A]">
       {/* Top Notification Bar */}
-      <AnnouncementBar />
+      {/* <AnnouncementBar /> */}
 
       {/* Sticky Main Navigation */}
       <Navbar variant="light" />
@@ -131,8 +129,8 @@ export default async function CourseDetailPage({ params }: PageProps) {
               <CourseOutcomes projects={studentProjects} />
             </div>
 
-            {/* CỘT PHẢI STICKY (384px): Học phí, Slider đa khóa học, CTA, Khóa học bao gồm */}
-            <CourseFigmaStickySidebar course={course} allCourses={allCourses} />
+            {/* CỘT PHẢI STICKY (384px): Học phí, CTA, Khóa học bao gồm */}
+            <CourseFigmaStickySidebar course={course} />
           </div>
         </div>
 

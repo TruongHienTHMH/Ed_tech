@@ -4,19 +4,11 @@ import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 export default function SyncNotifier() {
-  const mountTimeRef = useRef<number | null>(null);
-  const lastSeenRef = useRef<number | null>(null);
+  const isInitializedRef = useRef<boolean>(false);
+  const lastSeenTimestampRef = useRef<number>(0);
 
   useEffect(() => {
-    const now = Date.now();
-    if (mountTimeRef.current === null) {
-      mountTimeRef.current = now;
-    }
-    if (lastSeenRef.current === null) {
-      lastSeenRef.current = now;
-    }
-
-    // 1. Hàm kiểm tra trạng thái cập nhật từ server
+    // Hàm kiểm tra trạng thái cập nhật từ server (chỉ gọi khi cần, không dùng polling định kỳ)
     const checkSyncStatus = async () => {
       try {
         const res = await fetch("/api/revalidate/status", {
@@ -26,21 +18,25 @@ export default function SyncNotifier() {
         if (!res.ok) return;
 
         const data = await res.json();
-        const serverTimestamp = Number(data.lastRevalidatedAt);
-        const mountTime = mountTimeRef.current || now;
+        const serverTimestamp = Number(data.lastRevalidatedAt) || 0;
 
-        // Nếu server có revalidation diễn ra SAU khi component được mount
-        // và KHÁC với timestamp đã thông báo trước đó
+        // Lần đầu tiên chạy: Ghi nhận mốc ban đầu (baseline) từ server, không bắn toast
+        if (!isInitializedRef.current) {
+          isInitializedRef.current = true;
+          lastSeenTimestampRef.current = serverTimestamp;
+          return;
+        }
+
+        // Các lần kiểm tra sau (khi chuyển tab):
+        // Chỉ thông báo khi server có lượt đồng bộ thực tế mới hơn mốc đã thấy
         if (
-          serverTimestamp &&
-          serverTimestamp > mountTime &&
-          serverTimestamp !== lastSeenRef.current
+          serverTimestamp > 0 &&
+          serverTimestamp > lastSeenTimestampRef.current
         ) {
-          lastSeenRef.current = serverTimestamp;
+          lastSeenTimestampRef.current = serverTimestamp;
 
-          // Thông báo Sonner (Chỉ thông báo, không cần nút action theo yêu cầu)
-          toast.info("LYDATA Vừa cập nhật nội dung mới, bạn refresh trang để theo dõi nội dung mới nhất.", {
-            duration: 12000,
+          toast.info("LYDATA vừa cập nhật nội dung mới, bạn tải lại trang để theo dõi nội dung mới nhất.", {
+            duration: 8000,
           });
         }
       } catch {
@@ -48,10 +44,11 @@ export default function SyncNotifier() {
       }
     };
 
-    // 2. Kiểm tra định kỳ mỗi 8 giây
-    const intervalId = setInterval(checkSyncStatus, 8000);
+    // 1. Kiểm tra mốc ban đầu khi nạp trang
+    checkSyncStatus();
 
-    // 3. Kiểm tra ngay khi người dùng chuyển lại tab (Tab Visibility Change)
+    // 2. Chỉ kiểm tra khi người dùng chuyển lại tab trang web (Tab Visibility Change)
+    // Hoàn toàn không dùng setInterval polling chạy nền định kỳ để tránh spam log và tốn tài nguyên
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
         checkSyncStatus();
@@ -61,7 +58,6 @@ export default function SyncNotifier() {
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      clearInterval(intervalId);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
