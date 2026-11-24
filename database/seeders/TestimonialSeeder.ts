@@ -139,6 +139,66 @@ export class TestimonialSeeder implements Seeder<Testimonial> {
         avatarUrl: "/assets/mentor/icon-student-primary.svg",
         isActive: true,
       },
+      // {
+      //   id: "testi-10",
+      //   studentName: "Đỗ Phương Thảo",
+      //   studentRole: "Combo End-to-End Analytics",
+      //   role: "Combo End-to-End Analytics",
+      //   company: "VNPAY",
+      //   courseId: "end-to-end-analytics",
+      //   rating: 5,
+      //   comment:
+      //     "Sau khóa học mình tự tin lead các dự án phân tích dữ liệu lớn tại công ty. Kiến thức được hệ thống hóa bài bản và có tính ứng dụng cực kỳ cao.",
+      //   reviewText:
+      //     "Sau khóa học mình tự tin lead các dự án phân tích dữ liệu lớn tại công ty. Kiến thức được hệ thống hóa bài bản và có tính ứng dụng cực kỳ cao.",
+      //   avatarUrl: "/assets/mentor/icon-student-primary.svg",
+      //   isActive: true,
+      // },
+      // {
+      //   id: "testi-11",
+      //   studentName: "Phạm Quốc Huy",
+      //   studentRole: "Data Analytical Thinking & Dashboard Design",
+      //   role: "Data Analytical Thinking & Dashboard Design",
+      //   company: "FPT Software",
+      //   courseId: "analytical-thinking-dashboard-design",
+      //   rating: 5,
+      //   comment:
+      //     "Tư duy thiết kế Dashboard trực quan giúp sếp và các phòng ban nắm bắt insight chỉ trong 5 giây. Khóa học giải quyết đúng nỗi đau của mình.",
+      //   reviewText:
+      //     "Tư duy thiết kế Dashboard trực quan giúp sếp và các phòng ban nắm bắt insight chỉ trong 5 giây. Khóa học giải quyết đúng nỗi đau của mình.",
+      //   avatarUrl: "/assets/mentor/icon-student-primary.svg",
+      //   isActive: true,
+      // },
+      // {
+      //   id: "testi-12",
+      //   studentName: "Bùi Thị Lan",
+      //   studentRole: "Khóa SQL for Data Analytics",
+      //   role: "Khóa SQL for Data Analytics",
+      //   company: "Viettel Digital",
+      //   courseId: "sql-for-data-analytics",
+      //   rating: 5,
+      //   comment:
+      //     "Lộ trình học rõ ràng, bài tập thực tế từ dễ đến nâng cao. Chị Lý giải đáp thắc mắc siêu tận tình, hỗ trợ cả ngoài giờ học rất chu đáo.",
+      //   reviewText:
+      //     "Lộ trình học rõ ràng, bài tập thực tế từ dễ đến nâng cao. Chị Lý giải đáp thắc mắc siêu tận tình, hỗ trợ cả ngoài giờ học rất chu đáo.",
+      //   avatarUrl: "/assets/mentor/icon-student-primary.svg",
+      //   isActive: true,
+      // },
+      // {
+      //   id: "testi-13",
+      //   studentName: "Lê Minh Trí",
+      //   studentRole: "Combo End-to-End Analytics",
+      //   role: "Combo End-to-End Analytics",
+      //   company: "Giaohangtietkiem",
+      //   courseId: "end-to-end-analytics",
+      //   rating: 5,
+      //   comment:
+      //     "Rất ấn tượng với phần data storytelling và framing business problem. Giúp mình chuyển đổi ngành thành công sang Data Analyst chỉ sau 3 tháng.",
+      //   reviewText:
+      //     "Rất ấn tượng với phần data storytelling và framing business problem. Giúp mình chuyển đổi ngành thành công sang Data Analyst chỉ sau 3 tháng.",
+      //   avatarUrl: "/assets/mentor/icon-student-primary.svg",
+      //   isActive: true,
+      // },
     ];
   }
 }

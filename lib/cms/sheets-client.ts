@@ -548,6 +548,10 @@ export class SheetsClient {
       contactEmail: settingsMap.contact_email || "lyhuathithao@gmail.com",
       announcementBar: settingsMap.announcement_bar || "",
       revalidationUrl: settingsMap.revalidation_url || "",
+      tiktokUrl: settingsMap.tiktok_url || "https://www.tiktok.com/@datawithly",
+      facebookUrl: settingsMap.facebook_url || "https://www.facebook.com/profile.php?id=61594436940087",
+      instagramUrl: settingsMap.instagram_url || "https://www.instagram.com/datawithly/",
+      threadsUrl: settingsMap.threads_url || "https://www.threads.com/@datawithly",
       raw: settingsMap,
     };
 

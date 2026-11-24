@@ -52,7 +52,7 @@ var CONFIG = {
 };
 
 var COACHING_COURSES_LIST = [
-  "End-to-End Analytics with SQL & Dashboard Design Design",
+  "End-to-End Analytics with SQL & Dashboard Design",
   "SQL for Data Analytics",
   "Analytical Thinking & Data Analysis with Looker Studio",
   "Combo SQL & Looker Studio",

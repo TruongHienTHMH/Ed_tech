@@ -438,9 +438,13 @@ function setupSettingsTab(ss) {
 
   if (sheet.getLastRow() === 1) {
     var initialDeployUrl = PropertiesService.getScriptProperties().getProperty("WEB_DEPLOY_URL") || "";
-    sheet.appendRow(["hotline", "(+84) 934 938 431", "Số điện thoại hotline tư vấn tuyển sinh"]);
-    sheet.appendRow(["zalo_url", "https://zalo.me/0934938431", "Đường dẫn chat Zalo tư vấn nhanh"]);
+    sheet.appendRow(["hotline", "(+84) 769 361 960", "Số điện thoại hotline tư vấn tuyển sinh"]);
+    sheet.appendRow(["zalo_url", "https://zalo.me/0769361960", "Đường dẫn chat Zalo tư vấn nhanh"]);
     sheet.appendRow(["contact_email", "lyhuathithao@gmail.com", "Email nhận thư liên hệ"]);
+    sheet.appendRow(["tiktok_url", "https://www.tiktok.com/@datawithly", "Đường dẫn kênh TikTok chính thức"]);
+    sheet.appendRow(["facebook_url", "https://www.facebook.com/profile.php?id=61594436940087", "Đường dẫn trang Facebook / Fanpage"]);
+    sheet.appendRow(["instagram_url", "https://www.instagram.com/datawithly/", "Đường dẫn tài khoản Instagram"]);
+    sheet.appendRow(["threads_url", "https://www.threads.com/@datawithly", "Đường dẫn tài khoản Threads"]);
     sheet.appendRow(["announcement_bar", "Level Up Week: Learn More, Save 75%! - 4 days only! Get 70+ online SQL courses and save up to $450", "Thông báo trên thanh header"]);
     sheet.appendRow(["web_deploy_url", initialDeployUrl, "URL Website Production chính thức (Lấy từ Script Properties)"]);
     sheet.appendRow(["active_revalidation_env", "PROD", "Môi trường đồng bộ kích hoạt (PROD hoặc LOCAL)"]);

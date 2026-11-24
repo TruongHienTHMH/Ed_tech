@@ -3,7 +3,7 @@
  * DATAWITHLY LEADS CRM - GOOGLE APPS SCRIPT BUNDLE (LIGHTWEIGHT & SECURE)
  * ==============================================================================
  * Phiên bản: 2.2.0 (DataWithLy Leads CRM Engine)
- * Thời gian đóng gói: 2026-11-23T17:08:22.791Z
+ * Thời gian đóng gói: 2026-11-24T11:45:43.890Z
  * ==============================================================================
  */
 
@@ -77,7 +77,7 @@ var CONFIG = {
 };
 
 var COACHING_COURSES_LIST = [
-  "End-to-End Analytics with SQL & Dashboard Design Design",
+  "End-to-End Analytics with SQL & Dashboard Design",
   "SQL for Data Analytics",
   "Analytical Thinking & Data Analysis with Looker Studio",
   "Combo SQL & Looker Studio",

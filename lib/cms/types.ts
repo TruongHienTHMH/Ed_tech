@@ -151,6 +151,10 @@ export interface SystemSettings {
   contactEmail: string;
   announcementBar: string;
   revalidationUrl: string;
+  tiktokUrl?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  threadsUrl?: string;
   raw?: Record<string, string>;
 }
 

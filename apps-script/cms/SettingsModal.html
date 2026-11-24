@@ -29,22 +29,52 @@
     <div class="form-row">
       <div class="form-group col-1">
         <label for="hotline">Số Điện Thoại Hotline <span class="required">*</span></label>
-        <input type="text" id="hotline" name="hotline" required value="<?= currentSettings.hotline || '0901 234 567' ?>"
-          placeholder="0901 234 567">
+        <input type="text" id="hotline" name="hotline" required value="<?= currentSettings.hotline || '(+84) 769 361 960' ?>"
+          placeholder="(+84) 769 361 960">
       </div>
       <div class="form-group col-1">
         <label for="contact_email">Email Tuyển Sinh / Hỗ Trợ</label>
         <input type="text" id="contact_email" name="contact_email"
-          value="<?= currentSettings.contact_email || 'tuyensinh@datawithly.edu.vn' ?>"
-          placeholder="tuyensinh@datawithly.edu.vn">
+          value="<?= currentSettings.contact_email || 'lyhuathithao@gmail.com' ?>"
+          placeholder="lyhuathithao@gmail.com">
       </div>
     </div>
 
     <div class="form-group">
       <label for="zalo_url">Đường Dẫn Chat Zalo Tư Vấn Nhanh</label>
       <input type="text" id="zalo_url" name="zalo_url"
-        value="<?= currentSettings.zalo_url || 'https://zalo.me/0901234567' ?>"
-        placeholder="https://zalo.me/0901234567">
+        value="<?= currentSettings.zalo_url || 'https://zalo.me/0769361960' ?>"
+        placeholder="https://zalo.me/0769361960">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="tiktok_url">Đường Dẫn TikTok</label>
+        <input type="text" id="tiktok_url" name="tiktok_url"
+          value="<?= currentSettings.tiktok_url || 'https://www.tiktok.com/@datawithly' ?>"
+          placeholder="https://www.tiktok.com/@datawithly">
+      </div>
+      <div class="form-group col-1">
+        <label for="facebook_url">Đường Dẫn Facebook</label>
+        <input type="text" id="facebook_url" name="facebook_url"
+          value="<?= currentSettings.facebook_url || 'https://www.facebook.com/profile.php?id=61594436940087' ?>"
+          placeholder="https://www.facebook.com/profile.php?id=61594436940087">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="instagram_url">Đường Dẫn Instagram</label>
+        <input type="text" id="instagram_url" name="instagram_url"
+          value="<?= currentSettings.instagram_url || 'https://www.instagram.com/datawithly/' ?>"
+          placeholder="https://www.instagram.com/datawithly/">
+      </div>
+      <div class="form-group col-1">
+        <label for="threads_url">Đường Dẫn Threads</label>
+        <input type="text" id="threads_url" name="threads_url"
+          value="<?= currentSettings.threads_url || 'https://www.threads.com/@datawithly' ?>"
+          placeholder="https://www.threads.com/@datawithly">
+      </div>
     </div>
 
     <div class="form-group">
@@ -93,6 +123,10 @@
         hotline: document.getElementById("hotline").value.trim(),
         contact_email: document.getElementById("contact_email").value.trim(),
         zalo_url: document.getElementById("zalo_url").value.trim(),
+        tiktok_url: document.getElementById("tiktok_url").value.trim(),
+        facebook_url: document.getElementById("facebook_url").value.trim(),
+        instagram_url: document.getElementById("instagram_url").value.trim(),
+        threads_url: document.getElementById("threads_url").value.trim(),
         announcement_bar: announceInput.value.trim(),
         revalidation_url: document.getElementById("revalidation_url").value.trim()
       };

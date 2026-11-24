@@ -6,9 +6,13 @@ function showSettingsModal() {
   var sheet = ss.getSheetByName("settings") || (setupSettingsTab(ss), ss.getSheetByName("settings"));
 
   var currentSettings = {
-    hotline: "0901 234 567",
-    zalo_url: "https://zalo.me/0901234567",
-    contact_email: "tuyensinh@datawithly.edu.vn",
+    hotline: "(+84) 769 361 960",
+    zalo_url: "https://zalo.me/0769361960",
+    contact_email: "lyhuathithao@gmail.com",
+    tiktok_url: "https://www.tiktok.com/@datawithly",
+    facebook_url: "https://www.facebook.com/profile.php?id=61594436940087",
+    instagram_url: "https://www.instagram.com/datawithly/",
+    threads_url: "https://www.threads.com/@datawithly",
     announcement_bar: "Ưu đãi học phí 15% cho 10 học viên đăng ký sớm trong tuần này!",
     revalidation_url: CONFIG.REVALIDATION_URL
   };
@@ -36,6 +40,10 @@ function saveSettingsFromModal(data) {
     hotline: "Số điện thoại hotline tư vấn tuyển sinh",
     zalo_url: "Đường dẫn chat Zalo tư vấn nhanh",
     contact_email: "Email nhận thư liên hệ",
+    tiktok_url: "Đường dẫn kênh TikTok chính thức",
+    facebook_url: "Đường dẫn trang Facebook / Fanpage",
+    instagram_url: "Đường dẫn tài khoản Instagram",
+    threads_url: "Đường dẫn tài khoản Threads",
     announcement_bar: "Thông báo trên thanh header",
     revalidation_url: "URL Webhook làm mới bộ nhớ cache của Website"
   };

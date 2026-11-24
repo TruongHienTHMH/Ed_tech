@@ -9,6 +9,10 @@ export class SettingSeeder implements Seeder<SystemSettings> {
       contactEmail: "lyhuathithao@gmail.com",
       announcementBar: "🎉 Khai giảng khóa mới ngày 26 tháng 10, 2026 - Giảm ngay 500.000đ khi đăng ký sớm!",
       revalidationUrl: "/api/revalidate",
+      tiktokUrl: "https://www.tiktok.com/@datawithly",
+      facebookUrl: "https://www.facebook.com/profile.php?id=61594436940087",
+      instagramUrl: "https://www.instagram.com/datawithly/",
+      threadsUrl: "https://www.threads.com/@datawithly",
     };
   }
 
