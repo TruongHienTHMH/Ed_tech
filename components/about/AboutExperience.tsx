@@ -44,7 +44,7 @@ const EXPERIENCE_DATA: ExperienceItem[] = [
       </>
     ),
     description:
-      "Từng làm Data Analyst tại MoMo, Tiki & ACB. Hiểu rõ cách doanh nghiệp lớn vận hành dữ liệu và các bài toán thực tế.",
+      "Từng làm Senior Data Analyst tại MoMo, Tiki & ACB. Hiểu rõ cách doanh nghiệp lớn vận hành dữ liệu và các bài toán thực tế.",
     logos: [
       {
         name: "MoMo",

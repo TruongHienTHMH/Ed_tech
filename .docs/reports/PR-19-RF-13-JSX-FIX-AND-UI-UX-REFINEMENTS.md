@@ -46,7 +46,7 @@
 * **Giải pháp triển khai:**
   - Sử dụng danh từ chuẩn nghiệp vụ: **`course_kind`** (CMS Parser đồng thời hỗ trợ đọc linh hoạt các alias: `course_kind`, `kind`, `type`, `course_type`, `badge`).
   - Cho phép người dùng thêm cột `course_kind` trên tab `courses` của Google Sheets và tùy chọn 3 giá trị:
-    1. 🌟 **`Khóa học nổi bật`**: Tự động áp dụng `variant="gold"` của Global Badge (màu vàng kim sang trọng, ánh kim đặc trưng). Chỉ định mặc định cho khóa trọn gói: *End-to-End Analytics with SQL & Dashboard Design Design*.
+    1. 🌟 **`Khóa học nổi bật`**: Tự động áp dụng `variant="gold"` của Global Badge (màu vàng kim sang trọng, ánh kim đặc trưng). Chỉ định mặc định cho khóa trọn gói: *End-to-End Analytics with SQL & Dashboard Design*.
     2. 🎯 **`Khóa học nền tảng`**: Tự động áp dụng `variant="level"` của Global Badge (màu xám xanh Slate nền nã, chuẩn mực). Áp dụng cho khóa: *SQL for Data Analytics*.
     3. 🚀 **`Khóa học chuyên sâu`**: Tự động áp dụng `variant="level"` của Global Badge. Áp dụng cho khóa: *Analytical Thinking & Dashboard Design*.
   - Tuân thủ 100% quy ước mã màu của hệ thống thiết kế ([`Badge.tsx`](file:///Users/hientruongthmh/Documents/Web_Jobs/ed_da_tech/components/common/Badge.tsx)).
