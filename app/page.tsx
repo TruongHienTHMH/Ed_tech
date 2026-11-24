@@ -16,12 +16,13 @@ export const revalidate = 300;
 
 export default async function Home() {
   // Fetch real-time data from 12-tab Google Sheets CMS with in-memory caching and fallback
-  const [courses, packages, studentProjects, testimonials, blogPosts] = await Promise.all([
+  const [courses, packages, studentProjects, testimonials, blogPosts, settings] = await Promise.all([
     ContentFetcher.getCourses().catch(() => []),
     ContentFetcher.getPackages().catch(() => []),
     ContentFetcher.getStudentProjects().catch(() => []),
     ContentFetcher.getTestimonials().catch(() => []),
     ContentFetcher.getBlogPosts().catch(() => []),
+    ContentFetcher.getSettings().catch(() => undefined),
   ]);
 
   return (
@@ -30,7 +31,7 @@ export default async function Home() {
       {/* <AnnouncementBar /> */}
 
       {/* Main Sticky Navbar */}
-      <Navbar />
+      <Navbar courses={courses} />
 
       {/* Main Page Flow matching Figma Desktop Design (Node 12:682) */}
       <main className="flex-1">
@@ -60,10 +61,10 @@ export default async function Home() {
       </main>
 
       {/* Modern 4-Column Footer */}
-      <Footer />
+      <Footer settings={settings} />
 
       {/* Floating Support CTAs (Phone, Messenger, Zalo) */}
-      <FloatingCta />
+      <FloatingCta settings={settings} />
     </div>
   );
 }

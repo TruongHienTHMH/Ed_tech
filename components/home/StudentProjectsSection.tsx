@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { X } from "@/components/common/Icons";
 import { Badge } from "@/components/common/Badge";
@@ -22,6 +22,11 @@ interface DisplayProject {
 
 export default function StudentProjectsSection({ projects = seedStudentProjects }: StudentProjectsSectionProps) {
   const [selectedProject, setSelectedProject] = useState<DisplayProject | null>(null);
+  
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const isUserInteractingRef = useRef(false);
+  const userTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const animFrameRef = useRef<number | null>(null);
 
   // Khóa cuộn trang khi mở popup modal và hỗ trợ phím Escape
   useEffect(() => {
@@ -43,16 +48,83 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
     };
   }, [selectedProject]);
 
-  const activeProjects = (projects && projects.length >= 6 ? projects : seedStudentProjects).slice(0, 9);
+  // Nạp toàn bộ danh sách projects
+  const activeProjects = projects && projects.length > 0 ? projects : seedStudentProjects;
   const displayProjects: DisplayProject[] = activeProjects.map((p, idx) => {
     const registryItem = STUDENT_PROJECT_IMAGES[idx];
     return {
       id: p.id || registryItem?.id || `p-${idx}`,
-
       image: resolveImageUrl(p.imageUrl || registryItem?.filePath, "project", idx),
       aspect: registryItem?.aspect || (idx >= 6 ? "tall" : "normal"),
     };
   });
+
+  // Tự động kích hoạt hiệu ứng cuộn mượt (Auto Smooth Scroll) nếu > 9 items
+  const shouldAutoScroll = displayProjects.length > 9;
+  const renderProjects = shouldAutoScroll ? [...displayProjects, ...displayProjects] : displayProjects;
+
+  // Chuyển động cuộn trôi êm dịu, liên tục và tự nhiên (Continuous Smooth Drift)
+  useEffect(() => {
+    if (!shouldAutoScroll) return;
+
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    let lastTime = performance.now();
+    const speed = 0.5;
+
+    const step = (now: number) => {
+      const delta = now - lastTime;
+      lastTime = now;
+
+      if (!isUserInteractingRef.current && container) {
+        container.scrollTop += speed * (delta / 16.67);
+
+        if (container.scrollTop >= container.scrollHeight / 2) {
+          container.scrollTop = container.scrollTop - container.scrollHeight / 2;
+        }
+      }
+
+      animFrameRef.current = requestAnimationFrame(step);
+    };
+
+    animFrameRef.current = requestAnimationFrame(step);
+
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      if (userTimeoutRef.current) clearTimeout(userTimeoutRef.current);
+    };
+  }, [shouldAutoScroll]);
+
+  // Xử lý song song tương tác chuột (Mouse Wheel / Touchpad / Hover)
+  const handleWheel = () => {
+    isUserInteractingRef.current = true;
+    if (userTimeoutRef.current) clearTimeout(userTimeoutRef.current);
+    // Khi người dùng dừng lăn chuột 2 giây, tiếp tục tự động trôi nhẹ nhàng
+    userTimeoutRef.current = setTimeout(() => {
+      isUserInteractingRef.current = false;
+    }, 2000);
+  };
+
+  const handleMouseEnter = () => {
+    isUserInteractingRef.current = true;
+  };
+
+  const handleMouseLeave = () => {
+    if (userTimeoutRef.current) clearTimeout(userTimeoutRef.current);
+    // Khi rời chuột ra ngoài, sau 800ms tiếp tục trôi tự nhiên
+    userTimeoutRef.current = setTimeout(() => {
+      isUserInteractingRef.current = false;
+    }, 800);
+  };
+
+  const handleScroll = () => {
+    const container = scrollContainerRef.current;
+    if (!container || !shouldAutoScroll) return;
+    if (container.scrollTop >= container.scrollHeight / 2) {
+      container.scrollTop = container.scrollTop - container.scrollHeight / 2;
+    }
+  };
 
   return (
     <section id="projects" className="relative w-full bg-white overflow-hidden">
@@ -82,63 +154,67 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
           Dự án của học viên qua các khóa học tại LYDATA
         </h2>
 
-        {/* 3x3 Showcase Grid:
-            Row 1 sits inside the dark zone (#2E2E2E) of the background SVG.
-            Middle wave ribbon runs through the gap between Row 1 and Row 2.
-            Row 2 & Row 3 sit on the crisp white background below. */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full mb-10 sm:mb-12">
-          {displayProjects.map((project, idx) => {
-            const isTall = idx >= 6;
-            return (
-              <div key={project.id} className="relative group">
-                {/* Aura Glow Effect: Hào quang chuyển sắc thương hiệu khi hover */}
-                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#AF445A] via-[#FFC934]/60 to-[#784080] opacity-0 group-hover:opacity-100 blur-md transition-all duration-300 pointer-events-none" />
+        {/* 3x3 Showcase Grid Container with 3D Shadow Depth Overlay on Row 3 */}
+        <div
+          className="relative w-full mb-10 sm:mb-12"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onWheel={handleWheel}
+        >
+          {shouldAutoScroll && (
+            <div className="pointer-events-none absolute top-0 inset-x-0 h-10 bg-gradient-to-b from-white/20 to-transparent z-10" />
+          )}
 
-                {/* Main Project Card */}
-                <div
-                  onClick={() => setSelectedProject(project)}
-                  className={`relative rounded-2xl overflow-hidden border-4 border-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] group-hover:shadow-[0_16px_36px_rgba(175,68,90,0.3)] bg-neutral-900 cursor-pointer transform group-hover:-translate-y-1.5 transition-all duration-300 ${
-                    isTall ? "h-[300px] sm:h-[330px]" : "h-[200px] sm:h-[216px]"
-                  }`}
-                >
-                  <SafeImage
-                    src={project.image}
-                    fallbackSrc={getFigmaFallback("project", idx)}
-                    alt="project"
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+          <div
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+            className={shouldAutoScroll ? "max-h-[820px] overflow-y-auto no-scrollbar py-2" : ""}
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+              {renderProjects.map((project, idx) => {
+                const uniqueKey = `${project.id}-${idx}`;
+                const isTall = !shouldAutoScroll ? idx >= 6 : (idx % displayProjects.length) >= 6;
 
-                  {/* Hover Overlay: Aura Glow & Popup Zoom Trigger (Không còn phần tác giả) */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4 sm:p-5">
-                    {/* Centered Zoom Icon */}
-                    <div className="flex-1 flex items-center justify-center">
-                      <div className="w-11 h-11 rounded-full bg-white/20 backdrop-blur-md border border-white/40 text-white flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition-all duration-300 group-hover:bg-[#AF445A]">
-                        <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
-                        </svg>
+                return (
+                  <div key={uniqueKey} className="relative group">
+                    {/* Aura Glow Effect */}
+                    <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#AF445A] via-[#FFC934]/60 to-[#784080] opacity-0 group-hover:opacity-100 blur-md transition-all duration-300 pointer-events-none" />
+
+                    {/* Main Project Card */}
+                    <div
+                      onClick={() => setSelectedProject(project)}
+                      className={`relative rounded-2xl overflow-hidden border-4 border-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] group-hover:shadow-[0_16px_36px_rgba(175,68,90,0.3)] bg-neutral-900 cursor-pointer transform group-hover:-translate-y-1.5 transition-all duration-300 ${
+                        isTall ? "h-[300px] sm:h-[330px] opacity-90 group-hover:opacity-100" : "h-[200px] sm:h-[216px]"
+                      }`}
+                    >
+                      <SafeImage
+                        src={project.image}
+                        fallbackSrc={getFigmaFallback("project", idx % 9)}
+                        alt="project"
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+
+                      {/* Hover Overlay: Aura Glow & Popup Zoom Trigger */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4 sm:p-5">
+                        <div className="flex-1 flex items-center justify-center">
+                          <div className="w-11 h-11 rounded-full bg-white/20 backdrop-blur-md border border-white/40 text-white flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition-all duration-300 group-hover:bg-[#AF445A]">
+                            <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                            </svg>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                );
+              })}
+            </div>
+          </div>
 
-        {/* "Xem thêm" Button (Figma Node 12:888) */}
-        <div>
-          <a
-            href="https://facebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center border-2 border-[#AF445A] bg-white rounded-[8px] px-10 py-3 hover:bg-neutral-50 active:scale-[0.99] transition-all cursor-pointer shadow-xs"
-          >
-            <span className="font-bold text-base sm:text-[18px] bg-gradient-to-r from-[#AF445A] to-[#784080] bg-clip-text text-transparent">
-              Xem thêm
-            </span>
-          </a>
+          {/* 3D Depth Shadow Gradient Overlay on Row 3 */}
+          <div className="pointer-events-none absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-white via-white/80 to-transparent z-10" />
         </div>
       </div>
 
@@ -148,7 +224,6 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
           onClick={() => setSelectedProject(null)}
           className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 cursor-zoom-out animate-in fade-in duration-200"
         >
-          {/* Header Bar của Popup */}
           <div
             onClick={(e) => e.stopPropagation()}
             className="w-full max-w-5xl flex items-center justify-between pb-3 text-white cursor-default"
@@ -163,7 +238,6 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
             </button>
           </div>
 
-          {/* Khung hiển thị ảnh Dashboard phóng to */}
           <div
             onClick={(e) => e.stopPropagation()}
             className="relative max-w-5xl max-h-[80vh] w-full h-[75vh] rounded-2xl overflow-hidden border-2 border-white/20 bg-neutral-950/80 shadow-2xl cursor-default"

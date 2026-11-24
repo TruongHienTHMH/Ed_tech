@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { openLeadModal } from "@/components/forms/LeadModalManager";
 import RoadmapCard, { RoadmapStage } from "@/components/home/RoadmapCard";
@@ -11,7 +11,7 @@ const ROADMAP_STAGES: RoadmapStage[] = [
     step: "01",
     title: "Data Foundation",
     desc: "Nắm vững nền tảng dữ liệu và SQL.",
-    tags: ["SQL cơ bản", "Database", "Xử lý dữ liệu"],
+    tags: ["SQL", "Database", "Data Cleaning"],
     icon: (active: boolean) => (
       <svg className={`w-5 h-5 ${active ? "text-white" : "text-neutral-500"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <ellipse cx="12" cy="5" rx="9" ry="3" />
@@ -25,7 +25,7 @@ const ROADMAP_STAGES: RoadmapStage[] = [
     step: "02",
     title: "Data Analysis & Visualization",
     desc: "Phân tích, trực quan hóa và khám phá insight.",
-    tags: ["SQL nâng cao", "Phân tích dữ liệu", "Dashboard"],
+    tags: ["Data Analysis", "Dashboard"],
     icon: (active: boolean) => (
       <svg className={`w-6 h-6 ${active ? "text-white" : "text-neutral-500"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
@@ -37,7 +37,7 @@ const ROADMAP_STAGES: RoadmapStage[] = [
     step: "03",
     title: "Analytical Thinking",
     desc: "Rèn luyện tư duy phân tích và giải quyết vấn đề.",
-    tags: ["Business problem", "Metrics", "Storytelling"],
+    tags: ["Define business problem", "Metrics", "Data Storytelling"],
     icon: (active: boolean) => (
       <svg className={`w-5 h-5 ${active ? "text-white" : "text-neutral-500"}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
         <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04z" />
@@ -50,7 +50,7 @@ const ROADMAP_STAGES: RoadmapStage[] = [
     step: "04",
     title: "Case Study & Project",
     desc: "Vận dụng tổng hợp qua bài tập lớn.",
-    tags: ["Case study", "Capstone", "Portfolio"],
+    tags: ["Project Capstone", "Portfolio"],
     icon: (active: boolean) => (
       <svg className={`w-5 h-5 ${active ? "text-white" : "text-neutral-500"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m0 0L21 3" />
@@ -62,6 +62,7 @@ const ROADMAP_STAGES: RoadmapStage[] = [
 export default function HeroSection() {
   const [activeStage, setActiveStage] = useState<number>(1); // Mặc định giai đoạn 2 như ảnh thiết kế
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true);
+  const mobileSliderRef = useRef<HTMLDivElement>(null);
 
   // Auto-cycle through the 4 stages every 3.8s for a lively, premium transition
   useEffect(() => {
@@ -71,6 +72,16 @@ export default function HeroSection() {
     }, 3800);
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
+
+  // Tự động cuộn thẻ tương ứng vào giữa màn hình trên điện thoại (Mobile Responsive Carousel)
+  useEffect(() => {
+    const container = mobileSliderRef.current;
+    if (!container) return;
+    const targetCard = container.children[activeStage] as HTMLElement;
+    if (targetCard && typeof window !== "undefined" && window.innerWidth < 640) {
+      targetCard.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    }
+  }, [activeStage]);
 
   // Dynamic progress line percentage calculation (from Node 0 to Node 3)
   const linePercentage = `${(activeStage / (ROADMAP_STAGES.length - 1)) * 100}%`;
@@ -124,24 +135,24 @@ export default function HeroSection() {
 
         {/* 4-Stage RoadMap Component with Running Line & Primary Aura Glow */}
         <div
-          className="w-full max-w-[1060px] mb-12 sm:mb-14"
+          className="w-full max-w-[1100px] mb-8 sm:mb-10"
           onMouseEnter={() => setIsAutoPlaying(false)}
           onMouseLeave={() => setIsAutoPlaying(true)}
         >
           {/* RoadMap Header */}
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FDF2F4] text-[#AF445A] text-xs font-bold uppercase tracking-wider mb-2.5">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FDF2F4] text-[#AF445A] text-xs font-bold uppercase tracking-wider mb-2">
             <span className="w-1.5 h-1.5 rounded-full bg-[#AF445A] animate-pulse" />
             LỘ TRÌNH HỌC DATA ANALYTICS
           </div>
-          <h2 className="font-heading font-bold text-2xl sm:text-3xl text-[#252525] tracking-tight mb-2">
+          <h2 className="font-heading font-bold text-2xl sm:text-3xl text-[#252525] tracking-tight mb-1.5">
             Học từ nền tảng đến ứng dụng thực tế
           </h2>
-          <p className="text-neutral-500 text-xs sm:text-sm max-w-[580px] mx-auto mb-8 sm:mb-10 font-normal">
+          <p className="text-neutral-500 text-xs sm:text-sm max-w-[580px] mx-auto mb-5 sm:mb-6 font-normal">
             Lộ trình 4 giai đoạn, xây dựng đầy đủ kiến thức và kỹ năng để làm Data Analyst.
           </p>
 
           {/* Connected Timeline Bar with Transition Line & Aura Nodes */}
-          <div className="relative w-full max-w-[880px] mx-auto mb-7 px-4 sm:px-8">
+          <div className="relative w-full max-w-[880px] mx-auto mb-7 sm:mb-9 lg:mb-10 px-3 sm:px-6">
             {/* Background Track Line */}
             <div className="absolute top-1/2 left-[12%] right-[12%] h-[3px] -translate-y-1/2 bg-[#F3D8DF] rounded-full" />
 
@@ -183,20 +194,24 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* 4 Stage Cards Grid with Primary Aura Glow */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 w-full items-stretch justify-center">
+          {/* 4 Stage Cards Grid / Mobile Horizontal Snap Slider */}
+          <div
+            ref={mobileSliderRef}
+            className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 lg:gap-3.5 w-full items-stretch justify-start sm:justify-center overflow-x-auto no-scrollbar snap-x snap-mandatory px-6 sm:px-0 pt-4 pb-2 scroll-smooth"
+          >
             {ROADMAP_STAGES.map((stage, idx) => (
               <RoadmapCard
                 key={stage.id}
                 stage={stage}
                 isActive={activeStage === idx}
                 onClick={() => setActiveStage(idx)}
+                className="w-[260px] xs:w-[270px] shrink-0 snap-center sm:w-auto sm:shrink"
               />
             ))}
           </div>
 
           {/* RoadMap CTA Button */}
-          <div className="mt-8 sm:mt-10 flex justify-center">
+          <div className="mt-6 sm:mt-7 flex justify-center">
             <button
               type="button"
               onClick={() => openLeadModal({ ctaLocation: "hero_roadmap" })}
