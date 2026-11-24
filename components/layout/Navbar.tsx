@@ -28,7 +28,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Giới thiệu", href: "/about", exact: false },
   { label: "Khóa học", href: "/courses", hasDropdown: true },
   { label: "Dự án học viên", href: "/#projects", exact: false },
-  { label: "Đánh giá", href: "/#testimonials", exact: false },
   { label: "Blog", href: "/blog", exact: false },
 ];
 
@@ -43,11 +42,12 @@ export default function Navbar({
 
   const isLight = variant === "light";
 
-  // Danh sách khóa học thường và khóa combo từ Database
-  const regularCourses = courses.filter(
+  // Danh sách khóa học thường và khóa combo từ Database (fallback an toàn về seedCourses nếu rỗng)
+  const displayCourses = courses && courses.length > 0 ? courses : seedCourses;
+  const regularCourses = displayCourses.filter(
     (c) => !c.isFeatured && c.slug !== "end-to-end-analytics"
   );
-  const comboCourses = courses.filter(
+  const comboCourses = displayCourses.filter(
     (c) => c.isFeatured || c.slug === "end-to-end-analytics"
   );
 
@@ -177,7 +177,7 @@ export default function Navbar({
                                   className={`text-xs ${isLight ? "text-neutral-500" : "text-white/70"
                                     }`}
                                 >
-                                  {combo.totalSessions ? `${combo.totalSessions} buổi` : "25 buổi"} — Trọn gói tiết kiệm &rarr;
+                                  {combo.totalSessions ? `${combo.totalSessions} buổi` : "25 buổi"} — Khoá học nổi bật &rarr;
                                 </p>
                               </Link>
                             ))}

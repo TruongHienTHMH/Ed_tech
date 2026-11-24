@@ -2,8 +2,19 @@
 
 import React from "react";
 import Image from "next/image";
+import { seedSettings } from "@/data/seed-data";
+import { SystemSettings } from "@/lib/cms/types";
 
-export default function FloatingCta() {
+interface FloatingCtaProps {
+  settings?: SystemSettings;
+}
+
+export default function FloatingCta({ settings = seedSettings }: FloatingCtaProps) {
+  const currentSettings = settings || seedSettings;
+  const instagramUrl = currentSettings.instagramUrl || "https://www.instagram.com/datawithly/";
+  const facebookUrl = currentSettings.facebookUrl || "https://www.facebook.com/profile.php?id=61594436940087";
+  const zaloUrl = currentSettings.zaloUrl || "https://zalo.me/0769361960";
+
   return (
     <aside
       aria-label="Kênh liên hệ hỗ trợ trực tuyến"
@@ -12,7 +23,7 @@ export default function FloatingCta() {
       <div className="flex flex-col items-center gap-2.5">
         {/* Instagram Support */}
         <a
-          href="https://www.instagram.com/datawithly/"
+          href={instagramUrl}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Theo dõi qua Instagram"
@@ -29,7 +40,7 @@ export default function FloatingCta() {
 
         {/* Messenger */}
         <a
-          href="https://www.facebook.com/profile.php?id=61594436940087"
+          href={facebookUrl}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Nhắn tin qua Facebook"
@@ -46,7 +57,7 @@ export default function FloatingCta() {
 
         {/* Zalo */}
         <a
-          href="https://zalo.me/0769361960"
+          href={zaloUrl}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Tư vấn qua Zalo"
