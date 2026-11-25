@@ -54,7 +54,7 @@ var CONFIG = {
 var COACHING_COURSES_LIST = [
   "End-to-End Analytics with SQL & Dashboard Design",
   "SQL for Data Analytics",
-  "Analytical Thinking & Data Analysis with Looker Studio",
+  "Analytical Thinking & Dashboard Design",
   "Combo SQL & Looker Studio",
   "Tư vấn lộ trình 1-1"
 ];

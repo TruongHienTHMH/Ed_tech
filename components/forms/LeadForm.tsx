@@ -44,7 +44,7 @@ const AVAILABLE_COURSES = [
   { id: "sql-for-data-analytics", name: "SQL for Data Analytics" },
   {
     id: "data-analytical-thinking",
-    name: "Analytical Thinking & Data Analysis with Looker Studio",
+    name: "Analytical Thinking & Dashboard Design",
   },
 ];
 
@@ -83,7 +83,7 @@ export default function LeadForm({
       courseId === "analytical-thinking-dashboard-design" ||
       courseId === "analytics-thinking"
     ) {
-      return ["Analytical Thinking & Data Analysis with Looker Studio"];
+      return ["Analytical Thinking & Dashboard Design"];
     }
     return ["SQL for Data Analytics"];
   };
