@@ -20,6 +20,7 @@ export interface LeadFormProps {
   ctaId?: string;
   defaultCourseId?: string;
   initialEmail?: string;
+  zaloUrl?: string;
   onSuccess?: () => void;
   className?: string;
 }
@@ -69,6 +70,7 @@ export default function LeadForm({
   ctaId = "submit_consultation_form",
   defaultCourseId = "sql-for-data-analytics",
   initialEmail = "",
+  zaloUrl,
   onSuccess,
   className = "",
 }: LeadFormProps) {
@@ -476,7 +478,7 @@ export default function LeadForm({
             <div className="py-1">
               <div className="relative w-[210px] h-[210px] mx-auto rounded-2xl overflow-hidden border-2 border-red-100 shadow-md bg-neutral-50 flex items-center justify-center">
                 <Image
-                  src="/assets/mentor/qr-zalo.png"
+                  src="/assets/mentor/qr-zalo.jpg"
                   alt="QR Code Zalo Tư Vấn DataWithLy"
                   width={210}
                   height={210}
@@ -489,7 +491,7 @@ export default function LeadForm({
             {/* Nút bấm liên hệ Zalo & Thử lại */}
             <div className="space-y-2 pt-1">
               <a
-                href="https://zalo.me/0769361960"
+                href={zaloUrl || "https://zalo.me/0769361960"}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackClickZalo({ cta_location: "form_error_qr_popout" })}

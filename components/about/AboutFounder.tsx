@@ -29,7 +29,7 @@ const SOCIAL_LINKS: SocialLink[] = [
   },
   {
     name: "Facebook",
-    url: "https://www.facebook.com/profile.php?id=61594436940087",
+    url: "https://www.facebook.com/datawithly.official1",
     handle: "Ly Data",
     iconPath: "/assets/icons/facebook.svg",
   },
@@ -43,7 +43,7 @@ const SOCIAL_LINKS: SocialLink[] = [
 
 const CAREER_MILESTONES = [
   {
-    role: "Lead Data Analyst",
+    role: "Senior Data Analyst",
     company: "MoMo (M_Service)",
     period: "Fintech & Payments",
     highlight: "",
@@ -182,9 +182,9 @@ export default function AboutFounder() {
                   truy vấn chuẩn xác và <strong className="text-[#8B1D2C]">kể câu chuyện số liệu (Data Storytelling)</strong> để giúp high level ra quyết định.
                 </p>
                 <p>
-                  Đó là lý do <strong className="text-[#8B1D2C]">LYDATA</strong> ra đời. Với giáo trình chuẩn hóa từ
-                  Production Data thực chiến và phương pháp kèm cặp 1-on-1 sát sao, mình muốn rút ngắn con đường
-                  chuyển ngành của bạn từ vài năm xuống còn vài tháng với sự tự tin vững chắc nhất.
+                  Đó là lý do <strong className="text-[#8B1D2C]">LYDATA</strong> ra đời. Với giáo trình chuẩn hóa từ Production Data thực chiến và phương pháp kèm 
+                  cặp 1-on-1 sát sao, LYDATA được xây dựng với mong muốn tạo ra một lộ trình học Data Analytics có hệ thống hơn — nơi bạn không chỉ học SQL hay Dashboard, mà còn hiểu cách 
+                  Data Analyst tiếp cận vấn đề, phân tích dữ liệu và truyền tải insight để hỗ trợ quyết định.
                 </p>
               </div>
             </div>

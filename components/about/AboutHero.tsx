@@ -31,7 +31,7 @@ const SOCIAL_LINKS: SocialLink[] = [
   },
   {
     name: "Facebook",
-    url: "https://www.facebook.com/profile.php?id=61594436940087",
+    url: "https://www.facebook.com/datawithly.official1",
     ariaLabel: "Facebook Mentor Hứa Thảo Lý",
     iconSrc: "/assets/icons/facebook.svg",
   },

@@ -12,7 +12,7 @@ interface FloatingCtaProps {
 export default function FloatingCta({ settings = seedSettings }: FloatingCtaProps) {
   const currentSettings = settings || seedSettings;
   const instagramUrl = currentSettings.instagramUrl || "https://www.instagram.com/datawithly/";
-  const facebookUrl = currentSettings.facebookUrl || "https://www.facebook.com/profile.php?id=61594436940087";
+  const facebookUrl = currentSettings.facebookUrl || "https://www.facebook.com/datawithly.official1";
   const zaloUrl = currentSettings.zaloUrl || "https://zalo.me/0769361960";
 
   return (

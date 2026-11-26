@@ -48,7 +48,7 @@ export default function CourseFigmaInstructor({ onOpenConsult }: CourseFigmaInst
     },
     {
       name: "Facebook",
-      url: "https://www.facebook.com/profile.php?id=61594436940087",
+      url: "https://www.facebook.com/datawithly.official1",
       icon: "/assets/icons/facebook.svg",
       hoverClass: "hover:bg-[#1877F2]/10 hover:text-[#1877F2]",
       color: "hover:border-[#1877F2]/30",

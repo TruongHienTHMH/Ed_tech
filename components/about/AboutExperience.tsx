@@ -44,7 +44,7 @@ const EXPERIENCE_DATA: ExperienceItem[] = [
       </>
     ),
     description:
-      "Từng làm Senior Data Analyst tại MoMo, Tiki & ACB. Hiểu rõ cách doanh nghiệp lớn vận hành dữ liệu và các bài toán thực tế.",
+      "Từng làm Senior Data Analyst tại MoMo, Tiki & ACB. Hiểu rõ cách doanh nghiệp lớn vận hành dữ liệu và các bài toán thực tế",
     logos: [
       {
         name: "MoMo",
@@ -92,7 +92,7 @@ const EXPERIENCE_DATA: ExperienceItem[] = [
       },
       {
         id: "rmit-ba",
-        content: "Top 17 RMIT Business Analyst Champion Competition Season 1.",
+        content: "Top 17 RMIT Business Analyst Champion Competition Season 1",
       },
       {
         id: "momo-innovation",
@@ -125,7 +125,7 @@ const EXPERIENCE_DATA: ExperienceItem[] = [
         id: "mentor-talent",
         content: (
           <span>
-            Mentor tại <strong className="text-[#8B1D2C] font-semibold">Data Got Talent 2023</strong> và chương trình <strong className="text-[#8B1D2C] font-semibold">Heading for the future: Data Analysis</strong>.
+            Mentor tại <strong className="text-[#8B1D2C] font-semibold">Data Got Talent 2023</strong> và Ban Giám Khảo chương trình <strong className="text-[#8B1D2C] font-semibold">Heading for the future: Data Analysis</strong>.
           </span>
         ),
       },
@@ -133,7 +133,7 @@ const EXPERIENCE_DATA: ExperienceItem[] = [
         id: "mentees-count",
         content: (
           <span>
-            Đã đồng hành cùng <strong className="text-[#8B1D2C] font-semibold">1.000+ học viên</strong> trên hành trình trở thành Data Analyst thực chiến.
+            Đã đồng hành cùng <strong className="text-[#8B1D2C] font-semibold">200+ học viên</strong> trên hành trình trở thành Data Analyst thực chiến.
           </span>
         ),
       },

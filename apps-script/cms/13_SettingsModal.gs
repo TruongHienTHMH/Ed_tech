@@ -10,7 +10,7 @@ function showSettingsModal() {
     zalo_url: "https://zalo.me/0769361960",
     contact_email: "lyhuathithao@gmail.com",
     tiktok_url: "https://www.tiktok.com/@datawithly",
-    facebook_url: "https://www.facebook.com/profile.php?id=61594436940087",
+    facebook_url: "https://www.facebook.com/datawithly.official1",
     instagram_url: "https://www.instagram.com/datawithly/",
     threads_url: "https://www.threads.com/@datawithly",
     announcement_bar: "Ưu đãi học phí 15% cho 10 học viên đăng ký sớm trong tuần này!",

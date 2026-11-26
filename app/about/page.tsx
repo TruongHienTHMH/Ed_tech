@@ -37,7 +37,10 @@ export const metadata: Metadata = {
 export const revalidate = 300;
 
 export default async function AboutPage() {
-  const courses = await ContentFetcher.getCourses().catch(() => []);
+  const [courses, settings] = await Promise.all([
+    ContentFetcher.getCourses().catch(() => []),
+    ContentFetcher.getSettings().catch(() => undefined),
+  ]);
 
   return (
     <div className="min-h-screen flex flex-col bg-white selection:bg-[#AF445A]/20 selection:text-[#AF445A]">
@@ -68,8 +71,8 @@ export default async function AboutPage() {
       </main>
 
       {/* Floating CTA & Footer */}
-      <FloatingCta />
-      <Footer />
+      <FloatingCta settings={settings} />
+      <Footer settings={settings} />
     </div>
   );
 }

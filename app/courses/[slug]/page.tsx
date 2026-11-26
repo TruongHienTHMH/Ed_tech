@@ -76,12 +76,13 @@ export default async function CourseDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // Concurrent fetch for courses, curriculum, student projects, and FAQs from Google Sheets
-  const [courses, modules, studentProjects, faqs] = await Promise.all([
+  // Concurrent fetch for courses, curriculum, student projects, FAQs, and settings from Google Sheets
+  const [courses, modules, studentProjects, faqs, settings] = await Promise.all([
     ContentFetcher.getCourses().catch(() => []),
     CourseService.getCurriculumByCourseId(course.id, course.slug).catch(() => []),
     ContentFetcher.getStudentProjects().catch(() => []),
     ContentFetcher.getFaqs().catch(() => []),
+    ContentFetcher.getSettings().catch(() => undefined),
   ]);
 
   return (
@@ -136,10 +137,10 @@ export default async function CourseDetailPage({ params }: PageProps) {
       </main>
 
       {/* Global Footer */}
-      <Footer />
+      <Footer settings={settings} />
 
       {/* Floating Fast CTAs */}
-      <FloatingCta />
+      <FloatingCta settings={settings} />
     </div>
   );
 }

@@ -16,7 +16,7 @@ export default function Footer({ settings = seedSettings }: FooterProps) {
   const hotline = currentSettings.hotline || "(+84) 769 361 960";
   const contactEmail = currentSettings.contactEmail || "lyhuathithao@gmail.com";
   const tiktokUrl = currentSettings.tiktokUrl || "https://www.tiktok.com/@datawithly";
-  const facebookUrl = currentSettings.facebookUrl || "https://www.facebook.com/profile.php?id=61594436940087";
+  const facebookUrl = currentSettings.facebookUrl || "https://www.facebook.com/datawithly.official1";
   const instagramUrl = currentSettings.instagramUrl || "https://www.instagram.com/datawithly/";
   const threadsUrl = currentSettings.threadsUrl || "https://www.threads.com/@datawithly";
   return (

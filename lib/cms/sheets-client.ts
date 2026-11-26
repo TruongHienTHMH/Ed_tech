@@ -534,24 +534,62 @@ export class SheetsClient {
       sortOrder: Number(tm.sort_order || idx + 1),
     }));
 
-    // Parse Settings
+    // Parse Settings with Multi-format & Fuzzy Key Matching Support
     const settingsMap: Record<string, string> = {};
+
     rawSettings.forEach((item) => {
-      if (item.key) {
-        settingsMap[String(item.key)] = String(item.value || "");
+      if (!item || typeof item !== "object") return;
+      const record = item as Record<string, unknown>;
+
+      // Format 1: Row-based Key-Value (e.g. { key: "facebook_url", value: "..." } or { setting: "...", val: "..." })
+      const keyCandidates = [record.key, record.k, record.setting, record.setting_key, record.name, record.ma_cai_dat, record["0"]];
+      const valCandidates = [record.value, record.val, record.gia_tri, record.content, record["1"]];
+
+      const foundKey = keyCandidates.find((k) => typeof k === "string" && (k as string).trim());
+      const foundVal = valCandidates.find((v) => v !== undefined && v !== null);
+
+      if (foundKey && foundVal !== undefined) {
+        const cleanKey = String(foundKey).trim().toLowerCase().replace(/[\s-]+/g, "_");
+        settingsMap[cleanKey] = String(foundVal).trim();
       }
+
+      // Format 2: Column-based (e.g. { facebook_url: "...", zalo_url: "...", hotline: "..." })
+      Object.entries(record).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== "") {
+          const cleanK = k.trim().toLowerCase().replace(/[\s-]+/g, "_");
+          if (!["key", "value", "description", "k", "val", "desc"].includes(cleanK)) {
+            settingsMap[cleanK] = String(v).trim();
+          }
+        }
+      });
     });
 
+    // Helper: Tìm giá trị linh hoạt từ settingsMap với nhiều biến thể key
+    const getSettingVal = (patterns: string[], fallback: string): string => {
+      for (const p of patterns) {
+        if (settingsMap[p] && settingsMap[p].trim()) {
+          return settingsMap[p].trim();
+        }
+      }
+      const matchedKey = Object.keys(settingsMap).find((k) =>
+        patterns.some((p) => k.includes(p) || p.includes(k))
+      );
+      if (matchedKey && settingsMap[matchedKey]?.trim()) {
+        return settingsMap[matchedKey].trim();
+      }
+      return fallback;
+    };
+
     const parsedSettings: SystemSettings = {
-      hotline: settingsMap.hotline || "0769361960",
-      zaloUrl: settingsMap.zalo_url || "https://zalo.me/0769361960",
-      contactEmail: settingsMap.contact_email || "lyhuathithao@gmail.com",
-      announcementBar: settingsMap.announcement_bar || "",
-      revalidationUrl: settingsMap.revalidation_url || "",
-      tiktokUrl: settingsMap.tiktok_url || "https://www.tiktok.com/@datawithly",
-      facebookUrl: settingsMap.facebook_url || "https://www.facebook.com/profile.php?id=61594436940087",
-      instagramUrl: settingsMap.instagram_url || "https://www.instagram.com/datawithly/",
-      threadsUrl: settingsMap.threads_url || "https://www.threads.com/@datawithly",
+      hotline: getSettingVal(["hotline", "phone", "sdt", "so_dien_thoai"], "(+84) 769 361 960"),
+      zaloUrl: getSettingVal(["zalo_url", "zalo", "link_zalo", "zalourl"], "https://zalo.me/0769361960"),
+      contactEmail: getSettingVal(["contact_email", "email", "mail"], "lyhuathithao@gmail.com"),
+      announcementBar: getSettingVal(["announcement_bar", "announcement", "thong_bao"], ""),
+      revalidationUrl: getSettingVal(["revalidation_url", "revalidate_url", "webhook_url"], ""),
+      tiktokUrl: getSettingVal(["tiktok_url", "tiktok", "link_tiktok"], "https://www.tiktok.com/@datawithly"),
+      facebookUrl: getSettingVal(["facebook_url", "facebook", "fb", "fb_url", "link_facebook"], "https://www.facebook.com/datawithly.official1"),
+      instagramUrl: getSettingVal(["instagram_url", "instagram", "insta", "link_instagram"], "https://www.instagram.com/datawithly/"),
+      threadsUrl: getSettingVal(["threads_url", "threads", "link_threads"], "https://www.threads.com/@datawithly"),
       raw: settingsMap,
     };
 
