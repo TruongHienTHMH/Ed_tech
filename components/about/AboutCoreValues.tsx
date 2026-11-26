@@ -12,47 +12,48 @@ export default function AboutCoreValues() {
   const values: CoreValue[] = [
     {
       icon: (
-        <svg className="w-6 h-6 text-[#8B1D2C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        <svg className="w-6 h-6 text-[#8B1D2C]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04z" />
+          <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04z" />
         </svg>
       ),
-      title: "Business-First Mindset",
-      subtitle: "Tư duy bản chất bài toán kinh doanh",
-      description: "Không chỉ dạy cú pháp câu lệnh vô hồn, LYDATA rèn luyện bạn cách đặt câu hỏi phản biện, xác định đúng chỉ số North Star Metrics và phân tích nguyên nhân gốc rễ (Root Cause Analysis).",
+      title: "Analytical Thinking",
+      subtitle: "Tư duy phân tích từ bản chất",
+      description: "Không chỉ học cách sử dụng công cụ, bạn sẽ được rèn luyện cách đặt câu hỏi, xác định vấn đề và khai thác dữ liệu để hỗ trợ ra quyết định",
       points: [
-        "Hiểu cội nguồn mô hình kinh doanh Fintech, E-commerce, Banking",
-        "Biết cách làm việc với Stakeholders và giải quyết bài toán thực tế",
-        "Khung tư duy bóc tách vấn đề MECE & Hypothesis-driven",
+        "Hiểu bản chất thay vì học thuộc công thức",
+        "Kết nối Business Problem với Data & Metrics",
+        "Phát triển tư duy phân tích và giải quyết vấn đề",
       ],
     },
     {
       icon: (
-        <svg className="w-6 h-6 text-[#8B1D2C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+        <svg className="w-6 h-6 text-[#8B1D2C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
       ),
-      title: "Production Real Data",
-      subtitle: "Dữ liệu lớn từ môi trường thật",
-      description: "Nói không với các bảng dữ liệu đồ chơi vài chục dòng. Học viên được trực tiếp truy vấn trên Big Data Warehouse với hàng triệu bản ghi, đối mặt với dữ liệu bẩn và bài toán tối ưu hiệu năng.",
+      title: "Learning by Doing",
+      subtitle: "Học đi đôi với thực hành",
+      description: "Kiến thức được củng cố thông qua bài tập, Case Study và Project mô phỏng những bài toán thường gặp trong công việc Data Analyst",
       points: [
-        "Mô hình hóa dữ liệu sao / bông tuyết (Star / Snowflake Schema)",
-        "Xử lý Data Dirty, Duplicate, Missing Values thực tế",
-        "Tối ưu chi phí truy vấn và tốc độ thực thi SQL nâng cao",
+        "Lộ trình bài bản từ nền tảng đến ứng dụng",
+        "Thực hành với Dataset và Business Case",
+        "Vận dụng kiến thức qua Capstone Project",
       ],
     },
     {
       icon: (
-        <svg className="w-6 h-6 text-[#8B1D2C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-      </svg>
+        <svg className="w-6 h-6 text-[#8B1D2C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.999-3.199a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+        </svg>
       ),
-      title: "1-on-1 Mentorship",
-      subtitle: "Kèm cặp sát sao & Chỉnh sửa chi tiết",
-      description: "Mỗi học viên có tốc độ tiếp thu và mục tiêu chuyển ngành riêng. Đội ngũ Mentor sẽ review từng bài tập, sửa từng dòng code và luyện tập phỏng vấn Mock Interview 1-1 trước khi nộp hồ sơ.",
+      title: "Expert Mentorship",
+      subtitle: "Đồng hành cùng mentor thực chiến",
+      description: "Được trực tiếp hướng dẫn bởi mentor có hơn 5 năm kinh nghiệm Data Analytics, kết hợp kiến thức chuyên môn và kinh nghiệm làm việc tại MoMo, Tiki",
       points: [
-        "Code review chi tiết giải thích vì sao nên viết như vậy",
-        "Sửa CV chuẩn ATS và hướng dẫn xây dựng Portfolio trên GitHub/Tableau",
-        "Đồng hành trọn đời qua cộng đồng cựu học viên và đối tác tuyển dụng",
+        "Học trực tiếp và giải đáp trong quá trình học",
+        "Nhận góp ý để hoàn thiện bài tập và Project",
+        "Hỗ trợ định hướng nghề nghiệp và Review CV",
       ],
     },
   ];
@@ -74,7 +75,7 @@ export default function AboutCoreValues() {
             ?
           </h2>
           <p className="mt-4 text-base sm:text-lg text-neutral-600">
-            3 trụ cột tạo nên sự khác biệt vượt trội trong chất lượng đầu ra của học viên LYDATA.
+            Không chỉ học công cụ, LYDATA giúp bạn xây dựng tư duy, phát triển kỹ năng và từng bước ứng dụng dữ liệu vào công việc thực tế
           </p>
         </div>
 
