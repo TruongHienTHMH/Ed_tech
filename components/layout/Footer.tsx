@@ -55,7 +55,7 @@ export default function Footer({ settings = seedSettings }: FooterProps) {
                 </Link>
               </li>
               <li>
-                <Link href="/#why-choose-us" className="hover:text-[#AF445A] transition-colors inline-block whitespace-nowrap">
+                <Link href="/#roadmap" className="hover:text-[#AF445A] transition-colors inline-block whitespace-nowrap">
                   Lộ trình học tập
                 </Link>
               </li>

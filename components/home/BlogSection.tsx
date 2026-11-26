@@ -94,7 +94,7 @@ export default function BlogSection({ blogs = seedBlogPosts }: BlogSectionProps)
   };
 
   return (
-    <section id="blogs" className="relative w-full bg-white py-16 lg:py-24 overflow-hidden">
+    <section id="blogs" className="relative w-full bg-white py-16 lg:py-24 overflow-hidden scroll-mt-20 sm:scroll-mt-24">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-12">

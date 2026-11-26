@@ -113,7 +113,7 @@ export default function TestimonialsSection({
   return (
     <section
       id="testimonials"
-      className="relative w-full bg-white py-16 lg:py-24 overflow-hidden border-t border-neutral-100"
+      className="relative w-full bg-white py-16 lg:py-24 overflow-hidden border-t border-neutral-100 scroll-mt-20 sm:scroll-mt-24"
     >
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
         {/* Header (Figma Node 12:892) */}

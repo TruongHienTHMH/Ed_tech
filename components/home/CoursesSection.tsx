@@ -54,7 +54,7 @@ export default function CoursesSection({ courses = seedCourses }: CoursesSection
   };
 
   return (
-    <section id="courses" className="relative w-full bg-[#1F242F] text-white overflow-hidden">
+    <section id="courses" className="relative w-full bg-[#1F242F] text-white overflow-hidden scroll-mt-20 sm:scroll-mt-24">
       {/* Upper Transition Banner (Figma Node 12:779) */}
       <div className="w-full overflow-hidden leading-none select-none pointer-events-none">
         <Image

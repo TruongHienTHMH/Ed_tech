@@ -69,7 +69,7 @@ export default function ComboPricingSection({ packages = seedPackages }: ComboPr
       : 16;
 
   return (
-    <section id="combo-pricing" className="relative w-full bg-neutral-50/50 pt-16 lg:pt-24 pb-0 overflow-hidden">
+    <section id="combo-pricing" className="relative w-full bg-neutral-50/50 pt-16 lg:pt-24 pb-0 overflow-hidden scroll-mt-20 sm:scroll-mt-24">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 pb-16 lg:pb-20">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-14 lg:mb-16">

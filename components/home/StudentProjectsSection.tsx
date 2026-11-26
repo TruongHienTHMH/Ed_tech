@@ -127,7 +127,7 @@ export default function StudentProjectsSection({ projects = seedStudentProjects 
   };
 
   return (
-    <section id="projects" className="relative w-full bg-white overflow-hidden">
+    <section id="projects" className="relative w-full bg-white overflow-hidden scroll-mt-20 sm:scroll-mt-24">
       {/* Absolute Background SVG (Figma Group 472 / 12:834):
           Contains top wave (y=0..50), dark zone (y=50..532), and middle wave (y=532..582) */}
       <div className="absolute -top-[0] left-1/2 -translate-x-1/2 min-w-[1920px] w-full h-[582px] pointer-events-none select-none z-0">

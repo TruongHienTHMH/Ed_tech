@@ -62,24 +62,44 @@ const ROADMAP_STAGES: RoadmapStage[] = [
 export default function HeroSection() {
   const [activeStage, setActiveStage] = useState<number>(1); // Mặc định giai đoạn 2 như ảnh thiết kế
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true);
+  const [isInView, setIsInView] = useState<boolean>(true);
+  const roadmapSectionRef = useRef<HTMLDivElement>(null);
   const mobileSliderRef = useRef<HTMLDivElement>(null);
 
-  // Auto-cycle through the 4 stages every 3.8s for a lively, premium transition
+  // Chỉ bật auto-cycle khi Roadmap section thực sự nằm trong tầm nhìn (viewport)
   useEffect(() => {
-    if (!isAutoPlaying) return;
+    const el = roadmapSectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Auto-cycle through the 4 stages every 4s for a lively, premium transition (chỉ chạy khi đang trong view)
+  useEffect(() => {
+    if (!isAutoPlaying || !isInView) return;
     const interval = setInterval(() => {
       setActiveStage((prev) => (prev + 1) % ROADMAP_STAGES.length);
-    }, 3800);
+    }, 4000);
     return () => clearInterval(interval);
-  }, [isAutoPlaying]);
+  }, [isAutoPlaying, isInView]);
 
-  // Tự động cuộn thẻ tương ứng vào giữa màn hình trên điện thoại (Mobile Responsive Carousel)
+  // Tự động cuộn thẻ tương ứng vào giữa thanh trượt ngang trên điện thoại mà TUYỆT ĐỐI không làm giật/kéo màn hình trình duyệt window
   useEffect(() => {
     const container = mobileSliderRef.current;
     if (!container) return;
     const targetCard = container.children[activeStage] as HTMLElement;
     if (targetCard && typeof window !== "undefined" && window.innerWidth < 640) {
-      targetCard.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      // Chỉ thay đổi scrollLeft của container, TUYỆT ĐỐI KHÔNG dùng targetCard.scrollIntoView() vì nó sẽ kéo cả window di chuyển
+      const targetLeft = targetCard.offsetLeft - (container.clientWidth - targetCard.clientWidth) / 2;
+      container.scrollTo({ left: targetLeft, behavior: "smooth" });
     }
   }, [activeStage]);
 
@@ -135,7 +155,9 @@ export default function HeroSection() {
 
         {/* 4-Stage RoadMap Component with Running Line & Primary Aura Glow */}
         <div
-          className="w-full max-w-[1100px] mb-8 sm:mb-10"
+          ref={roadmapSectionRef}
+          id="roadmap"
+          className="w-full max-w-[1100px] mb-8 sm:mb-10 scroll-mt-20 sm:scroll-mt-24"
           onMouseEnter={() => setIsAutoPlaying(false)}
           onMouseLeave={() => setIsAutoPlaying(true)}
         >
@@ -152,7 +174,7 @@ export default function HeroSection() {
           </p>
 
           {/* Connected Timeline Bar with Transition Line & Aura Nodes */}
-          <div className="relative w-full max-w-[880px] mx-auto mb-7 sm:mb-9 lg:mb-10 px-3 sm:px-6">
+          <div className="relative w-full max-w-[880px] mx-auto mb-10 sm:mb-12 lg:mb-14 px-3 sm:px-6">
             {/* Background Track Line */}
             <div className="absolute top-1/2 left-[12%] right-[12%] h-[3px] -translate-y-1/2 bg-[#F3D8DF] rounded-full" />
 
@@ -197,7 +219,11 @@ export default function HeroSection() {
           {/* 4 Stage Cards Grid / Mobile Horizontal Snap Slider */}
           <div
             ref={mobileSliderRef}
-            className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 lg:gap-3.5 w-full items-stretch justify-start sm:justify-center overflow-x-auto no-scrollbar snap-x snap-mandatory px-6 sm:px-0 pt-4 pb-2 scroll-smooth"
+            onTouchStart={() => setIsAutoPlaying(false)}
+            onTouchEnd={() => {
+              setTimeout(() => setIsAutoPlaying(true), 3000);
+            }}
+            className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 lg:gap-3.5 w-full items-stretch justify-start sm:justify-center overflow-x-auto no-scrollbar snap-x snap-mandatory px-6 sm:px-0 pt-2 sm:pt-3 pb-3 scroll-smooth"
           >
             {ROADMAP_STAGES.map((stage, idx) => (
               <RoadmapCard
