@@ -4,6 +4,7 @@ import CoursesSection from "@/components/home/CoursesSection";
 import WhyChooseUsSection from "@/components/home/WhyChooseUsSection";
 import AlumniCompaniesSection from "@/components/home/AlumniCompaniesSection";
 import ComboPricingSection from "@/components/home/ComboPricingSection";
+import CommunitySection from "@/components/home/CommunitySection";
 import StudentProjectsSection from "@/components/home/StudentProjectsSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import BlogSection from "@/components/home/BlogSection";
@@ -50,7 +51,10 @@ export default async function Home() {
         {/* 5. Đầu tư thông minh cho sự nghiệp (Combo vs Đăng ký riêng lẻ) */}
         <ComboPricingSection packages={packages} />
 
-        {/* 6. Blogs về Data Analytics - Chia sẻ miễn phí (Figma Node 12:838) */}
+        {/* 6. Cộng đồng & Nền tảng E-Learning LYDATA (Figma Node 434:1375) */}
+        <CommunitySection />
+
+        {/* 7. Blogs về Data Analytics - Chia sẻ miễn phí (Figma Node 12:838) */}
         <BlogSection blogs={blogPosts} />
 
         {/* 7. Dự án của học viên qua các khóa học tại LYDATA (Figma Node 12:873) */}

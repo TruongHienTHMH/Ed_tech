@@ -1,0 +1,19 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="1920" height="446" viewBox="0 0 1920 446" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 473">
+<path id="Rectangle 1574" d="M4.37113e-06 50L4.37113e-06 34L1920 0L1920 49.9999L4.37113e-06 50Z" fill="url(#paint0_linear_0_4)"/>
+<rect id="Rectangle 1576" x="4.37113e-06" y="50" width="1920" height="346" fill="#2E2E2E"/>
+<path id="Rectangle 1575" d="M1920 396L1920 412L0 446L2.18557e-06 396L1920 396Z" fill="url(#paint1_linear_0_4)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_4" x1="12.4984" y1="50" x2="13.1549" y2="-0.0255785" gradientUnits="userSpaceOnUse">
+<stop stop-color="#AF445A"/>
+<stop offset="0.5" stop-color="#984C87"/>
+<stop offset="1" stop-color="#8054B3"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_4" x1="1907.5" y1="396" x2="1906.85" y2="446.026" gradientUnits="userSpaceOnUse">
+<stop stop-color="#AF445A"/>
+<stop offset="0.5" stop-color="#984C87"/>
+<stop offset="1" stop-color="#8054B3"/>
+</linearGradient>
+</defs>
+</svg>
