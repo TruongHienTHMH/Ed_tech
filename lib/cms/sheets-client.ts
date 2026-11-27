@@ -508,7 +508,15 @@ export class SheetsClient {
         ),
         companies: rawCompanies.split(",").map((c) => c.trim()).filter(Boolean),
         companiesWorked: rawCompanies,
-        linkedinUrl: m.linkedin_url ? String(m.linkedin_url) : undefined,
+        linkedinUrl: (() => {
+          const rawLinkedin = String(m.linkedin_url || m.linkedin || m.linkedinUrl || "").trim();
+          const isPlaceholderOrInvalid =
+            !rawLinkedin ||
+            !rawLinkedin.includes("linkedin.com") ||
+            rawLinkedin.includes("lyhuadata") ||
+            rawLinkedin.includes("huathaoly");
+          return isPlaceholderOrInvalid ? "https://www.linkedin.com/in/thao-ly-hua/" : rawLinkedin;
+        })(),
         experienceYears: 7,
         isActive: m.is_active === true || String(m.is_active).toUpperCase() === "TRUE",
       };

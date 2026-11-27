@@ -13,7 +13,7 @@ export class MentorSeeder implements Seeder<Mentor> {
         avatarUrl: "/assets/figma/00d85e9072dd2031d3c61249ae87330dd98d7556.png",
         companies: ["MoMo", "Tiki", "ACB"],
         companiesWorked: "MoMo, Tiki, ACB",
-        linkedinUrl: "https://www.facebook.com/datawithly.official1",
+        linkedinUrl: "https://www.linkedin.com/in/thao-ly-hua/",
         experienceYears: 5,
         isActive: true,
       },

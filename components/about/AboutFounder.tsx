@@ -35,7 +35,7 @@ const SOCIAL_LINKS: SocialLink[] = [
   },
   {
     name: "LinkedIn",
-    url: "https://www.linkedin.com/in/huathaoly",
+    url: "https://www.linkedin.com/in/thao-ly-hua/",
     handle: "Hứa Thảo Lý",
     iconPath: "/assets/icons/linkedin.svg",
   },
