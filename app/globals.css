@@ -218,6 +218,52 @@
   animation-play-state: paused;
 }
 
+/* Reusable GPU-accelerated Marquee Items (Card & Image tracks) */
+@keyframes marquee-item-left {
+  0% {
+    transform: translate3d(0%, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marquee-item-right {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0%, 0, 0);
+  }
+}
+
+.animate-marquee-item {
+  display: flex;
+  width: max-content;
+  animation: marquee-item-left var(--marquee-duration, 45s) linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-item-reverse {
+  display: flex;
+  width: max-content;
+  animation: marquee-item-right var(--marquee-duration, 45s) linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-item:hover,
+.animate-marquee-item-reverse:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-marquee-item,
+  .animate-marquee-item-reverse {
+    animation-play-state: paused;
+  }
+}
+
 .mask-marquee-edges {
   mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
