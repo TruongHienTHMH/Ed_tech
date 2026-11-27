@@ -21,6 +21,7 @@ interface NavItem {
   href: string;
   exact?: boolean;
   hasDropdown?: boolean;
+  external?: boolean;
 }
 
 const NAV_ITEMS: NavItem[] = [
@@ -28,6 +29,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Giới thiệu", href: "/about", exact: false },
   { label: "Khóa học", href: "/courses", hasDropdown: true },
   { label: "Dự án học viên", href: "/#projects", exact: false },
+  { label: "Community", href: "https://community-lydata.vercel.app/", external: true },
   { label: "Blog", href: "/blog", exact: false },
 ];
 
@@ -103,7 +105,7 @@ export default function Navbar({
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 text-[15px]">
+        <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-[15px]">
           {NAV_ITEMS.map((item) => {
             if (item.hasDropdown) {
               return (
@@ -187,6 +189,20 @@ export default function Navbar({
                     </div>
                   )}
                 </div>
+              );
+            }
+
+            if (item.external) {
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={getLinkClass(item.href, item.exact)}
+                >
+                  {item.label}
+                </a>
               );
             }
 
@@ -290,6 +306,25 @@ export default function Navbar({
               : item.exact
               ? pathname === item.href
               : item.href !== "/" && pathname.startsWith(item.href);
+
+            if (item.external) {
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block py-2 text-base transition-colors ${
+                    isLight
+                      ? "text-neutral-700 hover:text-[#AF445A]"
+                      : "text-white/80 hover:text-[#AF445A]"
+                  }`}
+                >
+                  {item.label}
+                </a>
+              );
+            }
 
             return (
               <Link
